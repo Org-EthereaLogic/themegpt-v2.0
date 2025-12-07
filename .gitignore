@@ -1,0 +1,27 @@
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
+
+# Dependencies
+node_modules
+.pnpm-store
+
+# Next.js
+.next
+out
+build
+
+# Plasmo
+.plasmo
+extension/dist
+extension/build
+
+# Misc
+.DS_Store
+*.log
+.env
+.env.local
+.turbo
+dist
+coverage

@@ -1,0 +1,104 @@
+# ThemeGPT
+
+**The privacy-first ChatGPT theme manager**
+
+A Chrome extension that lets you customize ChatGPT's appearance and track your token usage—all without any data ever leaving your browser.
+
+---
+
+## Privacy Pledge
+
+> **Your data stays with you. Always.**
+
+- **No data leaves your browser** — All processing happens locally
+- **No analytics or tracking** — We don't collect anything
+- **Token counting is 100% local** — Uses bundled `gpt-tokenizer` library
+- **Open source** — Full transparency and auditability
+
+---
+
+## Features
+
+- **Custom Themes** — Personalize ChatGPT's look and feel
+- **Token Counter** — Track your input/output token usage in real-time
+- **Local-First** — Everything runs in your browser, nothing is sent externally
+
+---
+
+## Repository Structure
+
+```
+themegpt-v2.0/
+├── apps/
+│   ├── extension/    # Plasmo Chrome extension (React, TypeScript)
+│   └── web/          # Next.js website
+└── packages/
+    └── shared/       # Shared TypeScript types & constants
+```
+
+| Directory | Description |
+|-----------|-------------|
+| `apps/extension` | Chrome extension built with [Plasmo](https://plasmo.com) framework |
+| `apps/web` | Marketing/docs website built with [Next.js](https://nextjs.org) |
+| `packages/shared` | Shared types, constants, and theme definitions |
+
+---
+
+## Quick Start
+
+**Prerequisites:** [Node.js](https://nodejs.org) 18+ and [pnpm](https://pnpm.io) 9+
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/themegpt-v2.0.git
+cd themegpt-v2.0
+
+# Install dependencies
+pnpm install
+
+# Run both apps in development mode
+pnpm dev
+
+# Or run just the extension
+cd apps/extension && pnpm dev
+```
+
+### Loading the Extension in Chrome
+
+1. Run `pnpm dev` in the `apps/extension` directory
+2. Open Chrome and go to `chrome://extensions`
+3. Enable "Developer mode" (top right)
+4. Click "Load unpacked"
+5. Select the `apps/extension/build/chrome-mv3-dev` folder
+
+---
+
+## Tech Stack
+
+| Component | Technologies |
+|-----------|-------------|
+| **Extension** | Plasmo, React 18, TypeScript, gpt-tokenizer |
+| **Web App** | Next.js 16, React 19, Tailwind CSS 4, TypeScript |
+| **Shared** | TypeScript |
+| **Tooling** | pnpm workspaces, Prettier, ESLint |
+
+---
+
+## Brand Identity
+
+ThemeGPT uses the **"Cream & Chocolate"** design system:
+
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Cream | `#FAF6F0` | Backgrounds |
+| Chocolate | `#4B2E1E` | Primary text |
+| Peach | `#F4A988` | Accents |
+| Teal | `#7ECEC5` | Highlights |
+
+---
+
+## License
+
+MIT License - see [LICENSE](./LICENSE) for details.
+
+Copyright (c) 2025 Anthony Johnson II

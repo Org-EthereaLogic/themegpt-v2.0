@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { TokenCounter } from "./src/components/TokenCounter"
 
 function IndexPopup() {
   const [data, setData] = useState("")
@@ -19,6 +20,9 @@ function IndexPopup() {
       <a href="https://docs.plasmo.com" target="_blank">
         View Docs
       </a>
+      <div className="px-4 pb-4">
+        <TokenCounter />
+      </div>
     </div>
   )
 }

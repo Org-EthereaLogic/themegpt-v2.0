@@ -85,3 +85,17 @@ export const DEFAULT_THEMES: Theme[] = [
         },
     },
 ];
+
+// ============================================
+// TOKEN COUNTER
+// ============================================
+
+export interface TokenStats {
+    user: number;
+    assistant: number;
+    total: number;
+    lastUpdated: number;
+}
+
+export const MSG_GET_TOKENS = "THEMEGPT_GET_TOKENS";
+export const STORAGE_TOKEN_ENABLED = "tokenCounterEnabled";

@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThemeGPT - Option B: Frame Method</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      min-height: 100vh;
+      background: #FFF8E8;
+    }
+    
+    /* Header */
+    .header {
+      background: #FFF8E8;
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #E5DECF;
+    }
+    
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #E8956A 0%, #1F9E8F 40%, #F5E6A3 80%, #1F9E8F 100%);
+      border: 2.5px solid #4B2E1E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .logo-text {
+      font-weight: 700;
+      color: #4B2E1E;
+      font-size: 20px;
+    }
+    
+    .nav {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+    
+    .nav a {
+      color: #4B2E1E;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+    }
+    
+    .nav a:hover {
+      color: #1F9E8F;
+    }
+    
+    .btn-primary {
+      background: #1F9E8F;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(31, 158, 143, 0.3);
+    }
+    
+    /* Hero - Same cream throughout */
+    .hero {
+      background: #FFF8E8;
+      padding: 70px 32px;
+      text-align: center;
+    }
+    
+    .hero h1 {
+      color: #4B2E1E;
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 18px;
+      line-height: 1.15;
+    }
+    
+    .hero h1 span {
+      color: #1F9E8F;
+    }
+    
+    .hero p {
+      color: #7a5a49;
+      font-size: 19px;
+      max-width: 520px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+    }
+    
+    .btn-dark {
+      background: #4B2E1E;
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 28px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .btn-dark:hover {
+      transform: translateY(-1px);
+    }
+    
+    .btn-outline {
+      background: transparent;
+      color: #4B2E1E;
+      border: 2px solid #4B2E1E;
+      padding: 12px 26px;
+      border-radius: 28px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-outline:hover {
+      background: #4B2E1E;
+      color: white;
+    }
+    
+    /* Section Header */
+    .section-header {
+      text-align: center;
+      padding: 50px 32px 30px;
+      background: #FFF8E8;
+    }
+    
+    .section-header h2 {
+      color: #4B2E1E;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    
+    .section-header p {
+      color: #7a5a49;
+      font-size: 16px;
+    }
+    
+    /* Theme Gallery - CREAM BACKGROUND with white frames */
+    .gallery {
+      background: #FFF8E8;
+      padding: 20px 32px 70px;
+    }
+    
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    /* Theme Cards with WHITE FRAME */
+    .theme-card {
+      background: #FFFFFF;
+      border-radius: 20px;
+      overflow: hidden;
+      /* Thicker padding creates the "frame" effect */
+      padding: 12px;
+      box-shadow: 0 4px 24px rgba(75, 46, 30, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    
+    .theme-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(75, 46, 30, 0.15);
+    }
+    
+    .theme-preview-wrapper {
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .theme-preview {
+      padding: 22px;
+      min-height: 160px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .chat-bubble {
+      border-radius: 14px;
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+    
+    .chat-label {
+      font-weight: 600;
+      margin-right: 6px;
+    }
+    
+    .chat-input {
+      border-radius: 22px;
+      padding: 12px 16px;
+      font-size: 11px;
+      border-width: 1px;
+      border-style: solid;
+    }
+    
+    .theme-footer {
+      padding: 14px 6px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #FFFFFF;
+    }
+    
+    .theme-name {
+      font-weight: 600;
+      color: #4B2E1E;
+      font-size: 15px;
+    }
+    
+    .theme-type {
+      font-size: 12px;
+      color: #7a5a49;
+      margin-top: 3px;
+    }
+    
+    .btn-preview {
+      background: #1F9E8F;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+    }
+    
+    /* Testimonials - Cream Background */
+    .testimonials {
+      background: #FFF8E8;
+      padding: 70px 32px;
+      text-align: center;
+      border-top: 1px solid #E5DECF;
+    }
+    
+    .testimonials h2 {
+      color: #4B2E1E;
+      font-size: 32px;
+      margin-bottom: 36px;
+      font-weight: 700;
+    }
+    
+    .testimonial-grid {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .testimonial-card {
+      background: white;
+      padding: 24px;
+      border-radius: 14px;
+      flex: 1;
+      min-width: 240px;
+      max-width: 280px;
+      box-shadow: 0 2px 16px rgba(75, 46, 30, 0.06);
+      text-align: left;
+    }
+    
+    .testimonial-card p {
+      color: #4B2E1E;
+      font-size: 15px;
+      margin-bottom: 14px;
+      line-height: 1.55;
+    }
+    
+    .testimonial-card .author {
+      color: #1F9E8F;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    
+    /* Footer */
+    .footer {
+      background: #4B2E1E;
+      color: #FFF8E8;
+      padding: 28px;
+      text-align: center;
+      font-size: 14px;
+    }
+    
+    .footer span {
+      opacity: 0.85;
+    }
+    
+    /* Option Label */
+    .option-label {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: #E8956A;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(232, 149, 106, 0.3);
+    }
+    
+    /* Zone Labels */
+    .zone-label {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(75, 46, 30, 0.9);
+      color: #FFF8E8;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .gallery-label {
+      position: absolute;
+      left: 12px;
+      top: 12px;
+      background: rgba(232, 149, 106, 0.95);
+      color: white;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .hero, .gallery, .testimonials {
+      position: relative;
+    }
+    
+    /* Frame indicator */
+    .frame-indicator {
+      position: absolute;
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #4B2E1E;
+      color: #FFF8E8;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <div class="option-label">OPTION B: Frame Method</div>
+  
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">😊</div>
+      <span class="logo-text">ThemeGPT</span>
+    </div>
+    <nav class="nav">
+      <a href="#">Themes</a>
+      <a href="#">Pricing</a>
+      <a href="#">Support</a>
+      <button class="btn-primary">Get Extension</button>
+    </nav>
+  </header>
+  
+  <!-- Hero -->
+  <section class="hero">
+    <div class="zone-label">All Cream Background</div>
+    <h1>Make ChatGPT <span>yours</span></h1>
+    <p>Beautiful themes that match your style. No coding, no hassle—just click and transform your ChatGPT experience.</p>
+    <div class="hero-buttons">
+      <button class="btn-dark">Add to Chrome — Free</button>
+      <button class="btn-outline">View Themes</button>
+    </div>
+  </section>
+  
+  <!-- Section Header -->
+  <div class="section-header">
+    <h2>✨ Premium Themes</h2>
+    <p>Each theme sits in a white "frame" against the cream background</p>
+  </div>
+  
+  <!-- Theme Gallery - Cream with White Frames -->
+  <section class="gallery">
+    <div class="gallery-label">Cream BG + White Card Frames</div>
+    <div class="gallery-grid">
+      
+      <!-- Dracula Theme -->
+      <div class="theme-card" style="position: relative;">
+        <div class="frame-indicator">White Frame</div>
+        <div class="theme-preview-wrapper">
+          <div class="theme-preview" style="background: #282a36;">
+            <div class="chat-bubble" style="background: #343746; color: #f8f8f2;">
+              <span class="chat-label" style="color: #bd93f9;">ChatGPT:</span>
+              Here's a quick summary of your notes from today...
+            </div>
+            <div class="chat-input" style="background: #21222c; color: #6272a4; border-color: #44475a;">
+              Message ChatGPT...
+            </div>
+          </div>
+        </div>
+        <div class="theme-footer">
+          <div>
+            <div class="theme-name">Dracula</div>
+            <div class="theme-type">🌙 Dark Theme</div>
+          </div>
+          <button class="btn-preview">Preview</button>
+        </div>
+      </div>
+      
+      <!-- Rose Garden Theme -->
+      <div class="theme-card">
+        <div class="theme-preview-wrapper">
+          <div class="theme-preview" style="background: #FFF0F3;">
+            <div class="chat-bubble" style="background: #FFFFFF; color: #5C374C;">
+              <span class="chat-label" style="color: #E91E63;">ChatGPT:</span>
+              Here's a quick summary of your notes from today...
+            </div>
+            <div class="chat-input" style="background: #FFFFFF; color: #8B6B7B; border-color: #F8D7DA;">
+              Message ChatGPT...
+            </div>
+          </div>
+        </div>
+        <div class="theme-footer">
+          <div>
+            <div class="theme-name">Rose Garden</div>
+            <div class="theme-type">☀️ Light Theme</div>
+          </div>
+          <button class="btn-preview">Preview</button>
+        </div>
+      </div>
+      
+      <!-- Ocean Breeze Theme -->
+      <div class="theme-card">
+        <div class="theme-preview-wrapper">
+          <div class="theme-preview" style="background: #E8F4F8;">
+            <div class="chat-bubble" style="background: #FFFFFF; color: #1A535C;">
+              <span class="chat-label" style="color: #00A896;">ChatGPT:</span>
+              Here's a quick summary of your notes from today...
+            </div>
+            <div class="chat-input" style="background: #FFFFFF; color: #4A7C82; border-color: #B8D8E0;">
+              Message ChatGPT...
+            </div>
+          </div>
+        </div>
+        <div class="theme-footer">
+          <div>
+            <div class="theme-name">Ocean Breeze</div>
+            <div class="theme-type">☀️ Light Theme</div>
+          </div>
+          <button class="btn-preview">Preview</button>
+        </div>
+      </div>
+      
+      <!-- Monokai Pro Theme -->
+      <div class="theme-card">
+        <div class="theme-preview-wrapper">
+          <div class="theme-preview" style="background: #2D2A2E;">
+            <div class="chat-bubble" style="background: #403E41; color: #FCFCFA;">
+              <span class="chat-label" style="color: #FFD866;">ChatGPT:</span>
+              Here's a quick summary of your notes from today...
+            </div>
+            <div class="chat-input" style="background: #221F22; color: #939293; border-color: #49474A;">
+              Message ChatGPT...
+            </div>
+          </div>
+        </div>
+        <div class="theme-footer">
+          <div>
+            <div class="theme-name">Monokai Pro</div>
+            <div class="theme-type">🌙 Dark Theme</div>
+          </div>
+          <button class="btn-preview">Preview</button>
+        </div>
+      </div>
+      
+      <!-- Lavender Dreams Theme -->
+      <div class="theme-card">
+        <div class="theme-preview-wrapper">
+          <div class="theme-preview" style="background: #F3E8FF;">
+            <div class="chat-bubble" style="background: #FFFFFF; color: #4A3560;">
+              <span class="chat-label" style="color: #9333EA;">ChatGPT:</span>
+              Here's a quick summary of your notes from today...
+            </div>
+            <div class="chat-input" style="background: #FFFFFF; color: #7C6B8E; border-color: #E2D1F0;">
+              Message ChatGPT...
+            </div>
+          </div>
+        </div>
+        <div class="theme-footer">
+          <div>
+            <div class="theme-name">Lavender Dreams</div>
+            <div class="theme-type">☀️ Light Theme</div>
+          </div>
+          <button class="btn-preview">Preview</button>
+        </div>
+      </div>
+      
+      <!-- Midnight Blue Theme -->
+      <div class="theme-card">
+        <div class="theme-preview-wrapper">
+          <div class="theme-preview" style="background: #0F172A;">
+            <div class="chat-bubble" style="background: #1E293B; color: #E2E8F0;">
+              <span class="chat-label" style="color: #38BDF8;">ChatGPT:</span>
+              Here's a quick summary of your notes from today...
+            </div>
+            <div class="chat-input" style="background: #0F172A; color: #64748B; border-color: #334155;">
+              Message ChatGPT...
+            </div>
+          </div>
+        </div>
+        <div class="theme-footer">
+          <div>
+            <div class="theme-name">Midnight Blue</div>
+            <div class="theme-type">🌙 Dark Theme</div>
+          </div>
+          <button class="btn-preview">Preview</button>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+  
+  <!-- Testimonials -->
+  <section class="testimonials">
+    <h2>Loved by everyday users</h2>
+    <div class="testimonial-grid">
+      <div class="testimonial-card">
+        <p>"Finally, ChatGPT matches my aesthetic! The Rose Garden theme is exactly what I wanted."</p>
+        <div class="author">— Sarah, College Student</div>
+      </div>
+      <div class="testimonial-card">
+        <p>"So easy to use. Changed themes in seconds and my students love seeing the different colors."</p>
+        <div class="author">— Mike, High School Teacher</div>
+      </div>
+      <div class="testimonial-card">
+        <p>"Love that they don't collect my data. Simple, safe, and my ChatGPT finally has personality!"</p>
+        <div class="author">— Jen, Professor</div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <span>No tracking • No data collection • Just beautiful themes</span>
+  </footer>
+</body>
+</html>

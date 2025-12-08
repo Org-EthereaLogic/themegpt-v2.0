@@ -11,6 +11,8 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 ---
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab47f04628b54fd8a67c2f6261135582)](https://app.codacy.com/gh/Org-EthereaLogic/themegpt-v2.0?utm_source=github.com&utm_medium=referral&utm_content=Org-EthereaLogic/themegpt-v2.0&utm_campaign=Badge_Grade)
+
 ## Privacy Pledge
 
 > **Your data stays with you. Always.**

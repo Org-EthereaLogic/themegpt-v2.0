@@ -11,6 +11,14 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 ---
 
+## Get ThemeGPT
+
+**[Install Version 1.0.2 from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb)**
+
+> **Note:** Version 1.0.2 is the current stable release available to the public. This repository contains the ongoing development of Version 2.0 with enhanced features and improvements.
+
+---
+
 ## Privacy Pledge
 
 > **Your data stays with you. Always.**

@@ -1,6 +1,7 @@
+# AI Prompt Engineering (development artifacts)
+prompt/
 
-
-#Ignore vscode AI rules
+# VS Code AI rules
 .github/instructions/codacy.instructions.md
 
 # Dependencies

@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-brand-bg text-brand-text w-[320px] h-[450px] overflow-hidden;
+}
+
+/* Custom Scrollbar to match Chocolate theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-brand-text/20 rounded-full;
+}

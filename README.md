@@ -1,7 +1,12 @@
-# ThemeGPT
-
-**The privacy-first ChatGPT theme manager**
-
+<div align="center">
+  <img src="apps/extension/assets/logo-full.png" alt="ThemeGPT Logo" width="200" />
+  <h1>ThemeGPT</h1>
+  <p><b>The privacy-first ChatGPT theme manager</b></p>
+  <p>
+    <img src="https://img.shields.io/badge/Privacy-Local--Only-green" alt="Privacy Focused" />
+    <img src="https://img.shields.io/badge/License-MIT-blue" alt="License" />
+  </p>
+</div>
 A Chrome extension that lets you customize ChatGPT's appearance and track your token usage—all without any data ever leaving your browser.
 
 ---

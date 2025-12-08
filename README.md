@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="apps/extension/assets/logo-full.png" alt="ThemeGPT Logo" width="200" />
+  <img src="asset/variants/logo-full-transparent.png" alt="ThemeGPT Logo" width="300" />
   <h1>ThemeGPT</h1>
   <p><b>The privacy-first ChatGPT theme manager</b></p>
   <p>

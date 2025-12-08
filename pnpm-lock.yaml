@@ -19,7 +19,7 @@ importers:
     dependencies:
       '@plasmohq/storage':
         specifier: ^1.15.0
-        version: 1.15.0(react@18.2.0)
+        version: 1.15.0(react@19.2.1)
       '@themegpt/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -30,8 +30,8 @@ importers:
         specifier: ^0.90.5
         version: 0.90.5(@swc/core@1.15.3(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(@types/node@24.10.1)(jiti@2.6.1)(postcss@8.5.6)(react-dom@19.2.1(react@18.2.0))(react@18.2.0)(yaml@2.8.2)
       react:
-        specifier: 18.2.0
-        version: 18.2.0
+        specifier: 19.2.1
+        version: 19.2.1
       react-dom:
         specifier: 19.2.1
         version: 19.2.1(react@18.2.0)
@@ -46,8 +46,8 @@ importers:
         specifier: 24.10.1
         version: 24.10.1
       '@types/react':
-        specifier: 18.2.48
-        version: 18.2.48
+        specifier: 19.2.7
+        version: 19.2.7
       '@types/react-dom':
         specifier: 19.2.3
         version: 19.2.3(@types/react@18.2.48)
@@ -2094,25 +2094,16 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  '@types/prop-types@15.7.15':
-    resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==}
-
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
       '@types/react': ^19.2.0
-
-  '@types/react@18.2.48':
-    resolution: {integrity: sha512-qboRCl6Ie70DQQG9hhNREz81jqC1cs9EVNcjQ1AU+jH6NFfSAhVVbrrY/+nSF+Bsk4AOwm9Qa61InvMCyV+H3w==}
 
   '@types/react@19.2.7':
     resolution: {integrity: sha512-MWtvHrGZLFttgeEj28VXHxpmwYbor/ATPYbBfSFZEIRK0ecCFLl2Qo55z52Hss+UV9CRN7trSeq1zbgx7YDWWg==}
 
   '@types/relateurl@0.2.33':
     resolution: {integrity: sha512-bTQCKsVbIdzLqZhLkF5fcJQreE4y1ro4DIyVrlDNSCJRRwHhB8Z+4zXXa8jN6eDvc2HbRsEYgbvrnGvi54EpSw==}
-
-  '@types/scheduler@0.26.0':
-    resolution: {integrity: sha512-WFHp9YUJQ6CKshqoC37iOlHnQSmxNc795UhB26CyBBttrN9svdIrUjl/NjnNmfcwtncN0h/0PPAFWv9ovP8mLA==}
 
   '@types/trusted-types@2.0.7':
     resolution: {integrity: sha512-ScaPdn1dQczgbl0QFTeTOmVHFULt394XJgOQNoyVhZ6r2vLnMLJfBPd53SB52T/3G36VI1/g2MZaX0cwDuXsfw==}
@@ -4089,10 +4080,6 @@ packages:
     resolution: {integrity: sha512-Gvzk7OZpiqKSkxsQvO/mbTN1poglhmAV7gR/DdIrRrSMXraRQQlfikRJOr3Nb9GTMPC5kof948Zy6jJZIFtDvQ==}
     engines: {node: '>=0.10.0'}
 
-  react@18.2.0:
-    resolution: {integrity: sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==}
-    engines: {node: '>=0.10.0'}
-
   react@19.2.1:
     resolution: {integrity: sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==}
     engines: {node: '>=0.10.0'}
@@ -6065,12 +6052,12 @@ snapshots:
       '@parcel/utils': 2.9.3
       nullthrows: 1.1.1
 
-  '@plasmohq/consolidate@0.17.0(react-dom@19.2.1(react@18.2.0))(react@18.2.0)':
+  '@plasmohq/consolidate@0.17.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
       bluebird: 3.7.2
     optionalDependencies:
-      react: 18.2.0
-      react-dom: 19.2.1(react@18.2.0)
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
 
   '@plasmohq/init@0.7.0': {}
 
@@ -6090,7 +6077,7 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@plasmohq/parcel-config@0.42.0(@swc/core@1.15.3(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(jiti@2.6.1)(postcss@8.5.6)(react-dom@19.2.1(react@18.2.0))(react@18.2.0)(typescript@5.8.2)(yaml@2.8.2)':
+  '@plasmohq/parcel-config@0.42.0(@swc/core@1.15.3(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(jiti@2.6.1)(postcss@8.5.6)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.8.2)(yaml@2.8.2)':
     dependencies:
       '@parcel/compressor-raw': 2.9.3(@parcel/core@2.9.3)
       '@parcel/config-default': 2.9.3(@parcel/core@2.9.3)(@swc/helpers@0.5.17)(postcss@8.5.6)(typescript@5.8.2)
@@ -6126,7 +6113,7 @@ snapshots:
       '@plasmohq/parcel-transformer-inline-css': 0.3.11
       '@plasmohq/parcel-transformer-manifest': 0.21.0
       '@plasmohq/parcel-transformer-svelte': 0.6.0
-      '@plasmohq/parcel-transformer-vue': 0.5.0(react-dom@19.2.1(react@18.2.0))(react@18.2.0)
+      '@plasmohq/parcel-transformer-vue': 0.5.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
     transitivePeerDependencies:
       - '@microsoft/api-extractor'
       - '@swc/core'
@@ -6314,7 +6301,7 @@ snapshots:
       '@parcel/utils': 2.9.3
       svelte: 4.2.20
 
-  '@plasmohq/parcel-transformer-vue@0.5.0(react-dom@19.2.1(react@18.2.0))(react@18.2.0)':
+  '@plasmohq/parcel-transformer-vue@0.5.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)':
     dependencies:
       '@parcel/core': 2.9.3
       '@parcel/diagnostic': 2.9.3
@@ -6322,7 +6309,7 @@ snapshots:
       '@parcel/source-map': 2.1.1
       '@parcel/types': 2.9.3(@parcel/core@2.9.3)
       '@parcel/utils': 2.9.3
-      '@plasmohq/consolidate': 0.17.0(react-dom@19.2.1(react@18.2.0))(react@18.2.0)
+      '@plasmohq/consolidate': 0.17.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       '@vue/compiler-sfc': 3.3.4
       nullthrows: 1.1.1
       semver: 7.5.4
@@ -6375,11 +6362,11 @@ snapshots:
       - walrus
       - whiskers
 
-  '@plasmohq/storage@1.15.0(react@18.2.0)':
+  '@plasmohq/storage@1.15.0(react@19.2.1)':
     dependencies:
       pify: 6.1.0
     optionalDependencies:
-      react: 18.2.0
+      react: 19.2.1
 
   '@pnpm/config.env-replace@1.1.0': {}
 
@@ -6762,25 +6749,19 @@ snapshots:
 
   '@types/react-dom@19.2.3(@types/react@18.2.48)':
     dependencies:
-      '@types/react': 18.2.48
+      undici-types: 7.16.0
+
+  '@types/parse-json@4.0.2': {}
 
   '@types/react-dom@19.2.3(@types/react@19.2.7)':
     dependencies:
       '@types/react': 19.2.7
-
-  '@types/react@18.2.48':
-    dependencies:
-      '@types/prop-types': 15.7.15
-      '@types/scheduler': 0.26.0
-      csstype: 3.2.3
 
   '@types/react@19.2.7':
     dependencies:
       csstype: 3.2.3
 
   '@types/relateurl@0.2.33': {}
-
-  '@types/scheduler@0.26.0': {}
 
   '@types/trusted-types@2.0.7': {}
 
@@ -8790,7 +8771,7 @@ snapshots:
       '@parcel/package-manager': 2.9.3(@parcel/core@2.9.3)
       '@parcel/watcher': 2.5.1
       '@plasmohq/init': 0.7.0
-      '@plasmohq/parcel-config': 0.42.0(@swc/core@1.15.3(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(jiti@2.6.1)(postcss@8.5.6)(react-dom@19.2.1(react@18.2.0))(react@18.2.0)(typescript@5.8.2)(yaml@2.8.2)
+      '@plasmohq/parcel-config': 0.42.0(@swc/core@1.15.3(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(jiti@2.6.1)(postcss@8.5.6)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(typescript@5.8.2)(yaml@2.8.2)
       '@plasmohq/parcel-core': 0.1.11
       buffer: 6.0.3
       chalk: 5.4.1
@@ -8994,10 +8975,6 @@ snapshots:
   react-refresh@0.14.0: {}
 
   react-refresh@0.9.0: {}
-
-  react@18.2.0:
-    dependencies:
-      loose-envify: 1.4.0
 
   react@19.2.1: {}
 

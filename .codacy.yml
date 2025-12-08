@@ -18,3 +18,5 @@ exclude_paths:
   - "pnpm-lock.yaml"
   - "**/*.min.js"
   - "**/*.d.ts"
+  - "doc/**"
+  - "prompt/**"

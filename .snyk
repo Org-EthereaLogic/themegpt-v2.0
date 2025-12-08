@@ -1,3 +1,7 @@
 version: v1.25.0
+exclude:
+  global:
+    - doc
+    - prompt
 ignore: {}
 patch: {}

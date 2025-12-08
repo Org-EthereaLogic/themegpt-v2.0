@@ -54,11 +54,13 @@ MAX_RETRIES=3  # Increase if network is unreliable
 ### When to Split Scripts
 
 Split when:
+
 - A script does more than one distinct job
 - Functions could be reused by other scripts (extract to a library)
 - The script exceeds 200 lines and isn't inherently complex
 
 Don't split when:
+
 - It's a single workflow that happens to be long
 - Splitting would require complex inter-script communication
 - The "reusable" library would only have one consumer
@@ -109,6 +111,7 @@ cleanup() {
 ## Required Features for Production Scripts
 
 ### Argument Parsing
+
 ```bash
 usage() {
     cat <<EOF
@@ -154,6 +157,7 @@ parse_args() {
 ```
 
 ### Logging Infrastructure
+
 ```bash
 log() {
     local level=$1
@@ -195,6 +199,7 @@ ensure_directory() {
 ## ShellCheck Configuration
 
 Include `.shellcheckrc` in projects:
+
 ```
 enable=all
 external-sources=true
@@ -202,6 +207,7 @@ source-path=SCRIPTDIR
 ```
 
 Minimize suppressions. When necessary, use inline directives with explanations:
+
 ```bash
 # shellcheck disable=SC2034 # Variable used by sourced script
 readonly CONFIG_PATH="/etc/app/config"
@@ -246,6 +252,7 @@ setup() {
 ## Common Patterns
 
 ### Safe File Reading
+
 ```bash
 while IFS= read -r line || [[ -n "$line" ]]; do
     # Process line (handles missing final newline)
@@ -253,11 +260,13 @@ done < "$file"
 ```
 
 ### Safe Subprocess Orchestration
+
 ```bash
 find "$dir" -type f -print0 | xargs -0 -P "$(nproc)" -I {} process_file "{}"
 ```
 
 ### Version Checking
+
 ```bash
 require_bash_version() {
     local required=$1
@@ -268,6 +277,7 @@ require_bash_version() {
 ```
 
 ### Command Availability Check
+
 ```bash
 require_command() {
     local cmd=$1
@@ -304,6 +314,7 @@ Before considering any script complete, verify:
 ## Output Format
 
 When creating scripts, provide:
+
 1. The complete script with proper header and defensive patterns
 2. A companion `.shellcheckrc` if the project needs one
 3. Bats test file for the script

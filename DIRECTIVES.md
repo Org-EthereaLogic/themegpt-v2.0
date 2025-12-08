@@ -185,6 +185,7 @@ const MAX_TOKENS = 4096;
 ```
 
 **Justification Required:** If you must create an abstraction early, document:
+
 1. What specific problem it solves
 2. Why simpler approaches are insufficient
 3. When the additional implementations will be added

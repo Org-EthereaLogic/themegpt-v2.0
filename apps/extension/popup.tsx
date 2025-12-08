@@ -3,9 +3,9 @@ import { Storage } from "@plasmohq/storage"
 import { DEFAULT_THEMES, type Theme } from "@themegpt/shared"
 import { TokenCounter } from "./src/components/TokenCounter"
 
-import "./src/style.css"
+import "./style.css"
 
-// Fallback asset import
+// Fallback asset import if logo-full.png isn't ready
 import mascotUrl from "url:../assets/icon.png"
 
 const storage = new Storage({ area: "local" })

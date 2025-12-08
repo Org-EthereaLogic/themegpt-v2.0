@@ -1,0 +1,20 @@
+---
+engines:
+  eslint-9:
+    enabled: true
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - typescript
+        - javascript
+
+exclude_paths:
+  - "node_modules/**"
+  - "**/dist/**"
+  - "**/build/**"
+  - "**/.next/**"
+  - "**/.plasmo/**"
+  - "pnpm-lock.yaml"
+  - "**/*.min.js"
+  - "**/*.d.ts"

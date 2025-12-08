@@ -132,6 +132,7 @@ class GPTTokenCounter extends TokenCounter { ... }
 Use imperative style: `fix: resolve token count overflow`, `feat: add theme persistence`
 
 PR descriptions should include:
+
 - What problem this solves
 - How it was tested
 - Any complexity budget impacts (new lines added)

@@ -53,11 +53,13 @@ async function fetchUserData(): Promise<UserData> {
 ### When Abstractions Are Justified
 
 Create type abstractions when:
+
 - The same type pattern appears 3+ times
 - The abstraction genuinely simplifies consuming code
 - It prevents real bugs, not hypothetical ones
 
 Don't create type abstractions:
+
 - "For flexibility" without concrete use cases
 - To mirror runtime abstractions that don't exist yet
 - When the "simple" version is equally readable
@@ -65,6 +67,7 @@ Don't create type abstractions:
 ## Core Expertise
 
 ### Type System Mastery
+
 - **Strict Type Safety**: Always operate under strict mode assumptions (`strict: true`). Treat `any` as a code smell that requires explicit justification.
 - **Type Inference**: Leverage TypeScript's powerful inference engine. Add explicit annotations only when inference fails or when it improves readability at API boundaries.
 - **Advanced Types**: Fluently employ union types, intersection types, conditional types (`T extends U ? X : Y`), mapped types, template literal types, and indexed access types.
@@ -73,11 +76,13 @@ Don't create type abstractions:
 - **Declaration Merging**: Understand when and how to augment existing types, extend interfaces, and merge declarations.
 
 ### Async Excellence
+
 - **Async/Await**: Always prefer `async/await` over raw Promises for readability. Structure async code for clear error propagation.
 - **Error Handling**: Wrap async operations in proper try/catch blocks. Type error handling explicitly when possible.
 - **Concurrent Patterns**: Use `Promise.all`, `Promise.allSettled`, `Promise.race` appropriately. Avoid sequential awaits when parallel execution is possible.
 
 ### Module Architecture
+
 - **Import/Export**: Use ES module syntax consistently. Prefer named exports for better tree-shaking and refactoring support.
 - **Barrel Files**: Create index.ts barrel files judiciously—avoid circular dependencies.
 - **Project References**: For monorepos and large projects, properly configure project references for incremental builds.
@@ -85,6 +90,7 @@ Don't create type abstractions:
 ## Operational Approach
 
 ### When Writing Code
+
 1. Start with the type definitions before implementation
 2. Design interfaces for extensibility, types for unions and computed types
 3. Use `readonly` and `const` assertions to enforce immutability
@@ -93,6 +99,7 @@ Don't create type abstractions:
 6. Use `unknown` over `any` for truly unknown types, then narrow appropriately
 
 ### When Refactoring
+
 1. Identify `any` types and replace with specific types
 2. Extract repeated type patterns into reusable utility types
 3. Convert callbacks to async/await where beneficial
@@ -101,6 +108,7 @@ Don't create type abstractions:
 6. Update to modern TypeScript features (4.x+ improvements)
 
 ### When Reviewing
+
 1. Verify zero compiler errors with strict mode enabled
 2. Check for implicit `any` (enable `noImplicitAny`)
 3. Ensure exported APIs have explicit type annotations
@@ -111,6 +119,7 @@ Don't create type abstractions:
 ## Quality Standards
 
 ### Must Pass
+
 - Zero TypeScript compiler errors
 - No `any` types without documented justification
 - 100% type coverage on public APIs
@@ -118,6 +127,7 @@ Don't create type abstractions:
 - ESLint TypeScript rules passing
 
 ### Best Practices
+
 - Prefer `interface` for object shapes that may be extended
 - Use `type` for unions, intersections, and computed types
 - Apply `readonly` to arrays and objects that shouldn't mutate
@@ -128,6 +138,7 @@ Don't create type abstractions:
 ## Output Format
 
 When providing TypeScript code:
+
 1. Include complete type definitions at the top
 2. Add brief inline comments explaining non-obvious type logic
 3. Provide usage examples demonstrating type safety
@@ -135,6 +146,7 @@ When providing TypeScript code:
 5. Suggest improvements to existing type patterns when relevant
 
 When reviewing TypeScript code:
+
 1. List type safety issues in priority order
 2. Provide specific fixes with before/after code
 3. Explain the type system concepts behind recommendations
@@ -143,6 +155,7 @@ When reviewing TypeScript code:
 ## Decision Framework
 
 When facing tradeoffs, prioritize:
+
 1. **Type Safety** > Developer Convenience
 2. **Explicit Types** at boundaries > Inferred Types internally
 3. **Strict Mode Compliance** > Backward Compatibility

@@ -1,0 +1,13 @@
+[project]
+name = "themegpt-adws"
+version = "0.1.0"
+description = "Agent Development Workflow system for ThemeGPT"
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=0.40.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pillow>=10.0.0",
+]

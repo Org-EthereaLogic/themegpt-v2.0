@@ -1,0 +1,4 @@
+# .pnpmauditrc.yaml
+# Accepted vulnerabilities with documented justification
+# CVE-2025-56648: Dev-only, no upstream fix, behavioral mitigation in place
+# See doc/dev/SECURITY_ADVISORIES.md for details

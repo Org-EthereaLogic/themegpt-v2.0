@@ -5,6 +5,7 @@
         "declaration": true,
         "module": "CommonJS",
         "target": "ES6",
+        "lib": ["ES2017"],
         "jsx": "react",
         "esModuleInterop": true,
         "strict": true,

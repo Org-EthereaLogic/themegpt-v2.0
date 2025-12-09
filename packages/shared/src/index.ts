@@ -6,6 +6,16 @@ export const BRAND = {
   yellow: '#FAD000',
 } as const;
 
+export const MSG_GET_TOKENS = 'MSG_GET_TOKENS';
+export const STORAGE_TOKEN_ENABLED = 'tokenCounterEnabled';
+
+export interface TokenStats {
+  user: number;
+  assistant: number;
+  total: number;
+  lastUpdated: number;
+}
+
 export interface Theme {
   id: string;
   name: string;

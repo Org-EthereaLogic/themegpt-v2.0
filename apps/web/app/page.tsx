@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
     <div className="min-h-screen bg-cream font-sans text-brown-900">
@@ -160,7 +158,17 @@ export default function Home() {
 
 // --- Helper Components ---
 
-function ThemeCard({ name, type, bg, bubble, label, input, indicator }: any) {
+interface ThemeCardProps {
+  name: string;
+  type: string;
+  bg: string;
+  bubble: string;
+  label: string;
+  input: string;
+  indicator?: boolean;
+}
+
+function ThemeCard({ name, type, bg, bubble, label, input, indicator }: ThemeCardProps) {
   return (
     <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(75,46,30,0.15)]">
       {indicator && (
@@ -172,7 +180,7 @@ function ThemeCard({ name, type, bg, bubble, label, input, indicator }: any) {
         <div className={`flex min-h-[160px] flex-col gap-2.5 p-[22px] ${bg}`}>
           <div className={`rounded-[14px] p-3.5 text-xs leading-relaxed ${bubble}`}>
             <span className={`mr-1.5 font-semibold ${label}`}>ChatGPT:</span>
-            Here's a quick summary of your notes from today...
+            Here&apos;s a quick summary of your notes from today...
           </div>
           <div className={`rounded-[22px] border border-solid px-4 py-3 text-[11px] ${input}`}>
             Message ChatGPT...

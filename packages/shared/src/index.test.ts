@@ -17,7 +17,7 @@ describe('BRAND colors', () => {
 
   it('has valid hex color format for all colors', () => {
     const hexPattern = /^#[0-9A-Fa-f]{6}$/;
-    Object.values(BRAND).forEach((color) => {
+    Object.values(BRAND).forEach((color: string) => {
       expect(color).toMatch(hexPattern);
     });
   });
@@ -71,7 +71,7 @@ describe('DEFAULT_THEMES', () => {
   it('all color values are valid hex colors', () => {
     const hexPattern = /^#[0-9A-Fa-f]{6}$/;
     DEFAULT_THEMES.forEach((theme) => {
-      Object.values(theme.colors).forEach((color) => {
+      Object.values(theme.colors).forEach((color: string) => {
         expect(color).toMatch(hexPattern);
       });
     });

@@ -21,6 +21,8 @@ extension/build
 # Misc
 .DS_Store
 *.log
+*.pyc
+__pycache__/
 .env
 .env.local
 .turbo

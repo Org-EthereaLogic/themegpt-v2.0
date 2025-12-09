@@ -1,101 +1,193 @@
-// packages/shared/src/index.ts
-
-// ============================================
-// TYPE DEFINITIONS
-// ============================================
-
-export type ThemeId = string;
-
-export interface ThemeColors {
-    "--cgpt-bg": string;
-    "--cgpt-text": string;
-    "--cgpt-surface": string;
-    "--cgpt-border": string;
-    "--cgpt-accent": string;
-}
-
-export interface Theme {
-    id: ThemeId;
-    name: string;
-    isPremium: boolean;
-    colors: ThemeColors;
-}
-
-export interface BootstrapResponse {
-    clientToken: string;
-    themes: Theme[];
-}
-
-// ============================================
-// BRAND CONSTANTS
-// Sourced from your Brand Kit
-// ============================================
-
 export const BRAND = {
-    cream: "#FAF6F0",
-    chocolate: "#4B2E1E",
-    peach: "#F4A988",
-    teal: "#7ECEC5",
-    yellow: "#F5E6B8",
-    lightTeal: "#8DD4CB",
+  cream: '#FAF6F0',
+  chocolate: '#4B2E1E',
+  teal: '#7ECEC5',
+  peach: '#F4A988',
+  yellow: '#FAD000',
 } as const;
 
-export type BrandColor = (typeof BRAND)[keyof typeof BRAND];
-
-// ============================================
-// DEFAULT THEMES
-// Available immediately without API calls
-// ============================================
-
-export const DEFAULT_THEMES: Theme[] = [
-    {
-        id: "system",
-        name: "System Default",
-        isPremium: false,
-        colors: {
-            "--cgpt-bg": "inherit",
-            "--cgpt-text": "inherit",
-            "--cgpt-surface": "inherit",
-            "--cgpt-border": "inherit",
-            "--cgpt-accent": "inherit",
-        },
-    },
-    {
-        id: "midnight-blue",
-        name: "Midnight Blue",
-        isPremium: false,
-        colors: {
-            "--cgpt-bg": "#0f172a",
-            "--cgpt-text": "#f8fafc",
-            "--cgpt-surface": "#1e293b",
-            "--cgpt-border": "#334155",
-            "--cgpt-accent": "#38bdf8",
-        },
-    },
-    {
-        id: "chocolate-coffee",
-        name: "Chocolate Coffee",
-        isPremium: false,
-        colors: {
-            "--cgpt-bg": "#2b1d16",
-            "--cgpt-text": "#f5e6b8",
-            "--cgpt-surface": BRAND.chocolate,
-            "--cgpt-border": "#6d4c41",
-            "--cgpt-accent": BRAND.peach,
-        },
-    },
-];
-
-// ============================================
-// TOKEN COUNTER
-// ============================================
-
-export interface TokenStats {
-    user: number;
-    assistant: number;
-    total: number;
-    lastUpdated: number;
+export interface Theme {
+  id: string;
+  name: string;
+  category: 'christmas' | 'core';
+  colors: {
+    '--cgpt-bg': string;
+    '--cgpt-surface': string;
+    '--cgpt-text': string;
+    '--cgpt-text-muted': string;
+    '--cgpt-border': string;
+    '--cgpt-accent': string;
+  };
+  isPremium: boolean;
 }
 
-export const MSG_GET_TOKENS = "THEMEGPT_GET_TOKENS";
-export const STORAGE_TOKEN_ENABLED = "tokenCounterEnabled";
+export const DEFAULT_THEMES: Theme[] = [
+  {
+    id: 'cozy-cabin-christmas',
+    name: 'Cozy Cabin Christmas',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#140E0A',
+      '--cgpt-surface': '#1E1410',
+      '--cgpt-text': '#F9FAFB',
+      '--cgpt-text-muted': '#E5E7EB',
+      '--cgpt-border': '#4B2E23',
+      '--cgpt-accent': '#D97757',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'frosted-windowpane',
+    name: 'Frosted Windowpane',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#F5F7FB',
+      '--cgpt-surface': '#FFFFFF',
+      '--cgpt-text': '#0F172A',
+      '--cgpt-text-muted': '#4B5563',
+      '--cgpt-border': '#D1D5DB',
+      '--cgpt-accent': '#3B82F6',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'midnight-evergreen',
+    name: 'Midnight Evergreen',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#020817',
+      '--cgpt-surface': '#07120E',
+      '--cgpt-text': '#F9FAFB',
+      '--cgpt-text-muted': '#E5E7EB',
+      '--cgpt-border': '#14532D',
+      '--cgpt-accent': '#22C55E',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'candy-cane-chat',
+    name: 'Candy Cane Chat',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#FDF2F2',
+      '--cgpt-surface': '#FFFFFF',
+      '--cgpt-text': '#111827',
+      '--cgpt-text-muted': '#4B5563',
+      '--cgpt-border': '#FECACA',
+      '--cgpt-accent': '#DC2626',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'silent-night-starfield',
+    name: 'Silent Night (Starfield)',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#020617',
+      '--cgpt-surface': '#02081C',
+      '--cgpt-text': '#F9FAFB',
+      '--cgpt-text-muted': '#CBD5F5',
+      '--cgpt-border': '#1D4ED8',
+      '--cgpt-accent': '#38BDF8',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'minimal-advent',
+    name: 'Minimal Advent',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#0B0712',
+      '--cgpt-surface': '#141021',
+      '--cgpt-text': '#F9FAFB',
+      '--cgpt-text-muted': '#E5E7EB',
+      '--cgpt-border': '#4C1D95',
+      '--cgpt-accent': '#7C3AED',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'red',
+    name: 'Red',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#FFFFFF',
+      '--cgpt-surface': '#F3F3F3',
+      '--cgpt-text': '#111827',
+      '--cgpt-text-muted': '#4B5563',
+      '--cgpt-border': '#E5E7EB',
+      '--cgpt-accent': '#EF4444',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'synth-wave',
+    name: 'Synth Wave',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#262335',
+      '--cgpt-surface': '#2E2943',
+      '--cgpt-text': '#F9FAFB',
+      '--cgpt-text-muted': '#C7D2FE',
+      '--cgpt-border': '#433162',
+      '--cgpt-accent': '#FF6AC1',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'tomorrow-night-blue',
+    name: 'Tomorrow Night Blue',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#002451',
+      '--cgpt-surface': '#001C40',
+      '--cgpt-text': '#E0F2FF',
+      '--cgpt-text-muted': '#BFDBFE',
+      '--cgpt-border': '#003566',
+      '--cgpt-accent': '#4FC3F7',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'shades-of-purple',
+    name: 'Shades of Purple',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#2D2B56',
+      '--cgpt-surface': '#222244',
+      '--cgpt-text': '#FFFFFF',
+      '--cgpt-text-muted': '#C7D2FE',
+      '--cgpt-border': '#3F3C78',
+      '--cgpt-accent': '#FAD000',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'dark-forest',
+    name: 'Dark Forest',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#101917',
+      '--cgpt-surface': '#131F1D',
+      '--cgpt-text': '#E5F5F0',
+      '--cgpt-text-muted': '#94A3B8',
+      '--cgpt-border': '#1F2933',
+      '--cgpt-accent': '#22C55E',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'chocolate-caramel',
+    name: 'Chocolate Caramel',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#221A0F',
+      '--cgpt-surface': '#362712',
+      '--cgpt-text': '#FDEFD9',
+      '--cgpt-text-muted': '#D1B59A',
+      '--cgpt-border': '#4A3419',
+      '--cgpt-accent': '#FBBF77',
+    },
+    isPremium: false,
+  },
+];

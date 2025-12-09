@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="asset/variants/logo-full-transparent.png" alt="ThemeGPT Logo" width="300" />
+  <img src="asset/icons/animated-clean-400.gif" alt="ThemeGPT Logo" width="400" />
   <h1>ThemeGPT</h1>
   <p><b>The privacy-first ChatGPT theme manager</b></p>
   <p>

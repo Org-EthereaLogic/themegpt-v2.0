@@ -8,8 +8,10 @@
     "dev:web": "pnpm --filter web dev",
     "build": "pnpm -r build",
     "lint": "pnpm -r lint",
-    "test": "vitest run",
-    "test:coverage": "vitest run --coverage"
+    "lint:extension": "pnpm --filter extension lint",
+    "lint:web": "pnpm --filter web lint",
+    "test": "pnpm -r test",
+    "clean": "pnpm -r clean"
   },
   "pnpm": {
     "overrides": {

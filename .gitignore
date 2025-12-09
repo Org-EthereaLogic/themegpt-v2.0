@@ -23,7 +23,6 @@ extension/build
 *.log
 *.pyc
 __pycache__/
-.env
 .env.local
 .turbo
 dist

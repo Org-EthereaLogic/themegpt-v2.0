@@ -77,10 +77,10 @@ async def call_gemini(prompt: str, model: str = None) -> str:
     """
     model = model or DEFAULT_MODELS["gemini"]
     
-    # Configure API key
-    api_key = os.environ.get("GOOGLE_API_KEY")
+    # Configure API key (accept either GOOGLE_API_KEY or GEMINI_API_KEY)
+    api_key = os.environ.get("GOOGLE_API_KEY") or os.environ.get("GEMINI_API_KEY")
     if not api_key:
-        raise ValueError("GOOGLE_API_KEY environment variable required")
+        raise ValueError("GOOGLE_API_KEY or GEMINI_API_KEY environment variable required")
     
     genai.configure(api_key=api_key)
     gemini_model = genai.GenerativeModel(model)

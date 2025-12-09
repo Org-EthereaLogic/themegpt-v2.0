@@ -31,3 +31,7 @@ coverage
 
 # Snyk Security Extension - AI Rules (auto-generated)
 .github/instructions/snyk_rules.instructions.md
+
+# Codacy CLI local tooling (keep codacy.yaml)
+.codacy/*
+!.codacy/codacy.yaml

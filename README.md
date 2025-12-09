@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="asset/animated/mascot-wink.gif" alt="ThemeGPT Mascot" width="128" />
-  <br />
   <img src="asset/variants/logo-full-transparent.png" alt="ThemeGPT Logo" width="300" />
   <h1>ThemeGPT</h1>
   <p><b>The privacy-first ChatGPT theme manager</b></p>

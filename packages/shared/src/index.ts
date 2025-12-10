@@ -19,7 +19,7 @@ export interface TokenStats {
 export interface Theme {
   id: string;
   name: string;
-  category: 'christmas' | 'core';
+  category: 'christmas' | 'core' | 'premium';
   colors: {
     '--cgpt-bg': string;
     '--cgpt-surface': string;
@@ -86,7 +86,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#FECACA',
       '--cgpt-accent': '#DC2626',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'silent-night-starfield',
@@ -100,7 +100,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#1D4ED8',
       '--cgpt-accent': '#38BDF8',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'minimal-advent',
@@ -114,7 +114,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#4C1D95',
       '--cgpt-accent': '#7C3AED',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'red',
@@ -142,7 +142,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#433162',
       '--cgpt-accent': '#FF6AC1',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'tomorrow-night-blue',
@@ -156,7 +156,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#003566',
       '--cgpt-accent': '#4FC3F7',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'shades-of-purple',
@@ -170,7 +170,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#3F3C78',
       '--cgpt-accent': '#FAD000',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'dark-forest',

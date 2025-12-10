@@ -1,5 +1,7 @@
 # AI Prompt Engineering (development artifacts)
 prompt/
+doc/
+screenshot/
 
 # VS Code AI rules
 .github/instructions/codacy.instructions.md

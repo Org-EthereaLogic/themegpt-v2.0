@@ -22,9 +22,9 @@ export default function Home() {
               {item}
             </a>
           ))}
-          <button className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30">
+          <a href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba" target="_blank" className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30">
             Get Extension
-          </button>
+          </a>
         </nav>
       </header>
 
@@ -39,12 +39,12 @@ export default function Home() {
           and transform your ChatGPT experience.
         </p>
         <div className="flex justify-center gap-3.5">
-          <button className="cursor-pointer rounded-full bg-brown-900 px-7 py-3.5 text-base font-semibold text-white transition-transform hover:-translate-y-px">
+          <a href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba" target="_blank" className="cursor-pointer rounded-full bg-brown-900 px-7 py-3.5 text-base font-semibold text-white transition-transform hover:-translate-y-px">
             Add to Chrome — Free
-          </button>
-          <button className="cursor-pointer rounded-full border-[2px] border-brown-900 bg-transparent px-6 py-3 text-base font-semibold text-brown-900 transition-all hover:bg-brown-900 hover:text-white">
+          </a>
+          <a href="#themes" className="cursor-pointer rounded-full border-[2px] border-brown-900 bg-transparent px-6 py-3 text-base font-semibold text-brown-900 transition-all hover:bg-brown-900 hover:text-white">
             View Themes
-          </button>
+          </a>
         </div>
       </section>
 
@@ -53,13 +53,13 @@ export default function Home() {
         <h2 className="mb-2 text-[32px] font-bold text-brown-900">
           ✨ Premium Themes
         </h2>
-        <p className="text-base text-brown-600">
-          Each theme sits in a white &quot;frame&quot; against the cream background
+        <p className="text-base text-brown-600 max-w-2xl mx-auto">
+          Unlock our full collection of professionally designed themes. Each theme is carefully crafted to provide excellent readability and aesthetic appeal.
         </p>
       </div>
 
       {/* Theme Gallery */}
-      <section className="px-8 pb-[70px] pt-5">
+      <section id="themes" className="px-8 pb-[70px] pt-5">
 
         <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
           

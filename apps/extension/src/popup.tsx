@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react"
 import { Storage } from "@plasmohq/storage"
 import { DEFAULT_THEMES, type Theme } from "@themegpt/shared"
-import { TokenCounter } from "./src/components/TokenCounter"
+import { TokenCounter } from "./components/TokenCounter"
 
-import "./style.css"
+import "../style.css"
 
 // ThemeGPT mascot logo
-import mascotUrl from "url:./assets/mascot-32.png"
+import mascotUrl from "url:../assets/mascot-32.png"
 
 const storage = new Storage({ area: "local" })
 

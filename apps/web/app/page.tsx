@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 export default function Home() {
   return (
     <div className="min-h-screen bg-cream font-sans text-brown-900">
@@ -5,10 +7,13 @@ export default function Home() {
       {/* Header */}
       <header className="flex items-center justify-between border-b border-cream-dark bg-cream px-8 py-4">
         <div className="flex items-center gap-2.5">
-          <img 
-            src="/mascot-48.png" 
-            alt="ThemeGPT mascot" 
+          <Image
+            src="/mascot-48.png"
+            alt="ThemeGPT mascot"
+            width={40}
+            height={40}
             className="h-10 w-10 rounded-full shadow-sm"
+            priority
           />
           <span className="text-xl font-bold text-brown-900">ThemeGPT</span>
         </div>

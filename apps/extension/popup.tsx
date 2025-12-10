@@ -5,8 +5,8 @@ import { TokenCounter } from "./src/components/TokenCounter"
 
 import "./style.css"
 
-// Fallback asset import if logo-full.png isn't ready
-import mascotUrl from "url:../assets/icon.png"
+// ThemeGPT mascot logo
+import mascotUrl from "url:./assets/mascot-32.png"
 
 const storage = new Storage({ area: "local" })
 

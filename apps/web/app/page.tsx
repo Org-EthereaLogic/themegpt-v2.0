@@ -1,17 +1,15 @@
 export default function Home() {
   return (
     <div className="min-h-screen bg-cream font-sans text-brown-900">
-      {/* Option Label - For Review Context */}
-      <div className="fixed top-3 right-3 z-50 rounded-lg bg-orange-accent px-4 py-2 text-[13px] font-bold text-white shadow-lg shadow-orange-accent/30">
-        OPTION B: Frame Method
-      </div>
 
       {/* Header */}
       <header className="flex items-center justify-between border-b border-cream-dark bg-cream px-8 py-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full border-[2.5px] border-brown-900 bg-gradient-to-br from-[#E8956A] via-[#1F9E8F] to-[#1F9E8F] text-base shadow-sm">
-            😊
-          </div>
+          <img 
+            src="/mascot-48.png" 
+            alt="ThemeGPT mascot" 
+            className="h-10 w-10 rounded-full shadow-sm"
+          />
           <span className="text-xl font-bold text-brown-900">ThemeGPT</span>
         </div>
         <nav className="flex items-center gap-7">
@@ -32,10 +30,6 @@ export default function Home() {
 
       {/* Hero */}
       <section className="relative px-8 py-[70px] text-center">
-        {/* Zone Label */}
-        <div className="absolute top-1/2 left-3 -translate-y-1/2 rounded bg-brown-900/90 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase text-cream">
-          All Cream Background
-        </div>
 
         <h1 className="mb-4.5 text-5xl font-bold leading-[1.15] text-brown-900">
           Make ChatGPT <span className="text-teal-500">yours</span>
@@ -65,10 +59,7 @@ export default function Home() {
       </div>
 
       {/* Theme Gallery */}
-      <section className="relative px-8 pb-[70px] pt-5">
-        <div className="absolute top-3 left-3 rounded bg-orange-accent/95 px-2.5 py-1 text-[10px] font-semibold tracking-wider uppercase text-white">
-          Cream BG + White Card Frames
-        </div>
+      <section className="px-8 pb-[70px] pt-5">
 
         <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
           
@@ -80,7 +71,6 @@ export default function Home() {
             bubble="bg-[#343746] text-[#f8f8f2]"
             label="text-[#bd93f9]"
             input="bg-[#21222c] text-[#6272a4] border-[#44475a]"
-            indicator={true}
           />
           <ThemeCard
             name="Rose Garden"
@@ -165,17 +155,11 @@ interface ThemeCardProps {
   bubble: string;
   label: string;
   input: string;
-  indicator?: boolean;
 }
 
-function ThemeCard({ name, type, bg, bubble, label, input, indicator }: ThemeCardProps) {
+function ThemeCard({ name, type, bg, bubble, label, input }: ThemeCardProps) {
   return (
     <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(75,46,30,0.15)]">
-      {indicator && (
-        <div className="absolute top-1/2 -right-2 -translate-y-1/2 rounded bg-brown-900 px-2 py-0.5 text-[9px] font-semibold text-cream z-10">
-          White Frame
-        </div>
-      )}
       <div className="overflow-hidden rounded-xl">
         <div className={`flex min-h-[160px] flex-col gap-2.5 p-[22px] ${bg}`}>
           <div className={`rounded-[14px] p-3.5 text-xs leading-relaxed ${bubble}`}>

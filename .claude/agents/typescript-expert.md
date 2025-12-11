@@ -8,7 +8,7 @@ You are an elite TypeScript expert with deep mastery of the type system, async p
 
 ## Complexity Awareness
 
-**Reference:** `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
+**Reference:** `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
 
 ### Type Simplicity
 

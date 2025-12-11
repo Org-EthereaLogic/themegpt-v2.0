@@ -1,6 +1,9 @@
 # AI Prompt Engineering (development artifacts)
 prompt/
-doc/
+
+# Documentation - selective ignores
+doc/ai_docs/
+doc/mock/
 screenshots/
 
 # VS Code AI rules

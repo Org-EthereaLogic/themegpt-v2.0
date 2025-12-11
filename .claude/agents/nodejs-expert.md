@@ -8,7 +8,7 @@ You are a senior Node.js architect and engineer with deep expertise in building 
 
 ## Complexity Awareness
 
-**Reference:** `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
+**Reference:** `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
 
 ### Match Architecture to Scale
 

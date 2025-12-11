@@ -1,6 +1,6 @@
 # ThemeGPT v2.0 Repository Guidelines
 
-Operational procedures for AI coding agents working on ThemeGPT v2.0. Before reading this document, familiarize yourself with the historical context in `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`.
+Operational procedures for AI coding agents working on ThemeGPT v2.0. Before reading this document, familiarize yourself with the historical context in `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`.
 
 ## Project Structure & Module Organization
 
@@ -22,7 +22,7 @@ Group new work by these domains. Check existing modules before creating new file
 
 ## Complexity Awareness
 
-**Required Reading:** `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
+**Required Reading:** `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
 
 Before implementing any solution, apply the complexity gate:
 
@@ -65,11 +65,13 @@ When you see these patterns emerging, stop and raise the concern before continui
 4. **Delete freely:** Remove unused abstractions immediately
 
 **Order of operations:**
+
 ```
 Working code → Observe duplication → Extract pattern → Document why
 ```
 
 **NOT:**
+
 ```
 Design pattern → Implement abstraction → Hope for reuse
 ```
@@ -150,5 +152,5 @@ PR descriptions should include:
 |----------|---------|
 | `CONSTITUTION.md` | Philosophical principles |
 | `DIRECTIVES.md` | Enforcement rules |
-| `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md` | Historical lessons (required reading) |
+| `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md` | Historical lessons (required reading) |
 | `.claude/agents/*.md` | Specialized agent definitions |

@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **ThemeGPT v2.0** is a privacy-first Chrome extension that lets users customize ChatGPT's appearance and track token usage — all without data leaving the browser.
 
-This project follows a **simplicity-first development philosophy** informed by historical lessons documented in `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`. That document describes how a simple 200-line solution became a 7,900-line enterprise platform through unchecked complexity accumulation. We actively prevent that pattern here.
+This project follows a **simplicity-first development philosophy** informed by historical lessons documented in `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`. That document describes how a simple 200-line solution became a 7,900-line enterprise platform through unchecked complexity accumulation. We actively prevent that pattern here.
 
 ## Technology Stack
 
@@ -66,7 +66,7 @@ When principles conflict: **Simplicity > Privacy > Accessibility > Brand > Compl
 
 ## Historical Lessons
 
-The SynthAI project archaeology (`doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`) documents these failure patterns we must avoid:
+The SynthAI project archaeology (`doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`) documents these failure patterns we must avoid:
 
 | Anti-Pattern | What Happened | Prevention |
 |--------------|---------------|------------|
@@ -94,7 +94,7 @@ pnpm lint       # Lint code
 | `CONSTITUTION.md` | Philosophical principles for development |
 | `DIRECTIVES.md` | Enforcement rules for AI coding agents |
 | `AGENTS.md` | Operational procedures and guidelines |
-| `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md` | **Required reading** — Historical lessons on avoiding over-engineering |
+| `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md` | **Required reading** — Historical lessons on avoiding over-engineering |
 | `.claude/agents/*.md` | Specialized agent definitions |
 
 ## Complexity Gate

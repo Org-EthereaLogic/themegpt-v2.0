@@ -14,7 +14,7 @@ Governs all development for ThemeGPT v2.0, including:
 
 ## Historical Context
 
-This project operates under lessons learned from the SynthAI project archaeology (`doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`), which documented how a simple 200-line solution became a 7,900-line enterprise platform through unchecked complexity accumulation. That cautionary tale informs several principles below.
+This project operates under lessons learned from the SynthAI project archaeology (`doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`), which documented how a simple 200-line solution became a 7,900-line enterprise platform through unchecked complexity accumulation. That cautionary tale informs several principles below.
 
 ## Foundational Principles (Priority Order)
 
@@ -156,4 +156,4 @@ These patterns emerged from the SynthAI archaeology and must be actively prevent
 | DIRECTIVES.md | Enforcement rules derived from these principles |
 | AGENTS.md | Operational procedures for development |
 | CLAUDE.md | Quick reference for Claude Code sessions |
-| doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md | Historical lessons informing these principles |
+| doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md | Historical lessons informing these principles |

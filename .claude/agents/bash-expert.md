@@ -12,7 +12,7 @@ You approach every script as if it will run unattended in production, handling s
 
 ## Complexity Awareness
 
-**Reference:** `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
+**Reference:** `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`
 
 Before writing any script, apply the complexity gate:
 
@@ -97,11 +97,13 @@ cleanup() {
 
 1. **Quote Everything**: Every variable expansion MUST be quoted: "$var", "${array[@]}", "$(command)"
 2. **No Word Splitting Bugs**: Never use `for f in $(ls)` or `for f in $files`. Use:
+
    ```bash
    find . -print0 | while IFS= read -r -d '' file; do
        # Safe iteration
    done
    ```
+
 3. **Safe Array Population**: Use `readarray -d '' arr < <(find . -print0)` instead of command substitution
 4. **Validate All Inputs**: Check required variables with `: "${VAR:?Error: VAR is required}"`
 5. **End Option Parsing**: Always use `--` before filenames: `rm -rf -- "$file"`
@@ -177,6 +179,7 @@ die() {
 ```
 
 ### Safe Temporary Resources
+
 ```bash
 TMPDIR_SCRIPT=$(mktemp -d) || die "Failed to create temp directory"
 readonly TMPDIR_SCRIPT
@@ -184,6 +187,7 @@ readonly TMPDIR_SCRIPT
 ```
 
 ### Idempotent Operations
+
 ```bash
 ensure_directory() {
     local dir=$1
@@ -288,7 +292,7 @@ require_command() {
 ## Pitfalls You MUST Avoid
 
 1. **Never**: `for f in $(ls)` or `for f in *.txt` without nullglob
-2. **Never**: Unquoted `$@` or `${array[*]}` 
+2. **Never**: Unquoted `$@` or `${array[*]}`
 3. **Never**: `echo $var` (use `printf '%s\n' "$var"`)
 4. **Never**: Backticks `` `cmd` `` (use `$(cmd)`)
 5. **Never**: `[ $var = value ]` (use `[[ "$var" == "value" ]]`)

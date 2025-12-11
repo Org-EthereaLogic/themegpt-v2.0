@@ -1,6 +1,6 @@
 # ThemeGPT v2.0 Development Directives
 
-Enforcement rules for AI coding agents working on ThemeGPT v2.0. Rules derive from CONSTITUTION.md principles and lessons from `doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md`.
+Enforcement rules for AI coding agents working on ThemeGPT v2.0. Rules derive from CONSTITUTION.md principles and lessons from `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`.
 
 **Enforcement Model:**
 
@@ -14,12 +14,12 @@ Enforcement rules for AI coding agents working on ThemeGPT v2.0. Rules derive fr
 |-----------|----------|----------|---------------|
 | Complexity Budget | Critical | Architecture | All code files |
 | No Placeholder Content | Critical | Content | All files |
-| Accessibility Standards | Critical | Markup | *.tsx, *.html |
+| Accessibility Standards | Critical | Markup | *.tsx,*.html |
 | Brand Color Compliance | Critical | Visual | *.css, *.tsx, tailwind.config.* |
 | No Premature Abstraction | Important | Architecture | All code files |
 | Pattern Justification | Important | Architecture | New patterns, abstractions |
 | Framework Separation | Important | Architecture | Utility code |
-| Responsive Implementation | Important | Layout | *.css, *.tsx |
+| Responsive Implementation | Important | Layout | *.css,*.tsx |
 | Component Architecture | Important | Structure | components/**/* |
 | Performance Budgets | Recommended | Optimization | All files |
 
@@ -310,4 +310,4 @@ find . -name "*.json" -o -name "*.yaml" | xargs wc -l
 | CONSTITUTION.md | Philosophical principles these rules enforce |
 | AGENTS.md | Operational procedures using these rules |
 | CLAUDE.md | Quick reference summarizing key rules |
-| doc/dev/SYNTHAI_PROJECT_ARCHAEOLOGY.md | Historical lessons informing complexity rules |
+| doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md | Historical lessons informing complexity rules |

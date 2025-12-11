@@ -1,5 +1,7 @@
 # Security Advisories
 
+This file tracks known security vulnerabilities affecting the development environment. Production builds and end users are not affected by these advisories.
+
 ## Active Advisories
 
 ### CVE-2025-56648: Parcel Dev Server Origin Validation Error
@@ -26,7 +28,25 @@ running the Parcel dev server. It does NOT affect:
 
 #### Tracking
 
-- GitHub Advisory: https://github.com/advisories/GHSA-qm9p-f9j5-w83w
-- Upstream Fix PR: https://github.com/parcel-bundler/parcel/pull/10138
+- GitHub Advisory: <https://github.com/advisories/GHSA-qm9p-f9j5-w83w>
+- Upstream Fix PR: <https://github.com/parcel-bundler/parcel/pull/10138>
 
 **Last reviewed:** 2025-12-09
+
+---
+
+## Archived Advisories
+
+*No archived advisories yet.*
+
+When an advisory is resolved (upstream patch applied and dependency updated), move it here with resolution details:
+
+```markdown
+### [RESOLVED] CVE-YYYY-NNNNN: Description
+
+**Resolved:** YYYY-MM-DD  
+**Resolution:** Upgraded dependency-name from X.X.X to Y.Y.Y  
+**Original Severity:** Moderate/High/Critical  
+
+Brief description of the original issue and how it was resolved.
+```

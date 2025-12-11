@@ -34,7 +34,7 @@ export async function POST(request: Request) {
       };
     }
 
-    db.createLicense(newKey, entitlement);
+    await db.createLicense(newKey, entitlement);
 
     // Return the key directly for the Mock flow
     return NextResponse.json({ 

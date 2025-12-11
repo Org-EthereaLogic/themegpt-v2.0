@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const entitlement = db.getLicense(licenseKey);
+    const entitlement = await db.getLicense(licenseKey);
 
     if (!entitlement) {
       return NextResponse.json<VerifyResponse>({

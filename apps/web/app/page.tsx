@@ -1,6 +1,30 @@
+"use client"
+
 import Image from "next/image"
+import { useRouter } from "next/navigation"
 
 export default function Home() {
+  const router = useRouter()
+
+  const handleCheckout = async (type: 'subscription' | 'one-time', themeId?: string) => {
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type, themeId })
+      })
+      const data = await res.json()
+      if (data.success) {
+        // Redirect to success page with key
+        router.push(`/success?key=${data.licenseKey}`)
+      } else {
+        alert('Checkout failed: ' + data.message)
+      }
+    } catch (e) {
+      alert('Checkout error')
+    }
+  }
+
   return (
     <div className="min-h-screen bg-cream font-sans text-brown-900">
 
@@ -53,22 +77,60 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Pricing Section (New) */}
+      <div className="bg-cream px-8 pt-[30px] pb-[30px] text-center">
+        <h2 className="mb-6 text-[32px] font-bold text-brown-900">
+          ✨ Simple Pricing
+        </h2>
+        <div className="flex flex-wrap justify-center gap-6 max-w-4xl mx-auto">
+            {/* Subscription Card */}
+            <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[280px] border-2 border-teal-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-teal-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-bl-lg">
+                    Best Value
+                </div>
+                <h3 className="text-xl font-bold mb-2">Infinite Style</h3>
+                <div className="text-4xl font-bold text-brown-900 mb-2">$1.99<span className="text-base font-normal opacity-60">/mo</span></div>
+                <p className="opacity-70 text-sm mb-6 min-h-[40px]">Access to 3 active premium themes at once. Swap anytime.</p>
+                <button 
+                  onClick={() => handleCheckout('subscription')}
+                  className="w-full py-3 rounded-xl bg-teal-500 text-white font-bold hover:bg-teal-600 transition-colors"
+                >
+                    Subscribe Now
+                </button>
+            </div>
+
+            {/* Pay Per Theme Card */}
+            <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[280px] border border-brown-900/10">
+                <h3 className="text-xl font-bold mb-2">Single Theme</h3>
+                <div className="text-4xl font-bold text-brown-900 mb-2">$0.99<span className="text-base font-normal opacity-60">/ea</span></div>
+                <p className="opacity-70 text-sm mb-6 min-h-[40px]">Own a specific theme forever. One-time purchase.</p>
+                <button 
+                   onClick={() => {
+                        const themeId = prompt("Enter Theme ID to buy (e.g., 'synth-wave'):", "synth-wave")
+                        if(themeId) handleCheckout('one-time', themeId)
+                   }}
+                   className="w-full py-3 rounded-xl bg-brown-900 text-white font-bold hover:bg-brown-800 transition-colors"
+                >
+                    Buy One Theme
+                </button>
+            </div>
+        </div>
+      </div>
+
       {/* Section Header */}
       <div className="bg-cream px-8 pt-[50px] pb-[30px] text-center">
         <h2 className="mb-2 text-[32px] font-bold text-brown-900">
-          ✨ Premium Themes
+          Premium Gallery
         </h2>
         <p className="text-base text-brown-600 max-w-2xl mx-auto">
-          Unlock our full collection of professionally designed themes. Each theme is carefully crafted to provide excellent readability and aesthetic appeal.
+          Unlock our full collection of professionally designed themes.
         </p>
       </div>
 
       {/* Theme Gallery */}
       <section id="themes" className="px-8 pb-[70px] pt-5">
-
         <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
           
-          {/* Theme Card Components */}
           <ThemeCard
             name="Dracula"
             type="🌙 Dark Theme"
@@ -76,6 +138,7 @@ export default function Home() {
             bubble="bg-[#343746] text-[#f8f8f2]"
             label="text-[#bd93f9]"
             input="bg-[#21222c] text-[#6272a4] border-[#44475a]"
+            onBuy={() => handleCheckout('one-time', 'dracula')}
           />
           <ThemeCard
             name="Rose Garden"
@@ -84,6 +147,7 @@ export default function Home() {
             bubble="bg-[#FFFFFF] text-[#5C374C]"
             label="text-[#E91E63]"
             input="bg-[#FFFFFF] text-[#8B6B7B] border-[#F8D7DA]"
+             onBuy={() => handleCheckout('one-time', 'rose-garden')}
           />
           <ThemeCard
             name="Ocean Breeze"
@@ -92,6 +156,7 @@ export default function Home() {
             bubble="bg-[#FFFFFF] text-[#1A535C]"
             label="text-[#00A896]"
             input="bg-[#FFFFFF] text-[#4A7C82] border-[#B8D8E0]"
+             onBuy={() => handleCheckout('one-time', 'ocean-breeze')}
           />
           <ThemeCard
             name="Monokai Pro"
@@ -100,6 +165,7 @@ export default function Home() {
             bubble="bg-[#403E41] text-[#FCFCFA]"
             label="text-[#FFD866]"
             input="bg-[#221F22] text-[#939293] border-[#49474A]"
+            onBuy={() => handleCheckout('one-time', 'monokai-pro')}
           />
           <ThemeCard
             name="Lavender Dreams"
@@ -108,6 +174,7 @@ export default function Home() {
             bubble="bg-[#FFFFFF] text-[#4A3560]"
             label="text-[#9333EA]"
             input="bg-[#FFFFFF] text-[#7C6B8E] border-[#E2D1F0]"
+             onBuy={() => handleCheckout('one-time', 'lavender-dreams')}
           />
           <ThemeCard
             name="Midnight Blue"
@@ -116,6 +183,7 @@ export default function Home() {
             bubble="bg-[#1E293B] text-[#E2E8F0]"
             label="text-[#38BDF8]"
             input="bg-[#0F172A] text-[#64748B] border-[#334155]"
+             onBuy={() => handleCheckout('one-time', 'midnight-blue')}
           />
         </div>
       </section>
@@ -160,9 +228,10 @@ interface ThemeCardProps {
   bubble: string;
   label: string;
   input: string;
+  onBuy?: () => void;
 }
 
-function ThemeCard({ name, type, bg, bubble, label, input }: ThemeCardProps) {
+function ThemeCard({ name, type, bg, bubble, label, input, onBuy }: ThemeCardProps) {
   return (
     <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(75,46,30,0.15)]">
       <div className="overflow-hidden rounded-xl">
@@ -181,8 +250,14 @@ function ThemeCard({ name, type, bg, bubble, label, input }: ThemeCardProps) {
           <div className="text-[15px] font-semibold text-brown-900">{name}</div>
           <div className="mt-0.5 text-xs text-brown-600">{type}</div>
         </div>
-        <button className="cursor-pointer rounded-[20px] bg-teal-500 px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-teal-600">
-          Preview
+        <button 
+          onClick={(e) => {
+              e.stopPropagation()
+              onBuy?.()
+          }}
+          className="cursor-pointer rounded-[20px] bg-teal-500/10 text-teal-600 hover:bg-teal-500 hover:text-white px-4 py-2 text-[13px] font-medium transition-colors"
+        >
+          Buy $0.99
         </button>
       </div>
     </div>

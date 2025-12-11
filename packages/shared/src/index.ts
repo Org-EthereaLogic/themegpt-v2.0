@@ -201,3 +201,40 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: false,
   },
 ];
+
+// --- License & Payments ---
+
+export type LicenseType = 'subscription' | 'lifetime';
+
+export interface LicenseEntitlement {
+  active: boolean;
+  type: LicenseType;
+  /**
+   * For subscription: Number of slots available (e.g. 3)
+   * For lifetime: Usually undefined or 0 (specific themes are in permanentlyUnlocked)
+   */
+  maxSlots: number;
+  /**
+   * IDs of themes permanently unlocked (Lifetime purchase)
+   */
+  permanentlyUnlocked: string[];
+  /**
+   * IDs of themes currently "active" in the flexible slots (Subscription)
+   * User can swap these out up to maxSlots.
+   */
+  activeSlotThemes: string[];
+}
+
+export interface VerifyResponse {
+  valid: boolean;
+  entitlement?: LicenseEntitlement;
+  message?: string;
+}
+
+const globalLocation =
+  typeof globalThis !== 'undefined'
+    ? (globalThis as { location?: { hostname?: string } }).location
+    : undefined;
+
+const isLocalHost = !!globalLocation && globalLocation.hostname === 'localhost';
+export const API_BASE_URL = isLocalHost ? 'http://localhost:3000' : 'https://themegpt.ai';

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Storage } from "@plasmohq/storage"
-import { DEFAULT_THEMES, type Theme } from "@themegpt/shared"
+import { API_BASE_URL, DEFAULT_THEMES, type LicenseEntitlement, type Theme, type VerifyResponse } from "@themegpt/shared"
 import { TokenCounter } from "./components/TokenCounter"
 
 import "../style.css"
@@ -13,6 +13,12 @@ const storage = new Storage({ area: "local" })
 export default function Popup() {
   const [activeThemeId, setActiveThemeId] = useState<string>("system")
   const [unlockedThemeIds, setUnlockedThemeIds] = useState<string[]>([])
+  
+  // --- License Logic ---
+  const [licenseKey, setLicenseKey] = useState("")
+  const [entitlement, setEntitlement] = useState<LicenseEntitlement | null>(null)
+  const [showLicenseInput, setShowLicenseInput] = useState(false)
+  const [statusMsg, setStatusMsg] = useState("")
 
   useEffect(() => {
     storage.get<Theme>("activeTheme").then((t) => {
@@ -21,30 +27,141 @@ export default function Popup() {
     storage.get<string[]>("unlockedThemes").then((ids) => {
       if (ids) setUnlockedThemeIds(ids)
     })
+    // Load saved license
+    storage.get<string>("licenseKey").then((key) => {
+      if (key) {
+        setLicenseKey(key)
+        validateLicense(key)
+      }
+    })
   }, [])
 
-  const applyTheme = (theme: Theme) => {
-    if (theme.isPremium && !unlockedThemeIds.includes(theme.id)) {
-      window.open(`https://themegpt.ai/themes/${theme.id}`, '_blank')
+  const validateLicense = async (key: string) => {
+    if (!key) return
+    setStatusMsg("Validating...")
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/verify`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ licenseKey: key })
+      })
+      if (!res.ok) {
+        setStatusMsg("Validation failed. Try again.")
+        return
+      }
+
+      const data: VerifyResponse = await res.json()
+      
+      if (data.valid && data.entitlement) {
+        setEntitlement(data.entitlement)
+        setStatusMsg("License Active ✅")
+        // Update local unlocked state based on entitlement
+        updateUnlockedState(data.entitlement)
+        storage.set("licenseKey", key)
+        return
+      }
+
+      setEntitlement(null)
+      setStatusMsg(`Error: ${data.message ?? "Invalid key"}`)
+    } catch (e) {
+      console.error(e)
+      setStatusMsg("Connection Error")
+    }
+  }
+
+  const updateUnlockedState = (ent: LicenseEntitlement) => {
+    const unlocked: string[] = []
+    if (ent.permanentlyUnlocked?.length) unlocked.push(...ent.permanentlyUnlocked)
+    if (ent.activeSlotThemes?.length) unlocked.push(...ent.activeSlotThemes)
+    setUnlockedThemeIds(unlocked)
+    storage.set("unlockedThemes", unlocked)
+  }
+
+  const handleApply = (theme: Theme) => {
+    // Check if unlocked
+    if (!theme.isPremium || unlockedThemeIds.includes(theme.id)) {
+      setActiveThemeId(theme.id)
+      storage.set("activeTheme", theme)
       return
     }
-    setActiveThemeId(theme.id)
-    storage.set("activeTheme", theme)
+
+    // Handle Subscription Slot Logic
+    if (entitlement?.type === 'subscription') {
+      const currentEntitlement = entitlement as LicenseEntitlement
+      const currentSlots = currentEntitlement.activeSlotThemes ?? []
+      if (currentSlots.length < entitlement.maxSlots) {
+        const newSlots = [...currentSlots, theme.id]
+        const newEntitlement: LicenseEntitlement = {
+          ...currentEntitlement,
+          activeSlotThemes: newSlots
+        }
+        setEntitlement(newEntitlement)
+        updateUnlockedState(newEntitlement)
+        
+        setActiveThemeId(theme.id)
+        storage.set("activeTheme", theme)
+        
+        // Note: Ideally sync to server here
+        storage.set("localEntitlement", newEntitlement)
+        return
+      } else {
+        // Simple alert for now
+        // In a real app, show a modal to deselect one
+        alert(`Subscription Limit Reached (${entitlement.maxSlots}). Please deactivate another theme first via the web settings.`)
+        return
+      }
+    }
+    
+    // Fallback: Open buy page
+    window.open(`https://themegpt.ai/themes/${theme.id}`, '_blank')
   }
 
   const freeThemes = DEFAULT_THEMES.filter(t => !t.isPremium)
   const premiumThemes = DEFAULT_THEMES.filter(t => t.isPremium)
 
   return (
-    <div className="flex flex-col h-full bg-brand-bg text-brand-text font-sans">
+    <div className="flex flex-col h-full bg-brand-bg text-brand-text font-sans relative">
       {/* HEADER */}
       <header className="flex items-center gap-3 p-4 border-b border-brand-text/10 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
         <img src={mascotUrl} alt="ThemeGPT" className="w-8 h-8" />
         <h1 className="text-lg font-bold tracking-tight">ThemeGPT</h1>
-        <div className="ml-auto">
+        <div className="ml-auto flex items-center gap-2">
+           <button 
+             onClick={() => setShowLicenseInput(!showLicenseInput)}
+             className="text-xs font-medium text-brand-teal hover:text-brand-text transition-colors"
+           >
+             {entitlement ? "Premium" : "Activate"}
+           </button>
           <div className="w-2 h-2 rounded-full bg-brand-teal shadow-[0_0_8px_rgba(126,206,197,0.8)]" title="Active" />
         </div>
       </header>
+      
+      {/* LICENSE INPUT DROPDOWN */}
+      {showLicenseInput && (
+        <div className="bg-white/90 p-4 border-b border-brand-text/10 animate-in slide-in-from-top-2">
+            <h3 className="text-xs font-bold uppercase mb-2">License Key</h3>
+            <div className="flex gap-2">
+                <input 
+                  value={licenseKey}
+                  onChange={(e) => setLicenseKey(e.target.value)}
+                  className="flex-1 text-xs p-2 rounded border border-brand-text/20"
+                  placeholder="Enter key..."
+                />
+                <button 
+                  onClick={() => validateLicense(licenseKey)}
+                  className="bg-brand-teal text-white text-xs px-3 rounded font-bold"
+                >
+                  Verify
+                </button>
+            </div>
+            {statusMsg && <div className="text-[10px] mt-1 opacity-70">{statusMsg}</div>}
+            {entitlement?.type === 'subscription' && (
+                <div className="text-[10px] mt-2 text-brand-text/60">
+                    Slots Used: {(entitlement.activeSlotThemes?.length ?? 0)} / {entitlement.maxSlots}
+                </div>
+            )}
+        </div>
+      )}
 
       {/* THEME GRID */}
       <main className="flex-1 overflow-y-auto p-4 space-y-6">
@@ -63,7 +180,7 @@ export default function Popup() {
                 theme={theme}
                 isActive={activeThemeId === theme.id}
                 isLocked={false}
-                onSelect={() => applyTheme(theme)}
+                onSelect={() => handleApply(theme)}
               />
             ))}
           </div>
@@ -86,7 +203,7 @@ export default function Popup() {
                   theme={theme}
                   isActive={activeThemeId === theme.id}
                   isLocked={isLocked}
-                  onSelect={() => applyTheme(theme)}
+                  onSelect={() => handleApply(theme)}
                 />
               )
             })}

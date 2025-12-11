@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import { Suspense } from "react"
+import Link from "next/link"
 import Image from "next/image"
 
 function SuccessContent() {
@@ -35,9 +36,9 @@ function SuccessContent() {
             Keep this key safe! You can use it to verify your implementation.
         </p>
 
-        <a href="/" className="inline-block bg-brown-900 text-white px-6 py-3 rounded-full font-semibold hover:-translate-y-1 transition-transform">
+        <Link href="/" className="inline-block bg-brown-900 text-white px-6 py-3 rounded-full font-semibold hover:-translate-y-1 transition-transform">
           Back to Home
-        </a>
+        </Link>
       </div>
     </div>
   )

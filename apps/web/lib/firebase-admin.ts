@@ -19,15 +19,27 @@ const serviceAccount: ServiceAccount = {
   privateKey,
 };
 
+// Check if we have credentials
+const hasCredentials = projectId && clientEmail && privateKey;
+
 function createFirebaseApp() {
-  if (getApps().length <= 0) {
+  if (getApps().length > 0) {
+    return getApp();
+  }
+  
+  if (hasCredentials) {
     return initializeApp({
       credential: cert(serviceAccount),
       projectId,
     });
   }
-  return getApp();
+  
+  // During build time or if creds missing, return null or throw later
+  console.warn("Firebase credentials missing. Skipping initialization (okay during build).");
+  return null;
 }
 
-export const firebaseApp = createFirebaseApp();
-export const db = getFirestore(firebaseApp);
+const firebaseApp = createFirebaseApp();
+// Cast to Firestore to avoid type errors in consumers, but it will be null at build time
+export const db = (firebaseApp ? getFirestore(firebaseApp) : null) as unknown as FirebaseFirestore.Firestore;
+export { firebaseApp };

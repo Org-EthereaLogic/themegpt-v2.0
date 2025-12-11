@@ -1,0 +1,8 @@
+.git
+.next
+node_modules
+apps/web/node_modules
+packages/shared/node_modules
+.env
+.env.local
+.DS_Store

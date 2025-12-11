@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { LicenseEntitlement } from '@themegpt/shared';
 
 // Manually load .env.local because tsx doesn't load it by default
 // and we need it set BEFORE importing lib/db -> lib/firebase-admin
@@ -40,9 +41,9 @@ const run = async () => {
 
     console.log("Testing Firestore connection...");
     const testKey = "TEST-CONNECTION-KEY";
-    const testEntitlement: any = {
+    const testEntitlement: LicenseEntitlement = {
         active: true,
-        type: "test",
+        type: "subscription",
         maxSlots: 0,
         permanentlyUnlocked: [],
         activeSlotThemes: []
@@ -50,7 +51,7 @@ const run = async () => {
 
     try {
         console.log(`Writing test license: ${testKey}`);
-        await db.createLicense(testKey, testEntitlement);
+        await db.createLicense(testKey, testEntitlement as LicenseEntitlement);
         console.log("Write successful.");
 
         console.log(`Reading test license: ${testKey}`);

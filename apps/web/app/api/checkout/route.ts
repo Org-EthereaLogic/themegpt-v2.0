@@ -3,6 +3,16 @@ import { db } from "@/lib/db";
 import { v4 as uuidv4 } from "uuid";
 import { LicenseEntitlement } from "@themegpt/shared";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
+export async function OPTIONS() {
+  return new Response(null, { headers: corsHeaders });
+}
+
 // Mock Checkout API
 // In prod, this would create a Stripe Session
 export async function POST(request: Request) {
@@ -37,17 +47,17 @@ export async function POST(request: Request) {
     await db.createLicense(newKey, entitlement);
 
     // Return the key directly for the Mock flow
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       licenseKey: newKey,
-      entitlement 
-    });
+      entitlement
+    }, { headers: corsHeaders });
 
   } catch (error) {
     console.error("Checkout API error", error);
     return NextResponse.json(
       { success: false, message: "Checkout failed" },
-      { status: 500 }
+      { status: 500, headers: corsHeaders }
     );
   }
 }

@@ -19,6 +19,7 @@ export default function Popup() {
   const [entitlement, setEntitlement] = useState<LicenseEntitlement | null>(null)
   const [showLicenseInput, setShowLicenseInput] = useState(false)
   const [statusMsg, setStatusMsg] = useState("")
+  const [slotError, setSlotError] = useState<string | null>(null)
 
   useEffect(() => {
     storage.get<Theme>("activeTheme").then((t) => {
@@ -78,6 +79,7 @@ export default function Popup() {
   }
 
   const handleApply = (theme: Theme) => {
+    setSlotError(null) // Clear any previous error
     // Check if unlocked
     if (!theme.isPremium || unlockedThemeIds.includes(theme.id)) {
       setActiveThemeId(theme.id)
@@ -105,9 +107,7 @@ export default function Popup() {
         storage.set("localEntitlement", newEntitlement)
         return
       } else {
-        // Simple alert for now
-        // In a real app, show a modal to deselect one
-        alert(`Subscription Limit Reached (${entitlement.maxSlots}). Please deactivate another theme first via the web settings.`)
+        setSlotError(`Subscription limit reached (${entitlement.maxSlots} themes). Deactivate another theme via web settings to continue.`)
         return
       }
     }
@@ -209,6 +209,13 @@ export default function Popup() {
             })}
           </div>
         </section>
+
+        {/* SLOT ERROR MESSAGE */}
+        {slotError && (
+          <div className="mt-4 p-3 rounded-lg bg-brand-peach/10 border border-brand-peach/30 text-brand-text text-xs" role="alert">
+            {slotError}
+          </div>
+        )}
       </main>
 
       {/* TOKEN COUNTER & FOOTER */}

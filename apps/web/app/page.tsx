@@ -1,12 +1,25 @@
 "use client"
 
+import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
 
+const PREMIUM_THEMES = [
+  { id: 'dracula', name: 'Dracula' },
+  { id: 'rose-garden', name: 'Rose Garden' },
+  { id: 'ocean-breeze', name: 'Ocean Breeze' },
+  { id: 'monokai-pro', name: 'Monokai Pro' },
+  { id: 'lavender-dreams', name: 'Lavender Dreams' },
+  { id: 'midnight-blue', name: 'Midnight Blue' },
+]
+
 export default function Home() {
   const router = useRouter()
+  const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0].id)
+  const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   const handleCheckout = async (type: 'subscription' | 'one-time', themeId?: string) => {
+    setCheckoutError(null)
     try {
       const res = await fetch('/api/checkout', {
         method: 'POST',
@@ -15,14 +28,13 @@ export default function Home() {
       })
       const data = await res.json()
       if (data.success) {
-        // Redirect to success page with key
         router.push(`/success?key=${data.licenseKey}`)
       } else {
-        alert('Checkout failed: ' + data.message)
+        setCheckoutError('Checkout failed: ' + data.message)
       }
     } catch (error) {
       console.error('Checkout error', error)
-      alert('Checkout error')
+      setCheckoutError('Unable to process checkout. Please try again.')
     }
   }
 
@@ -108,18 +120,33 @@ export default function Home() {
             <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[280px] border border-brown-900/10">
                 <h3 className="text-xl font-bold mb-2">Single Theme</h3>
                 <div className="text-4xl font-bold text-brown-900 mb-2">$0.99<span className="text-base font-normal opacity-60">/ea</span></div>
-                <p className="opacity-70 text-sm mb-6 min-h-[40px]">Own a specific theme forever. One-time purchase.</p>
-                <button 
-                   onClick={() => {
-                        const themeId = prompt("Enter Theme ID to buy (e.g., 'synth-wave'):", "synth-wave")
-                        if(themeId) handleCheckout('one-time', themeId)
-                   }}
+                <p className="opacity-70 text-sm mb-4 min-h-[40px]">Own a specific theme forever. One-time purchase.</p>
+                <label htmlFor="theme-select" className="block text-sm font-medium text-brown-900/70 mb-2 text-left">
+                  Select Theme
+                </label>
+                <select
+                  id="theme-select"
+                  value={selectedTheme}
+                  onChange={(e) => setSelectedTheme(e.target.value)}
+                  className="w-full mb-4 py-2.5 px-3 rounded-lg border border-brown-900/20 bg-white text-brown-900 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
+                >
+                  {PREMIUM_THEMES.map((theme) => (
+                    <option key={theme.id} value={theme.id}>{theme.name}</option>
+                  ))}
+                </select>
+                <button
+                   onClick={() => handleCheckout('one-time', selectedTheme)}
                    className="w-full py-3 rounded-xl bg-brown-900 text-white font-bold hover:bg-brown-800 transition-colors"
                 >
                     Buy One Theme
                 </button>
             </div>
         </div>
+        {checkoutError && (
+          <div className="mt-4 max-w-4xl mx-auto p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm" role="alert">
+            {checkoutError}
+          </div>
+        )}
       </section>
 
       {/* Section Header */}

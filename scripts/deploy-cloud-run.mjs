@@ -10,7 +10,7 @@ const serviceAccountPath = join(__dirname, '..', 'service-account.json');
 const PROJECT_ID = 'gen-lang-client-0312336987';
 const REGION = 'us-central1';
 const SERVICE_NAME = 'theme-gpt-web';
-const IMAGE = `us-central1-docker.pkg.dev/${PROJECT_ID}/theme-gpt-repo/theme-gpt-web:v1765501499`;
+const IMAGE = `us-central1-docker.pkg.dev/${PROJECT_ID}/theme-gpt-repo/theme-gpt-web:v3`;
 
 async function deploy() {
   const serviceAccount = JSON.parse(readFileSync(serviceAccountPath, 'utf8'));

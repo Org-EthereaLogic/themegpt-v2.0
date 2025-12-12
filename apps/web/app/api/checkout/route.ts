@@ -44,6 +44,7 @@ export async function POST(request: Request) {
     });
 
   } catch (error) {
+    console.error("Checkout API error", error);
     return NextResponse.json(
       { success: false, message: "Checkout failed" },
       { status: 500 }

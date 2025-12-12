@@ -12,8 +12,8 @@ class MockStorage {
 }
 vi.mock('@plasmohq/storage', () => ({ Storage: MockStorage }))
 
-// Mock url: imports for Plasmo assets
-vi.mock('url:../assets/mascot-32.png', () => ({ default: '' }))
+// Mock url: imports for Plasmo assets (1x1 transparent PNG to avoid empty src warning)
+vi.mock('url:../assets/mascot-32.png', () => ({ default: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==' }))
 vi.mock('../style.css', () => ({}))
 
 // Mock chrome APIs

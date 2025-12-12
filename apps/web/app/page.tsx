@@ -20,7 +20,8 @@ export default function Home() {
       } else {
         alert('Checkout failed: ' + data.message)
       }
-    } catch (e) {
+    } catch (error) {
+      console.error('Checkout error', error)
       alert('Checkout error')
     }
   }
@@ -42,17 +43,21 @@ export default function Home() {
           <span className="text-xl font-bold text-brown-900">ThemeGPT</span>
         </div>
         <nav className="flex items-center gap-7">
-          {["Themes", "Pricing", "Support"].map((item) => (
+          {[
+            { label: "Themes", href: "#themes" },
+            { label: "Pricing", href: "#pricing" },
+            { label: "Features", href: "#features" },
+          ].map((item) => (
             <a
-              key={item}
-              href="#"
+              key={item.label}
+              href={item.href}
               className="text-[15px] font-medium text-brown-900 hover:text-teal-500 transition-colors"
             >
-              {item}
+              {item.label}
             </a>
           ))}
-          <a href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba" target="_blank" className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30">
-            Get Extension
+          <a href="#waitlist" className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30">
+            Join Waitlist
           </a>
         </nav>
       </header>
@@ -68,8 +73,8 @@ export default function Home() {
           and transform your ChatGPT experience.
         </p>
         <div className="flex justify-center gap-3.5">
-          <a href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba" target="_blank" className="cursor-pointer rounded-full bg-brown-900 px-7 py-3.5 text-base font-semibold text-white transition-transform hover:-translate-y-px">
-            Add to Chrome — Free
+          <a href="#waitlist" className="cursor-pointer rounded-full bg-brown-900 px-7 py-3.5 text-base font-semibold text-white transition-transform hover:-translate-y-px">
+            Join Waitlist
           </a>
           <a href="#themes" className="cursor-pointer rounded-full border-[2px] border-brown-900 bg-transparent px-6 py-3 text-base font-semibold text-brown-900 transition-all hover:bg-brown-900 hover:text-white">
             View Themes
@@ -77,8 +82,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Pricing Section (New) */}
-      <div className="bg-cream px-8 pt-[30px] pb-[30px] text-center">
+      {/* Pricing Section */}
+      <section id="pricing" className="bg-cream px-8 pt-[30px] pb-[30px] text-center">
         <h2 className="mb-6 text-[32px] font-bold text-brown-900">
           ✨ Simple Pricing
         </h2>
@@ -115,7 +120,7 @@ export default function Home() {
                 </button>
             </div>
         </div>
-      </div>
+      </section>
 
       {/* Section Header */}
       <div className="bg-cream px-8 pt-[50px] pb-[30px] text-center">
@@ -188,24 +193,47 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="border-t border-cream-dark bg-cream px-8 py-[70px] text-center">
+      {/* Features */}
+      <section id="features" className="border-t border-cream-dark bg-cream px-8 py-[70px] text-center">
         <h2 className="mb-9 text-[32px] font-bold text-brown-900">
-          Loved by everyday users
+          Why ThemeGPT?
         </h2>
-        <div className="mx-auto flex max-w-[900px] flex-wrap justify-center gap-6">
-          <Testimonial
-            quote="Finally, ChatGPT matches my aesthetic! The Rose Garden theme is exactly what I wanted."
-            author="Sarah, College Student"
+        <div className="mx-auto grid max-w-[900px] grid-cols-1 gap-6 md:grid-cols-3">
+          <FeatureCard
+            icon="🎨"
+            title="One-Click Themes"
+            description="Transform ChatGPT instantly with beautiful, professionally designed themes. No coding required."
           />
-          <Testimonial
-            quote="So easy to use. Changed themes in seconds and my students love seeing the different colors."
-            author="Mike, High School Teacher"
+          <FeatureCard
+            icon="🔒"
+            title="Privacy First"
+            description="Everything runs locally in your browser. We never collect your data or track your conversations."
           />
-          <Testimonial
-            quote="Love that they don't collect my data. Simple, safe, and my ChatGPT finally has personality!"
-            author="Jen, Professor"
+          <FeatureCard
+            icon="📊"
+            title="Token Tracking"
+            description="Monitor your ChatGPT usage in real-time. Know exactly how many tokens each conversation uses."
           />
+        </div>
+      </section>
+
+      {/* Waitlist */}
+      <section id="waitlist" className="bg-brown-900 px-8 py-[70px] text-center">
+        <h2 className="mb-4 text-[32px] font-bold text-cream">
+          Join the Waitlist
+        </h2>
+        <p className="mx-auto mb-8 max-w-[480px] text-lg text-cream/80">
+          Be the first to know when ThemeGPT launches. Get early access and exclusive themes.
+        </p>
+        <div className="mx-auto flex max-w-md gap-3">
+          <input
+            type="email"
+            placeholder="Enter your email"
+            className="flex-1 rounded-full bg-white/10 px-5 py-3 text-cream placeholder:text-cream/50 border border-cream/20 focus:outline-none focus:border-teal-500"
+          />
+          <button className="rounded-full bg-teal-500 px-6 py-3 font-semibold text-white hover:bg-teal-600 transition-colors">
+            Notify Me
+          </button>
         </div>
       </section>
 
@@ -264,15 +292,12 @@ function ThemeCard({ name, type, bg, bubble, label, input, onBuy }: ThemeCardPro
   );
 }
 
-function Testimonial({ quote, author }: { quote: string; author: string }) {
+function FeatureCard({ icon, title, description }: { icon: string; title: string; description: string }) {
   return (
-    <div className="flex flex-1 min-w-[240px] max-w-[280px] flex-col rounded-[14px] bg-white p-6 text-left shadow-[0_2px_16px_rgba(75,46,30,0.06)]">
-      <p className="mb-3.5 text-[15px] leading-relaxed text-brown-900">
-        &quot;{quote}&quot;
-      </p>
-      <div className="mt-auto text-sm font-semibold text-teal-500">
-        — {author}
-      </div>
+    <div className="flex flex-col items-center rounded-[20px] bg-white p-8 shadow-[0_4px_24px_rgba(75,46,30,0.08)]">
+      <div className="mb-4 text-4xl">{icon}</div>
+      <h3 className="mb-2 text-lg font-bold text-brown-900">{title}</h3>
+      <p className="text-sm leading-relaxed text-brown-600">{description}</p>
     </div>
   );
 }

@@ -36,6 +36,7 @@ export async function POST(request: Request) {
     });
 
   } catch (error) {
+    console.error("Verify API error", error);
     return NextResponse.json(
       { valid: false, message: "Server error" },
       { status: 500 }

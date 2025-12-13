@@ -6,8 +6,9 @@ export const BRAND = {
   yellow: '#FAD000',
 } as const;
 
-export const MSG_GET_TOKENS = 'MSG_GET_TOKENS';
-export const STORAGE_TOKEN_ENABLED = 'tokenCounterEnabled';
+export const MSG_GET_TOKENS = "GET_TOKENS";
+export const MSG_TOKEN_UPDATE = "TOKEN_UPDATE";
+export const STORAGE_TOKEN_ENABLED = "token_counter_enabled";
 
 export interface TokenStats {
   user: number;

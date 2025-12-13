@@ -25,6 +25,11 @@ Object.assign(globalThis, {
     },
     runtime: {
       lastError: null,
+      onMessage: {
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+      },
+      sendMessage: vi.fn().mockResolvedValue(undefined),
     },
   },
 })

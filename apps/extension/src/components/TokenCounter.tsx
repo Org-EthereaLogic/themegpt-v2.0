@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Storage } from "@plasmohq/storage"
-import { MSG_GET_TOKENS, STORAGE_TOKEN_ENABLED, type TokenStats } from "@themegpt/shared"
+import { MSG_GET_TOKENS, MSG_TOKEN_UPDATE, STORAGE_TOKEN_ENABLED, type TokenStats } from "@themegpt/shared"
 
 const storage = new Storage({ area: "local" })
 
@@ -26,10 +26,18 @@ export function TokenCounter() {
                 })
             })
         }
-
+        
+        // Initial fetch
         fetchStats()
-        const interval = setInterval(fetchStats, 1000)
-        return () => clearInterval(interval)
+
+        const listener = (message: any) => {
+            if (message.type === MSG_TOKEN_UPDATE && message.payload) {
+                setStats(message.payload)
+            }
+        }
+        
+        chrome.runtime.onMessage.addListener(listener)
+        return () => chrome.runtime.onMessage.removeListener(listener)
     }, [enabled])
 
     const toggle = () => {

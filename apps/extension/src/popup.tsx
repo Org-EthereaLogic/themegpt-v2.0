@@ -102,9 +102,18 @@ export default function Popup() {
         
         setActiveThemeId(theme.id)
         storage.set("activeTheme", theme)
-        
-        // Note: Ideally sync to server here
         storage.set("localEntitlement", newEntitlement)
+        
+        // Sync to server
+        fetch(`${API_BASE_URL}/api/sync`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                licenseKey, 
+                activeSlotThemes: newSlots 
+            })
+        }).catch(err => console.error("Sync failed", err))
+
         return
       } else {
         setSlotError(`Subscription limit reached (${entitlement.maxSlots} themes). Deactivate another theme via web settings to continue.`)

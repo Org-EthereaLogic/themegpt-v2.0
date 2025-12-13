@@ -33,6 +33,7 @@ themegpt-logo-kit/
 ## 📐 Icons Directory (`/icons`)
 
 ### Full Logo (with wordmark)
+
 | File | Size | Use Case |
 |------|------|----------|
 | `logo-16.png` | 16×16 | Tiny favicon fallback |
@@ -49,6 +50,7 @@ themegpt-logo-kit/
 | `logo-512.png` | 512×512 | App stores, splash screens |
 
 ### Mascot Only (no wordmark)
+
 Same sizes as above with `mascot-` prefix.
 **Use mascot-only versions for small sizes (≤64px) where wordmark becomes illegible.**
 
@@ -69,6 +71,7 @@ Same sizes as above with `mascot-` prefix.
 | `safari-pinned-tab.png` | 512×512 | Safari pinned tab |
 
 ### HTML Implementation
+
 ```html
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -81,6 +84,7 @@ Same sizes as above with `mascot-` prefix.
 ```
 
 ### Web Manifest (`site.webmanifest`)
+
 ```json
 {
   "name": "ThemeGPT",
@@ -114,6 +118,7 @@ Same sizes as above with `mascot-` prefix.
 | `linkedin-banner.png` | 1584×396 | LinkedIn company banner |
 
 ### Meta Tags
+
 ```html
 <!-- Open Graph -->
 <meta property="og:image" content="https://themegpt.ai/og-image.png">
@@ -130,6 +135,7 @@ Same sizes as above with `mascot-` prefix.
 ## 🎨 Variants Directory (`/variants`)
 
 ### Full Logo Variants
+
 | File | Background | Use Case |
 |------|------------|----------|
 | `logo-full-cream.png` | Cream (#FAF6F0) | Default, warm surfaces |
@@ -138,6 +144,7 @@ Same sizes as above with `mascot-` prefix.
 | `logo-full-transparent.png` | Transparent | Overlays, flexible placement |
 
 ### Mascot-Only Variants
+
 | File | Background | Use Case |
 |------|------------|----------|
 | `mascot-cream.png` | Cream (#FAF6F0) | Default app icon |
@@ -150,19 +157,24 @@ Same sizes as above with `mascot-` prefix.
 ## ✅ Quick Reference
 
 ### For Website Header
+
 Use `logo-full-transparent.png` or appropriate size from `/icons`
 
 ### For Browser Tab
+
 Use files from `/favicons`
 
 ### For Social Sharing
+
 Use files from `/social`
 
 ### For App Stores / Extensions
+
 - Chrome Web Store: `logo-128.png` (main), `mascot-48.png` (toolbar)
 - PWA: `android-chrome-192x192.png`, `android-chrome-512x512.png`
 
 ### For Dark Mode
+
 Use `*-dark.png` variants or `*-transparent.png` on dark backgrounds
 
 ---

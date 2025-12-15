@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/db";
-import { v4 as uuidv4 } from "uuid";
-import { LicenseEntitlement } from "@themegpt/shared";
+import { getStripe, STRIPE_PRICES } from "@/lib/stripe";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,50 +11,45 @@ export async function OPTIONS() {
   return new Response(null, { headers: corsHeaders });
 }
 
-// Mock Checkout API
-// In prod, this would create a Stripe Session
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { type, themeId } = body;
+    const { type, themeId } = body as { type: "subscription" | "single"; themeId?: string };
 
-    // Simulate payment success and generate key
-    const newKey = `KEY-${uuidv4().substring(0, 8).toUpperCase()}`;
-    
-    let entitlement: LicenseEntitlement;
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
 
-    if (type === 'subscription') {
-      entitlement = {
-        active: true,
-        type: 'subscription',
-        maxSlots: 3,
-        permanentlyUnlocked: [],
-        activeSlotThemes: []
-      };
-    } else {
-      // Lifetime / Single Purchase
-      entitlement = {
-        active: true,
-        type: 'lifetime',
-        maxSlots: 0,
-        permanentlyUnlocked: themeId ? [themeId] : [],
-        activeSlotThemes: []
-      };
-    }
+    const priceId = type === "subscription"
+      ? STRIPE_PRICES.subscription
+      : STRIPE_PRICES.singleTheme;
 
-    await db.createLicense(newKey, entitlement);
+    const session = await getStripe().checkout.sessions.create({
+      mode: type === "subscription" ? "subscription" : "payment",
+      payment_method_types: ["card"],
+      line_items: [
+        {
+          price: priceId,
+          quantity: 1,
+        },
+      ],
+      metadata: {
+        type,
+        themeId: themeId || "",
+      },
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/?canceled=true`,
+    });
 
-    // Return the key directly for the Mock flow
-    return NextResponse.json({
-      success: true,
-      licenseKey: newKey,
-      entitlement
-    }, { headers: corsHeaders });
-
-  } catch (error) {
-    console.error("Checkout API error", error);
     return NextResponse.json(
-      { success: false, message: "Checkout failed" },
+      {
+        success: true,
+        checkoutUrl: session.url
+      },
+      { headers: corsHeaders }
+    );
+  } catch (error) {
+    console.error("Checkout API error:", error);
+    return NextResponse.json(
+      { success: false, message: "Failed to create checkout session" },
       { status: 500, headers: corsHeaders }
     );
   }

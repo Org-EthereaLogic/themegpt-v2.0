@@ -33,6 +33,83 @@ export interface Theme {
 }
 
 export const DEFAULT_THEMES: Theme[] = [
+  // =============================================
+  // FREE THEMES (Classic IDE themes from v1.0)
+  // =============================================
+  {
+    id: 'vscode-dark-plus',
+    name: 'VS Code Dark+',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#1E1E1E',
+      '--cgpt-surface': '#252526',
+      '--cgpt-text': '#D4D4D4',
+      '--cgpt-text-muted': '#808080',
+      '--cgpt-border': '#3C3C3C',
+      '--cgpt-accent': '#569CD6',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'solarized-dark',
+    name: 'Solarized Dark',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#002B36',
+      '--cgpt-surface': '#073642',
+      '--cgpt-text': '#839496',
+      '--cgpt-text-muted': '#657B83',
+      '--cgpt-border': '#094959',
+      '--cgpt-accent': '#2AA198',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'dracula',
+    name: 'Dracula',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#282A36',
+      '--cgpt-surface': '#343746',
+      '--cgpt-text': '#F8F8F2',
+      '--cgpt-text-muted': '#6272A4',
+      '--cgpt-border': '#44475A',
+      '--cgpt-accent': '#BD93F9',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'monokai-pro',
+    name: 'Monokai Pro',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#2D2A2E',
+      '--cgpt-surface': '#403E41',
+      '--cgpt-text': '#FCFCFA',
+      '--cgpt-text-muted': '#939293',
+      '--cgpt-border': '#49474A',
+      '--cgpt-accent': '#FFD866',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'one-dark',
+    name: 'One Dark',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#282C34',
+      '--cgpt-surface': '#21252B',
+      '--cgpt-text': '#ABB2BF',
+      '--cgpt-text-muted': '#5C6370',
+      '--cgpt-border': '#3E4451',
+      '--cgpt-accent': '#61AFEF',
+    },
+    isPremium: false,
+  },
+
+  // =============================================
+  // PREMIUM THEMES - Christmas Collection
+  // =============================================
   {
     id: 'cozy-cabin-christmas',
     name: 'Cozy Cabin Christmas',
@@ -45,7 +122,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#4B2E23',
       '--cgpt-accent': '#D97757',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'frosted-windowpane',
@@ -59,7 +136,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#D1D5DB',
       '--cgpt-accent': '#3B82F6',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'midnight-evergreen',
@@ -73,7 +150,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#14532D',
       '--cgpt-accent': '#22C55E',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'candy-cane-chat',
@@ -117,20 +194,10 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
   },
-  {
-    id: 'red',
-    name: 'Red',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#FFFFFF',
-      '--cgpt-surface': '#F3F3F3',
-      '--cgpt-text': '#111827',
-      '--cgpt-text-muted': '#4B5563',
-      '--cgpt-border': '#E5E7EB',
-      '--cgpt-accent': '#EF4444',
-    },
-    isPremium: false,
-  },
+
+  // =============================================
+  // PREMIUM THEMES - Core Collection
+  // =============================================
   {
     id: 'synth-wave',
     name: 'Synth Wave',
@@ -185,7 +252,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#1F2933',
       '--cgpt-accent': '#22C55E',
     },
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'chocolate-caramel',
@@ -199,7 +266,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#4A3419',
       '--cgpt-accent': '#FBBF77',
     },
-    isPremium: false,
+    isPremium: true,
   },
 ];
 

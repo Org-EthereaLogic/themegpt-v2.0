@@ -242,6 +242,22 @@ export default function Popup() {
   )
 }
 
+/**
+ * Theme screenshot URL builder.
+ * Screenshots should be 280x160px PNG files placed in apps/extension/assets/themes/
+ * and named after theme IDs (e.g., vscode-dark-plus.png).
+ *
+ * If screenshots are not available, the ThemeCard will show a multi-color preview
+ * of the theme palette as a fallback.
+ */
+function getThemeScreenshotUrl(themeId: string): string | null {
+  // Check if chrome.runtime is available (not available in tests)
+  if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
+    return chrome.runtime.getURL(`assets/themes/${themeId}.png`)
+  }
+  return null
+}
+
 function ThemeCard({
   theme,
   isActive,
@@ -253,6 +269,10 @@ function ThemeCard({
   isLocked: boolean
   onSelect: () => void
 }) {
+  const [imgError, setImgError] = useState(false)
+  const screenshotUrl = getThemeScreenshotUrl(theme.id)
+  const hasScreenshot = screenshotUrl && !imgError
+
   return (
     <button
       onClick={onSelect}
@@ -265,8 +285,28 @@ function ThemeCard({
         }
       `}
     >
-      <div className="w-full h-12 rounded-lg mb-2 border border-brand-text/5 overflow-hidden relative">
-        <div className="absolute inset-0" style={{ backgroundColor: theme.colors["--cgpt-bg"] }} />
+      <div className="w-full h-16 rounded-lg mb-2 border border-brand-text/5 overflow-hidden relative">
+        {hasScreenshot ? (
+          <img
+            src={screenshotUrl}
+            alt={`${theme.name} preview`}
+            className="w-full h-full object-cover"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          // Fallback: Multi-color preview showing theme palette
+          <div className="absolute inset-0 flex flex-col">
+            <div
+              className="flex-1"
+              style={{ backgroundColor: theme.colors["--cgpt-bg"] }}
+            />
+            <div className="h-2 flex">
+              <div className="flex-1" style={{ backgroundColor: theme.colors["--cgpt-surface"] }} />
+              <div className="flex-1" style={{ backgroundColor: theme.colors["--cgpt-accent"] }} />
+              <div className="flex-1" style={{ backgroundColor: theme.colors["--cgpt-border"] }} />
+            </div>
+          </div>
+        )}
 
         {isLocked && (
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center z-10 transition-opacity group-hover:bg-black/50">

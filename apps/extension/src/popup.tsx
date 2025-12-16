@@ -294,17 +294,21 @@ function ThemeCard({
             onError={() => setImgError(true)}
           />
         ) : (
-          // Fallback: Multi-color preview showing theme palette
-          <div className="absolute inset-0 flex flex-col">
+          // Name-first preview with accent color stripe (Option A: theme name as primary identifier)
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center"
+            style={{ backgroundColor: theme.colors["--cgpt-bg"] }}
+          >
+            <span
+              className="text-sm font-semibold text-center px-2 leading-tight"
+              style={{ color: theme.colors["--cgpt-text"] }}
+            >
+              {theme.name}
+            </span>
             <div
-              className="flex-1"
-              style={{ backgroundColor: theme.colors["--cgpt-bg"] }}
+              className="absolute bottom-0 left-0 right-0 h-1"
+              style={{ backgroundColor: theme.colors["--cgpt-accent"] }}
             />
-            <div className="h-2 flex">
-              <div className="flex-1" style={{ backgroundColor: theme.colors["--cgpt-surface"] }} />
-              <div className="flex-1" style={{ backgroundColor: theme.colors["--cgpt-accent"] }} />
-              <div className="flex-1" style={{ backgroundColor: theme.colors["--cgpt-border"] }} />
-            </div>
           </div>
         )}
 

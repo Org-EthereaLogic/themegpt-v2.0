@@ -93,7 +93,9 @@ describe('Popup', () => {
     it('renders theme cards with names', () => {
       render(<Popup />)
       DEFAULT_THEMES.forEach(theme => {
-        expect(screen.getByText(theme.name)).toBeInTheDocument()
+        // Theme name appears in both preview area and label, so use getAllByText
+        const nameElements = screen.getAllByText(theme.name)
+        expect(nameElements.length).toBeGreaterThanOrEqual(1)
       })
     })
   })
@@ -403,9 +405,9 @@ describe('Popup', () => {
 
       await screen.findByText('License Active ✅')
 
-      // Try to activate a third theme
+      // Try to activate a third theme (use aria-label since name appears twice)
       const thirdPremiumTheme = premiumThemes[2]
-      const themeCard = screen.getByText(thirdPremiumTheme.name).closest('button')!
+      const themeCard = screen.getByLabelText(`${thirdPremiumTheme.name} - Premium, click to unlock`)
       fireEvent.click(themeCard)
 
       expect(await screen.findByRole('alert')).toHaveTextContent(/Subscription limit reached/)

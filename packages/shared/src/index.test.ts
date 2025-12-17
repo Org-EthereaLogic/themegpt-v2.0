@@ -99,3 +99,54 @@ describe('Theme type', () => {
     expect(testTheme.category).toBe('core');
   });
 });
+
+describe('Free themes (v1.0 classic IDE themes)', () => {
+  const freeThemes = DEFAULT_THEMES.filter((t) => !t.isPremium);
+  const expectedFreeThemeIds = [
+    'vscode-dark-plus',
+    'solarized-dark',
+    'dracula',
+    'monokai-pro',
+    'one-dark',
+  ];
+
+  it('has exactly 5 free themes', () => {
+    expect(freeThemes).toHaveLength(5);
+  });
+
+  it('includes all classic IDE themes from v1.0', () => {
+    const freeThemeIds = freeThemes.map((t) => t.id);
+    expectedFreeThemeIds.forEach((id) => {
+      expect(freeThemeIds).toContain(id);
+    });
+  });
+
+  it('free themes are not marked as premium', () => {
+    expectedFreeThemeIds.forEach((id) => {
+      const theme = DEFAULT_THEMES.find((t) => t.id === id);
+      expect(theme).toBeDefined();
+      expect(theme?.isPremium).toBe(false);
+    });
+  });
+});
+
+describe('Premium themes', () => {
+  const premiumThemes = DEFAULT_THEMES.filter((t) => t.isPremium);
+
+  it('has premium themes available', () => {
+    expect(premiumThemes.length).toBeGreaterThan(0);
+  });
+
+  it('all premium themes are marked as isPremium: true', () => {
+    premiumThemes.forEach((theme) => {
+      expect(theme.isPremium).toBe(true);
+    });
+  });
+
+  it('christmas themes are premium', () => {
+    const christmasThemes = DEFAULT_THEMES.filter((t) => t.category === 'christmas');
+    christmasThemes.forEach((theme) => {
+      expect(theme.isPremium).toBe(true);
+    });
+  });
+});

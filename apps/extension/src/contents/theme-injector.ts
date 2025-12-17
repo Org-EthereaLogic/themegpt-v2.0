@@ -1,6 +1,6 @@
 import type { PlasmoCSConfig } from "plasmo"
 import { Storage } from "@plasmohq/storage"
-import type { Theme, ThemePattern } from "@themegpt/shared"
+import { DEFAULT_THEMES, type Theme, type ThemePattern } from "@themegpt/shared"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*", "https://chatgpt.com/*"],
@@ -9,6 +9,19 @@ export const config: PlasmoCSConfig = {
 
 const storage = new Storage({ area: "local" })
 let styleElement: HTMLStyleElement | null = null
+
+/**
+ * Check if extension context is still valid
+ * Returns false when extension has been reloaded/updated
+ */
+function isContextValid(): boolean {
+  if (typeof chrome === "undefined") return false
+  try {
+    return Boolean(chrome.runtime?.id)
+  } catch {
+    return false
+  }
+}
 
 /**
  * Generate CSS for background patterns
@@ -125,20 +138,79 @@ body::before {
   }
 }
 
+/**
+ * Generate CSS for premium noise overlay texture
+ * Uses SVG feTurbulence for subtle tactile quality
+ */
+function generateNoiseOverlayCSS(): string {
+  return `
+/* Premium: Subtle Noise Texture Overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}`
+}
+
+/**
+ * Generate CSS for ambient radial glow overlay
+ * Creates atmospheric depth using accent color
+ */
+function generateGlowOverlayCSS(accentColor: string): string {
+  return `
+/* Premium: Ambient Radial Glow Overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.08;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, ${accentColor} 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, ${accentColor} 0%, transparent 40%);
+}`
+}
+
 function applyTheme(theme: Theme | null): void {
   if (!theme || !theme.colors) {
     removeTheme()
     return
   }
 
+  // Look up current theme definition for latest properties (overlays, patterns)
+  // This ensures stored themes get new features without re-selection
+  const currentDef = DEFAULT_THEMES.find(t => t.id === theme.id)
+
   const cssVars = Object.entries(theme.colors)
     .map(([key, value]) => `${key}: ${value};`)
     .join("\n  ")
 
-  // Generate pattern CSS if theme has a pattern
-  const patternCSS = theme.pattern
-    ? generatePatternCSS(theme.pattern, theme.colors['--cgpt-accent'])
+  // Generate pattern CSS if theme has a pattern (prefer current definition)
+  const pattern = currentDef?.pattern ?? theme.pattern
+  const patternCSS = pattern
+    ? generatePatternCSS(pattern, theme.colors['--cgpt-accent'])
     : ''
+
+  // Generate overlay effect if theme opts in (noise takes priority over glow)
+  const hasNoise = currentDef?.noiseOverlay ?? theme.noiseOverlay
+  const hasGlow = currentDef?.glowOverlay ?? theme.glowOverlay
+  let overlayCSS = ''
+  if (hasNoise) {
+    overlayCSS = generateNoiseOverlayCSS()
+  } else if (hasGlow) {
+    overlayCSS = generateGlowOverlayCSS(theme.colors['--cgpt-accent'])
+  }
 
   const css = `
 /* ============================================
@@ -321,6 +393,7 @@ code {
 }
 
 ${patternCSS}
+${overlayCSS}
 `
 
   if (!styleElement) {
@@ -340,16 +413,25 @@ function removeTheme(): void {
 }
 
 async function init(): Promise<void> {
-  const theme = await storage.get<Theme>("activeTheme")
-  if (theme) {
-    applyTheme(theme)
-  }
+  if (!isContextValid()) return
 
-  storage.watch({
-    activeTheme: (change) => {
-      applyTheme(change.newValue as Theme | null)
+  try {
+    const theme = await storage.get<Theme>("activeTheme")
+    if (theme) {
+      applyTheme(theme)
     }
-  })
+
+    storage.watch({
+      activeTheme: (change) => {
+        if (!isContextValid()) return
+        applyTheme(change.newValue as Theme | null)
+      }
+    })
+  } catch {
+    // Context invalidated during storage operations
+  }
 }
 
-init()
+if (isContextValid()) {
+  init()
+}

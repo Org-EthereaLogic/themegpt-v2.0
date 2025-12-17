@@ -25,6 +25,7 @@ extension/dist
 extension/build
 
 # Misc
+.history/
 .DS_Store
 *.log
 *.pyc

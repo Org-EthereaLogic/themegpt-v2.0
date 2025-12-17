@@ -6,6 +6,19 @@ export const config: PlasmoCSConfig = {
     matches: ["https://chat.openai.com/*", "https://chatgpt.com/*"]
 }
 
+/**
+ * Check if extension context is still valid
+ * Returns false when extension has been reloaded/updated
+ */
+function isContextValid(): boolean {
+    if (typeof chrome === "undefined") return false
+    try {
+        return Boolean(chrome.runtime?.id)
+    } catch {
+        return false
+    }
+}
+
 let latestStats: TokenStats = { user: 0, assistant: 0, total: 0, lastUpdated: 0 }
 let debounceTimer: ReturnType<typeof setTimeout>
 
@@ -35,6 +48,12 @@ export function calculateTokenStats(messages: Array<{ role: string | null, text:
 }
 
 function updateCounts(): void {
+    // Stop if extension context is invalidated
+    if (!isContextValid()) {
+        observer.disconnect()
+        return
+    }
+
     const elements = document.querySelectorAll("[data-message-author-role]")
     const messageData = Array.from(elements).map(el => ({
         role: el.getAttribute("data-message-author-role"),
@@ -42,18 +61,27 @@ function updateCounts(): void {
     }))
 
     const newStats = calculateTokenStats(messageData)
-    
+
     // valid change check to avoid spamming events
     if (newStats.total !== latestStats.total) {
         latestStats = newStats
-        // Broadcast update
-        chrome.runtime.sendMessage({ type: MSG_TOKEN_UPDATE, payload: latestStats }).catch(() => {
-            // Ignore error if popup not open
-        })
+        // Broadcast update (safely)
+        try {
+            chrome.runtime.sendMessage({ type: MSG_TOKEN_UPDATE, payload: latestStats }).catch(() => {
+                // Ignore error if popup not open
+            })
+        } catch {
+            // Context invalidated - stop observer
+            observer.disconnect()
+        }
     }
 }
 
 const observer = new MutationObserver(() => {
+    if (!isContextValid()) {
+        observer.disconnect()
+        return
+    }
     clearTimeout(debounceTimer)
     debounceTimer = setTimeout(updateCounts, 1000)
 })
@@ -68,11 +96,14 @@ function initObserver(): void {
     }
 }
 
-initObserver()
+if (isContextValid()) {
+    initObserver()
 
-chrome.runtime.onMessage.addListener((req, _sender, sendResponse) => {
-    if (req.type === MSG_GET_TOKENS) {
-        sendResponse(latestStats)
-        return true
-    }
-})
+    chrome.runtime.onMessage.addListener((req, _sender, sendResponse) => {
+        if (!isContextValid()) return
+        if (req.type === MSG_GET_TOKENS) {
+            sendResponse(latestStats)
+            return true
+        }
+    })
+}

@@ -146,6 +146,7 @@ describe('token-counter DOM interactions', () => {
     Object.assign(globalThis, {
       chrome: {
         runtime: {
+          id: 'test-extension-id',
           sendMessage: mockSendMessage,
           onMessage: {
             addListener: mockAddListener,

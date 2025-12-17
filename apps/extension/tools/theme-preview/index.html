@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThemeGPT Preview</title>
+  <style>
+    /* === CSS Variables (matches theme-injector.ts) === */
+    :root {
+      --cgpt-bg: #1E1E1E;
+      --cgpt-surface: #252526;
+      --cgpt-text: #D4D4D4;
+      --cgpt-text-muted: #808080;
+      --cgpt-border: #3C3C3C;
+      --cgpt-accent: #569CD6;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--cgpt-bg);
+      color: var(--cgpt-text);
+      line-height: 1.5;
+    }
+
+    /* === Layout === */
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      height: 100vh;
+    }
+
+    .app.panel-hidden { grid-template-columns: 260px 1fr; }
+
+    /* === Sidebar === */
+    .sidebar {
+      background: var(--cgpt-surface);
+      border-right: 1px solid var(--cgpt-border);
+      display: flex;
+      flex-direction: column;
+      padding: 12px;
+    }
+
+    .new-chat-btn {
+      background: transparent;
+      border: 1px solid var(--cgpt-border);
+      color: var(--cgpt-text);
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .new-chat-btn:hover { background: var(--cgpt-border); }
+
+    .chat-list { flex: 1; margin-top: 16px; }
+
+    .chat-item {
+      padding: 10px 12px;
+      border-radius: 6px;
+      color: var(--cgpt-text-muted);
+      cursor: pointer;
+      margin-top: 4px;
+      font-size: 14px;
+    }
+
+    .chat-item.active, .chat-item:hover {
+      background: var(--cgpt-border);
+      color: var(--cgpt-text);
+    }
+
+    .sidebar-footer {
+      padding-top: 12px;
+      border-top: 1px solid var(--cgpt-border);
+      color: var(--cgpt-text-muted);
+      font-size: 12px;
+    }
+
+    /* === Main Content === */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .chat-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    /* === Messages === */
+    .message {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      max-width: 768px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .message-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .message.user .message-avatar {
+      background: var(--cgpt-accent);
+      color: var(--cgpt-bg);
+    }
+
+    .message.assistant .message-avatar {
+      background: var(--cgpt-surface);
+      border: 1px solid var(--cgpt-border);
+    }
+
+    .message-content { flex: 1; }
+    .message-content p { margin: 0 0 12px; }
+
+    .message-content pre {
+      background: var(--cgpt-surface);
+      border: 1px solid var(--cgpt-border);
+      border-radius: 8px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 12px 0;
+    }
+
+    .message-content code {
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      font-size: 14px;
+      color: var(--cgpt-accent);
+    }
+
+    .message-content pre code { color: var(--cgpt-text); }
+
+    /* === Composer === */
+    .composer {
+      padding: 16px 24px 24px;
+      border-top: 1px solid var(--cgpt-border);
+    }
+
+    .composer-container {
+      max-width: 768px;
+      margin: 0 auto;
+      display: flex;
+      gap: 12px;
+      background: var(--cgpt-surface);
+      border: 1px solid var(--cgpt-border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      align-items: flex-end;
+    }
+
+    .composer-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--cgpt-text);
+      resize: none;
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 1.5;
+      min-height: 24px;
+      max-height: 200px;
+    }
+
+    .composer-input::placeholder { color: var(--cgpt-text-muted); }
+    .composer-input:focus { outline: none; }
+
+    .send-btn {
+      background: var(--cgpt-accent);
+      border: none;
+      border-radius: 6px;
+      padding: 8px;
+      cursor: pointer;
+      color: var(--cgpt-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* === Selection & Focus === */
+    ::selection { background-color: color-mix(in srgb, var(--cgpt-accent) 35%, transparent); }
+    *:focus-visible { outline: 2px solid var(--cgpt-accent); outline-offset: 2px; }
+
+    /* === Scrollbar === */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--cgpt-bg); }
+    ::-webkit-scrollbar-thumb { background: var(--cgpt-border); border-radius: 4px; }
+
+    /* === Pattern & Overlay placeholders === */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+    body::before { z-index: 0; }
+    body::after { z-index: 1; }
+
+    /* === Theme Panel === */
+    .theme-panel {
+      position: fixed;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 300px;
+      background: #111;
+      border-left: 1px solid #333;
+      padding: 16px;
+      overflow-y: auto;
+      z-index: 1000;
+      color: #fff;
+      font-size: 13px;
+    }
+
+    .theme-panel.hidden { display: none; }
+    .theme-panel h2 { margin-bottom: 12px; font-size: 16px; }
+    .theme-panel h3 { margin: 16px 0 8px; font-size: 13px; color: #888; }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .theme-btn {
+      padding: 8px 6px;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 10px;
+      text-align: left;
+      transition: border-color 0.2s, transform 0.1s;
+    }
+
+    .theme-btn:hover { transform: scale(1.02); }
+    .theme-btn.active { border-color: #7ECEC5; }
+    .theme-btn .name { font-weight: 600; margin-bottom: 4px; }
+    .theme-btn .accent-bar { height: 3px; border-radius: 2px; margin-top: 4px; }
+
+    .current-theme {
+      margin-top: 16px;
+      padding: 12px;
+      background: #222;
+      border-radius: 8px;
+    }
+
+    .quality-panel {
+      margin-top: 16px;
+      padding: 12px;
+      background: #1a1a1a;
+      border-radius: 8px;
+    }
+
+    .quality-panel h4 { margin-bottom: 8px; font-size: 12px; }
+
+    .check-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      font-size: 11px;
+    }
+
+    .check-item.pass { color: #4ade80; }
+    .check-item.fail { color: #f87171; }
+
+    .controls {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ctrl-btn {
+      padding: 10px;
+      background: #7ECEC5;
+      color: #111;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .ctrl-btn:hover { opacity: 0.9; }
+    .ctrl-btn.secondary { background: #333; color: #fff; }
+
+    .shortcuts {
+      margin-top: 16px;
+      font-size: 10px;
+      color: #666;
+    }
+
+    .shortcuts kbd {
+      background: #333;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <button class="new-chat-btn">+ New chat</button>
+      <nav class="chat-list">
+        <div class="chat-item active">Theme preview session</div>
+        <div class="chat-item">Previous conversation</div>
+        <div class="chat-item">Code review discussion</div>
+      </nav>
+      <div class="sidebar-footer">user@example.com</div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <section class="chat-area">
+        <article class="message user">
+          <div class="message-avatar">U</div>
+          <div class="message-content">
+            <p>How do I create a responsive navbar in React?</p>
+          </div>
+        </article>
+        <article class="message assistant">
+          <div class="message-avatar">A</div>
+          <div class="message-content">
+            <p>Here's a simple approach using flexbox and media queries:</p>
+            <pre><code>const Navbar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    &lt;nav className="navbar"&gt;
+      &lt;Logo /&gt;
+      &lt;button onClick={() => setIsOpen(!isOpen)}&gt;
+        Menu
+      &lt;/button&gt;
+      &lt;NavLinks isOpen={isOpen} /&gt;
+    &lt;/nav&gt;
+  );
+};</code></pre>
+            <p>The key is using <code>display: flex</code> with <code>justify-content: space-between</code> for the desktop layout, then switching to a column layout on mobile.</p>
+          </div>
+        </article>
+        <article class="message user">
+          <div class="message-avatar">U</div>
+          <div class="message-content">
+            <p>Can you show me the CSS for that?</p>
+          </div>
+        </article>
+        <article class="message assistant">
+          <div class="message-avatar">A</div>
+          <div class="message-content">
+            <p>Here's the accompanying CSS with a mobile breakpoint:</p>
+            <pre><code>.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: var(--surface);
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+  }
+  .nav-links {
+    display: none;
+  }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+  }
+}</code></pre>
+          </div>
+        </article>
+      </section>
+
+      <footer class="composer">
+        <div class="composer-container">
+          <textarea class="composer-input" placeholder="Message ChatGPT..." rows="1"></textarea>
+          <button class="send-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+          </button>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- THEME PANEL -->
+  <aside class="theme-panel" id="themePanel">
+    <h2>ThemeGPT Preview</h2>
+
+    <h3>Free Themes</h3>
+    <div class="theme-grid" id="freeThemes"></div>
+
+    <h3>Premium Themes</h3>
+    <div class="theme-grid" id="premiumThemes"></div>
+
+    <div class="current-theme">
+      <strong>Active:</strong> <span id="themeName">-</span>
+      <div id="themeInfo" style="margin-top:8px;font-size:11px;color:#888"></div>
+    </div>
+
+    <div class="quality-panel">
+      <h4>Quality Checks</h4>
+      <div id="qualityChecks"></div>
+    </div>
+
+    <div class="controls">
+      <button class="ctrl-btn" id="exportBtn">Export Theme JSON</button>
+      <button class="ctrl-btn secondary" id="hideBtn">Hide Panel (Ctrl+H)</button>
+    </div>
+
+    <div class="shortcuts">
+      <p><kbd>Ctrl</kbd>+<kbd>H</kbd> Toggle panel</p>
+      <p><kbd>Ctrl</kbd>+<kbd>E</kbd> Export to console</p>
+    </div>
+  </aside>
+
+  <script>
+    // === THEME DATA (from packages/shared/src/index.ts) ===
+    const THEMES = [
+      { id: 'vscode-dark-plus', name: 'VS Code Dark+', category: 'core', colors: { '--cgpt-bg': '#1E1E1E', '--cgpt-surface': '#252526', '--cgpt-text': '#D4D4D4', '--cgpt-text-muted': '#808080', '--cgpt-border': '#3C3C3C', '--cgpt-accent': '#569CD6' }, isPremium: false },
+      { id: 'solarized-dark', name: 'Solarized Dark', category: 'core', colors: { '--cgpt-bg': '#002B36', '--cgpt-surface': '#073642', '--cgpt-text': '#839496', '--cgpt-text-muted': '#657B83', '--cgpt-border': '#094959', '--cgpt-accent': '#2AA198' }, isPremium: false },
+      { id: 'dracula', name: 'Dracula', category: 'core', colors: { '--cgpt-bg': '#282A36', '--cgpt-surface': '#343746', '--cgpt-text': '#F8F8F2', '--cgpt-text-muted': '#6272A4', '--cgpt-border': '#44475A', '--cgpt-accent': '#BD93F9' }, isPremium: false },
+      { id: 'monokai-pro', name: 'Monokai Pro', category: 'core', colors: { '--cgpt-bg': '#2D2A2E', '--cgpt-surface': '#403E41', '--cgpt-text': '#FCFCFA', '--cgpt-text-muted': '#939293', '--cgpt-border': '#49474A', '--cgpt-accent': '#FFD866' }, isPremium: false },
+      { id: 'one-dark', name: 'One Dark', category: 'core', colors: { '--cgpt-bg': '#282C34', '--cgpt-surface': '#21252B', '--cgpt-text': '#ABB2BF', '--cgpt-text-muted': '#5C6370', '--cgpt-border': '#3E4451', '--cgpt-accent': '#61AFEF' }, isPremium: false },
+      { id: 'aurora-borealis', name: 'Aurora Borealis', category: 'core', colors: { '--cgpt-bg': '#0A1628', '--cgpt-surface': '#0F2137', '--cgpt-text': '#E0F7FA', '--cgpt-text-muted': '#80DEEA', '--cgpt-border': '#164E63', '--cgpt-accent': '#00E5CC' }, isPremium: false },
+      { id: 'sunset-blaze', name: 'Sunset Blaze', category: 'core', colors: { '--cgpt-bg': '#1A0A14', '--cgpt-surface': '#2D1220', '--cgpt-text': '#FFF5F0', '--cgpt-text-muted': '#FFAB91', '--cgpt-border': '#4A1A2E', '--cgpt-accent': '#FF6B4A' }, isPremium: false },
+      { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false },
+      { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true },
+      { id: 'frosted-windowpane', name: 'Frosted Windowpane', category: 'christmas', colors: { '--cgpt-bg': '#F5F7FB', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0F172A', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#D1D5DB', '--cgpt-accent': '#3B82F6' }, isPremium: true },
+      { id: 'midnight-evergreen', name: 'Midnight Evergreen', category: 'christmas', colors: { '--cgpt-bg': '#020817', '--cgpt-surface': '#07120E', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#14532D', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true },
+      { id: 'candy-cane-chat', name: 'Candy Cane Chat', category: 'christmas', colors: { '--cgpt-bg': '#FDF2F2', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#111827', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#FECACA', '--cgpt-accent': '#DC2626' }, isPremium: true },
+      { id: 'silent-night-starfield', name: 'Silent Night (Starfield)', category: 'christmas', colors: { '--cgpt-bg': '#020617', '--cgpt-surface': '#02081C', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#CBD5F5', '--cgpt-border': '#1D4ED8', '--cgpt-accent': '#38BDF8' }, isPremium: true, glowOverlay: true },
+      { id: 'minimal-advent', name: 'Minimal Advent', category: 'christmas', colors: { '--cgpt-bg': '#0B0712', '--cgpt-surface': '#141021', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4C1D95', '--cgpt-accent': '#7C3AED' }, isPremium: true, noiseOverlay: true },
+      { id: 'snowfall-serenity', name: 'Snowfall Serenity', category: 'christmas', colors: { '--cgpt-bg': '#0F172A', '--cgpt-surface': '#1E293B', '--cgpt-text': '#F1F5F9', '--cgpt-text-muted': '#94A3B8', '--cgpt-border': '#334155', '--cgpt-accent': '#38BDF8' }, isPremium: true, pattern: { type: 'snowflakes', opacity: 0.08, color: '#FFFFFF', size: 1.2 } },
+      { id: 'holiday-plaid', name: 'Holiday Plaid', category: 'christmas', colors: { '--cgpt-bg': '#0D1F12', '--cgpt-surface': '#14291A', '--cgpt-text': '#E8F5E9', '--cgpt-text-muted': '#A5D6A7', '--cgpt-border': '#1B5E20', '--cgpt-accent': '#EF5350' }, isPremium: true, pattern: { type: 'grid', opacity: 0.06, color: '#2E7D32', size: 1.5 } },
+      { id: 'gingerbread-warmth', name: 'Gingerbread Warmth', category: 'christmas', colors: { '--cgpt-bg': '#1C120D', '--cgpt-surface': '#2A1B14', '--cgpt-text': '#FFF8E1', '--cgpt-text-muted': '#D7CCC8', '--cgpt-border': '#4E342E', '--cgpt-accent': '#FF8A65' }, isPremium: true, pattern: { type: 'dots', opacity: 0.05, color: '#A1887F', size: 1 } },
+      { id: 'winter-wonderland', name: 'Winter Wonderland', category: 'christmas', colors: { '--cgpt-bg': '#E3F2FD', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0D47A1', '--cgpt-text-muted': '#5472D3', '--cgpt-border': '#BBDEFB', '--cgpt-accent': '#1976D2' }, isPremium: true, pattern: { type: 'snowflakes', opacity: 0.12, color: '#90CAF9', size: 1 } },
+      { id: 'starry-christmas-eve', name: 'Starry Christmas Eve', category: 'christmas', colors: { '--cgpt-bg': '#0A0A1A', '--cgpt-surface': '#12122A', '--cgpt-text': '#FAFAFA', '--cgpt-text-muted': '#B8B8D1', '--cgpt-border': '#2A2A4A', '--cgpt-accent': '#FFD700' }, isPremium: true, pattern: { type: 'stars', opacity: 0.15, color: '#FFD700', size: 1 } },
+      { id: 'synth-wave', name: 'Synth Wave', category: 'core', colors: { '--cgpt-bg': '#262335', '--cgpt-surface': '#2E2943', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#C7D2FE', '--cgpt-border': '#433162', '--cgpt-accent': '#FF6AC1' }, isPremium: true, glowOverlay: true },
+      { id: 'tomorrow-night-blue', name: 'Tomorrow Night Blue', category: 'core', colors: { '--cgpt-bg': '#002451', '--cgpt-surface': '#001C40', '--cgpt-text': '#E0F2FF', '--cgpt-text-muted': '#BFDBFE', '--cgpt-border': '#003566', '--cgpt-accent': '#4FC3F7' }, isPremium: true, glowOverlay: true },
+      { id: 'shades-of-purple', name: 'Shades of Purple', category: 'core', colors: { '--cgpt-bg': '#2D2B56', '--cgpt-surface': '#222244', '--cgpt-text': '#FFFFFF', '--cgpt-text-muted': '#C7D2FE', '--cgpt-border': '#3F3C78', '--cgpt-accent': '#FAD000' }, isPremium: true },
+      { id: 'dark-forest', name: 'Dark Forest', category: 'core', colors: { '--cgpt-bg': '#101917', '--cgpt-surface': '#131F1D', '--cgpt-text': '#E5F5F0', '--cgpt-text-muted': '#94A3B8', '--cgpt-border': '#1F2933', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true },
+      { id: 'chocolate-caramel', name: 'Chocolate Caramel', category: 'core', colors: { '--cgpt-bg': '#221A0F', '--cgpt-surface': '#362712', '--cgpt-text': '#FDEFD9', '--cgpt-text-muted': '#D1B59A', '--cgpt-border': '#4A3419', '--cgpt-accent': '#FBBF77' }, isPremium: true, noiseOverlay: true },
+    ];
+
+    let currentTheme = null;
+    let dynamicStyleEl = null;
+
+    // === PATTERN GENERATORS (mirrors theme-injector.ts) ===
+    function generatePatternCSS(pattern, accentColor) {
+      if (!pattern) return '';
+      const color = pattern.color || accentColor;
+      const opacity = pattern.opacity;
+      const size = pattern.size || 1;
+
+      const patterns = {
+        dots: {
+          bg: `radial-gradient(${color} 1px, transparent 1px)`,
+          size: `${20 * size}px ${20 * size}px`
+        },
+        grid: {
+          bg: `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`,
+          size: `${24 * size}px ${24 * size}px`
+        },
+        snowflakes: {
+          bg: `radial-gradient(${color} 2px, transparent 2px), radial-gradient(${color} 1px, transparent 1px)`,
+          size: `${50 * size}px ${50 * size}px, ${30 * size}px ${30 * size}px`
+        },
+        stars: {
+          bg: `radial-gradient(${color} 1.5px, transparent 1.5px), radial-gradient(${color} 1px, transparent 1px), radial-gradient(${color} 0.5px, transparent 0.5px)`,
+          size: `${80 * size}px ${80 * size}px, ${60 * size}px ${60 * size}px, ${40 * size}px ${40 * size}px`
+        },
+        noise: null
+      };
+
+      if (pattern.type === 'noise') {
+        const svg = `<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='${opacity}'/></svg>`;
+        return `body::before { background-image: url("data:image/svg+xml,${encodeURIComponent(svg)}"); }`;
+      }
+
+      const p = patterns[pattern.type];
+      if (!p) return '';
+      return `body::before { background-image: ${p.bg}; background-size: ${p.size}; opacity: ${opacity}; }`;
+    }
+
+    function generateNoiseOverlay() {
+      const svg = `<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>`;
+      return `body::after { background-image: url("data:image/svg+xml,${encodeURIComponent(svg)}"); opacity: 0.035; }`;
+    }
+
+    function generateGlowOverlay(accentColor) {
+      return `body::after { background-image: radial-gradient(ellipse 80% 50% at 50% 0%, ${accentColor} 0%, transparent 50%), radial-gradient(ellipse 60% 40% at 20% 100%, ${accentColor} 0%, transparent 40%); opacity: 0.08; }`;
+    }
+
+    // === QUALITY CHECKS ===
+    function hexToRgb(hex) {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)] : [0, 0, 0];
+    }
+
+    function getLuminance(hex) {
+      const rgb = hexToRgb(hex);
+      const [r, g, b] = rgb.map(c => {
+        c = c / 255;
+        return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      });
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    function getContrastRatio(hex1, hex2) {
+      const l1 = getLuminance(hex1);
+      const l2 = getLuminance(hex2);
+      return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+    }
+
+    function runQualityChecks(theme) {
+      const checks = [];
+      const c = theme.colors;
+
+      // Text contrast (WCAG AA = 4.5:1)
+      const textContrast = getContrastRatio(c['--cgpt-bg'], c['--cgpt-text']);
+      checks.push({ name: 'Text Contrast', pass: textContrast >= 4.5, value: textContrast.toFixed(2), target: '>= 4.5' });
+
+      // Muted text contrast (WCAG AA = 4.5:1)
+      const mutedContrast = getContrastRatio(c['--cgpt-bg'], c['--cgpt-text-muted']);
+      checks.push({ name: 'Muted Contrast', pass: mutedContrast >= 3, value: mutedContrast.toFixed(2), target: '>= 3.0' });
+
+      // Accent visibility
+      const accentContrast = getContrastRatio(c['--cgpt-bg'], c['--cgpt-accent']);
+      checks.push({ name: 'Accent Visibility', pass: accentContrast >= 3, value: accentContrast.toFixed(2), target: '>= 3.0' });
+
+      // Pattern opacity check
+      if (theme.pattern) {
+        checks.push({ name: 'Pattern Opacity', pass: theme.pattern.opacity <= 0.15, value: theme.pattern.opacity.toString(), target: '<= 0.15' });
+      }
+
+      return checks;
+    }
+
+    function displayQualityChecks(checks) {
+      const container = document.getElementById('qualityChecks');
+      container.innerHTML = checks.map(check => `
+        <div class="check-item ${check.pass ? 'pass' : 'fail'}">
+          <span>${check.name}</span>
+          <span>${check.value} ${check.pass ? '✓' : '✗'}</span>
+        </div>
+      `).join('');
+    }
+
+    // === THEME APPLICATION ===
+    function applyTheme(theme) {
+      currentTheme = theme;
+      const root = document.documentElement;
+
+      // Apply CSS variables
+      Object.entries(theme.colors).forEach(([prop, value]) => {
+        root.style.setProperty(prop, value);
+      });
+
+      // Generate pattern and overlay CSS
+      let additionalCSS = '';
+      if (theme.pattern) {
+        additionalCSS += generatePatternCSS(theme.pattern, theme.colors['--cgpt-accent']);
+      }
+      if (theme.noiseOverlay) {
+        additionalCSS += generateNoiseOverlay();
+      } else if (theme.glowOverlay) {
+        additionalCSS += generateGlowOverlay(theme.colors['--cgpt-accent']);
+      }
+
+      // Apply dynamic styles
+      if (!dynamicStyleEl) {
+        dynamicStyleEl = document.createElement('style');
+        dynamicStyleEl.id = 'dynamic-theme';
+        document.head.appendChild(dynamicStyleEl);
+      }
+      dynamicStyleEl.textContent = additionalCSS;
+
+      // Update UI
+      document.getElementById('themeName').textContent = theme.name;
+
+      let info = theme.isPremium ? 'Premium' : 'Free';
+      if (theme.pattern) info += ` | Pattern: ${theme.pattern.type}`;
+      if (theme.noiseOverlay) info += ' | Noise overlay';
+      if (theme.glowOverlay) info += ' | Glow overlay';
+      document.getElementById('themeInfo').textContent = info;
+
+      // Update active button
+      document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.themeId === theme.id);
+      });
+
+      // Run quality checks
+      const checks = runQualityChecks(theme);
+      displayQualityChecks(checks);
+
+      // Log for LLM agents
+      console.log(`[ThemeGPT] Applied: ${theme.id}`, { checks });
+    }
+
+    // === INITIALIZATION ===
+    function init() {
+      const freeGrid = document.getElementById('freeThemes');
+      const premiumGrid = document.getElementById('premiumThemes');
+
+      THEMES.forEach(theme => {
+        const btn = document.createElement('button');
+        btn.className = 'theme-btn';
+        btn.dataset.themeId = theme.id;
+        btn.style.background = theme.colors['--cgpt-bg'];
+        btn.style.color = theme.colors['--cgpt-text'];
+        btn.innerHTML = `
+          <div class="name">${theme.name}</div>
+          <div class="accent-bar" style="background:${theme.colors['--cgpt-accent']}"></div>
+        `;
+        btn.addEventListener('click', () => applyTheme(theme));
+
+        if (theme.isPremium) {
+          premiumGrid.appendChild(btn);
+        } else {
+          freeGrid.appendChild(btn);
+        }
+      });
+
+      // Controls
+      document.getElementById('exportBtn').addEventListener('click', () => {
+        if (currentTheme) {
+          const json = JSON.stringify(currentTheme, null, 2);
+          console.log('[ThemeGPT] Export:', json);
+          navigator.clipboard?.writeText(json).then(() => alert('Copied to clipboard!'));
+        }
+      });
+
+      document.getElementById('hideBtn').addEventListener('click', togglePanel);
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'h') { e.preventDefault(); togglePanel(); }
+        if (e.ctrlKey && e.key === 'e') { e.preventDefault(); console.log('[ThemeGPT] Export:', JSON.stringify(currentTheme, null, 2)); }
+      });
+
+      // Apply first theme
+      applyTheme(THEMES[0]);
+    }
+
+    function togglePanel() {
+      document.getElementById('themePanel').classList.toggle('hidden');
+      console.log('[ThemeGPT] Panel toggled');
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>

@@ -24,6 +24,7 @@ Object.assign(globalThis, {
       sendMessage: vi.fn(),
     },
     runtime: {
+      id: 'test-extension-id', // Required for isContextValid() check
       lastError: null,
       onMessage: {
         addListener: vi.fn(),

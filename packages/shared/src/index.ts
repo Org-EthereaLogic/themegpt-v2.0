@@ -40,6 +40,8 @@ export interface Theme {
   };
   isPremium: boolean;
   pattern?: ThemePattern;
+  noiseOverlay?: boolean; // Subtle texture overlay for tactile quality
+  glowOverlay?: boolean;  // Ambient radial glow from accent color
 }
 
 export const DEFAULT_THEMES: Theme[] = [
@@ -133,6 +135,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#D97757',
     },
     isPremium: true,
+    noiseOverlay: true,
   },
   {
     id: 'frosted-windowpane',
@@ -161,6 +164,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#22C55E',
     },
     isPremium: true,
+    noiseOverlay: true,
   },
   {
     id: 'candy-cane-chat',
@@ -189,6 +193,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#38BDF8',
     },
     isPremium: true,
+    glowOverlay: true,
   },
   {
     id: 'minimal-advent',
@@ -203,6 +208,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#7C3AED',
     },
     isPremium: true,
+    noiseOverlay: true,
   },
 
   // =============================================
@@ -325,6 +331,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FF6AC1',
     },
     isPremium: true,
+    glowOverlay: true,
   },
   {
     id: 'tomorrow-night-blue',
@@ -339,6 +346,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#4FC3F7',
     },
     isPremium: true,
+    glowOverlay: true,
   },
   {
     id: 'shades-of-purple',
@@ -367,6 +375,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#22C55E',
     },
     isPremium: true,
+    noiseOverlay: true,
   },
   {
     id: 'chocolate-caramel',
@@ -381,6 +390,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FBBF77',
     },
     isPremium: true,
+    noiseOverlay: true,
   },
 
   // =============================================

@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
 
 const PREMIUM_THEMES = [
   { id: 'dracula', name: 'Dracula' },
@@ -14,11 +13,10 @@ const PREMIUM_THEMES = [
 ]
 
 export default function Home() {
-  const router = useRouter()
   const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0].id)
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
-  const handleCheckout = async (type: 'subscription' | 'one-time', themeId?: string) => {
+  const handleCheckout = async (type: 'subscription' | 'single', themeId?: string) => {
     setCheckoutError(null)
     try {
       const res = await fetch('/api/checkout', {
@@ -27,10 +25,10 @@ export default function Home() {
         body: JSON.stringify({ type, themeId })
       })
       const data = await res.json()
-      if (data.success) {
-        router.push(`/success?key=${data.licenseKey}`)
+      if (data.success && data.checkoutUrl) {
+        window.location.href = data.checkoutUrl
       } else {
-        setCheckoutError('Checkout failed: ' + data.message)
+        setCheckoutError('Checkout failed: ' + (data.message || 'Unknown error'))
       }
     } catch (error) {
       console.error('Checkout error', error)
@@ -135,7 +133,7 @@ export default function Home() {
                   ))}
                 </select>
                 <button
-                   onClick={() => handleCheckout('one-time', selectedTheme)}
+                   onClick={() => handleCheckout('single', selectedTheme)}
                    className="w-full py-3 rounded-xl bg-brown-900 text-white font-bold hover:bg-brown-800 transition-colors"
                 >
                     Buy One Theme
@@ -170,7 +168,7 @@ export default function Home() {
             bubble="bg-[#343746] text-[#f8f8f2]"
             label="text-[#bd93f9]"
             input="bg-[#21222c] text-[#6272a4] border-[#44475a]"
-            onBuy={() => handleCheckout('one-time', 'dracula')}
+            onBuy={() => handleCheckout('single', 'dracula')}
           />
           <ThemeCard
             name="Rose Garden"
@@ -179,7 +177,7 @@ export default function Home() {
             bubble="bg-[#FFFFFF] text-[#5C374C]"
             label="text-[#E91E63]"
             input="bg-[#FFFFFF] text-[#8B6B7B] border-[#F8D7DA]"
-             onBuy={() => handleCheckout('one-time', 'rose-garden')}
+             onBuy={() => handleCheckout('single', 'rose-garden')}
           />
           <ThemeCard
             name="Ocean Breeze"
@@ -188,7 +186,7 @@ export default function Home() {
             bubble="bg-[#FFFFFF] text-[#1A535C]"
             label="text-[#00A896]"
             input="bg-[#FFFFFF] text-[#4A7C82] border-[#B8D8E0]"
-             onBuy={() => handleCheckout('one-time', 'ocean-breeze')}
+             onBuy={() => handleCheckout('single', 'ocean-breeze')}
           />
           <ThemeCard
             name="Monokai Pro"
@@ -197,7 +195,7 @@ export default function Home() {
             bubble="bg-[#403E41] text-[#FCFCFA]"
             label="text-[#FFD866]"
             input="bg-[#221F22] text-[#939293] border-[#49474A]"
-            onBuy={() => handleCheckout('one-time', 'monokai-pro')}
+            onBuy={() => handleCheckout('single', 'monokai-pro')}
           />
           <ThemeCard
             name="Lavender Dreams"
@@ -206,7 +204,7 @@ export default function Home() {
             bubble="bg-[#FFFFFF] text-[#4A3560]"
             label="text-[#9333EA]"
             input="bg-[#FFFFFF] text-[#7C6B8E] border-[#E2D1F0]"
-             onBuy={() => handleCheckout('one-time', 'lavender-dreams')}
+             onBuy={() => handleCheckout('single', 'lavender-dreams')}
           />
           <ThemeCard
             name="Midnight Blue"
@@ -215,7 +213,7 @@ export default function Home() {
             bubble="bg-[#1E293B] text-[#E2E8F0]"
             label="text-[#38BDF8]"
             input="bg-[#0F172A] text-[#64748B] border-[#334155]"
-             onBuy={() => handleCheckout('one-time', 'midnight-blue')}
+             onBuy={() => handleCheckout('single', 'midnight-blue')}
           />
         </div>
       </section>
@@ -266,8 +264,16 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="bg-brown-900 p-7 text-center text-sm text-cream">
+        <div className="flex justify-center gap-6 mb-4">
+          <a href="/privacy" className="text-cream/80 hover:text-cream">
+            Privacy Policy
+          </a>
+          <a href="/terms" className="text-cream/80 hover:text-cream">
+            Terms of Service
+          </a>
+        </div>
         <span className="opacity-85">
-          No tracking • No data collection • Just beautiful themes
+          No tracking - No data collection - Just beautiful themes
         </span>
       </footer>
     </div>

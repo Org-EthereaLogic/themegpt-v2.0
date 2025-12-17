@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThemeGPT - Custom Christmas Elements Prototype</title>
+  <style>
+    /* === CSS Variables === */
+    :root {
+      --cgpt-bg: #0A0A1A;
+      --cgpt-surface: #12122A;
+      --cgpt-text: #FAFAFA;
+      --cgpt-text-muted: #B8B8D1;
+      --cgpt-border: #2A2A4A;
+      --cgpt-accent: #FFD700;
+      --christmas-red: #DC2626;
+      --christmas-green: #22C55E;
+      --christmas-gold: #FFD700;
+      --snow-white: #FFFFFF;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--cgpt-bg);
+      color: var(--cgpt-text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* =========================================
+       CUSTOM CSS SHAPES - FULL ARTISTIC CONTROL
+       =========================================
+
+       These demonstrate that we are NOT limited to
+       pre-built patterns. Every shape is customizable:
+       - Size, color, position
+       - Animation timing and style
+       - Multiple instances with variation
+       ========================================= */
+
+    /* =========================================
+       SHAPE 1: CSS-Only Christmas Tree
+       Using stacked triangles via clip-path
+       ========================================= */
+
+    .christmas-tree {
+      position: absolute;
+      width: var(--tree-size, 60px);
+      height: calc(var(--tree-size, 60px) * 1.5);
+    }
+
+    .tree-layer {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--christmas-green);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+
+    .tree-layer-1 {
+      width: 40%;
+      height: 35%;
+      top: 0;
+    }
+
+    .tree-layer-2 {
+      width: 60%;
+      height: 40%;
+      top: 20%;
+    }
+
+    .tree-layer-3 {
+      width: 80%;
+      height: 45%;
+      top: 40%;
+    }
+
+    .tree-trunk {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 15%;
+      height: 15%;
+      background: #8B4513;
+      border-radius: 0 0 2px 2px;
+    }
+
+    .tree-star {
+      position: absolute;
+      top: -8%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20%;
+      aspect-ratio: 1;
+      background: var(--christmas-gold);
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+      animation: star-glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes star-glow {
+      0% { filter: drop-shadow(0 0 2px var(--christmas-gold)); }
+      100% { filter: drop-shadow(0 0 8px var(--christmas-gold)); }
+    }
+
+    /* Tree ornaments/lights */
+    .tree-light {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      animation: light-blink var(--blink-duration, 1.5s) ease-in-out infinite alternate;
+    }
+
+    @keyframes light-blink {
+      0% { opacity: 0.4; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1.2); }
+    }
+
+    /* =========================================
+       SHAPE 2: CSS-Only Star (Multiple Variants)
+       5-point, 4-point, 6-point
+       ========================================= */
+
+    .star-5 {
+      width: var(--star-size, 20px);
+      aspect-ratio: 1;
+      background: var(--star-color, var(--christmas-gold));
+      clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+    }
+
+    .star-4 {
+      width: var(--star-size, 20px);
+      aspect-ratio: 1;
+      background: var(--star-color, var(--christmas-gold));
+      clip-path: polygon(50% 0%, 60% 40%, 100% 50%, 60% 60%, 50% 100%, 40% 60%, 0% 50%, 40% 40%);
+    }
+
+    .star-6 {
+      width: var(--star-size, 20px);
+      aspect-ratio: 1;
+      background: var(--star-color, var(--christmas-gold));
+      clip-path: polygon(50% 0%, 61% 25%, 93% 25%, 75% 50%, 93% 75%, 61% 75%, 50% 100%, 39% 75%, 7% 75%, 25% 50%, 7% 25%, 39% 25%);
+    }
+
+    /* Twinkle animation for stars */
+    .star-twinkle {
+      animation: twinkle var(--twinkle-duration, 3s) ease-in-out infinite;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.2) rotate(10deg); }
+    }
+
+    /* =========================================
+       SHAPE 3: CSS-Only Snowflakes
+       Using radial gradients + rotation
+       ========================================= */
+
+    .snowflake {
+      --flake-size: 30px;
+      width: var(--flake-size);
+      height: var(--flake-size);
+      position: relative;
+    }
+
+    .snowflake::before,
+    .snowflake::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--snow-white);
+      mask:
+        /* Center dot */
+        radial-gradient(circle at 50% 50%, #000 15%, transparent 15%),
+        /* 6 arms */
+        linear-gradient(0deg, transparent 45%, #000 45%, #000 55%, transparent 55%),
+        linear-gradient(60deg, transparent 45%, #000 45%, #000 55%, transparent 55%),
+        linear-gradient(120deg, transparent 45%, #000 45%, #000 55%, transparent 55%);
+      mask-composite: add;
+      -webkit-mask-composite: source-over;
+    }
+
+    .snowflake::after {
+      transform: rotate(30deg) scale(0.7);
+      opacity: 0.7;
+    }
+
+    /* Alternative snowflake using clip-path */
+    .snowflake-detailed {
+      --flake-size: 24px;
+      width: var(--flake-size);
+      height: var(--flake-size);
+      background: var(--snow-white);
+      clip-path: polygon(
+        50% 0%, 52% 42%, 93% 25%, 58% 50%, 93% 75%, 52% 58%, 50% 100%,
+        48% 58%, 7% 75%, 42% 50%, 7% 25%, 48% 42%
+      );
+      animation: spin-slow 20s linear infinite;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Snowfall animation */
+    .snow-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+      overflow: hidden;
+    }
+
+    .falling-snow {
+      position: absolute;
+      animation: snowfall var(--fall-duration, 10s) linear infinite;
+      opacity: var(--snow-opacity, 0.8);
+    }
+
+    @keyframes snowfall {
+      0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% { opacity: var(--snow-opacity, 0.8); }
+      90% { opacity: var(--snow-opacity, 0.8); }
+      100% {
+        transform: translateY(110vh) translateX(var(--drift, 50px)) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* =========================================
+       SHAPE 4: CSS-Only Ornaments/Baubles
+       ========================================= */
+
+    .ornament {
+      --ornament-size: 30px;
+      width: var(--ornament-size);
+      height: var(--ornament-size);
+      border-radius: 50%;
+      background: var(--ornament-color, var(--christmas-red));
+      position: relative;
+      box-shadow:
+        inset calc(var(--ornament-size) * -0.2) calc(var(--ornament-size) * -0.15) calc(var(--ornament-size) * 0.3) rgba(0,0,0,0.3),
+        inset calc(var(--ornament-size) * 0.1) calc(var(--ornament-size) * 0.1) calc(var(--ornament-size) * 0.2) rgba(255,255,255,0.3);
+    }
+
+    /* Ornament cap */
+    .ornament::before {
+      content: '';
+      position: absolute;
+      top: -15%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30%;
+      height: 20%;
+      background: linear-gradient(to bottom, #C0C0C0, #808080);
+      border-radius: 3px 3px 0 0;
+    }
+
+    /* Ornament hook */
+    .ornament::after {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20%;
+      height: 20%;
+      border: 2px solid #C0C0C0;
+      border-radius: 50%;
+      background: transparent;
+    }
+
+    /* Ornament swing animation */
+    .ornament-swing {
+      transform-origin: top center;
+      animation: swing 4s ease-in-out infinite;
+    }
+
+    @keyframes swing {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    /* =========================================
+       SHAPE 5: CSS-Only Candy Cane
+       ========================================= */
+
+    .candy-cane {
+      --cane-width: 15px;
+      --cane-height: 60px;
+      width: var(--cane-width);
+      height: var(--cane-height);
+      background: repeating-linear-gradient(
+        -45deg,
+        var(--snow-white),
+        var(--snow-white) 5px,
+        var(--christmas-red) 5px,
+        var(--christmas-red) 10px
+      );
+      border-radius: calc(var(--cane-width) / 2);
+      position: relative;
+    }
+
+    /* Candy cane hook */
+    .candy-cane::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: calc(var(--cane-width) * 2);
+      height: calc(var(--cane-width) * 2);
+      border: var(--cane-width) solid;
+      border-color: transparent;
+      border-top-color: inherit;
+      border-right-color: inherit;
+      border-radius: 0 calc(var(--cane-width) * 2) 0 0;
+      background: repeating-linear-gradient(
+        45deg,
+        var(--snow-white),
+        var(--snow-white) 5px,
+        var(--christmas-red) 5px,
+        var(--christmas-red) 10px
+      );
+      clip-path: inset(0 0 50% 50%);
+      transform: translateX(-50%);
+    }
+
+    /* =========================================
+       SHAPE 6: CSS-Only Gift Box
+       ========================================= */
+
+    .gift-box {
+      --box-size: 40px;
+      width: var(--box-size);
+      height: var(--box-size);
+      background: var(--gift-color, var(--christmas-red));
+      position: relative;
+      border-radius: 2px;
+    }
+
+    /* Gift ribbon horizontal */
+    .gift-box::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20%;
+      height: 100%;
+      background: var(--ribbon-color, var(--christmas-gold));
+    }
+
+    /* Gift ribbon vertical */
+    .gift-box::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+      width: 100%;
+      height: 20%;
+      background: var(--ribbon-color, var(--christmas-gold));
+    }
+
+    /* Gift bow (separate element) */
+    .gift-bow {
+      position: absolute;
+      top: -25%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 40%;
+    }
+
+    .gift-bow::before,
+    .gift-bow::after {
+      content: '';
+      position: absolute;
+      width: 50%;
+      height: 100%;
+      background: var(--ribbon-color, var(--christmas-gold));
+      border-radius: 50% 50% 0 0;
+    }
+
+    .gift-bow::before {
+      left: 0;
+      transform: rotate(-30deg);
+      transform-origin: bottom right;
+    }
+
+    .gift-bow::after {
+      right: 0;
+      transform: rotate(30deg);
+      transform-origin: bottom left;
+    }
+
+    /* =========================================
+       SHAPE 7: CSS-Only Holly Leaves
+       ========================================= */
+
+    .holly {
+      --holly-size: 30px;
+      width: var(--holly-size);
+      height: var(--holly-size);
+      position: relative;
+    }
+
+    .holly-leaf {
+      position: absolute;
+      width: 70%;
+      height: 40%;
+      background: var(--christmas-green);
+      border-radius: 0 80% 0 80%;
+    }
+
+    .holly-leaf:nth-child(1) {
+      top: 20%;
+      left: 0;
+      transform: rotate(-30deg);
+    }
+
+    .holly-leaf:nth-child(2) {
+      top: 20%;
+      right: 0;
+      transform: rotate(30deg) scaleX(-1);
+    }
+
+    .holly-berry {
+      position: absolute;
+      width: 25%;
+      height: 25%;
+      background: var(--christmas-red);
+      border-radius: 50%;
+      bottom: 25%;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow:
+        calc(var(--holly-size) * -0.2) calc(var(--holly-size) * 0.1) 0 var(--christmas-red),
+        calc(var(--holly-size) * 0.2) calc(var(--holly-size) * 0.1) 0 var(--christmas-red);
+    }
+
+    /* =========================================
+       DEMO LAYOUT
+       ========================================= */
+
+    .demo-container {
+      position: relative;
+      z-index: 10;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      color: var(--christmas-gold);
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      margin: 32px 0 16px;
+      color: var(--cgpt-text);
+      border-bottom: 1px solid var(--cgpt-border);
+      padding-bottom: 8px;
+    }
+
+    .subtitle {
+      color: var(--cgpt-text-muted);
+      margin-bottom: 32px;
+    }
+
+    .shape-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin: 24px 0;
+    }
+
+    .shape-card {
+      background: var(--cgpt-surface);
+      border: 1px solid var(--cgpt-border);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .shape-preview {
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .shape-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .shape-desc {
+      font-size: 12px;
+      color: var(--cgpt-text-muted);
+    }
+
+    .customization-panel {
+      background: var(--cgpt-surface);
+      border: 1px solid var(--cgpt-border);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+
+    .control-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin: 12px 0;
+    }
+
+    .control-row label {
+      min-width: 120px;
+      font-size: 13px;
+    }
+
+    .control-row input[type="range"] {
+      flex: 1;
+      max-width: 200px;
+    }
+
+    .control-row input[type="color"] {
+      width: 50px;
+      height: 30px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .code-block {
+      background: #000;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #4ade80;
+      overflow-x: auto;
+      white-space: pre;
+      margin: 16px 0;
+    }
+
+    .capability-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+
+    .capability-item {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid var(--christmas-green);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .capability-item h4 {
+      color: var(--christmas-green);
+      margin-bottom: 8px;
+    }
+
+    .capability-item p {
+      font-size: 13px;
+      color: var(--cgpt-text-muted);
+      line-height: 1.5;
+    }
+
+    .live-preview {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      background: var(--cgpt-surface);
+      border: 1px solid var(--cgpt-border);
+      border-radius: 12px;
+      padding: 16px;
+      z-index: 1000;
+    }
+
+    .live-preview h3 {
+      font-size: 14px;
+      margin-bottom: 12px;
+      color: var(--christmas-gold);
+    }
+
+    .preview-area {
+      height: 150px;
+      background: var(--cgpt-bg);
+      border-radius: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .toggle-snow {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: var(--christmas-green);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 12px;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <!-- SNOWFALL LAYER (toggleable) -->
+  <div class="snow-container" id="snowContainer"></div>
+
+  <!-- DEMO CONTENT -->
+  <div class="demo-container">
+    <h1>Custom Christmas Elements</h1>
+    <p class="subtitle">Pure CSS shapes with full artistic control - no pre-built limitations</p>
+
+    <h2>Key Finding: Full Artistic Control</h2>
+    <div class="capability-list">
+      <div class="capability-item">
+        <h4>Custom Shapes</h4>
+        <p>Create ANY shape using clip-path polygon coordinates. Trees, stars, snowflakes, ornaments - all possible with pure CSS.</p>
+      </div>
+      <div class="capability-item">
+        <h4>Color Customization</h4>
+        <p>Every element uses CSS variables. Change --christmas-red, --christmas-green, --christmas-gold to match any theme palette.</p>
+      </div>
+      <div class="capability-item">
+        <h4>Size Scaling</h4>
+        <p>All shapes use relative units (%, calc). Scale from tiny background accents to large decorative elements.</p>
+      </div>
+      <div class="capability-item">
+        <h4>Animation Control</h4>
+        <p>Custom keyframes for each element: twinkling, swinging, falling, rotating. Timing, easing, and duration all adjustable.</p>
+      </div>
+      <div class="capability-item">
+        <h4>Composition</h4>
+        <p>Layer multiple elements: snowfall + stars + trees. Each layer independently controllable via z-index and opacity.</p>
+      </div>
+      <div class="capability-item">
+        <h4>No External Assets</h4>
+        <p>Everything is pure CSS - no images, SVGs, or external dependencies. Minimal file size, instant loading.</p>
+      </div>
+    </div>
+
+    <h2>Shape Gallery</h2>
+    <div class="shape-grid">
+      <!-- Christmas Tree -->
+      <div class="shape-card">
+        <div class="shape-preview">
+          <div class="christmas-tree" style="--tree-size: 80px; position: relative;">
+            <div class="tree-star"></div>
+            <div class="tree-layer tree-layer-1"></div>
+            <div class="tree-layer tree-layer-2"></div>
+            <div class="tree-layer tree-layer-3"></div>
+            <div class="tree-trunk"></div>
+            <div class="tree-light" style="top: 35%; left: 35%; background: var(--christmas-red); --blink-duration: 1.2s;"></div>
+            <div class="tree-light" style="top: 50%; left: 55%; background: var(--christmas-gold); --blink-duration: 1.8s;"></div>
+            <div class="tree-light" style="top: 65%; left: 30%; background: #3B82F6; --blink-duration: 1.5s;"></div>
+            <div class="tree-light" style="top: 75%; left: 60%; background: var(--christmas-red); --blink-duration: 2s;"></div>
+          </div>
+        </div>
+        <div class="shape-name">Christmas Tree</div>
+        <div class="shape-desc">Layered triangles + star + lights</div>
+      </div>
+
+      <!-- Stars -->
+      <div class="shape-card">
+        <div class="shape-preview" style="gap: 16px;">
+          <div class="star-5 star-twinkle" style="--star-size: 30px; --twinkle-duration: 2s;"></div>
+          <div class="star-4 star-twinkle" style="--star-size: 25px; --star-color: #FFFFFF; --twinkle-duration: 2.5s;"></div>
+          <div class="star-6 star-twinkle" style="--star-size: 35px; --star-color: #38BDF8; --twinkle-duration: 3s;"></div>
+        </div>
+        <div class="shape-name">Stars (5, 4, 6 point)</div>
+        <div class="shape-desc">clip-path polygon with twinkle</div>
+      </div>
+
+      <!-- Snowflakes -->
+      <div class="shape-card">
+        <div class="shape-preview" style="gap: 20px;">
+          <div class="snowflake-detailed" style="--flake-size: 30px;"></div>
+          <div class="snowflake-detailed" style="--flake-size: 24px; animation-duration: 15s;"></div>
+          <div class="snowflake-detailed" style="--flake-size: 20px; animation-duration: 25s;"></div>
+        </div>
+        <div class="shape-name">Snowflakes</div>
+        <div class="shape-desc">clip-path + rotation animation</div>
+      </div>
+
+      <!-- Ornaments -->
+      <div class="shape-card">
+        <div class="shape-preview" style="gap: 16px;">
+          <div class="ornament ornament-swing" style="--ornament-size: 35px; --ornament-color: var(--christmas-red);"></div>
+          <div class="ornament ornament-swing" style="--ornament-size: 30px; --ornament-color: var(--christmas-gold); animation-delay: 0.5s;"></div>
+          <div class="ornament ornament-swing" style="--ornament-size: 28px; --ornament-color: #3B82F6; animation-delay: 1s;"></div>
+        </div>
+        <div class="shape-name">Ornaments</div>
+        <div class="shape-desc">Gradient shading + swing animation</div>
+      </div>
+
+      <!-- Gift Box -->
+      <div class="shape-card">
+        <div class="shape-preview">
+          <div style="position: relative;">
+            <div class="gift-box" style="--box-size: 50px; --gift-color: var(--christmas-red);">
+              <div class="gift-bow" style="--ribbon-color: var(--christmas-gold);"></div>
+            </div>
+          </div>
+          <div style="position: relative; margin-left: 20px;">
+            <div class="gift-box" style="--box-size: 40px; --gift-color: var(--christmas-green); --ribbon-color: #FFFFFF;">
+              <div class="gift-bow" style="--ribbon-color: #FFFFFF;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="shape-name">Gift Boxes</div>
+        <div class="shape-desc">Box + ribbon + bow layers</div>
+      </div>
+
+      <!-- Holly -->
+      <div class="shape-card">
+        <div class="shape-preview">
+          <div class="holly" style="--holly-size: 50px;">
+            <div class="holly-leaf"></div>
+            <div class="holly-leaf"></div>
+            <div class="holly-berry"></div>
+          </div>
+        </div>
+        <div class="shape-name">Holly</div>
+        <div class="shape-desc">Leaves + berries with box-shadow</div>
+      </div>
+    </div>
+
+    <h2>Customization Example</h2>
+    <div class="customization-panel">
+      <p style="margin-bottom: 16px; color: var(--cgpt-text-muted);">All elements accept CSS variables for real-time customization:</p>
+      <div class="code-block">/* Theme-specific Christmas tree */
+.christmas-tree {
+  --tree-size: 60px;           /* Scale entire tree */
+  --tree-color: #22C55E;       /* Override green */
+  --star-color: #FFD700;       /* Star on top */
+  --light-colors: red, gold, blue;  /* Ornament palette */
+}
+
+/* Custom snowflake */
+.snowflake-detailed {
+  --flake-size: 24px;          /* Diameter */
+  --snow-white: #E0F2FF;       /* Tinted snow */
+  animation-duration: 20s;      /* Rotation speed */
+}
+
+/* Ornament variations */
+.ornament {
+  --ornament-size: 30px;
+  --ornament-color: #DC2626;   /* Any color */
+  animation: swing 4s ease-in-out infinite;
+}</div>
+    </div>
+
+    <h2>Integration with Theme System</h2>
+    <div class="customization-panel">
+      <p style="margin-bottom: 16px; color: var(--cgpt-text-muted);">Extended Theme interface for custom elements:</p>
+      <div class="code-block">interface ChristmasTheme extends Theme {
+  customElements?: {
+    trees?: {
+      enabled: boolean;
+      count: number;           // 1-5
+      size: 'small' | 'medium' | 'large';
+      positions: ('corner' | 'edge' | 'random')[];
+      animated: boolean;       // Twinkling lights
+    };
+    snowfall?: {
+      enabled: boolean;
+      density: number;         // 10-100 flakes
+      speed: 'slow' | 'medium' | 'fast';
+      style: 'simple' | 'detailed';
+    };
+    stars?: {
+      enabled: boolean;
+      count: number;           // 5-50
+      types: (5 | 4 | 6)[];    // Point variants
+      twinkle: boolean;
+    };
+    ornaments?: {
+      enabled: boolean;
+      count: number;
+      colors: string[];        // Custom palette
+      swing: boolean;
+    };
+  };
+}</div>
+    </div>
+
+    <h2>Variable Reference Extension</h2>
+    <div class="customization-panel">
+      <p style="margin-bottom: 16px; color: var(--cgpt-text-muted);">New indexing codes for custom elements:</p>
+      <div class="code-block">| Variable           | Type    | Description                    |
+|--------------------|---------|--------------------------------|
+| FX-TREE-COUNT      | Number  | Christmas trees (0-5)          |
+| FX-TREE-SIZE       | Enum    | small, medium, large           |
+| FX-SNOW-DENSITY    | Number  | Snowflake count (0-100)        |
+| FX-SNOW-SPEED      | Enum    | slow, medium, fast             |
+| FX-STAR-COUNT      | Number  | Background stars (0-50)        |
+| FX-STAR-TYPES      | Array   | [5, 4, 6] point variants       |
+| FX-ORNAMENT-COUNT  | Number  | Floating ornaments (0-20)      |
+| FX-ORNAMENT-COLORS | Array   | ["#DC2626", "#FFD700", ...]    |
+
+Example command:
+SET FX-SNOW-DENSITY 50, FX-STAR-COUNT 30, FX-TREE-COUNT 2</div>
+    </div>
+  </div>
+
+  <!-- LIVE PREVIEW PANEL -->
+  <div class="live-preview">
+    <h3>Live Preview</h3>
+    <div class="preview-area" id="previewArea">
+      <!-- Dynamic elements added here -->
+    </div>
+    <button class="toggle-snow" id="toggleSnow">Toggle Snowfall</button>
+  </div>
+
+  <script>
+    // Generate snowfall
+    function createSnowfall(container, count = 30) {
+      container.innerHTML = '';
+      for (let i = 0; i < count; i++) {
+        const flake = document.createElement('div');
+        flake.className = 'falling-snow snowflake-detailed';
+        flake.style.cssText = `
+          left: ${Math.random() * 100}%;
+          --flake-size: ${8 + Math.random() * 16}px;
+          --fall-duration: ${8 + Math.random() * 12}s;
+          --drift: ${-30 + Math.random() * 60}px;
+          --snow-opacity: ${0.4 + Math.random() * 0.4};
+          animation-delay: ${Math.random() * 10}s;
+        `;
+        container.appendChild(flake);
+      }
+    }
+
+    // Generate stars in preview
+    function createStarsInPreview(container, count = 15) {
+      for (let i = 0; i < count; i++) {
+        const star = document.createElement('div');
+        const types = ['star-5', 'star-4', 'star-6'];
+        star.className = `${types[Math.floor(Math.random() * types.length)]} star-twinkle`;
+        star.style.cssText = `
+          position: absolute;
+          left: ${Math.random() * 90}%;
+          top: ${Math.random() * 90}%;
+          --star-size: ${6 + Math.random() * 12}px;
+          --star-color: ${['#FFD700', '#FFFFFF', '#38BDF8'][Math.floor(Math.random() * 3)]};
+          --twinkle-duration: ${2 + Math.random() * 3}s;
+          animation-delay: ${Math.random() * 3}s;
+        `;
+        container.appendChild(star);
+      }
+    }
+
+    // Initialize
+    const snowContainer = document.getElementById('snowContainer');
+    const previewArea = document.getElementById('previewArea');
+    let snowEnabled = false;
+
+    createStarsInPreview(previewArea, 20);
+
+    document.getElementById('toggleSnow').addEventListener('click', () => {
+      snowEnabled = !snowEnabled;
+      if (snowEnabled) {
+        createSnowfall(snowContainer, 40);
+      } else {
+        snowContainer.innerHTML = '';
+      }
+    });
+
+    // Console API
+    window.createSnowfall = (count) => createSnowfall(snowContainer, count);
+    window.clearSnow = () => { snowContainer.innerHTML = ''; };
+
+    console.log('[ThemeGPT] Custom Christmas Elements loaded');
+    console.log('[ThemeGPT] API: createSnowfall(count), clearSnow()');
+  </script>
+</body>
+</html>

@@ -4,6 +4,7 @@ prompt/
 # Documentation - selective ignores
 doc/ai_docs/
 doc/mock/
+doc/specs/root-*.css
 screenshots/
 
 # VS Code AI rules

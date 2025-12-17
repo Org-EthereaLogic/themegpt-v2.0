@@ -17,6 +17,15 @@ export interface TokenStats {
   lastUpdated: number;
 }
 
+export type PatternType = 'dots' | 'grid' | 'snowflakes' | 'stars' | 'noise';
+
+export interface ThemePattern {
+  type: PatternType;
+  opacity: number; // 0.01-0.15 for subtlety
+  color?: string;  // Optional override, defaults to accent color
+  size?: number;   // Pattern scale factor, defaults to 1
+}
+
 export interface Theme {
   id: string;
   name: string;
@@ -30,6 +39,7 @@ export interface Theme {
     '--cgpt-accent': string;
   };
   isPremium: boolean;
+  pattern?: ThemePattern;
 }
 
 export const DEFAULT_THEMES: Theme[] = [
@@ -196,6 +206,110 @@ export const DEFAULT_THEMES: Theme[] = [
   },
 
   // =============================================
+  // PREMIUM THEMES - Christmas Pattern Collection
+  // =============================================
+  {
+    id: 'snowfall-serenity',
+    name: 'Snowfall Serenity',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#0F172A',
+      '--cgpt-surface': '#1E293B',
+      '--cgpt-text': '#F1F5F9',
+      '--cgpt-text-muted': '#94A3B8',
+      '--cgpt-border': '#334155',
+      '--cgpt-accent': '#38BDF8',
+    },
+    isPremium: true,
+    pattern: {
+      type: 'snowflakes',
+      opacity: 0.08,
+      color: '#FFFFFF',
+      size: 1.2,
+    },
+  },
+  {
+    id: 'holiday-plaid',
+    name: 'Holiday Plaid',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#0D1F12',
+      '--cgpt-surface': '#14291A',
+      '--cgpt-text': '#E8F5E9',
+      '--cgpt-text-muted': '#A5D6A7',
+      '--cgpt-border': '#1B5E20',
+      '--cgpt-accent': '#EF5350',
+    },
+    isPremium: true,
+    pattern: {
+      type: 'grid',
+      opacity: 0.06,
+      color: '#2E7D32',
+      size: 1.5,
+    },
+  },
+  {
+    id: 'gingerbread-warmth',
+    name: 'Gingerbread Warmth',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#1C120D',
+      '--cgpt-surface': '#2A1B14',
+      '--cgpt-text': '#FFF8E1',
+      '--cgpt-text-muted': '#D7CCC8',
+      '--cgpt-border': '#4E342E',
+      '--cgpt-accent': '#FF8A65',
+    },
+    isPremium: true,
+    pattern: {
+      type: 'dots',
+      opacity: 0.05,
+      color: '#A1887F',
+      size: 1,
+    },
+  },
+  {
+    id: 'winter-wonderland',
+    name: 'Winter Wonderland',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#E3F2FD',
+      '--cgpt-surface': '#FFFFFF',
+      '--cgpt-text': '#0D47A1',
+      '--cgpt-text-muted': '#5472D3',
+      '--cgpt-border': '#BBDEFB',
+      '--cgpt-accent': '#1976D2',
+    },
+    isPremium: true,
+    pattern: {
+      type: 'snowflakes',
+      opacity: 0.12,
+      color: '#90CAF9',
+      size: 1,
+    },
+  },
+  {
+    id: 'starry-christmas-eve',
+    name: 'Starry Christmas Eve',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#0A0A1A',
+      '--cgpt-surface': '#12122A',
+      '--cgpt-text': '#FAFAFA',
+      '--cgpt-text-muted': '#B8B8D1',
+      '--cgpt-border': '#2A2A4A',
+      '--cgpt-accent': '#FFD700',
+    },
+    isPremium: true,
+    pattern: {
+      type: 'stars',
+      opacity: 0.15,
+      color: '#FFD700',
+      size: 1,
+    },
+  },
+
+  // =============================================
   // PREMIUM THEMES - Core Collection
   // =============================================
   {
@@ -267,6 +381,52 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FBBF77',
     },
     isPremium: true,
+  },
+
+  // =============================================
+  // FREE THEMES - Vibrant Collection
+  // =============================================
+  {
+    id: 'aurora-borealis',
+    name: 'Aurora Borealis',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#0A1628',
+      '--cgpt-surface': '#0F2137',
+      '--cgpt-text': '#E0F7FA',
+      '--cgpt-text-muted': '#80DEEA',
+      '--cgpt-border': '#164E63',
+      '--cgpt-accent': '#00E5CC',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'sunset-blaze',
+    name: 'Sunset Blaze',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#1A0A14',
+      '--cgpt-surface': '#2D1220',
+      '--cgpt-text': '#FFF5F0',
+      '--cgpt-text-muted': '#FFAB91',
+      '--cgpt-border': '#4A1A2E',
+      '--cgpt-accent': '#FF6B4A',
+    },
+    isPremium: false,
+  },
+  {
+    id: 'electric-dreams',
+    name: 'Electric Dreams',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#0D0221',
+      '--cgpt-surface': '#150634',
+      '--cgpt-text': '#F5E6FF',
+      '--cgpt-text-muted': '#D4AAFF',
+      '--cgpt-border': '#3D1A6D',
+      '--cgpt-accent': '#FF2E97',
+    },
+    isPremium: false,
   },
 ];
 

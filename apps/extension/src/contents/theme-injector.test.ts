@@ -60,7 +60,7 @@ describe('theme-injector', () => {
       expect(style?.textContent).toContain('--cgpt-text: #000000')
     })
 
-    it('should include ChatGPT UI overrides in CSS', async () => {
+    it('should include ChatGPT CSS variable overrides', async () => {
       const mockTheme: Theme = {
         id: 'test-theme',
         name: 'Test Theme',
@@ -75,8 +75,10 @@ describe('theme-injector', () => {
       await new Promise(resolve => setTimeout(resolve, 50))
 
       const style = document.getElementById('themegpt-styles')
-      expect(style?.textContent).toContain('background-color: var(--cgpt-bg)')
-      expect(style?.textContent).toContain('[data-message-author-role]')
+      // Check that we're overriding ChatGPT's CSS variables
+      expect(style?.textContent).toContain('--main-surface-primary: var(--cgpt-bg)')
+      expect(style?.textContent).toContain('--sidebar-surface-primary: var(--cgpt-surface)')
+      expect(style?.textContent).toContain('--text-primary: var(--cgpt-text)')
     })
 
     it('should not create style element when no theme is saved', async () => {

@@ -310,6 +310,78 @@
       border-radius: 3px;
       font-family: monospace;
     }
+
+    .var-reference {
+      margin-top: 12px;
+      padding: 12px;
+      background: #0a0a0a;
+      border-radius: 8px;
+      border: 1px solid #333;
+    }
+
+    .var-reference h4 { margin-bottom: 8px; font-size: 11px; color: #7ECEC5; }
+
+    .var-grid {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 4px 8px;
+      font-size: 10px;
+    }
+
+    .var-code {
+      font-family: monospace;
+      color: #FBBF77;
+      background: #1a1a1a;
+      padding: 1px 4px;
+      border-radius: 2px;
+    }
+
+    .var-desc { color: #888; }
+
+    .var-cmd {
+      margin-top: 10px;
+      display: flex;
+      gap: 6px;
+    }
+
+    .var-cmd input {
+      flex: 1;
+      background: #1a1a1a;
+      border: 1px solid #333;
+      border-radius: 4px;
+      padding: 6px 8px;
+      color: #fff;
+      font-family: monospace;
+      font-size: 11px;
+    }
+
+    .var-cmd input::placeholder { color: #555; }
+
+    .var-cmd button {
+      background: #7ECEC5;
+      color: #111;
+      border: none;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .cmd-output {
+      margin-top: 8px;
+      padding: 6px;
+      background: #111;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 10px;
+      max-height: 60px;
+      overflow-y: auto;
+    }
+
+    .cmd-output .ok { color: #4ade80; }
+    .cmd-output .warn { color: #fbbf24; }
+    .cmd-output .err { color: #f87171; }
   </style>
 </head>
 <body>
@@ -429,6 +501,23 @@
     <div class="shortcuts">
       <p><kbd>Ctrl</kbd>+<kbd>H</kbd> Toggle panel</p>
       <p><kbd>Ctrl</kbd>+<kbd>E</kbd> Export to console</p>
+      <p><kbd>Ctrl</kbd>+<kbd>R</kbd> Show reference</p>
+    </div>
+
+    <div class="var-reference" id="varReference" style="display:none">
+      <h4>Variable Quick Ref</h4>
+      <div class="var-grid">
+        <span class="var-code">GL-BG</span><span class="var-desc">Page background</span>
+        <span class="var-code">GL-SRF</span><span class="var-desc">Surfaces</span>
+        <span class="var-code">GL-TXT</span><span class="var-desc">Primary text</span>
+        <span class="var-code">GL-TXM</span><span class="var-desc">Muted text</span>
+        <span class="var-code">GL-BRD</span><span class="var-desc">Borders</span>
+        <span class="var-code">GL-ACC</span><span class="var-desc">Accent/links</span>
+      </div>
+      <div class="var-cmd">
+        <input type="text" id="varCmd" placeholder="SET GL-ACC #FF6AC1" />
+        <button id="varExec">Run</button>
+      </div>
     </div>
   </aside>
 
@@ -666,7 +755,155 @@
       console.log('[ThemeGPT] Panel toggled');
     }
 
+    function toggleReference() {
+      const ref = document.getElementById('varReference');
+      ref.style.display = ref.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // === VARIABLE COMMAND SYSTEM ===
+    const VAR_MAP = {
+      'GL-BG': '--cgpt-bg',
+      'GL-SRF': '--cgpt-surface',
+      'GL-TXT': '--cgpt-text',
+      'GL-TXM': '--cgpt-text-muted',
+      'GL-BRD': '--cgpt-border',
+      'GL-ACC': '--cgpt-accent'
+    };
+
+    function parseCommand(cmd) {
+      const trimmed = cmd.trim().toUpperCase();
+      const results = [];
+
+      // SET VAR VALUE or SET VAR1 VALUE1, VAR2 VALUE2
+      if (trimmed.startsWith('SET ')) {
+        const parts = trimmed.slice(4).split(/,\s*/);
+        parts.forEach(part => {
+          const match = part.match(/^(GL-\w+)\s+(#[A-F0-9]{6}|#[A-F0-9]{3})$/i);
+          if (match) {
+            const [, varCode, color] = match;
+            results.push({ action: 'SET', varCode: varCode.toUpperCase(), value: color });
+          }
+        });
+      }
+
+      // ENABLE/DISABLE FX-OVL-NOISE or FX-OVL-GLOW
+      if (trimmed.startsWith('ENABLE ')) {
+        const fx = trimmed.slice(7);
+        if (fx === 'FX-OVL-NOISE') results.push({ action: 'ENABLE', effect: 'noise' });
+        if (fx === 'FX-OVL-GLOW') results.push({ action: 'ENABLE', effect: 'glow' });
+      }
+      if (trimmed.startsWith('DISABLE ')) {
+        const fx = trimmed.slice(8);
+        if (fx.startsWith('FX-')) results.push({ action: 'DISABLE', effect: fx });
+      }
+
+      return results;
+    }
+
+    function executeCommand(cmd) {
+      const instructions = parseCommand(cmd);
+      const output = [];
+
+      if (instructions.length === 0) {
+        output.push({ type: 'err', msg: 'Invalid command. Try: SET GL-ACC #FF6AC1' });
+        console.log('[ThemeGPT] Command error:', cmd);
+        return output;
+      }
+
+      instructions.forEach(inst => {
+        if (inst.action === 'SET') {
+          const cssVar = VAR_MAP[inst.varCode];
+          if (cssVar && currentTheme) {
+            const oldValue = currentTheme.colors[cssVar];
+            currentTheme.colors[cssVar] = inst.value;
+            document.documentElement.style.setProperty(cssVar, inst.value);
+
+            // Re-run quality checks
+            const checks = runQualityChecks(currentTheme);
+            displayQualityChecks(checks);
+
+            const contrast = inst.varCode === 'GL-TXT'
+              ? getContrastRatio(currentTheme.colors['--cgpt-bg'], inst.value)
+              : null;
+
+            let msg = `OK ${inst.varCode} ${oldValue} → ${inst.value}`;
+            if (contrast) msg += ` Contrast: ${contrast.toFixed(1)}:1`;
+
+            output.push({ type: contrast && contrast < 4.5 ? 'warn' : 'ok', msg });
+            console.log(`[ThemeGPT] ${msg}`);
+          } else {
+            output.push({ type: 'err', msg: `Unknown variable: ${inst.varCode}` });
+          }
+        }
+
+        if (inst.action === 'ENABLE' && currentTheme) {
+          if (inst.effect === 'noise') {
+            currentTheme.noiseOverlay = true;
+            currentTheme.glowOverlay = false;
+          } else if (inst.effect === 'glow') {
+            currentTheme.glowOverlay = true;
+            currentTheme.noiseOverlay = false;
+          }
+          applyTheme(currentTheme);
+          output.push({ type: 'ok', msg: `Enabled ${inst.effect} overlay` });
+          console.log(`[ThemeGPT] Enabled ${inst.effect} overlay`);
+        }
+
+        if (inst.action === 'DISABLE' && currentTheme) {
+          currentTheme.noiseOverlay = false;
+          currentTheme.glowOverlay = false;
+          currentTheme.pattern = null;
+          applyTheme(currentTheme);
+          output.push({ type: 'ok', msg: 'Disabled effects' });
+          console.log('[ThemeGPT] Disabled effects');
+        }
+      });
+
+      return output;
+    }
+
+    function renderOutput(results) {
+      let container = document.querySelector('.cmd-output');
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'cmd-output';
+        document.getElementById('varReference').appendChild(container);
+      }
+      container.innerHTML = results.map(r => `<div class="${r.type}">${r.msg}</div>`).join('');
+    }
+
+    // Expose for console use
+    window.SET = (varCode, value) => {
+      const results = executeCommand(`SET ${varCode} ${value}`);
+      return results.map(r => r.msg).join('\n');
+    };
+
+    window.VAR_MAP = VAR_MAP;
+
     document.addEventListener('DOMContentLoaded', init);
+
+    // Additional keyboard shortcut for reference toggle
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'r') { e.preventDefault(); toggleReference(); }
+    });
+
+    // Variable command input handler
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('varExec')?.addEventListener('click', () => {
+        const input = document.getElementById('varCmd');
+        const results = executeCommand(input.value);
+        renderOutput(results);
+        input.value = '';
+      });
+
+      document.getElementById('varCmd')?.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          const results = executeCommand(e.target.value);
+          renderOutput(results);
+          e.target.value = '';
+        }
+      });
+    });
   </script>
 </body>
 </html>

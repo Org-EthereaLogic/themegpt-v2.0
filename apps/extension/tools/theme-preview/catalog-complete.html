@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ThemeGPT Complete Catalog</title>
+  <style>
+    :root {
+      --cream: #FAF6F0;
+      --chocolate: #4B2E1E;
+      --peach: #F4A988;
+      --teal: #7ECEC5;
+      --premium-badge: #FFD700;
+      --legacy-badge: #A0AEC0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--cream);
+      color: var(--chocolate);
+      padding: 2rem;
+      line-height: 1.5;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--chocolate);
+    }
+    h1 { font-family: 'Space Grotesk', sans-serif; font-size: 2rem; margin-bottom: 0.5rem; }
+    .subtitle { color: #6B5344; font-size: 0.9rem; }
+    .stats { display: flex; justify-content: center; gap: 2rem; margin-top: 1rem; }
+    .stat { text-align: center; }
+    .stat-value { font-size: 1.5rem; font-weight: bold; color: var(--peach); }
+    .stat-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.25rem;
+      margin: 2rem 0 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--chocolate);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.65rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-premium { background: var(--premium-badge); color: var(--chocolate); }
+    .badge-legacy { background: var(--legacy-badge); color: white; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(75, 46, 30, 0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .card:hover, .card:focus-within {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(75, 46, 30, 0.15);
+    }
+    .preview {
+      height: 120px;
+      position: relative;
+      display: flex;
+    }
+    .preview-before, .preview-after {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      position: relative;
+    }
+    .preview-before::after, .preview-after::after {
+      content: attr(data-label);
+      position: absolute;
+      bottom: 4px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.5);
+      color: white;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 0.5rem;
+    }
+    .preview-divider {
+      width: 2px;
+      background: var(--cream);
+    }
+    .card-body { padding: 1rem; }
+    .card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-desc { font-size: 0.75rem; color: #6B5344; margin-bottom: 0.5rem; }
+    .card-meta { font-size: 0.65rem; color: #8B7B6B; }
+    .enhancement-list {
+      margin-top: 0.5rem;
+      padding-left: 1rem;
+      font-size: 0.7rem;
+      color: #6B5344;
+    }
+    .enhancement-list li { margin-bottom: 0.15rem; }
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--chocolate);
+      font-size: 0.75rem;
+      color: #6B5344;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>ThemeGPT Theme Catalog</h1>
+    <p class="subtitle">Complete inventory of enhanced themes</p>
+    <div class="stats">
+      <div class="stat"><div class="stat-value">16</div><div class="stat-label">Premium</div></div>
+      <div class="stat"><div class="stat-value">8</div><div class="stat-label">Legacy</div></div>
+      <div class="stat"><div class="stat-value">24</div><div class="stat-label">Total</div></div>
+    </div>
+  </header>
+  <main>
+    <h2 class="section-title"><span class="badge badge-premium">Premium</span> Christmas Themes (11)</h2>
+    <section class="grid" aria-label="Christmas Premium Themes">
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(135deg, #3d2817 0%, #5c3d2e 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(135deg, #3d2817 0%, #5c3d2e 100%); position: relative; overflow: hidden;">
+            <div style="position: absolute; bottom: 0; left: 20%; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-bottom: 25px solid #2d5a3d;"></div>
+            <div style="position: absolute; bottom: 10px; right: 20%; width: 12px; height: 12px; background: #dc2626; border-radius: 50%; box-shadow: inset -2px -2px 4px rgba(0,0,0,0.3);"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Cozy Cabin Christmas</h3>
+          <p class="card-desc">Warm cabin atmosphere with fireplace glow</p>
+          <ul class="enhancement-list"><li>Fireplace glow animation</li><li>Christmas tree + ornaments</li><li>Wood grain texture</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #1a365d 0%, #2c5282 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #1a365d 0%, #2c5282 100%); position: relative;">
+            <div style="position: absolute; inset: 0; background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%);"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Frosted Windowpane</h3>
+          <p class="card-desc">Ice and frost visual treatment</p>
+          <ul class="enhancement-list"><li>Frost edge effect</li><li>Ice crystal formations</li><li>Condensation droplets</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #0d3320 0%, #1a4731 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #0d3320 0%, #1a4731 100%); position: relative; overflow: hidden;">
+            <div style="position: absolute; bottom: 0; left: 10%; width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-bottom: 40px solid rgba(0,0,0,0.4);"></div>
+            <div style="position: absolute; top: 20%; left: 30%; width: 4px; height: 4px; background: white; border-radius: 50%;"></div>
+            <div style="position: absolute; top: 15%; right: 25%; width: 3px; height: 3px; background: white; border-radius: 50%;"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Midnight Evergreen</h3>
+          <p class="card-desc">Dense forest at night atmosphere</p>
+          <ul class="enhancement-list"><li>Layered tree silhouettes</li><li>Twinkling star field</li><li>Rising fog layer</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(135deg, #fff 0%, #fecaca 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: repeating-linear-gradient(-45deg, #fff, #fff 5px, #dc2626 5px, #dc2626 10px);"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Candy Cane Chat</h3>
+          <p class="card-desc">Playful candy-themed decoration</p>
+          <ul class="enhancement-list"><li>Candy cane border frame</li><li>Peppermint swirl corners</li><li>Sprinkle dots</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #0f172a 0%, #1e3a5f 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #0f172a 0%, #1e3a5f 100%); position: relative;">
+            <div style="position: absolute; top: 15%; right: 20%; width: 20px; height: 20px; background: radial-gradient(circle, #ffd700 30%, transparent 70%);"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Silent Night (Starfield)</h3>
+          <p class="card-desc">Peaceful nighttime sky scene</p>
+          <ul class="enhancement-list"><li>Deep starfield (40+ stars)</li><li>Northern lights wave</li><li>Shooting stars</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #2d3748"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: #2d3748; position: relative;">
+            <div style="position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%); display: flex; gap: 8px;">
+              <div style="width: 6px; height: 20px; background: linear-gradient(#f5deb3, #d4a76a); border-radius: 2px;"></div>
+              <div style="width: 4px; height: 6px; background: #ffd700; border-radius: 50% 50% 20% 20%; position: absolute; top: -4px; left: 1px;"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Minimal Advent</h3>
+          <p class="card-desc">Subtle, contemplative holiday feel</p>
+          <ul class="enhancement-list"><li>Advent candles</li><li>Candle glow halos</li><li>Sparse star field</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #e2e8f0 0%, #94a3b8 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #e2e8f0 0%, #94a3b8 100%); position: relative; overflow: hidden;">
+            <div style="position: absolute; top: 20%; left: 30%; width: 8px; height: 8px; background: white; border-radius: 50%; opacity: 0.8;"></div>
+            <div style="position: absolute; top: 40%; right: 25%; width: 6px; height: 6px; background: white; border-radius: 50%; opacity: 0.6;"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Snowfall Serenity</h3>
+          <p class="card-desc">Immersive falling snow experience</p>
+          <ul class="enhancement-list"><li>Primary snowfall layer</li><li>Background snow depth</li><li>Snow accumulation</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #7f1d1d"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: repeating-linear-gradient(0deg, #7f1d1d 0px, #7f1d1d 10px, #166534 10px, #166534 20px), repeating-linear-gradient(90deg, rgba(255,255,255,0.1) 0px, rgba(255,255,255,0.1) 10px, transparent 10px, transparent 20px); background-blend-mode: multiply;"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Holiday Plaid</h3>
+          <p class="card-desc">Cozy textile pattern aesthetic</p>
+          <ul class="enhancement-list"><li>Woven plaid texture</li><li>Ribbon corner bows</li><li>Gold thread highlights</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #92400e"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: #92400e; position: relative;">
+            <div style="position: absolute; bottom: 20%; left: 30%; width: 20px; height: 25px; background: #78350f; border-radius: 40% 40% 45% 45%;"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Gingerbread Warmth</h3>
+          <p class="card-desc">Baked goods visual theme</p>
+          <ul class="enhancement-list"><li>Gingerbread silhouettes</li><li>Icing drizzle lines</li><li>Sugar sparkle</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #f8fafc 0%, #cbd5e1 100%); position: relative; overflow: hidden;">
+            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 15px; background: white; border-radius: 100% 100% 0 0;"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Winter Wonderland</h3>
+          <p class="card-desc">Magical winter landscape</p>
+          <ul class="enhancement-list"><li>Heavy snowfall</li><li>Ice crystal sparkles</li><li>Snow bank accumulation</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #0c1445 0%, #1e3a8a 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #0c1445 0%, #1e3a8a 100%); position: relative;">
+            <div style="position: absolute; top: 20%; left: 50%; transform: translateX(-50%); width: 16px; height: 16px; background: #ffd700; clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Starry Christmas Eve</h3>
+          <p class="card-desc">Magical Christmas night sky</p>
+          <ul class="enhancement-list"><li>Dense star field (50+)</li><li>Bethlehem star focal</li><li>Shooting star trails</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+    </section>
+    <h2 class="section-title"><span class="badge badge-premium">Premium</span> Core Themes (5)</h2>
+    <section class="grid" aria-label="Core Premium Themes">
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #ff6ec4 100%); position: relative;">
+            <div style="position: absolute; bottom: 30%; left: 50%; transform: translateX(-50%); width: 40px; height: 20px; background: linear-gradient(#ff6ec4, #7873f5); border-radius: 50% 50% 0 0;"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Synth Wave</h3>
+          <p class="card-desc">Full 80s retro aesthetic</p>
+          <ul class="enhancement-list"><li>Perspective grid floor</li><li>Retro sun</li><li>Neon glow pulse</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #002451"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #002451 0%, #003366 100%); position: relative;">
+            <div style="position: absolute; top: 15%; right: 20%; width: 12px; height: 12px; background: radial-gradient(circle, #fffacd 30%, transparent 70%);"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Tomorrow Night Blue</h3>
+          <p class="card-desc">Serene nighttime coding environment</p>
+          <ul class="enhancement-list"><li>Distant star layer</li><li>Moon accent</li><li>Gradient depth</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #2d2b55"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: #2d2b55; position: relative;">
+            <div style="position: absolute; inset: 0; background: radial-gradient(circle at 80% 20%, rgba(189, 147, 249, 0.15) 0%, transparent 50%);"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Shades of Purple</h3>
+          <p class="card-desc">Rich purple atmosphere with depth</p>
+          <ul class="enhancement-list"><li>Crystal corner accents</li><li>Purple gradient glow</li><li>Shimmer particles</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #1a2f1a"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, #1a2f1a 0%, #0d1f0d 100%); position: relative; overflow: hidden;">
+            <div style="position: absolute; bottom: 0; left: 20%; width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-bottom: 30px solid rgba(0,0,0,0.5);"></div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Dark Forest</h3>
+          <p class="card-desc">Deep woodland atmosphere</p>
+          <ul class="enhancement-list"><li>Layered tree silhouettes</li><li>Rising mist animation</li><li>Firefly particles</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #3d2817"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: conic-gradient(from 0deg at 50% 50%, #3d2817, #d4a76a, #3d2817);"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Chocolate Caramel</h3>
+          <p class="card-desc">Rich, warm indulgent aesthetic</p>
+          <ul class="enhancement-list"><li>Caramel swirl pattern</li><li>Chocolate drip edge</li><li>Golden shimmer</li></ul>
+          <p class="card-meta">Source: CSS-Only</p>
+        </div>
+      </article>
+    </section>
+    <h2 class="section-title"><span class="badge badge-legacy">Legacy</span> Free Themes (8)</h2>
+    <section class="grid" aria-label="Legacy Free Themes">
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #1e1e1e"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: #1e1e1e; border: 1px solid #333;"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">VS Code Dark+ <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Classic dark IDE colors</p>
+          <ul class="enhancement-list"><li>Subtle noise texture</li><li>Border accent</li></ul>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #002b36"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: #002b36; background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px); background-size: 32px 32px;"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Solarized Dark <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Warm dark palette</p>
+          <ul class="enhancement-list"><li>Faint grid pattern</li><li>Soft inner shadow</li></ul>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #282a36"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: #282a36; background-image: radial-gradient(ellipse at 50% 0%, rgba(189, 147, 249, 0.04) 0%, transparent 60%);"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Dracula <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Purple-tinted dark palette</p>
+          <ul class="enhancement-list"><li>Ambient glow</li><li>Border tint</li></ul>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #2d2a2e"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(rgba(249, 174, 88, 0.03), transparent 100px), #2d2a2e;"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Monokai Pro <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Warm dark palette</p>
+          <ul class="enhancement-list"><li>Film grain overlay</li><li>Warm highlight</li></ul>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: #282c34"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: #282c34; box-shadow: inset 0 0 100px rgba(97, 175, 239, 0.03);"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">One Dark <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Blue-gray dark palette</p>
+          <ul class="enhancement-list"><li>Inner border glow</li><li>Panel definition</li></ul>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(180deg, rgba(126, 206, 197, 0.05) 0%, rgba(189, 147, 249, 0.03) 15%, transparent 25%), linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Aurora Borealis <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Green/purple gradient palette</p>
+          <ul class="enhancement-list"><li>Aurora band</li><li>Star dot hint</li></ul>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(135deg, #f97316 0%, #dc2626 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: radial-gradient(circle at 20% 90%, rgba(244, 169, 136, 0.15) 0%, transparent 50%), linear-gradient(135deg, #f97316 0%, #dc2626 100%);"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Sunset Blaze <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Warm orange/red palette</p>
+          <ul class="enhancement-list"><li>Sun glow</li><li>Horizon line</li></ul>
+        </div>
+      </article>
+      <article class="card" tabindex="0">
+        <div class="preview">
+          <div class="preview-before" data-label="Before" style="background: linear-gradient(135deg, #06b6d4 0%, #ec4899 100%)"></div>
+          <div class="preview-divider"></div>
+          <div class="preview-after" data-label="After" style="background: linear-gradient(135deg, #06b6d4 0%, #ec4899 100%); box-shadow: inset 0 0 50px rgba(0, 255, 255, 0.08);"></div>
+        </div>
+        <div class="card-body">
+          <h3 class="card-title">Electric Dreams <span class="badge badge-legacy">Free</span></h3>
+          <p class="card-desc">Neon cyan/magenta palette</p>
+          <ul class="enhancement-list"><li>Edge glow</li><li>Grid hint</li></ul>
+        </div>
+      </article>
+    </section>
+  </main>
+  <footer>
+    <p>ThemeGPT Theme Catalog | CSS-Only Implementation | All themes use brand color variables</p>
+  </footer>
+</body>
+</html>

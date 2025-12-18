@@ -209,13 +209,22 @@
     body::before { z-index: 0; }
     body::after { z-index: 1; }
 
+    /* === Effects Layer === */
+    .themegpt-effects-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 2;
+      overflow: hidden;
+    }
+
     /* === Theme Panel === */
     .theme-panel {
       position: fixed;
       right: 0;
       top: 0;
       bottom: 0;
-      width: 300px;
+      width: 320px;
       background: #111;
       border-left: 1px solid #333;
       padding: 16px;
@@ -249,6 +258,14 @@
     .theme-btn.active { border-color: #7ECEC5; }
     .theme-btn .name { font-weight: 600; margin-bottom: 4px; }
     .theme-btn .accent-bar { height: 3px; border-radius: 2px; margin-top: 4px; }
+    .theme-btn .effects-badge {
+      font-size: 8px;
+      background: rgba(255,255,255,0.2);
+      padding: 1px 4px;
+      border-radius: 2px;
+      margin-top: 4px;
+      display: inline-block;
+    }
 
     .current-theme {
       margin-top: 16px;
@@ -311,77 +328,16 @@
       font-family: monospace;
     }
 
-    .var-reference {
+    .theme-stats {
       margin-top: 12px;
-      padding: 12px;
-      background: #0a0a0a;
-      border-radius: 8px;
-      border: 1px solid #333;
-    }
-
-    .var-reference h4 { margin-bottom: 8px; font-size: 11px; color: #7ECEC5; }
-
-    .var-grid {
-      display: grid;
-      grid-template-columns: auto 1fr;
-      gap: 4px 8px;
-      font-size: 10px;
-    }
-
-    .var-code {
-      font-family: monospace;
-      color: #FBBF77;
+      padding: 8px;
       background: #1a1a1a;
-      padding: 1px 4px;
-      border-radius: 2px;
-    }
-
-    .var-desc { color: #888; }
-
-    .var-cmd {
-      margin-top: 10px;
-      display: flex;
-      gap: 6px;
-    }
-
-    .var-cmd input {
-      flex: 1;
-      background: #1a1a1a;
-      border: 1px solid #333;
-      border-radius: 4px;
-      padding: 6px 8px;
-      color: #fff;
-      font-family: monospace;
+      border-radius: 6px;
       font-size: 11px;
+      color: #888;
     }
 
-    .var-cmd input::placeholder { color: #555; }
-
-    .var-cmd button {
-      background: #7ECEC5;
-      color: #111;
-      border: none;
-      border-radius: 4px;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .cmd-output {
-      margin-top: 8px;
-      padding: 6px;
-      background: #111;
-      border-radius: 4px;
-      font-family: monospace;
-      font-size: 10px;
-      max-height: 60px;
-      overflow-y: auto;
-    }
-
-    .cmd-output .ok { color: #4ade80; }
-    .cmd-output .warn { color: #fbbf24; }
-    .cmd-output .err { color: #f87171; }
+    .theme-stats span { color: #7ECEC5; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -473,14 +429,23 @@
     </main>
   </div>
 
+  <!-- Effects container (for animated elements) -->
+  <div id="themegpt-effects" class="themegpt-effects-layer"></div>
+
   <!-- THEME PANEL -->
   <aside class="theme-panel" id="themePanel">
     <h2>ThemeGPT Preview</h2>
 
-    <h3>Free Themes</h3>
+    <div class="theme-stats">
+      Total: <span id="totalCount">0</span> themes |
+      Free: <span id="freeCount">0</span> |
+      Premium: <span id="premiumCount">0</span>
+    </div>
+
+    <h3>Free Themes (8)</h3>
     <div class="theme-grid" id="freeThemes"></div>
 
-    <h3>Premium Themes</h3>
+    <h3>Premium Themes (16)</h3>
     <div class="theme-grid" id="premiumThemes"></div>
 
     <div class="current-theme">
@@ -495,63 +460,57 @@
 
     <div class="controls">
       <button class="ctrl-btn" id="exportBtn">Export Theme JSON</button>
+      <button class="ctrl-btn secondary" id="toggleEffectsBtn">Toggle Effects</button>
       <button class="ctrl-btn secondary" id="hideBtn">Hide Panel (Ctrl+H)</button>
     </div>
 
     <div class="shortcuts">
       <p><kbd>Ctrl</kbd>+<kbd>H</kbd> Toggle panel</p>
       <p><kbd>Ctrl</kbd>+<kbd>E</kbd> Export to console</p>
-      <p><kbd>Ctrl</kbd>+<kbd>R</kbd> Show reference</p>
-    </div>
-
-    <div class="var-reference" id="varReference" style="display:none">
-      <h4>Variable Quick Ref</h4>
-      <div class="var-grid">
-        <span class="var-code">GL-BG</span><span class="var-desc">Page background</span>
-        <span class="var-code">GL-SRF</span><span class="var-desc">Surfaces</span>
-        <span class="var-code">GL-TXT</span><span class="var-desc">Primary text</span>
-        <span class="var-code">GL-TXM</span><span class="var-desc">Muted text</span>
-        <span class="var-code">GL-BRD</span><span class="var-desc">Borders</span>
-        <span class="var-code">GL-ACC</span><span class="var-desc">Accent/links</span>
-      </div>
-      <div class="var-cmd">
-        <input type="text" id="varCmd" placeholder="SET GL-ACC #FF6AC1" />
-        <button id="varExec">Run</button>
-      </div>
+      <p><kbd>&larr;</kbd>/<kbd>&rarr;</kbd> Navigate themes</p>
     </div>
   </aside>
 
   <script>
-    // === THEME DATA (from packages/shared/src/index.ts) ===
+    // === THEME DATA (synced from packages/shared/src/index.ts) ===
     const THEMES = [
-      { id: 'vscode-dark-plus', name: 'VS Code Dark+', category: 'core', colors: { '--cgpt-bg': '#1E1E1E', '--cgpt-surface': '#252526', '--cgpt-text': '#D4D4D4', '--cgpt-text-muted': '#808080', '--cgpt-border': '#3C3C3C', '--cgpt-accent': '#569CD6' }, isPremium: false },
-      { id: 'solarized-dark', name: 'Solarized Dark', category: 'core', colors: { '--cgpt-bg': '#002B36', '--cgpt-surface': '#073642', '--cgpt-text': '#839496', '--cgpt-text-muted': '#657B83', '--cgpt-border': '#094959', '--cgpt-accent': '#2AA198' }, isPremium: false },
-      { id: 'dracula', name: 'Dracula', category: 'core', colors: { '--cgpt-bg': '#282A36', '--cgpt-surface': '#343746', '--cgpt-text': '#F8F8F2', '--cgpt-text-muted': '#6272A4', '--cgpt-border': '#44475A', '--cgpt-accent': '#BD93F9' }, isPremium: false },
-      { id: 'monokai-pro', name: 'Monokai Pro', category: 'core', colors: { '--cgpt-bg': '#2D2A2E', '--cgpt-surface': '#403E41', '--cgpt-text': '#FCFCFA', '--cgpt-text-muted': '#939293', '--cgpt-border': '#49474A', '--cgpt-accent': '#FFD866' }, isPremium: false },
-      { id: 'one-dark', name: 'One Dark', category: 'core', colors: { '--cgpt-bg': '#282C34', '--cgpt-surface': '#21252B', '--cgpt-text': '#ABB2BF', '--cgpt-text-muted': '#5C6370', '--cgpt-border': '#3E4451', '--cgpt-accent': '#61AFEF' }, isPremium: false },
-      { id: 'aurora-borealis', name: 'Aurora Borealis', category: 'core', colors: { '--cgpt-bg': '#0A1628', '--cgpt-surface': '#0F2137', '--cgpt-text': '#E0F7FA', '--cgpt-text-muted': '#80DEEA', '--cgpt-border': '#164E63', '--cgpt-accent': '#00E5CC' }, isPremium: false },
-      { id: 'sunset-blaze', name: 'Sunset Blaze', category: 'core', colors: { '--cgpt-bg': '#1A0A14', '--cgpt-surface': '#2D1220', '--cgpt-text': '#FFF5F0', '--cgpt-text-muted': '#FFAB91', '--cgpt-border': '#4A1A2E', '--cgpt-accent': '#FF6B4A' }, isPremium: false },
-      { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false },
-      { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true },
-      { id: 'frosted-windowpane', name: 'Frosted Windowpane', category: 'christmas', colors: { '--cgpt-bg': '#F5F7FB', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0F172A', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#D1D5DB', '--cgpt-accent': '#3B82F6' }, isPremium: true },
-      { id: 'midnight-evergreen', name: 'Midnight Evergreen', category: 'christmas', colors: { '--cgpt-bg': '#020817', '--cgpt-surface': '#07120E', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#14532D', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true },
-      { id: 'candy-cane-chat', name: 'Candy Cane Chat', category: 'christmas', colors: { '--cgpt-bg': '#FDF2F2', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#111827', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#FECACA', '--cgpt-accent': '#DC2626' }, isPremium: true },
-      { id: 'silent-night-starfield', name: 'Silent Night (Starfield)', category: 'christmas', colors: { '--cgpt-bg': '#020617', '--cgpt-surface': '#02081C', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#CBD5F5', '--cgpt-border': '#1D4ED8', '--cgpt-accent': '#38BDF8' }, isPremium: true, glowOverlay: true },
+      // FREE THEMES (8)
+      { id: 'vscode-dark-plus', name: 'VS Code Dark+', category: 'core', colors: { '--cgpt-bg': '#1E1E1E', '--cgpt-surface': '#252526', '--cgpt-text': '#D4D4D4', '--cgpt-text-muted': '#808080', '--cgpt-border': '#3C3C3C', '--cgpt-accent': '#569CD6' }, isPremium: false, noiseOverlay: true },
+      { id: 'solarized-dark', name: 'Solarized Dark', category: 'core', colors: { '--cgpt-bg': '#002B36', '--cgpt-surface': '#073642', '--cgpt-text': '#839496', '--cgpt-text-muted': '#657B83', '--cgpt-border': '#094959', '--cgpt-accent': '#2AA198' }, isPremium: false, pattern: { type: 'grid', opacity: 0.02, size: 1.5 } },
+      { id: 'dracula', name: 'Dracula', category: 'core', colors: { '--cgpt-bg': '#282A36', '--cgpt-surface': '#343746', '--cgpt-text': '#F8F8F2', '--cgpt-text-muted': '#6272A4', '--cgpt-border': '#44475A', '--cgpt-accent': '#BD93F9' }, isPremium: false, glowOverlay: true },
+      { id: 'monokai-pro', name: 'Monokai Pro', category: 'core', colors: { '--cgpt-bg': '#2D2A2E', '--cgpt-surface': '#403E41', '--cgpt-text': '#FCFCFA', '--cgpt-text-muted': '#939293', '--cgpt-border': '#49474A', '--cgpt-accent': '#FFD866' }, isPremium: false, noiseOverlay: true },
+      { id: 'one-dark', name: 'One Dark', category: 'core', colors: { '--cgpt-bg': '#282C34', '--cgpt-surface': '#21252B', '--cgpt-text': '#ABB2BF', '--cgpt-text-muted': '#5C6370', '--cgpt-border': '#3E4451', '--cgpt-accent': '#61AFEF' }, isPremium: false, glowOverlay: true },
+      { id: 'aurora-borealis', name: 'Aurora Borealis', category: 'core', colors: { '--cgpt-bg': '#0A1628', '--cgpt-surface': '#0F2137', '--cgpt-text': '#E0F7FA', '--cgpt-text-muted': '#80DEEA', '--cgpt-border': '#164E63', '--cgpt-accent': '#00E5CC' }, isPremium: false, glowOverlay: true },
+      { id: 'sunset-blaze', name: 'Sunset Blaze', category: 'core', colors: { '--cgpt-bg': '#1A0A14', '--cgpt-surface': '#2D1220', '--cgpt-text': '#FFF5F0', '--cgpt-text-muted': '#FFAB91', '--cgpt-border': '#4A1A2E', '--cgpt-accent': '#FF6B4A' }, isPremium: false, glowOverlay: true },
+      { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false, glowOverlay: true, pattern: { type: 'grid', opacity: 0.02, size: 2 } },
+
+      // PREMIUM THEMES - Christmas Collection (6)
+      { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'pine', density: 'few' }, animatedSnowfall: { enabled: true, density: 'light', speed: 'slow' } } },
+      { id: 'frosted-windowpane', name: 'Frosted Windowpane', category: 'christmas', colors: { '--cgpt-bg': '#F5F7FB', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0F172A', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#D1D5DB', '--cgpt-accent': '#3B82F6' }, isPremium: true, effects: { animatedSnowfall: { enabled: true, density: 'light', speed: 'slow' }, seasonalDecorations: { frostEdge: true } } },
+      { id: 'midnight-evergreen', name: 'Midnight Evergreen', category: 'christmas', colors: { '--cgpt-bg': '#020817', '--cgpt-surface': '#07120E', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#14532D', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' }, twinklingStars: { enabled: true, count: 'medium' }, ambientEffects: { fogRising: true } } },
+      { id: 'candy-cane-chat', name: 'Candy Cane Chat', category: 'christmas', colors: { '--cgpt-bg': '#FDF2F2', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#111827', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#FECACA', '--cgpt-accent': '#DC2626' }, isPremium: true, effects: { seasonalDecorations: { candyCaneFrame: true } } },
+      { id: 'silent-night-starfield', name: 'Silent Night (Starfield)', category: 'christmas', colors: { '--cgpt-bg': '#020617', '--cgpt-surface': '#02081C', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#CBD5F5', '--cgpt-border': '#1D4ED8', '--cgpt-accent': '#38BDF8' }, isPremium: true, glowOverlay: true, effects: { twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true }, ambientEffects: { auroraWaves: true } } },
       { id: 'minimal-advent', name: 'Minimal Advent', category: 'christmas', colors: { '--cgpt-bg': '#0B0712', '--cgpt-surface': '#141021', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4C1D95', '--cgpt-accent': '#7C3AED' }, isPremium: true, noiseOverlay: true },
-      { id: 'snowfall-serenity', name: 'Snowfall Serenity', category: 'christmas', colors: { '--cgpt-bg': '#0F172A', '--cgpt-surface': '#1E293B', '--cgpt-text': '#F1F5F9', '--cgpt-text-muted': '#94A3B8', '--cgpt-border': '#334155', '--cgpt-accent': '#38BDF8' }, isPremium: true, pattern: { type: 'snowflakes', opacity: 0.08, color: '#FFFFFF', size: 1.2 } },
+
+      // PREMIUM THEMES - Christmas Pattern Collection (5)
+      { id: 'snowfall-serenity', name: 'Snowfall Serenity', category: 'christmas', colors: { '--cgpt-bg': '#0F172A', '--cgpt-surface': '#1E293B', '--cgpt-text': '#F1F5F9', '--cgpt-text-muted': '#94A3B8', '--cgpt-border': '#334155', '--cgpt-accent': '#38BDF8' }, isPremium: true, effects: { animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow' } } },
       { id: 'holiday-plaid', name: 'Holiday Plaid', category: 'christmas', colors: { '--cgpt-bg': '#0D1F12', '--cgpt-surface': '#14291A', '--cgpt-text': '#E8F5E9', '--cgpt-text-muted': '#A5D6A7', '--cgpt-border': '#1B5E20', '--cgpt-accent': '#EF5350' }, isPremium: true, pattern: { type: 'grid', opacity: 0.06, color: '#2E7D32', size: 1.5 } },
       { id: 'gingerbread-warmth', name: 'Gingerbread Warmth', category: 'christmas', colors: { '--cgpt-bg': '#1C120D', '--cgpt-surface': '#2A1B14', '--cgpt-text': '#FFF8E1', '--cgpt-text-muted': '#D7CCC8', '--cgpt-border': '#4E342E', '--cgpt-accent': '#FF8A65' }, isPremium: true, pattern: { type: 'dots', opacity: 0.05, color: '#A1887F', size: 1 } },
-      { id: 'winter-wonderland', name: 'Winter Wonderland', category: 'christmas', colors: { '--cgpt-bg': '#E3F2FD', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0D47A1', '--cgpt-text-muted': '#5472D3', '--cgpt-border': '#BBDEFB', '--cgpt-accent': '#1976D2' }, isPremium: true, pattern: { type: 'snowflakes', opacity: 0.12, color: '#90CAF9', size: 1 } },
-      { id: 'starry-christmas-eve', name: 'Starry Christmas Eve', category: 'christmas', colors: { '--cgpt-bg': '#0A0A1A', '--cgpt-surface': '#12122A', '--cgpt-text': '#FAFAFA', '--cgpt-text-muted': '#B8B8D1', '--cgpt-border': '#2A2A4A', '--cgpt-accent': '#FFD700' }, isPremium: true, pattern: { type: 'stars', opacity: 0.15, color: '#FFD700', size: 1 } },
-      { id: 'synth-wave', name: 'Synth Wave', category: 'core', colors: { '--cgpt-bg': '#262335', '--cgpt-surface': '#2E2943', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#C7D2FE', '--cgpt-border': '#433162', '--cgpt-accent': '#FF6AC1' }, isPremium: true, glowOverlay: true },
-      { id: 'tomorrow-night-blue', name: 'Tomorrow Night Blue', category: 'core', colors: { '--cgpt-bg': '#002451', '--cgpt-surface': '#001C40', '--cgpt-text': '#E0F2FF', '--cgpt-text-muted': '#BFDBFE', '--cgpt-border': '#003566', '--cgpt-accent': '#4FC3F7' }, isPremium: true, glowOverlay: true },
+      { id: 'winter-wonderland', name: 'Winter Wonderland', category: 'christmas', colors: { '--cgpt-bg': '#E3F2FD', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0D47A1', '--cgpt-text-muted': '#5472D3', '--cgpt-border': '#BBDEFB', '--cgpt-accent': '#1976D2' }, isPremium: true, effects: { animatedSnowfall: { enabled: true, density: 'heavy', speed: 'medium' }, seasonalDecorations: { frostEdge: true } } },
+      { id: 'starry-christmas-eve', name: 'Starry Christmas Eve', category: 'christmas', colors: { '--cgpt-bg': '#0A0A1A', '--cgpt-surface': '#12122A', '--cgpt-text': '#FAFAFA', '--cgpt-text-muted': '#B8B8D1', '--cgpt-border': '#2A2A4A', '--cgpt-accent': '#FFD700' }, isPremium: true, effects: { twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true } } },
+
+      // PREMIUM THEMES - Core Collection (5)
+      { id: 'synth-wave', name: 'Synth Wave', category: 'core', colors: { '--cgpt-bg': '#262335', '--cgpt-surface': '#2E2943', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#C7D2FE', '--cgpt-border': '#433162', '--cgpt-accent': '#FF6AC1' }, isPremium: true, glowOverlay: true, effects: { ambientEffects: { neonGrid: true } } },
+      { id: 'tomorrow-night-blue', name: 'Tomorrow Night Blue', category: 'core', colors: { '--cgpt-bg': '#002451', '--cgpt-surface': '#001C40', '--cgpt-text': '#E0F2FF', '--cgpt-text-muted': '#BFDBFE', '--cgpt-border': '#003566', '--cgpt-accent': '#4FC3F7' }, isPremium: true, glowOverlay: true, effects: { twinklingStars: { enabled: true, count: 'sparse' } } },
       { id: 'shades-of-purple', name: 'Shades of Purple', category: 'core', colors: { '--cgpt-bg': '#2D2B56', '--cgpt-surface': '#222244', '--cgpt-text': '#FFFFFF', '--cgpt-text-muted': '#C7D2FE', '--cgpt-border': '#3F3C78', '--cgpt-accent': '#FAD000' }, isPremium: true },
-      { id: 'dark-forest', name: 'Dark Forest', category: 'core', colors: { '--cgpt-bg': '#101917', '--cgpt-surface': '#131F1D', '--cgpt-text': '#E5F5F0', '--cgpt-text-muted': '#94A3B8', '--cgpt-border': '#1F2933', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true },
+      { id: 'dark-forest', name: 'Dark Forest', category: 'core', colors: { '--cgpt-bg': '#101917', '--cgpt-surface': '#131F1D', '--cgpt-text': '#E5F5F0', '--cgpt-text-muted': '#94A3B8', '--cgpt-border': '#1F2933', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'mixed', density: 'moderate' }, ambientEffects: { fogRising: true, firefliesOrParticles: true } } },
       { id: 'chocolate-caramel', name: 'Chocolate Caramel', category: 'core', colors: { '--cgpt-bg': '#221A0F', '--cgpt-surface': '#362712', '--cgpt-text': '#FDEFD9', '--cgpt-text-muted': '#D1B59A', '--cgpt-border': '#4A3419', '--cgpt-accent': '#FBBF77' }, isPremium: true, noiseOverlay: true },
     ];
 
     let currentTheme = null;
+    let currentThemeIndex = 0;
     let dynamicStyleEl = null;
+    let effectsEnabled = true;
 
     // === PATTERN GENERATORS (mirrors theme-injector.ts) ===
     function generatePatternCSS(pattern, accentColor) {
@@ -599,6 +558,268 @@
       return `body::after { background-image: radial-gradient(ellipse 80% 50% at 50% 0%, ${accentColor} 0%, transparent 50%), radial-gradient(ellipse 60% 40% at 20% 100%, ${accentColor} 0%, transparent 40%); opacity: 0.08; }`;
     }
 
+    // === EFFECTS GENERATORS (mirrors theme-injector.ts) ===
+    function generateEffectsCSS(effects, accentColor) {
+      if (!effects || !effectsEnabled) return '';
+      const cssBlocks = [];
+
+      // Animated snowfall
+      if (effects.animatedSnowfall?.enabled) {
+        const snow = effects.animatedSnowfall;
+        const count = snow.density === 'heavy' ? 40 : snow.density === 'medium' ? 25 : 12;
+        const duration = snow.speed === 'fast' ? 8 : snow.speed === 'medium' ? 12 : 18;
+
+        let snowflakesCSS = '';
+        for (let i = 0; i < count; i++) {
+          const left = Math.random() * 100;
+          const delay = Math.random() * duration;
+          const size = 2 + Math.random() * 4;
+          const drift = -15 + Math.random() * 30;
+          snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${delay}s;width:${size}px;height:${size}px;--drift:${drift}px;}`;
+        }
+
+        cssBlocks.push(`
+@keyframes themegpt-snowfall {
+  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translateY(100vh) translateX(var(--drift, 20px)); opacity: 0; }
+}
+.themegpt-snowflake {
+  position: absolute;
+  top: -10px;
+  background: white;
+  border-radius: 50%;
+  animation: themegpt-snowfall ${duration}s linear infinite;
+  box-shadow: 0 0 3px rgba(255,255,255,0.5);
+}
+${snowflakesCSS}`);
+      }
+
+      // Twinkling stars
+      if (effects.twinklingStars?.enabled) {
+        const stars = effects.twinklingStars;
+        const count = stars.count === 'dense' ? 50 : stars.count === 'medium' ? 30 : 15;
+
+        let starsCSS = '';
+        for (let i = 0; i < count; i++) {
+          const left = Math.random() * 100;
+          const top = Math.random() * 70;
+          const delay = Math.random() * 4;
+          const size = 1 + Math.random() * 3;
+          starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay}s;width:${size}px;height:${size}px;}`;
+        }
+
+        cssBlocks.push(`
+@keyframes themegpt-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.themegpt-star {
+  position: absolute;
+  background: ${accentColor};
+  border-radius: 50%;
+  animation: themegpt-twinkle 3s ease-in-out infinite;
+  box-shadow: 0 0 4px ${accentColor};
+}
+${starsCSS}
+${stars.includeShootingStars ? `
+@keyframes themegpt-shooting {
+  0% { transform: translateX(0) translateY(0); opacity: 1; }
+  100% { transform: translateX(150px) translateY(100px); opacity: 0; }
+}
+.themegpt-shooting-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(90deg, white, transparent);
+  animation: themegpt-shooting 2s ease-out infinite;
+}
+.themegpt-shooting-star-1 { top: 15%; left: 20%; animation-delay: 3s; }
+.themegpt-shooting-star-2 { top: 25%; left: 60%; animation-delay: 7s; }` : ''}`);
+      }
+
+      // Tree silhouettes
+      if (effects.treeSilhouettes?.enabled) {
+        const trees = effects.treeSilhouettes;
+        const count = trees.density === 'forest' ? 8 : trees.density === 'moderate' ? 5 : 3;
+
+        let treesCSS = '';
+        for (let i = 0; i < count; i++) {
+          const left = (i / count) * 80 + Math.random() * 15;
+          const height = 60 + Math.random() * 80;
+          const width = height * 0.6;
+          const opacity = 0.15 + (i / count) * 0.25;
+          treesCSS += `.themegpt-tree-${i}{left:${left}%;height:${height}px;width:${width}px;opacity:${opacity};}`;
+        }
+
+        cssBlocks.push(`
+.themegpt-tree {
+  position: absolute;
+  bottom: 0;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: rgba(0,0,0,0.8);
+}
+${treesCSS}`);
+      }
+
+      // Ambient effects
+      if (effects.ambientEffects?.fogRising) {
+        cssBlocks.push(`
+@keyframes themegpt-fog {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-20px); opacity: 0.6; }
+}
+.themegpt-fog {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to top, rgba(255,255,255,0.15), transparent);
+  animation: themegpt-fog 8s ease-in-out infinite;
+}`);
+      }
+
+      if (effects.ambientEffects?.neonGrid) {
+        cssBlocks.push(`
+.themegpt-neon-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(${accentColor}22 1px, transparent 1px),
+    linear-gradient(90deg, ${accentColor}22 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: center bottom;
+  opacity: 0.4;
+}`);
+      }
+
+      if (effects.ambientEffects?.auroraWaves) {
+        cssBlocks.push(`
+@keyframes themegpt-aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.themegpt-aurora {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(90deg,
+    rgba(0,255,200,0.1),
+    rgba(100,200,255,0.15),
+    rgba(180,100,255,0.1),
+    rgba(0,255,200,0.1));
+  background-size: 300% 100%;
+  animation: themegpt-aurora 15s ease-in-out infinite;
+  filter: blur(30px);
+}`);
+      }
+
+      // Seasonal decorations
+      if (effects.seasonalDecorations?.frostEdge) {
+        cssBlocks.push(`
+.themegpt-frost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 100px 20px rgba(200,220,255,0.15);
+}`);
+      }
+
+      if (effects.seasonalDecorations?.candyCaneFrame) {
+        cssBlocks.push(`
+.themegpt-candy-frame {
+  position: absolute;
+  inset: 0;
+  border: 8px solid transparent;
+  border-image: repeating-linear-gradient(-45deg, #fff 0 5px, #dc2626 5px 10px) 8;
+  opacity: 0.6;
+}`);
+      }
+
+      return cssBlocks.join('\n');
+    }
+
+    function createEffectsElements(effects) {
+      const container = document.getElementById('themegpt-effects');
+      container.innerHTML = '';
+
+      if (!effects || !effectsEnabled) return;
+
+      // Add snowflakes
+      if (effects.animatedSnowfall?.enabled) {
+        const count = effects.animatedSnowfall.density === 'heavy' ? 40 :
+                      effects.animatedSnowfall.density === 'medium' ? 25 : 12;
+        for (let i = 0; i < count; i++) {
+          const flake = document.createElement('div');
+          flake.className = `themegpt-snowflake themegpt-snow-${i}`;
+          container.appendChild(flake);
+        }
+      }
+
+      // Add stars
+      if (effects.twinklingStars?.enabled) {
+        const count = effects.twinklingStars.count === 'dense' ? 50 :
+                      effects.twinklingStars.count === 'medium' ? 30 : 15;
+        for (let i = 0; i < count; i++) {
+          const star = document.createElement('div');
+          star.className = `themegpt-star themegpt-star-${i}`;
+          container.appendChild(star);
+        }
+        if (effects.twinklingStars.includeShootingStars) {
+          for (let i = 1; i <= 2; i++) {
+            const shooting = document.createElement('div');
+            shooting.className = `themegpt-shooting-star themegpt-shooting-star-${i}`;
+            container.appendChild(shooting);
+          }
+        }
+      }
+
+      // Add trees
+      if (effects.treeSilhouettes?.enabled) {
+        const count = effects.treeSilhouettes.density === 'forest' ? 8 :
+                      effects.treeSilhouettes.density === 'moderate' ? 5 : 3;
+        for (let i = 0; i < count; i++) {
+          const tree = document.createElement('div');
+          tree.className = `themegpt-tree themegpt-tree-${i}`;
+          container.appendChild(tree);
+        }
+      }
+
+      // Add ambient effects
+      if (effects.ambientEffects?.fogRising) {
+        const fog = document.createElement('div');
+        fog.className = 'themegpt-fog';
+        container.appendChild(fog);
+      }
+      if (effects.ambientEffects?.neonGrid) {
+        const grid = document.createElement('div');
+        grid.className = 'themegpt-neon-grid';
+        container.appendChild(grid);
+      }
+      if (effects.ambientEffects?.auroraWaves) {
+        const aurora = document.createElement('div');
+        aurora.className = 'themegpt-aurora';
+        container.appendChild(aurora);
+      }
+
+      // Add seasonal decorations
+      if (effects.seasonalDecorations?.frostEdge) {
+        const frost = document.createElement('div');
+        frost.className = 'themegpt-frost';
+        container.appendChild(frost);
+      }
+      if (effects.seasonalDecorations?.candyCaneFrame) {
+        const frame = document.createElement('div');
+        frame.className = 'themegpt-candy-frame';
+        container.appendChild(frame);
+      }
+    }
+
     // === QUALITY CHECKS ===
     function hexToRgb(hex) {
       const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -624,21 +845,21 @@
       const checks = [];
       const c = theme.colors;
 
-      // Text contrast (WCAG AA = 4.5:1)
       const textContrast = getContrastRatio(c['--cgpt-bg'], c['--cgpt-text']);
       checks.push({ name: 'Text Contrast', pass: textContrast >= 4.5, value: textContrast.toFixed(2), target: '>= 4.5' });
 
-      // Muted text contrast (WCAG AA = 4.5:1)
       const mutedContrast = getContrastRatio(c['--cgpt-bg'], c['--cgpt-text-muted']);
       checks.push({ name: 'Muted Contrast', pass: mutedContrast >= 3, value: mutedContrast.toFixed(2), target: '>= 3.0' });
 
-      // Accent visibility
       const accentContrast = getContrastRatio(c['--cgpt-bg'], c['--cgpt-accent']);
       checks.push({ name: 'Accent Visibility', pass: accentContrast >= 3, value: accentContrast.toFixed(2), target: '>= 3.0' });
 
-      // Pattern opacity check
       if (theme.pattern) {
         checks.push({ name: 'Pattern Opacity', pass: theme.pattern.opacity <= 0.15, value: theme.pattern.opacity.toString(), target: '<= 0.15' });
+      }
+
+      if (theme.effects) {
+        checks.push({ name: 'Has Effects', pass: true, value: 'Yes', target: 'Premium' });
       }
 
       return checks;
@@ -657,6 +878,7 @@
     // === THEME APPLICATION ===
     function applyTheme(theme) {
       currentTheme = theme;
+      currentThemeIndex = THEMES.findIndex(t => t.id === theme.id);
       const root = document.documentElement;
 
       // Apply CSS variables
@@ -675,6 +897,11 @@
         additionalCSS += generateGlowOverlay(theme.colors['--cgpt-accent']);
       }
 
+      // Generate effects CSS
+      if (theme.effects) {
+        additionalCSS += generateEffectsCSS(theme.effects, theme.colors['--cgpt-accent']);
+      }
+
       // Apply dynamic styles
       if (!dynamicStyleEl) {
         dynamicStyleEl = document.createElement('style');
@@ -683,13 +910,28 @@
       }
       dynamicStyleEl.textContent = additionalCSS;
 
+      // Create effects DOM elements
+      createEffectsElements(theme.effects);
+
       // Update UI
       document.getElementById('themeName').textContent = theme.name;
 
       let info = theme.isPremium ? 'Premium' : 'Free';
       if (theme.pattern) info += ` | Pattern: ${theme.pattern.type}`;
-      if (theme.noiseOverlay) info += ' | Noise overlay';
-      if (theme.glowOverlay) info += ' | Glow overlay';
+      if (theme.noiseOverlay) info += ' | Noise';
+      if (theme.glowOverlay) info += ' | Glow';
+      if (theme.effects) {
+        const fx = [];
+        if (theme.effects.animatedSnowfall?.enabled) fx.push('Snow');
+        if (theme.effects.twinklingStars?.enabled) fx.push('Stars');
+        if (theme.effects.treeSilhouettes?.enabled) fx.push('Trees');
+        if (theme.effects.ambientEffects?.fogRising) fx.push('Fog');
+        if (theme.effects.ambientEffects?.neonGrid) fx.push('Neon');
+        if (theme.effects.ambientEffects?.auroraWaves) fx.push('Aurora');
+        if (theme.effects.seasonalDecorations?.frostEdge) fx.push('Frost');
+        if (theme.effects.seasonalDecorations?.candyCaneFrame) fx.push('Candy');
+        if (fx.length) info += ` | FX: ${fx.join(', ')}`;
+      }
       document.getElementById('themeInfo').textContent = info;
 
       // Update active button
@@ -701,8 +943,8 @@
       const checks = runQualityChecks(theme);
       displayQualityChecks(checks);
 
-      // Log for LLM agents
-      console.log(`[ThemeGPT] Applied: ${theme.id}`, { checks });
+      // Log for debugging
+      console.log(`[ThemeGPT] Applied: ${theme.id}`, { checks, effects: theme.effects });
     }
 
     // === INITIALIZATION ===
@@ -710,15 +952,29 @@
       const freeGrid = document.getElementById('freeThemes');
       const premiumGrid = document.getElementById('premiumThemes');
 
+      const freeThemes = THEMES.filter(t => !t.isPremium);
+      const premiumThemes = THEMES.filter(t => t.isPremium);
+
+      // Update stats
+      document.getElementById('totalCount').textContent = THEMES.length;
+      document.getElementById('freeCount').textContent = freeThemes.length;
+      document.getElementById('premiumCount').textContent = premiumThemes.length;
+
       THEMES.forEach(theme => {
         const btn = document.createElement('button');
         btn.className = 'theme-btn';
         btn.dataset.themeId = theme.id;
         btn.style.background = theme.colors['--cgpt-bg'];
         btn.style.color = theme.colors['--cgpt-text'];
+
+        let badges = '';
+        if (theme.effects) badges += '<span class="effects-badge">FX</span>';
+        if (theme.pattern) badges += '<span class="effects-badge">PTN</span>';
+
         btn.innerHTML = `
           <div class="name">${theme.name}</div>
           <div class="accent-bar" style="background:${theme.colors['--cgpt-accent']}"></div>
+          ${badges}
         `;
         btn.addEventListener('click', () => applyTheme(theme));
 
@@ -738,16 +994,29 @@
         }
       });
 
+      document.getElementById('toggleEffectsBtn').addEventListener('click', () => {
+        effectsEnabled = !effectsEnabled;
+        if (currentTheme) applyTheme(currentTheme);
+        console.log(`[ThemeGPT] Effects ${effectsEnabled ? 'enabled' : 'disabled'}`);
+      });
+
       document.getElementById('hideBtn').addEventListener('click', togglePanel);
 
       // Keyboard shortcuts
       document.addEventListener('keydown', (e) => {
         if (e.ctrlKey && e.key === 'h') { e.preventDefault(); togglePanel(); }
         if (e.ctrlKey && e.key === 'e') { e.preventDefault(); console.log('[ThemeGPT] Export:', JSON.stringify(currentTheme, null, 2)); }
+        if (e.key === 'ArrowRight') { navigateTheme(1); }
+        if (e.key === 'ArrowLeft') { navigateTheme(-1); }
       });
 
       // Apply first theme
       applyTheme(THEMES[0]);
+    }
+
+    function navigateTheme(direction) {
+      const newIndex = (currentThemeIndex + direction + THEMES.length) % THEMES.length;
+      applyTheme(THEMES[newIndex]);
     }
 
     function togglePanel() {
@@ -755,155 +1024,7 @@
       console.log('[ThemeGPT] Panel toggled');
     }
 
-    function toggleReference() {
-      const ref = document.getElementById('varReference');
-      ref.style.display = ref.style.display === 'none' ? 'block' : 'none';
-    }
-
-    // === VARIABLE COMMAND SYSTEM ===
-    const VAR_MAP = {
-      'GL-BG': '--cgpt-bg',
-      'GL-SRF': '--cgpt-surface',
-      'GL-TXT': '--cgpt-text',
-      'GL-TXM': '--cgpt-text-muted',
-      'GL-BRD': '--cgpt-border',
-      'GL-ACC': '--cgpt-accent'
-    };
-
-    function parseCommand(cmd) {
-      const trimmed = cmd.trim().toUpperCase();
-      const results = [];
-
-      // SET VAR VALUE or SET VAR1 VALUE1, VAR2 VALUE2
-      if (trimmed.startsWith('SET ')) {
-        const parts = trimmed.slice(4).split(/,\s*/);
-        parts.forEach(part => {
-          const match = part.match(/^(GL-\w+)\s+(#[A-F0-9]{6}|#[A-F0-9]{3})$/i);
-          if (match) {
-            const [, varCode, color] = match;
-            results.push({ action: 'SET', varCode: varCode.toUpperCase(), value: color });
-          }
-        });
-      }
-
-      // ENABLE/DISABLE FX-OVL-NOISE or FX-OVL-GLOW
-      if (trimmed.startsWith('ENABLE ')) {
-        const fx = trimmed.slice(7);
-        if (fx === 'FX-OVL-NOISE') results.push({ action: 'ENABLE', effect: 'noise' });
-        if (fx === 'FX-OVL-GLOW') results.push({ action: 'ENABLE', effect: 'glow' });
-      }
-      if (trimmed.startsWith('DISABLE ')) {
-        const fx = trimmed.slice(8);
-        if (fx.startsWith('FX-')) results.push({ action: 'DISABLE', effect: fx });
-      }
-
-      return results;
-    }
-
-    function executeCommand(cmd) {
-      const instructions = parseCommand(cmd);
-      const output = [];
-
-      if (instructions.length === 0) {
-        output.push({ type: 'err', msg: 'Invalid command. Try: SET GL-ACC #FF6AC1' });
-        console.log('[ThemeGPT] Command error:', cmd);
-        return output;
-      }
-
-      instructions.forEach(inst => {
-        if (inst.action === 'SET') {
-          const cssVar = VAR_MAP[inst.varCode];
-          if (cssVar && currentTheme) {
-            const oldValue = currentTheme.colors[cssVar];
-            currentTheme.colors[cssVar] = inst.value;
-            document.documentElement.style.setProperty(cssVar, inst.value);
-
-            // Re-run quality checks
-            const checks = runQualityChecks(currentTheme);
-            displayQualityChecks(checks);
-
-            const contrast = inst.varCode === 'GL-TXT'
-              ? getContrastRatio(currentTheme.colors['--cgpt-bg'], inst.value)
-              : null;
-
-            let msg = `OK ${inst.varCode} ${oldValue} → ${inst.value}`;
-            if (contrast) msg += ` Contrast: ${contrast.toFixed(1)}:1`;
-
-            output.push({ type: contrast && contrast < 4.5 ? 'warn' : 'ok', msg });
-            console.log(`[ThemeGPT] ${msg}`);
-          } else {
-            output.push({ type: 'err', msg: `Unknown variable: ${inst.varCode}` });
-          }
-        }
-
-        if (inst.action === 'ENABLE' && currentTheme) {
-          if (inst.effect === 'noise') {
-            currentTheme.noiseOverlay = true;
-            currentTheme.glowOverlay = false;
-          } else if (inst.effect === 'glow') {
-            currentTheme.glowOverlay = true;
-            currentTheme.noiseOverlay = false;
-          }
-          applyTheme(currentTheme);
-          output.push({ type: 'ok', msg: `Enabled ${inst.effect} overlay` });
-          console.log(`[ThemeGPT] Enabled ${inst.effect} overlay`);
-        }
-
-        if (inst.action === 'DISABLE' && currentTheme) {
-          currentTheme.noiseOverlay = false;
-          currentTheme.glowOverlay = false;
-          currentTheme.pattern = null;
-          applyTheme(currentTheme);
-          output.push({ type: 'ok', msg: 'Disabled effects' });
-          console.log('[ThemeGPT] Disabled effects');
-        }
-      });
-
-      return output;
-    }
-
-    function renderOutput(results) {
-      let container = document.querySelector('.cmd-output');
-      if (!container) {
-        container = document.createElement('div');
-        container.className = 'cmd-output';
-        document.getElementById('varReference').appendChild(container);
-      }
-      container.innerHTML = results.map(r => `<div class="${r.type}">${r.msg}</div>`).join('');
-    }
-
-    // Expose for console use
-    window.SET = (varCode, value) => {
-      const results = executeCommand(`SET ${varCode} ${value}`);
-      return results.map(r => r.msg).join('\n');
-    };
-
-    window.VAR_MAP = VAR_MAP;
-
     document.addEventListener('DOMContentLoaded', init);
-
-    // Additional keyboard shortcut for reference toggle
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'r') { e.preventDefault(); toggleReference(); }
-    });
-
-    // Variable command input handler
-    document.addEventListener('DOMContentLoaded', () => {
-      document.getElementById('varExec')?.addEventListener('click', () => {
-        const input = document.getElementById('varCmd');
-        const results = executeCommand(input.value);
-        renderOutput(results);
-        input.value = '';
-      });
-
-      document.getElementById('varCmd')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          const results = executeCommand(e.target.value);
-          renderOutput(results);
-          e.target.value = '';
-        }
-      });
-    });
   </script>
 </body>
 </html>

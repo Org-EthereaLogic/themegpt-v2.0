@@ -26,6 +26,47 @@ export interface ThemePattern {
   size?: number;   // Pattern scale factor, defaults to 1
 }
 
+// Premium visual effect configurations
+export interface AnimatedSnowfall {
+  enabled: boolean;
+  density: 'light' | 'medium' | 'heavy';
+  speed: 'slow' | 'medium' | 'fast';
+}
+
+export interface TwinklingStars {
+  enabled: boolean;
+  count: 'sparse' | 'medium' | 'dense';
+  includeShootingStars?: boolean;
+}
+
+export interface TreeSilhouettes {
+  enabled: boolean;
+  style: 'pine' | 'bare' | 'mixed';
+  density: 'few' | 'moderate' | 'forest';
+}
+
+export interface AmbientEffects {
+  fogRising?: boolean;
+  firefliesOrParticles?: boolean;
+  auroraWaves?: boolean;
+  neonGrid?: boolean;
+}
+
+export interface SeasonalDecorations {
+  candlesticks?: boolean;
+  ornaments?: boolean;
+  candyCaneFrame?: boolean;
+  frostEdge?: boolean;
+}
+
+export interface ThemeEffects {
+  animatedSnowfall?: AnimatedSnowfall;
+  twinklingStars?: TwinklingStars;
+  treeSilhouettes?: TreeSilhouettes;
+  ambientEffects?: AmbientEffects;
+  seasonalDecorations?: SeasonalDecorations;
+}
+
 export interface Theme {
   id: string;
   name: string;
@@ -42,6 +83,7 @@ export interface Theme {
   pattern?: ThemePattern;
   noiseOverlay?: boolean; // Subtle texture overlay for tactile quality
   glowOverlay?: boolean;  // Ambient radial glow from accent color
+  effects?: ThemeEffects; // Premium animated visual effects
 }
 
 export const DEFAULT_THEMES: Theme[] = [
@@ -61,6 +103,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#569CD6',
     },
     isPremium: false,
+    noiseOverlay: true,
   },
   {
     id: 'solarized-dark',
@@ -75,6 +118,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#2AA198',
     },
     isPremium: false,
+    pattern: { type: 'grid', opacity: 0.02, size: 1.5 },
   },
   {
     id: 'dracula',
@@ -89,6 +133,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#BD93F9',
     },
     isPremium: false,
+    glowOverlay: true,
   },
   {
     id: 'monokai-pro',
@@ -103,6 +148,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FFD866',
     },
     isPremium: false,
+    noiseOverlay: true,
   },
   {
     id: 'one-dark',
@@ -117,6 +163,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#61AFEF',
     },
     isPremium: false,
+    glowOverlay: true,
   },
 
   // =============================================
@@ -136,6 +183,10 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     noiseOverlay: true,
+    effects: {
+      treeSilhouettes: { enabled: true, style: 'pine', density: 'few' },
+      animatedSnowfall: { enabled: true, density: 'light', speed: 'slow' },
+    },
   },
   {
     id: 'frosted-windowpane',
@@ -150,6 +201,10 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#3B82F6',
     },
     isPremium: true,
+    effects: {
+      animatedSnowfall: { enabled: true, density: 'light', speed: 'slow' },
+      seasonalDecorations: { frostEdge: true },
+    },
   },
   {
     id: 'midnight-evergreen',
@@ -165,6 +220,11 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     noiseOverlay: true,
+    effects: {
+      treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' },
+      twinklingStars: { enabled: true, count: 'medium' },
+      ambientEffects: { fogRising: true },
+    },
   },
   {
     id: 'candy-cane-chat',
@@ -179,6 +239,9 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#DC2626',
     },
     isPremium: true,
+    effects: {
+      seasonalDecorations: { candyCaneFrame: true },
+    },
   },
   {
     id: 'silent-night-starfield',
@@ -194,6 +257,10 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     glowOverlay: true,
+    effects: {
+      twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true },
+      ambientEffects: { auroraWaves: true },
+    },
   },
   {
     id: 'minimal-advent',
@@ -227,11 +294,8 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#38BDF8',
     },
     isPremium: true,
-    pattern: {
-      type: 'snowflakes',
-      opacity: 0.08,
-      color: '#FFFFFF',
-      size: 1.2,
+    effects: {
+      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow' },
     },
   },
   {
@@ -287,11 +351,9 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#1976D2',
     },
     isPremium: true,
-    pattern: {
-      type: 'snowflakes',
-      opacity: 0.12,
-      color: '#90CAF9',
-      size: 1,
+    effects: {
+      animatedSnowfall: { enabled: true, density: 'heavy', speed: 'medium' },
+      seasonalDecorations: { frostEdge: true },
     },
   },
   {
@@ -307,11 +369,8 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FFD700',
     },
     isPremium: true,
-    pattern: {
-      type: 'stars',
-      opacity: 0.15,
-      color: '#FFD700',
-      size: 1,
+    effects: {
+      twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true },
     },
   },
 
@@ -332,6 +391,9 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     glowOverlay: true,
+    effects: {
+      ambientEffects: { neonGrid: true },
+    },
   },
   {
     id: 'tomorrow-night-blue',
@@ -347,6 +409,9 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     glowOverlay: true,
+    effects: {
+      twinklingStars: { enabled: true, count: 'sparse' },
+    },
   },
   {
     id: 'shades-of-purple',
@@ -376,6 +441,10 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     noiseOverlay: true,
+    effects: {
+      treeSilhouettes: { enabled: true, style: 'mixed', density: 'moderate' },
+      ambientEffects: { fogRising: true, firefliesOrParticles: true },
+    },
   },
   {
     id: 'chocolate-caramel',
@@ -409,6 +478,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#00E5CC',
     },
     isPremium: false,
+    glowOverlay: true,
   },
   {
     id: 'sunset-blaze',
@@ -423,6 +493,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FF6B4A',
     },
     isPremium: false,
+    glowOverlay: true,
   },
   {
     id: 'electric-dreams',
@@ -437,6 +508,8 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FF2E97',
     },
     isPremium: false,
+    glowOverlay: true,
+    pattern: { type: 'grid', opacity: 0.02, size: 2 },
   },
 ];
 

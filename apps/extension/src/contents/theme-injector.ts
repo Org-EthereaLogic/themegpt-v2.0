@@ -1,6 +1,6 @@
 import type { PlasmoCSConfig } from "plasmo"
 import { Storage } from "@plasmohq/storage"
-import { DEFAULT_THEMES, type Theme, type ThemePattern } from "@themegpt/shared"
+import { DEFAULT_THEMES, type Theme, type ThemePattern, type ThemeEffects } from "@themegpt/shared"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*", "https://chatgpt.com/*"],
@@ -182,6 +182,306 @@ body::after {
 }`
 }
 
+/**
+ * Generate CSS for premium animated effects
+ * Creates immersive visual experiences for premium themes
+ */
+function generateEffectsCSS(effects: ThemeEffects, accentColor: string): string {
+  const cssBlocks: string[] = []
+
+  // Animated snowfall effect
+  if (effects.animatedSnowfall?.enabled) {
+    const snow = effects.animatedSnowfall
+    const count = snow.density === 'heavy' ? 40 : snow.density === 'medium' ? 25 : 12
+    const duration = snow.speed === 'fast' ? 8 : snow.speed === 'medium' ? 12 : 18
+
+    let snowflakesCSS = ''
+    for (let i = 0; i < count; i++) {
+      const left = Math.random() * 100
+      const delay = Math.random() * duration
+      const size = 2 + Math.random() * 4
+      const drift = -15 + Math.random() * 30
+      snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${delay}s;width:${size}px;height:${size}px;--drift:${drift}px;}`
+    }
+
+    cssBlocks.push(`
+/* Premium Effect: Animated Snowfall */
+@keyframes themegpt-snowfall {
+  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
+  10% { opacity: 0.9; }
+  90% { opacity: 0.9; }
+  100% { transform: translateY(100vh) translateX(var(--drift, 20px)); opacity: 0; }
+}
+.themegpt-effects-layer { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+.themegpt-snowflake {
+  position: absolute;
+  top: -10px;
+  background: white;
+  border-radius: 50%;
+  animation: themegpt-snowfall ${duration}s linear infinite;
+  box-shadow: 0 0 3px rgba(255,255,255,0.5);
+}
+${snowflakesCSS}
+@media (prefers-reduced-motion: reduce) { .themegpt-snowflake { animation: none; opacity: 0.3; } }`)
+  }
+
+  // Twinkling stars effect
+  if (effects.twinklingStars?.enabled) {
+    const stars = effects.twinklingStars
+    const count = stars.count === 'dense' ? 50 : stars.count === 'medium' ? 30 : 15
+
+    let starsCSS = ''
+    for (let i = 0; i < count; i++) {
+      const left = Math.random() * 100
+      const top = Math.random() * 70
+      const delay = Math.random() * 4
+      const size = 1 + Math.random() * 3
+      starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay}s;width:${size}px;height:${size}px;}`
+    }
+
+    cssBlocks.push(`
+/* Premium Effect: Twinkling Stars */
+@keyframes themegpt-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.themegpt-star {
+  position: absolute;
+  background: ${accentColor};
+  border-radius: 50%;
+  animation: themegpt-twinkle 3s ease-in-out infinite;
+  box-shadow: 0 0 4px ${accentColor};
+}
+${starsCSS}
+${stars.includeShootingStars ? `
+@keyframes themegpt-shooting {
+  0% { transform: translateX(0) translateY(0); opacity: 1; }
+  100% { transform: translateX(150px) translateY(100px); opacity: 0; }
+}
+.themegpt-shooting-star {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: linear-gradient(90deg, white, transparent);
+  animation: themegpt-shooting 2s ease-out infinite;
+}
+.themegpt-shooting-star-1 { top: 15%; left: 20%; animation-delay: 3s; }
+.themegpt-shooting-star-2 { top: 25%; left: 60%; animation-delay: 7s; }` : ''}
+@media (prefers-reduced-motion: reduce) { .themegpt-star { animation: none; opacity: 0.6; } }`)
+  }
+
+  // Tree silhouettes effect
+  if (effects.treeSilhouettes?.enabled) {
+    const trees = effects.treeSilhouettes
+    const count = trees.density === 'forest' ? 8 : trees.density === 'moderate' ? 5 : 3
+
+    let treesCSS = ''
+    for (let i = 0; i < count; i++) {
+      const left = (i / count) * 80 + Math.random() * 15
+      const height = 60 + Math.random() * 80
+      const width = height * 0.6
+      const opacity = 0.15 + (i / count) * 0.25
+      treesCSS += `.themegpt-tree-${i}{left:${left}%;height:${height}px;width:${width}px;opacity:${opacity};}`
+    }
+
+    cssBlocks.push(`
+/* Premium Effect: Tree Silhouettes */
+.themegpt-tree {
+  position: absolute;
+  bottom: 0;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: rgba(0,0,0,0.8);
+}
+.themegpt-tree::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 40%;
+  width: 20%;
+  height: 12px;
+  background: rgba(60,30,15,0.9);
+  border-radius: 2px;
+}
+${treesCSS}`)
+  }
+
+  // Ambient effects
+  if (effects.ambientEffects?.fogRising) {
+    cssBlocks.push(`
+/* Premium Effect: Rising Fog */
+@keyframes themegpt-fog {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-20px); opacity: 0.6; }
+}
+.themegpt-fog {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 150px;
+  background: linear-gradient(to top, rgba(255,255,255,0.15), transparent);
+  animation: themegpt-fog 8s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) { .themegpt-fog { animation: none; } }`)
+  }
+
+  if (effects.ambientEffects?.neonGrid) {
+    cssBlocks.push(`
+/* Premium Effect: Neon Grid */
+.themegpt-neon-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(${accentColor}22 1px, transparent 1px),
+    linear-gradient(90deg, ${accentColor}22 1px, transparent 1px);
+  background-size: 40px 40px;
+  transform: perspective(500px) rotateX(60deg);
+  transform-origin: center bottom;
+  opacity: 0.4;
+}`)
+  }
+
+  if (effects.ambientEffects?.auroraWaves) {
+    cssBlocks.push(`
+/* Premium Effect: Aurora Waves */
+@keyframes themegpt-aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.themegpt-aurora {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 30%;
+  background: linear-gradient(90deg,
+    rgba(0,255,200,0.1),
+    rgba(100,200,255,0.15),
+    rgba(180,100,255,0.1),
+    rgba(0,255,200,0.1));
+  background-size: 300% 100%;
+  animation: themegpt-aurora 15s ease-in-out infinite;
+  filter: blur(30px);
+}
+@media (prefers-reduced-motion: reduce) { .themegpt-aurora { animation: none; } }`)
+  }
+
+  // Seasonal decorations
+  if (effects.seasonalDecorations?.frostEdge) {
+    cssBlocks.push(`
+/* Premium Effect: Frost Edge */
+.themegpt-frost {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 100px 20px rgba(200,220,255,0.15);
+  border-radius: 0;
+}`)
+  }
+
+  if (effects.seasonalDecorations?.candyCaneFrame) {
+    cssBlocks.push(`
+/* Premium Effect: Candy Cane Frame */
+.themegpt-candy-frame {
+  position: absolute;
+  inset: 0;
+  border: 8px solid transparent;
+  border-image: repeating-linear-gradient(-45deg, #fff 0 5px, #dc2626 5px 10px) 8;
+  opacity: 0.6;
+}`)
+  }
+
+  return cssBlocks.join('\n')
+}
+
+/**
+ * Create effects layer DOM elements
+ */
+function createEffectsElements(effects: ThemeEffects): void {
+  // Remove existing effects layer
+  const existing = document.getElementById('themegpt-effects')
+  if (existing) existing.remove()
+
+  if (!effects) return
+
+  const container = document.createElement('div')
+  container.id = 'themegpt-effects'
+  container.className = 'themegpt-effects-layer'
+
+  // Add snowflakes
+  if (effects.animatedSnowfall?.enabled) {
+    const count = effects.animatedSnowfall.density === 'heavy' ? 40 :
+                  effects.animatedSnowfall.density === 'medium' ? 25 : 12
+    for (let i = 0; i < count; i++) {
+      const flake = document.createElement('div')
+      flake.className = `themegpt-snowflake themegpt-snow-${i}`
+      container.appendChild(flake)
+    }
+  }
+
+  // Add stars
+  if (effects.twinklingStars?.enabled) {
+    const count = effects.twinklingStars.count === 'dense' ? 50 :
+                  effects.twinklingStars.count === 'medium' ? 30 : 15
+    for (let i = 0; i < count; i++) {
+      const star = document.createElement('div')
+      star.className = `themegpt-star themegpt-star-${i}`
+      container.appendChild(star)
+    }
+    if (effects.twinklingStars.includeShootingStars) {
+      for (let i = 1; i <= 2; i++) {
+        const shooting = document.createElement('div')
+        shooting.className = `themegpt-shooting-star themegpt-shooting-star-${i}`
+        container.appendChild(shooting)
+      }
+    }
+  }
+
+  // Add trees
+  if (effects.treeSilhouettes?.enabled) {
+    const count = effects.treeSilhouettes.density === 'forest' ? 8 :
+                  effects.treeSilhouettes.density === 'moderate' ? 5 : 3
+    for (let i = 0; i < count; i++) {
+      const tree = document.createElement('div')
+      tree.className = `themegpt-tree themegpt-tree-${i}`
+      container.appendChild(tree)
+    }
+  }
+
+  // Add ambient effects
+  if (effects.ambientEffects?.fogRising) {
+    const fog = document.createElement('div')
+    fog.className = 'themegpt-fog'
+    container.appendChild(fog)
+  }
+  if (effects.ambientEffects?.neonGrid) {
+    const grid = document.createElement('div')
+    grid.className = 'themegpt-neon-grid'
+    container.appendChild(grid)
+  }
+  if (effects.ambientEffects?.auroraWaves) {
+    const aurora = document.createElement('div')
+    aurora.className = 'themegpt-aurora'
+    container.appendChild(aurora)
+  }
+
+  // Add seasonal decorations
+  if (effects.seasonalDecorations?.frostEdge) {
+    const frost = document.createElement('div')
+    frost.className = 'themegpt-frost'
+    container.appendChild(frost)
+  }
+  if (effects.seasonalDecorations?.candyCaneFrame) {
+    const frame = document.createElement('div')
+    frame.className = 'themegpt-candy-frame'
+    container.appendChild(frame)
+  }
+
+  if (container.children.length > 0) {
+    document.body.appendChild(container)
+  }
+}
+
 function applyTheme(theme: Theme | null): void {
   if (!theme || !theme.colors) {
     removeTheme()
@@ -210,6 +510,21 @@ function applyTheme(theme: Theme | null): void {
     overlayCSS = generateNoiseOverlayCSS()
   } else if (hasGlow) {
     overlayCSS = generateGlowOverlayCSS(theme.colors['--cgpt-accent'])
+  }
+
+  // Generate premium effects CSS if theme has effects
+  const effects = currentDef?.effects ?? theme.effects
+  const effectsCSS = effects
+    ? generateEffectsCSS(effects, theme.colors['--cgpt-accent'])
+    : ''
+
+  // Create effects DOM elements
+  if (effects) {
+    createEffectsElements(effects)
+  } else {
+    // Remove effects layer if no effects
+    const existing = document.getElementById('themegpt-effects')
+    if (existing) existing.remove()
   }
 
   const css = `
@@ -394,6 +709,7 @@ code {
 
 ${patternCSS}
 ${overlayCSS}
+${effectsCSS}
 `
 
   if (!styleElement) {
@@ -410,6 +726,9 @@ function removeTheme(): void {
     styleElement.remove()
     styleElement = null
   }
+  // Remove effects layer
+  const effectsLayer = document.getElementById('themegpt-effects')
+  if (effectsLayer) effectsLayer.remove()
 }
 
 async function init(): Promise<void> {

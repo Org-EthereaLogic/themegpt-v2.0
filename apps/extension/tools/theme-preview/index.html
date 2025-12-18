@@ -489,7 +489,7 @@
       { id: 'frosted-windowpane', name: 'Frosted Windowpane', category: 'christmas', colors: { '--cgpt-bg': '#F5F7FB', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0F172A', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#D1D5DB', '--cgpt-accent': '#3B82F6' }, isPremium: true, effects: { animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', snowColor: '#B8D4E8' }, seasonalDecorations: { frostedGlass: true } } },
       { id: 'midnight-evergreen', name: 'Midnight Evergreen', category: 'christmas', colors: { '--cgpt-bg': '#020817', '--cgpt-surface': '#07120E', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#14532D', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' }, twinklingStars: { enabled: true, count: 'medium' }, ambientEffects: { fogRising: true } } },
       { id: 'candy-cane-chat', name: 'Candy Cane Chat', category: 'christmas', colors: { '--cgpt-bg': '#FDF2F2', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#111827', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#FECACA', '--cgpt-accent': '#DC2626' }, isPremium: true, noiseOverlay: true, effects: { seasonalDecorations: { candyCaneFrame: true, sparkleOverlay: true, sparkleColor: '#dc2626' } } },
-      { id: 'silent-night-starfield', name: 'Silent Night (Starfield)', category: 'christmas', colors: { '--cgpt-bg': '#020617', '--cgpt-surface': '#02081C', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#CBD5F5', '--cgpt-border': '#1D4ED8', '--cgpt-accent': '#38BDF8' }, isPremium: true, glowOverlay: true, effects: { twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true }, ambientEffects: { auroraWaves: true } } },
+      { id: 'silent-night-starfield', name: 'Silent Night (Starfield)', category: 'christmas', colors: { '--cgpt-bg': '#020617', '--cgpt-surface': '#02081C', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#CBD5F5', '--cgpt-border': '#1D4ED8', '--cgpt-accent': '#38BDF8' }, isPremium: true, glowOverlay: true, effects: { twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true, starColor: '#FFFFFF', animationDuration: 8 }, ambientEffects: { auroraWaves: true } } },
       { id: 'minimal-advent', name: 'Minimal Advent', category: 'christmas', colors: { '--cgpt-bg': '#0B0712', '--cgpt-surface': '#141021', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4C1D95', '--cgpt-accent': '#7C3AED' }, isPremium: true, noiseOverlay: true },
 
       // PREMIUM THEMES - Christmas Pattern Collection (5)
@@ -605,27 +605,36 @@ ${snowflakesCSS}`);
       if (effects.twinklingStars?.enabled) {
         const stars = effects.twinklingStars;
         const count = stars.count === 'dense' ? 50 : stars.count === 'medium' ? 30 : 15;
+        const starColor = stars.starColor || accentColor;
+        const baseDuration = stars.animationDuration || 3;
 
         let starsCSS = '';
         for (let i = 0; i < count; i++) {
           const left = Math.random() * 100;
           const top = Math.random() * 70;
-          const delay = Math.random() * 4;
-          const size = 1 + Math.random() * 3;
-          starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay}s;width:${size}px;height:${size}px;}`;
+          // Highly varied delays to desynchronize stars (spread across 5x base duration)
+          const delay = Math.random() * (baseDuration * 5);
+          const size = 1 + Math.random() * 2.5;
+          // Wide duration variation (50%-150% of base) for organic feel
+          const durationVariation = baseDuration * (0.5 + Math.random());
+          // Vary the peak brightness per star
+          const peakOpacity = 0.6 + Math.random() * 0.4;
+          starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay.toFixed(2)}s;animation-duration:${durationVariation.toFixed(2)}s;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;--peak-opacity:${peakOpacity.toFixed(2)};}`;
         }
 
         cssBlocks.push(`
+/* Premium Effect: Twinkling Stars - Organic variation */
 @keyframes themegpt-twinkle {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
+  0%, 100% { opacity: 0.15; transform: scale(0.7); }
+  50% { opacity: var(--peak-opacity, 0.8); transform: scale(1.1); }
 }
 .themegpt-star {
   position: absolute;
-  background: ${accentColor};
+  background: ${starColor};
   border-radius: 50%;
-  animation: themegpt-twinkle 3s ease-in-out infinite;
-  box-shadow: 0 0 4px ${accentColor};
+  animation: themegpt-twinkle ${baseDuration}s ease-in-out infinite;
+  box-shadow: 0 0 3px ${starColor};
+  --peak-opacity: 0.8;
 }
 ${starsCSS}
 ${stars.includeShootingStars ? `

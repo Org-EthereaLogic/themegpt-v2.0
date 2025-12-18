@@ -274,26 +274,29 @@ ${snowflakesCSS}
     for (let i = 0; i < count; i++) {
       const left = Math.random() * 100
       const top = Math.random() * 70
-      // More varied delays for less repetitive appearance
-      const delay = Math.random() * (baseDuration * 3)
-      const size = 1 + Math.random() * 3
-      // Individual duration variation (±30% of base)
-      const durationVariation = baseDuration * (0.7 + Math.random() * 0.6)
-      starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay.toFixed(2)}s;animation-duration:${durationVariation.toFixed(2)}s;width:${size}px;height:${size}px;}`
+      // Highly varied delays to desynchronize stars (spread across 5x base duration)
+      const delay = Math.random() * (baseDuration * 5)
+      const size = 1 + Math.random() * 2.5
+      // Wide duration variation (50%-150% of base) for organic feel
+      const durationVariation = baseDuration * (0.5 + Math.random())
+      // Vary the peak brightness per star
+      const peakOpacity = 0.6 + Math.random() * 0.4
+      starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay.toFixed(2)}s;animation-duration:${durationVariation.toFixed(2)}s;width:${size.toFixed(1)}px;height:${size.toFixed(1)}px;--peak-opacity:${peakOpacity.toFixed(2)};}`
     }
 
     cssBlocks.push(`
-/* Premium Effect: Twinkling Stars */
+/* Premium Effect: Twinkling Stars - Organic variation */
 @keyframes themegpt-twinkle {
-  0%, 100% { opacity: 0.3; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.2); }
+  0%, 100% { opacity: 0.15; transform: scale(0.7); }
+  50% { opacity: var(--peak-opacity, 0.8); transform: scale(1.1); }
 }
 .themegpt-star {
   position: absolute;
   background: ${starColor};
   border-radius: 50%;
   animation: themegpt-twinkle ${baseDuration}s ease-in-out infinite;
-  box-shadow: 0 0 4px ${starColor};
+  box-shadow: 0 0 3px ${starColor};
+  --peak-opacity: 0.8;
 }
 ${starsCSS}
 ${stars.includeShootingStars ? `

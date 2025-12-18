@@ -1025,6 +1025,116 @@ ${treesCSS}`);
     }
 
     document.addEventListener('DOMContentLoaded', init);
+
+    // === THEMEGPT AGENTIC API ===
+    // Programmatic interface for LLM agent control
+    window.ThemeGPT = {
+      // Get current state
+      getState() {
+        return {
+          theme: currentTheme ? { ...currentTheme } : null,
+          effectsEnabled,
+          themeIndex: currentThemeIndex,
+          totalThemes: THEMES.length
+        };
+      },
+
+      // Set a single color variable
+      setColor(variable, value) {
+        if (!currentTheme) return { success: false, error: 'No theme loaded' };
+        const validVars = ['--cgpt-bg', '--cgpt-surface', '--cgpt-text', '--cgpt-text-muted', '--cgpt-border', '--cgpt-accent'];
+        if (!validVars.includes(variable)) return { success: false, error: `Invalid variable. Use: ${validVars.join(', ')}` };
+        currentTheme.colors[variable] = value;
+        applyTheme(currentTheme);
+        console.log(`[ThemeGPT] Set ${variable} = ${value}`);
+        return { success: true, variable, value };
+      },
+
+      // Set multiple colors at once
+      setColors(colors) {
+        if (!currentTheme) return { success: false, error: 'No theme loaded' };
+        Object.entries(colors).forEach(([k, v]) => { currentTheme.colors[k] = v; });
+        applyTheme(currentTheme);
+        console.log('[ThemeGPT] Set colors:', colors);
+        return { success: true, colors };
+      },
+
+      // Set background pattern
+      setPattern(pattern) {
+        if (!currentTheme) return { success: false, error: 'No theme loaded' };
+        currentTheme.pattern = pattern; // { type, opacity, color?, size? } or null
+        applyTheme(currentTheme);
+        console.log('[ThemeGPT] Set pattern:', pattern);
+        return { success: true, pattern };
+      },
+
+      // Toggle overlay
+      setOverlay(type) {
+        if (!currentTheme) return { success: false, error: 'No theme loaded' };
+        currentTheme.noiseOverlay = type === 'noise';
+        currentTheme.glowOverlay = type === 'glow';
+        applyTheme(currentTheme);
+        console.log('[ThemeGPT] Set overlay:', type);
+        return { success: true, overlay: type };
+      },
+
+      // Apply a preset theme by ID
+      apply(themeId) {
+        const theme = THEMES.find(t => t.id === themeId);
+        if (!theme) return { success: false, error: `Theme not found: ${themeId}`, available: THEMES.map(t => t.id) };
+        applyTheme(theme);
+        return { success: true, theme: theme.name };
+      },
+
+      // List all available themes
+      list() {
+        return THEMES.map(t => ({ id: t.id, name: t.name, isPremium: t.isPremium, hasEffects: !!t.effects }));
+      },
+
+      // Export current theme as JSON
+      export() {
+        const json = JSON.stringify(currentTheme, null, 2);
+        console.log('[ThemeGPT] Export:', json);
+        return currentTheme;
+      },
+
+      // Run quality checks
+      validate() {
+        if (!currentTheme) return { success: false, error: 'No theme loaded' };
+        const checks = runQualityChecks(currentTheme);
+        const allPass = checks.every(c => c.pass);
+        console.log('[ThemeGPT] Validate:', { allPass, checks });
+        return { success: true, allPass, checks };
+      },
+
+      // Toggle effects
+      toggleEffects() {
+        effectsEnabled = !effectsEnabled;
+        if (currentTheme) applyTheme(currentTheme);
+        console.log(`[ThemeGPT] Effects ${effectsEnabled ? 'enabled' : 'disabled'}`);
+        return { effectsEnabled };
+      },
+
+      // Create a new theme from scratch
+      create(config) {
+        const newTheme = {
+          id: config.id || `custom-${Date.now()}`,
+          name: config.name || 'Custom Theme',
+          category: 'custom',
+          colors: config.colors || { ...THEMES[0].colors },
+          isPremium: true,
+          pattern: config.pattern || null,
+          noiseOverlay: config.noiseOverlay || false,
+          glowOverlay: config.glowOverlay || false,
+          effects: config.effects || null
+        };
+        applyTheme(newTheme);
+        console.log('[ThemeGPT] Created:', newTheme.name);
+        return { success: true, theme: newTheme };
+      }
+    };
+
+    console.log('[ThemeGPT] Agentic API ready. Use ThemeGPT.getState(), ThemeGPT.setColor(), etc.');
   </script>
 </body>
 </html>

@@ -227,6 +227,10 @@ function generateEffectsCSS(effects: ThemeEffects, accentColor: string): string 
     const snow = effects.animatedSnowfall
     const count = snow.density === 'heavy' ? 40 : snow.density === 'medium' ? 25 : 12
     const duration = snow.speed === 'fast' ? 8 : snow.speed === 'medium' ? 12 : 18
+    // Support custom snow color for light backgrounds
+    const snowColor = snow.snowColor || 'white'
+    const isLightSnow = snowColor === 'white' || snowColor === '#FFFFFF' || snowColor === '#fff'
+    const shadowColor = isLightSnow ? 'rgba(255,255,255,0.5)' : 'rgba(100,140,180,0.4)'
 
     let snowflakesCSS = ''
     for (let i = 0; i < count; i++) {
@@ -245,14 +249,15 @@ function generateEffectsCSS(effects: ThemeEffects, accentColor: string): string 
   90% { opacity: 0.9; }
   100% { transform: translateY(100vh) translateX(var(--drift, 20px)); opacity: 0; }
 }
-.themegpt-effects-layer { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+.themegpt-effects-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
 .themegpt-snowflake {
   position: absolute;
   top: -10px;
-  background: white;
+  background: ${snowColor};
   border-radius: 50%;
   animation: themegpt-snowfall ${duration}s linear infinite;
-  box-shadow: 0 0 3px rgba(255,255,255,0.5);
+  box-shadow: 0 0 4px ${shadowColor};
+  z-index: -1;
 }
 ${snowflakesCSS}
 @media (prefers-reduced-motion: reduce) { .themegpt-snowflake { animation: none; opacity: 0.3; } }`)
@@ -318,71 +323,60 @@ ${stars.includeShootingStars ? `
     let treesCSS = ''
     for (let i = 0; i < count; i++) {
       const left = (i / count) * 80 + Math.random() * 15
-      const height = isChristmas ? 80 + Math.random() * 60 : 60 + Math.random() * 80
-      const width = height * (isChristmas ? 0.7 : 0.6)
-      const opacity = isChristmas ? 0.85 : 0.15 + (i / count) * 0.25
+      const height = isChristmas ? 90 + Math.random() * 50 : 60 + Math.random() * 80
+      const width = height * (isChristmas ? 0.5 : 0.6)
+      // Christmas trees: subtle background silhouettes with depth variation
+      const opacity = isChristmas ? 0.12 + (i / count) * 0.18 : 0.15 + (i / count) * 0.25
       treesCSS += `.themegpt-tree-${i}{left:${left}%;height:${height}px;width:${width}px;opacity:${opacity};}`
     }
 
     if (isChristmas) {
-      // Decorated Christmas tree with layered triangles, star, and ornaments
+      // Refined pine silhouettes - subtle background atmosphere
       cssBlocks.push(`
-/* Premium Effect: Decorated Christmas Trees */
-@keyframes themegpt-ornament-glow {
-  0%, 100% { opacity: 0.4; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.1); }
-}
+/* Premium Effect: Refined Pine Silhouettes */
 .themegpt-tree {
   position: absolute;
   bottom: 0;
+  z-index: 1;
 }
-/* Three layered triangles for tree tiers */
+/* Elegant layered pine shape */
 .themegpt-tree::before {
   content: '';
   position: absolute;
-  bottom: 12%;
+  bottom: 8%;
   left: 50%;
   transform: translateX(-50%);
   width: 100%;
-  height: 90%;
-  background: #1B5E20;
-  clip-path: polygon(50% 0%, 5% 35%, 15% 35%, 0% 65%, 20% 65%, 0% 100%, 100% 100%, 80% 65%, 100% 65%, 85% 35%, 95% 35%);
+  height: 92%;
+  background: rgba(0, 0, 0, 0.7);
+  clip-path: polygon(
+    50% 0%,
+    47% 12%, 35% 18%, 44% 20%,
+    30% 32%, 42% 34%,
+    22% 48%, 38% 50%,
+    12% 68%, 35% 70%,
+    5% 88%, 32% 88%,
+    25% 100%, 75% 100%,
+    68% 88%, 95% 88%,
+    65% 70%, 88% 68%,
+    62% 50%, 78% 48%,
+    58% 34%, 70% 32%,
+    56% 20%, 65% 18%, 53% 12%
+  );
 }
-/* Trunk */
+/* Subtle trunk */
 .themegpt-tree::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 18%;
-  height: 15%;
-  background: #5D4037;
-  border-radius: 0 0 3px 3px;
+  width: 12%;
+  height: 10%;
+  background: rgba(40, 25, 15, 0.8);
+  border-radius: 0 0 2px 2px;
 }
-/* Star on top */
-.themegpt-tree-star {
-  position: absolute;
-  top: -5%;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 15%;
-  aspect-ratio: 1;
-  background: #FFD700;
-  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
-  filter: drop-shadow(0 0 4px #FFD700);
-}
-/* Ornament lights */
-.themegpt-ornament {
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  animation: themegpt-ornament-glow 2s ease-in-out infinite;
-  box-shadow: 0 0 4px currentColor;
-}
-${treesCSS}
-@media (prefers-reduced-motion: reduce) { .themegpt-ornament { animation: none; opacity: 0.7; } }`)
+${treesCSS}`)
     } else {
       // Forest pine silhouettes with branch-like edges
       const pineClipPath = trees.style === 'pine' || trees.style === 'mixed'
@@ -501,12 +495,21 @@ ${treesCSS}`)
 
   if (effects.seasonalDecorations?.candyCaneFrame) {
     cssBlocks.push(`
-/* Premium Effect: Candy Cane Frame */
+/* Premium Effect: Candy Cane Frame - Static */
 .themegpt-candy-frame {
   position: absolute;
   inset: 0;
-  border: 8px solid transparent;
-  border-image: repeating-linear-gradient(-45deg, #fff 0 5px, #dc2626 5px 10px) 8;
+  pointer-events: none;
+  border: 10px solid transparent;
+  background: repeating-linear-gradient(
+    -45deg,
+    #fff 0 5px,
+    #dc2626 5px 10px
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   opacity: 0.6;
 }`)
   }
@@ -522,6 +525,11 @@ ${treesCSS}`)
       sparklesCSS += `.themegpt-sparkle-${i}{left:${left}%;top:${top}%;animation-delay:${delay.toFixed(2)}s;width:${size}px;height:${size}px;}`
     }
 
+    // Use red sparkles for light backgrounds (candy cane theme), white for dark
+    const sparkleColor = effects.seasonalDecorations.sparkleColor || 'white'
+    const isRedSparkle = sparkleColor !== 'white'
+    const shadowColor = isRedSparkle ? 'rgba(220,38,38,0.6)' : 'white'
+
     cssBlocks.push(`
 /* Premium Effect: Festive Sparkles */
 @keyframes themegpt-sparkle {
@@ -530,10 +538,10 @@ ${treesCSS}`)
 }
 .themegpt-sparkle {
   position: absolute;
-  background: white;
+  background: ${sparkleColor};
   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
   animation: themegpt-sparkle 3s ease-in-out infinite;
-  filter: drop-shadow(0 0 2px white);
+  filter: drop-shadow(0 0 3px ${shadowColor});
 }
 ${sparklesCSS}
 @media (prefers-reduced-motion: reduce) { .themegpt-sparkle { animation: none; opacity: 0.4; } }`)
@@ -541,48 +549,42 @@ ${sparklesCSS}
 
   if (effects.seasonalDecorations?.frostedGlass) {
     cssBlocks.push(`
-/* Premium Effect: Frosted Glass Window Pane */
-.themegpt-frosted-glass {
+/* Premium Effect: Frosted Window - Simplified for clarity */
+/* Heavy frost vignette creeping from edges */
+.themegpt-frost-vignette {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* Frosted edge border with blur effect */
   box-shadow:
-    inset 0 0 60px 15px rgba(220,235,255,0.4),
-    inset 0 0 120px 30px rgba(200,220,250,0.2);
+    /* Outer frost ring - prominent white frost */
+    inset 0 0 80px 30px rgba(220,235,255,0.6),
+    inset 0 0 150px 60px rgba(200,220,245,0.35),
+    /* Subtle inner glow */
+    inset 0 0 200px 80px rgba(180,210,240,0.15);
 }
-/* Ice crystal patterns at edges */
-.themegpt-ice-crystals {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    /* Top left corner frost */
-    radial-gradient(ellipse 25% 20% at 5% 5%, rgba(255,255,255,0.6) 0%, transparent 70%),
-    /* Top right corner frost */
-    radial-gradient(ellipse 20% 25% at 95% 8%, rgba(255,255,255,0.5) 0%, transparent 65%),
-    /* Bottom left corner frost */
-    radial-gradient(ellipse 22% 18% at 8% 92%, rgba(255,255,255,0.55) 0%, transparent 60%),
-    /* Bottom right corner frost */
-    radial-gradient(ellipse 18% 22% at 92% 95%, rgba(255,255,255,0.5) 0%, transparent 65%),
-    /* Edge frost lines */
-    linear-gradient(90deg, rgba(255,255,255,0.3) 0%, transparent 10%, transparent 90%, rgba(255,255,255,0.3) 100%),
-    linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 8%, transparent 92%, rgba(255,255,255,0.25) 100%);
-}
-/* Condensation drips at bottom */
+/* Condensation water droplets - the recognizable "frosted window" element */
 .themegpt-condensation {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 80px;
+  height: 180px;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 3px 20px at 15% 100%, rgba(200,220,250,0.4) 0%, transparent 100%),
-    radial-gradient(ellipse 2px 15px at 25% 100%, rgba(200,220,250,0.3) 0%, transparent 100%),
-    radial-gradient(ellipse 4px 25px at 45% 100%, rgba(200,220,250,0.35) 0%, transparent 100%),
-    radial-gradient(ellipse 2px 18px at 65% 100%, rgba(200,220,250,0.3) 0%, transparent 100%),
-    radial-gradient(ellipse 3px 22px at 85% 100%, rgba(200,220,250,0.4) 0%, transparent 100%);
+    /* Large prominent droplets */
+    radial-gradient(ellipse 8px 12px at 8% 75%, rgba(150,180,220,0.7) 0%, rgba(130,165,210,0.3) 50%, transparent 100%),
+    radial-gradient(ellipse 10px 14px at 25% 85%, rgba(160,190,230,0.65) 0%, rgba(140,175,220,0.25) 45%, transparent 100%),
+    radial-gradient(ellipse 7px 10px at 42% 70%, rgba(155,185,225,0.6) 0%, rgba(135,170,215,0.2) 50%, transparent 100%),
+    radial-gradient(ellipse 12px 16px at 60% 82%, rgba(165,195,235,0.7) 0%, rgba(145,180,225,0.3) 40%, transparent 100%),
+    radial-gradient(ellipse 6px 9px at 75% 90%, rgba(150,180,220,0.55) 0%, rgba(130,165,210,0.2) 55%, transparent 100%),
+    radial-gradient(ellipse 9px 13px at 90% 78%, rgba(158,188,228,0.6) 0%, rgba(138,173,218,0.25) 50%, transparent 100%),
+    /* Water trails running down */
+    radial-gradient(ellipse 3px 50px at 8% 100%, rgba(140,175,215,0.5) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 65px at 25% 100%, rgba(145,180,220,0.45) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 40px at 42% 100%, rgba(135,170,210,0.4) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 80px at 60% 100%, rgba(150,185,225,0.5) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 35px at 75% 100%, rgba(138,173,213,0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 55px at 90% 100%, rgba(142,177,217,0.45) 0%, transparent 100%);
 }`)
   }
 
@@ -643,35 +645,7 @@ function createEffectsElements(effects: ThemeEffects): void {
       const tree = document.createElement('div')
       tree.className = `themegpt-tree themegpt-tree-${i}`
 
-      // Add star on top for Christmas trees
-      if (isChristmas) {
-        const star = document.createElement('div')
-        star.className = 'themegpt-tree-star'
-        tree.appendChild(star)
-
-        // Add ornament lights
-        if (withOrnaments) {
-          const ornamentColors = ['#DC2626', '#FFD700', '#3B82F6', '#22C55E']
-          const ornamentPositions = [
-            { top: '30%', left: '35%' },
-            { top: '35%', left: '60%' },
-            { top: '50%', left: '25%' },
-            { top: '55%', left: '70%' },
-            { top: '70%', left: '40%' },
-            { top: '75%', left: '58%' },
-          ]
-          ornamentPositions.forEach((pos, idx) => {
-            const ornament = document.createElement('div')
-            ornament.className = 'themegpt-ornament'
-            ornament.style.top = pos.top
-            ornament.style.left = pos.left
-            ornament.style.color = ornamentColors[idx % ornamentColors.length]
-            ornament.style.background = ornamentColors[idx % ornamentColors.length]
-            ornament.style.animationDelay = `${idx * 0.3}s`
-            tree.appendChild(ornament)
-          })
-        }
-      }
+      // Christmas trees are now refined silhouettes - no additional elements needed
 
       container.appendChild(tree)
     }
@@ -718,14 +692,12 @@ function createEffectsElements(effects: ThemeEffects): void {
     }
   }
   if (effects.seasonalDecorations?.frostedGlass) {
-    const frosted = document.createElement('div')
-    frosted.className = 'themegpt-frosted-glass'
-    container.appendChild(frosted)
+    // Heavy frost vignette from edges
+    const vignette = document.createElement('div')
+    vignette.className = 'themegpt-frost-vignette'
+    container.appendChild(vignette)
 
-    const crystals = document.createElement('div')
-    crystals.className = 'themegpt-ice-crystals'
-    container.appendChild(crystals)
-
+    // Condensation droplets at bottom
     const condensation = document.createElement('div')
     condensation.className = 'themegpt-condensation'
     container.appendChild(condensation)

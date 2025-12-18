@@ -31,6 +31,7 @@ export interface AnimatedSnowfall {
   enabled: boolean;
   density: 'light' | 'medium' | 'heavy';
   speed: 'slow' | 'medium' | 'fast';
+  snowColor?: string; // Optional color for light backgrounds (default: white)
 }
 
 export interface TwinklingStars {
@@ -62,6 +63,7 @@ export interface SeasonalDecorations {
   candyCaneFrame?: boolean;
   frostEdge?: boolean;
   sparkleOverlay?: boolean; // Subtle festive sparkles
+  sparkleColor?: string;    // Color for sparkles (default: white, use red for light backgrounds)
   frostedGlass?: boolean;   // Full frosted window pane effect with blur and ice crystals
 }
 
@@ -125,6 +127,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#2AA198',
     },
     isPremium: false,
+    noiseOverlay: true,
     pattern: { type: 'grid', opacity: 0.04, size: 1.5 },
   },
   {
@@ -212,7 +215,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow' },
+      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', snowColor: '#B8D4E8' },
       seasonalDecorations: { frostedGlass: true },
     },
   },
@@ -249,8 +252,9 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#DC2626',
     },
     isPremium: true,
+    noiseOverlay: true,
     effects: {
-      seasonalDecorations: { candyCaneFrame: true, sparkleOverlay: true },
+      seasonalDecorations: { candyCaneFrame: true, sparkleOverlay: true, sparkleColor: '#dc2626' },
     },
   },
   {

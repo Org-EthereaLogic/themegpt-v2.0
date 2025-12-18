@@ -133,6 +133,39 @@ body::before {
   opacity: ${opacity * 3};
 }`
 
+    case 'giftwrap':
+      // Gift wrapping paper pattern with polka dots and diagonal ribbons
+      return `
+/* Pattern: Gift Wrap */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    /* Polka dots */
+    radial-gradient(${color} 3px, transparent 3px),
+    radial-gradient(${color} 2px, transparent 2px),
+    /* Diagonal ribbon lines */
+    repeating-linear-gradient(45deg, transparent, transparent 60px, ${color}33 60px, ${color}33 62px),
+    repeating-linear-gradient(-45deg, transparent, transparent 60px, ${color}22 60px, ${color}22 62px);
+  background-size:
+    ${40 * size}px ${40 * size}px,
+    ${25 * size}px ${25 * size}px,
+    100% 100%,
+    100% 100%;
+  background-position:
+    0 0,
+    ${12 * size}px ${12 * size}px,
+    0 0,
+    0 0;
+  opacity: ${opacity};
+}`
+
     default:
       return ''
   }
@@ -229,14 +262,19 @@ ${snowflakesCSS}
   if (effects.twinklingStars?.enabled) {
     const stars = effects.twinklingStars
     const count = stars.count === 'dense' ? 50 : stars.count === 'medium' ? 30 : 15
+    const starColor = stars.starColor || accentColor
+    const baseDuration = stars.animationDuration || 3
 
     let starsCSS = ''
     for (let i = 0; i < count; i++) {
       const left = Math.random() * 100
       const top = Math.random() * 70
-      const delay = Math.random() * 4
+      // More varied delays for less repetitive appearance
+      const delay = Math.random() * (baseDuration * 3)
       const size = 1 + Math.random() * 3
-      starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay}s;width:${size}px;height:${size}px;}`
+      // Individual duration variation (±30% of base)
+      const durationVariation = baseDuration * (0.7 + Math.random() * 0.6)
+      starsCSS += `.themegpt-star-${i}{left:${left}%;top:${top}%;animation-delay:${delay.toFixed(2)}s;animation-duration:${durationVariation.toFixed(2)}s;width:${size}px;height:${size}px;}`
     }
 
     cssBlocks.push(`
@@ -247,10 +285,10 @@ ${snowflakesCSS}
 }
 .themegpt-star {
   position: absolute;
-  background: ${accentColor};
+  background: ${starColor};
   border-radius: 50%;
-  animation: themegpt-twinkle 3s ease-in-out infinite;
-  box-shadow: 0 0 4px ${accentColor};
+  animation: themegpt-twinkle ${baseDuration}s ease-in-out infinite;
+  box-shadow: 0 0 4px ${starColor};
 }
 ${starsCSS}
 ${stars.includeShootingStars ? `
@@ -274,22 +312,89 @@ ${stars.includeShootingStars ? `
   if (effects.treeSilhouettes?.enabled) {
     const trees = effects.treeSilhouettes
     const count = trees.density === 'forest' ? 8 : trees.density === 'moderate' ? 5 : 3
+    const isChristmas = trees.style === 'christmas'
+    const withOrnaments = trees.withOrnaments || isChristmas
 
     let treesCSS = ''
     for (let i = 0; i < count; i++) {
       const left = (i / count) * 80 + Math.random() * 15
-      const height = 60 + Math.random() * 80
-      const width = height * 0.6
-      const opacity = 0.15 + (i / count) * 0.25
+      const height = isChristmas ? 80 + Math.random() * 60 : 60 + Math.random() * 80
+      const width = height * (isChristmas ? 0.7 : 0.6)
+      const opacity = isChristmas ? 0.85 : 0.15 + (i / count) * 0.25
       treesCSS += `.themegpt-tree-${i}{left:${left}%;height:${height}px;width:${width}px;opacity:${opacity};}`
     }
 
-    cssBlocks.push(`
-/* Premium Effect: Tree Silhouettes */
+    if (isChristmas) {
+      // Decorated Christmas tree with layered triangles, star, and ornaments
+      cssBlocks.push(`
+/* Premium Effect: Decorated Christmas Trees */
+@keyframes themegpt-ornament-glow {
+  0%, 100% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.1); }
+}
 .themegpt-tree {
   position: absolute;
   bottom: 0;
-  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+/* Three layered triangles for tree tiers */
+.themegpt-tree::before {
+  content: '';
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 90%;
+  background: #1B5E20;
+  clip-path: polygon(50% 0%, 5% 35%, 15% 35%, 0% 65%, 20% 65%, 0% 100%, 100% 100%, 80% 65%, 100% 65%, 85% 35%, 95% 35%);
+}
+/* Trunk */
+.themegpt-tree::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 18%;
+  height: 15%;
+  background: #5D4037;
+  border-radius: 0 0 3px 3px;
+}
+/* Star on top */
+.themegpt-tree-star {
+  position: absolute;
+  top: -5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 15%;
+  aspect-ratio: 1;
+  background: #FFD700;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  filter: drop-shadow(0 0 4px #FFD700);
+}
+/* Ornament lights */
+.themegpt-ornament {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: themegpt-ornament-glow 2s ease-in-out infinite;
+  box-shadow: 0 0 4px currentColor;
+}
+${treesCSS}
+@media (prefers-reduced-motion: reduce) { .themegpt-ornament { animation: none; opacity: 0.7; } }`)
+    } else {
+      // Forest pine silhouettes with branch-like edges
+      const pineClipPath = trees.style === 'pine' || trees.style === 'mixed'
+        ? 'polygon(50% 0%, 45% 15%, 30% 15%, 40% 30%, 20% 30%, 35% 45%, 10% 45%, 30% 60%, 5% 60%, 25% 75%, 0% 80%, 40% 100%, 60% 100%, 100% 80%, 75% 75%, 95% 60%, 70% 60%, 90% 45%, 65% 45%, 80% 30%, 60% 30%, 70% 15%, 55% 15%)'
+        : 'polygon(50% 0%, 0% 100%, 100% 100%)'
+
+      cssBlocks.push(`
+/* Premium Effect: Forest Tree Silhouettes */
+.themegpt-tree {
+  position: absolute;
+  bottom: 0;
+  clip-path: ${pineClipPath};
   background: rgba(0,0,0,0.8);
 }
 .themegpt-tree::after {
@@ -303,6 +408,7 @@ ${stars.includeShootingStars ? `
   border-radius: 2px;
 }
 ${treesCSS}`)
+    }
   }
 
   // Ambient effects
@@ -366,6 +472,20 @@ ${treesCSS}`)
 @media (prefers-reduced-motion: reduce) { .themegpt-aurora { animation: none; } }`)
   }
 
+  if (effects.ambientEffects?.candleGlow) {
+    cssBlocks.push(`
+/* Premium Effect: Candle Glow */
+.themegpt-candle-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 30% 40% at 10% 90%, rgba(255,183,77,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 35% at 90% 85%, rgba(255,183,77,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 20% 30% at 50% 95%, rgba(255,152,0,0.05) 0%, transparent 60%);
+}`)
+  }
+
   // Seasonal decorations
   if (effects.seasonalDecorations?.frostEdge) {
     cssBlocks.push(`
@@ -388,6 +508,81 @@ ${treesCSS}`)
   border: 8px solid transparent;
   border-image: repeating-linear-gradient(-45deg, #fff 0 5px, #dc2626 5px 10px) 8;
   opacity: 0.6;
+}`)
+  }
+
+  if (effects.seasonalDecorations?.sparkleOverlay) {
+    // Generate sparkle positions
+    let sparklesCSS = ''
+    for (let i = 0; i < 20; i++) {
+      const left = Math.random() * 100
+      const top = Math.random() * 100
+      const delay = Math.random() * 4
+      const size = 2 + Math.random() * 4
+      sparklesCSS += `.themegpt-sparkle-${i}{left:${left}%;top:${top}%;animation-delay:${delay.toFixed(2)}s;width:${size}px;height:${size}px;}`
+    }
+
+    cssBlocks.push(`
+/* Premium Effect: Festive Sparkles */
+@keyframes themegpt-sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) rotate(0deg); }
+  50% { opacity: 1; transform: scale(1) rotate(180deg); }
+}
+.themegpt-sparkle {
+  position: absolute;
+  background: white;
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  animation: themegpt-sparkle 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 2px white);
+}
+${sparklesCSS}
+@media (prefers-reduced-motion: reduce) { .themegpt-sparkle { animation: none; opacity: 0.4; } }`)
+  }
+
+  if (effects.seasonalDecorations?.frostedGlass) {
+    cssBlocks.push(`
+/* Premium Effect: Frosted Glass Window Pane */
+.themegpt-frosted-glass {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  /* Frosted edge border with blur effect */
+  box-shadow:
+    inset 0 0 60px 15px rgba(220,235,255,0.4),
+    inset 0 0 120px 30px rgba(200,220,250,0.2);
+}
+/* Ice crystal patterns at edges */
+.themegpt-ice-crystals {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    /* Top left corner frost */
+    radial-gradient(ellipse 25% 20% at 5% 5%, rgba(255,255,255,0.6) 0%, transparent 70%),
+    /* Top right corner frost */
+    radial-gradient(ellipse 20% 25% at 95% 8%, rgba(255,255,255,0.5) 0%, transparent 65%),
+    /* Bottom left corner frost */
+    radial-gradient(ellipse 22% 18% at 8% 92%, rgba(255,255,255,0.55) 0%, transparent 60%),
+    /* Bottom right corner frost */
+    radial-gradient(ellipse 18% 22% at 92% 95%, rgba(255,255,255,0.5) 0%, transparent 65%),
+    /* Edge frost lines */
+    linear-gradient(90deg, rgba(255,255,255,0.3) 0%, transparent 10%, transparent 90%, rgba(255,255,255,0.3) 100%),
+    linear-gradient(180deg, rgba(255,255,255,0.25) 0%, transparent 8%, transparent 92%, rgba(255,255,255,0.25) 100%);
+}
+/* Condensation drips at bottom */
+.themegpt-condensation {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 3px 20px at 15% 100%, rgba(200,220,250,0.4) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 15px at 25% 100%, rgba(200,220,250,0.3) 0%, transparent 100%),
+    radial-gradient(ellipse 4px 25px at 45% 100%, rgba(200,220,250,0.35) 0%, transparent 100%),
+    radial-gradient(ellipse 2px 18px at 65% 100%, rgba(200,220,250,0.3) 0%, transparent 100%),
+    radial-gradient(ellipse 3px 22px at 85% 100%, rgba(200,220,250,0.4) 0%, transparent 100%);
 }`)
   }
 
@@ -439,11 +634,45 @@ function createEffectsElements(effects: ThemeEffects): void {
 
   // Add trees
   if (effects.treeSilhouettes?.enabled) {
-    const count = effects.treeSilhouettes.density === 'forest' ? 8 :
-                  effects.treeSilhouettes.density === 'moderate' ? 5 : 3
+    const trees = effects.treeSilhouettes
+    const count = trees.density === 'forest' ? 8 : trees.density === 'moderate' ? 5 : 3
+    const isChristmas = trees.style === 'christmas'
+    const withOrnaments = trees.withOrnaments || isChristmas
+
     for (let i = 0; i < count; i++) {
       const tree = document.createElement('div')
       tree.className = `themegpt-tree themegpt-tree-${i}`
+
+      // Add star on top for Christmas trees
+      if (isChristmas) {
+        const star = document.createElement('div')
+        star.className = 'themegpt-tree-star'
+        tree.appendChild(star)
+
+        // Add ornament lights
+        if (withOrnaments) {
+          const ornamentColors = ['#DC2626', '#FFD700', '#3B82F6', '#22C55E']
+          const ornamentPositions = [
+            { top: '30%', left: '35%' },
+            { top: '35%', left: '60%' },
+            { top: '50%', left: '25%' },
+            { top: '55%', left: '70%' },
+            { top: '70%', left: '40%' },
+            { top: '75%', left: '58%' },
+          ]
+          ornamentPositions.forEach((pos, idx) => {
+            const ornament = document.createElement('div')
+            ornament.className = 'themegpt-ornament'
+            ornament.style.top = pos.top
+            ornament.style.left = pos.left
+            ornament.style.color = ornamentColors[idx % ornamentColors.length]
+            ornament.style.background = ornamentColors[idx % ornamentColors.length]
+            ornament.style.animationDelay = `${idx * 0.3}s`
+            tree.appendChild(ornament)
+          })
+        }
+      }
+
       container.appendChild(tree)
     }
   }
@@ -464,6 +693,11 @@ function createEffectsElements(effects: ThemeEffects): void {
     aurora.className = 'themegpt-aurora'
     container.appendChild(aurora)
   }
+  if (effects.ambientEffects?.candleGlow) {
+    const glow = document.createElement('div')
+    glow.className = 'themegpt-candle-glow'
+    container.appendChild(glow)
+  }
 
   // Add seasonal decorations
   if (effects.seasonalDecorations?.frostEdge) {
@@ -475,6 +709,26 @@ function createEffectsElements(effects: ThemeEffects): void {
     const frame = document.createElement('div')
     frame.className = 'themegpt-candy-frame'
     container.appendChild(frame)
+  }
+  if (effects.seasonalDecorations?.sparkleOverlay) {
+    for (let i = 0; i < 20; i++) {
+      const sparkle = document.createElement('div')
+      sparkle.className = `themegpt-sparkle themegpt-sparkle-${i}`
+      container.appendChild(sparkle)
+    }
+  }
+  if (effects.seasonalDecorations?.frostedGlass) {
+    const frosted = document.createElement('div')
+    frosted.className = 'themegpt-frosted-glass'
+    container.appendChild(frosted)
+
+    const crystals = document.createElement('div')
+    crystals.className = 'themegpt-ice-crystals'
+    container.appendChild(crystals)
+
+    const condensation = document.createElement('div')
+    condensation.className = 'themegpt-condensation'
+    container.appendChild(condensation)
   }
 
   if (container.children.length > 0) {

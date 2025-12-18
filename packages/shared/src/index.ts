@@ -17,7 +17,7 @@ export interface TokenStats {
   lastUpdated: number;
 }
 
-export type PatternType = 'dots' | 'grid' | 'snowflakes' | 'stars' | 'noise';
+export type PatternType = 'dots' | 'grid' | 'snowflakes' | 'stars' | 'noise' | 'giftwrap';
 
 export interface ThemePattern {
   type: PatternType;
@@ -37,12 +37,15 @@ export interface TwinklingStars {
   enabled: boolean;
   count: 'sparse' | 'medium' | 'dense';
   includeShootingStars?: boolean;
+  starColor?: string;        // Override accent color (default: accent, recommend '#FFFFFF')
+  animationDuration?: number; // Base twinkle duration in seconds (default: 3)
 }
 
 export interface TreeSilhouettes {
   enabled: boolean;
-  style: 'pine' | 'bare' | 'mixed';
+  style: 'pine' | 'bare' | 'mixed' | 'christmas'; // 'christmas' = decorated with ornaments
   density: 'few' | 'moderate' | 'forest';
+  withOrnaments?: boolean; // Add twinkling lights to trees
 }
 
 export interface AmbientEffects {
@@ -50,6 +53,7 @@ export interface AmbientEffects {
   firefliesOrParticles?: boolean;
   auroraWaves?: boolean;
   neonGrid?: boolean;
+  candleGlow?: boolean; // Warm ambient glow for minimalist themes
 }
 
 export interface SeasonalDecorations {
@@ -57,6 +61,8 @@ export interface SeasonalDecorations {
   ornaments?: boolean;
   candyCaneFrame?: boolean;
   frostEdge?: boolean;
+  sparkleOverlay?: boolean; // Subtle festive sparkles
+  frostedGlass?: boolean;   // Full frosted window pane effect with blur and ice crystals
 }
 
 export interface ThemeEffects {
@@ -104,6 +110,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     noiseOverlay: true,
+    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
   {
     id: 'solarized-dark',
@@ -118,7 +125,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#2AA198',
     },
     isPremium: false,
-    pattern: { type: 'grid', opacity: 0.02, size: 1.5 },
+    pattern: { type: 'grid', opacity: 0.04, size: 1.5 },
   },
   {
     id: 'dracula',
@@ -134,6 +141,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
+    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
   {
     id: 'monokai-pro',
@@ -149,6 +157,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     noiseOverlay: true,
+    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
   {
     id: 'one-dark',
@@ -164,6 +173,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
+    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
 
   // =============================================
@@ -184,7 +194,7 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     noiseOverlay: true,
     effects: {
-      treeSilhouettes: { enabled: true, style: 'pine', density: 'few' },
+      treeSilhouettes: { enabled: true, style: 'christmas', density: 'few', withOrnaments: true },
       animatedSnowfall: { enabled: true, density: 'light', speed: 'slow' },
     },
   },
@@ -202,8 +212,8 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      animatedSnowfall: { enabled: true, density: 'light', speed: 'slow' },
-      seasonalDecorations: { frostEdge: true },
+      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow' },
+      seasonalDecorations: { frostedGlass: true },
     },
   },
   {
@@ -222,7 +232,7 @@ export const DEFAULT_THEMES: Theme[] = [
     noiseOverlay: true,
     effects: {
       treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' },
-      twinklingStars: { enabled: true, count: 'medium' },
+      twinklingStars: { enabled: true, count: 'medium', starColor: '#FFFFFF' },
       ambientEffects: { fogRising: true },
     },
   },
@@ -240,7 +250,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      seasonalDecorations: { candyCaneFrame: true },
+      seasonalDecorations: { candyCaneFrame: true, sparkleOverlay: true },
     },
   },
   {
@@ -258,7 +268,7 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     glowOverlay: true,
     effects: {
-      twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true },
+      twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true, starColor: '#FFFFFF', animationDuration: 8 },
       ambientEffects: { auroraWaves: true },
     },
   },
@@ -276,6 +286,9 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     noiseOverlay: true,
+    effects: {
+      ambientEffects: { candleGlow: true },
+    },
   },
 
   // =============================================
@@ -294,13 +307,15 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#38BDF8',
     },
     isPremium: true,
+    pattern: { type: 'snowflakes', opacity: 0.04, size: 1.2 },
     effects: {
       animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow' },
+      seasonalDecorations: { frostEdge: true },
     },
   },
   {
-    id: 'holiday-plaid',
-    name: 'Holiday Plaid',
+    id: 'holiday-gift-wrapping',
+    name: 'Holiday Gift Wrapping',
     category: 'christmas',
     colors: {
       '--cgpt-bg': '#0D1F12',
@@ -312,10 +327,13 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     pattern: {
-      type: 'grid',
-      opacity: 0.06,
-      color: '#2E7D32',
-      size: 1.5,
+      type: 'giftwrap',
+      opacity: 0.08,
+      color: '#EF5350',
+      size: 1.2,
+    },
+    effects: {
+      seasonalDecorations: { sparkleOverlay: true },
     },
   },
   {
@@ -479,6 +497,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
+    pattern: { type: 'stars', opacity: 0.04, size: 1 },
   },
   {
     id: 'sunset-blaze',
@@ -494,6 +513,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
+    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
   {
     id: 'electric-dreams',
@@ -509,7 +529,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
-    pattern: { type: 'grid', opacity: 0.02, size: 2 },
+    pattern: { type: 'grid', opacity: 0.04, size: 2 },
   },
 ];
 

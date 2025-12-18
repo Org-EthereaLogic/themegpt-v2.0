@@ -149,9 +149,27 @@ The preview tool architecture supports:
 
 ```
 tools/theme-preview/
-├── index.html     # Complete standalone preview
-└── README.md      # This documentation
+├── index.html           # Core preview tool (1,030 lines)
+├── catalog-complete.html # Marketing theme catalog (494 lines)
+├── REFERENCE.md         # UI element indexing system
+├── README.md            # This documentation
+└── archive/             # Deprecated prototypes
+    ├── prototype-animated.html
+    └── prototype-christmas-custom.html
 ```
+
+## Complexity Justification
+
+Per DIRECTIVES.md, files exceeding 500 lines require architectural review.
+
+**index.html (1,030 lines)**: Justified because it must:
+1. Mirror theme-injector.ts exactly for visual parity
+2. Include all 24 theme definitions inline (no external dependencies)
+3. Provide complete ChatGPT mockup UI for accurate preview
+4. Contain pattern/effect generators matching production code
+5. Include WCAG quality checks for accessibility validation
+
+**Archived files**: `prototype-animated.html` and `prototype-christmas-custom.html` were development exploration artifacts. Their patterns have been incorporated into the main tool or deemed unnecessary. Archived 2024-12 per complexity audit.
 
 ## Synchronization
 

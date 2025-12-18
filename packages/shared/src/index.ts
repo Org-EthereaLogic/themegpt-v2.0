@@ -277,8 +277,8 @@ export const DEFAULT_THEMES: Theme[] = [
     },
   },
   {
-    id: 'minimal-advent',
-    name: 'Minimal Advent',
+    id: 'purple-twilight',
+    name: 'Purple Twilight',
     category: 'christmas',
     colors: {
       '--cgpt-bg': '#0B0712',
@@ -290,8 +290,11 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     noiseOverlay: true,
+    glowOverlay: true,
     effects: {
+      twinklingStars: { enabled: true, count: 'sparse', starColor: '#FFFFFF', animationDuration: 10 },
       ambientEffects: { candleGlow: true },
+      seasonalDecorations: { frostEdge: true },
     },
   },
 
@@ -311,9 +314,12 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#38BDF8',
     },
     isPremium: true,
+    noiseOverlay: true,
+    glowOverlay: true,
     pattern: { type: 'snowflakes', opacity: 0.04, size: 1.2 },
     effects: {
       animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow' },
+      twinklingStars: { enabled: true, count: 'sparse', starColor: '#E0F2FE', animationDuration: 12 },
       seasonalDecorations: { frostEdge: true },
     },
   },
@@ -416,6 +422,23 @@ export const DEFAULT_THEMES: Theme[] = [
     effects: {
       ambientEffects: { neonGrid: true },
     },
+  },
+  {
+    id: 'apple-ii-phosphor',
+    name: 'Apple II Phosphor',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#000000',
+      '--cgpt-surface': '#0A120A',
+      '--cgpt-text': '#33FF33',
+      '--cgpt-text-muted': '#22AA22',
+      '--cgpt-border': '#1A3A1A',
+      '--cgpt-accent': '#00FF41',
+    },
+    isPremium: true,
+    noiseOverlay: true,
+    glowOverlay: true,
+    pattern: { type: 'grid', opacity: 0.08, color: '#33FF33', size: 0.5 },
   },
   {
     id: 'tomorrow-night-blue',

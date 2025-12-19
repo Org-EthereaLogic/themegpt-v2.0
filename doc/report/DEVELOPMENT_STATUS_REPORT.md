@@ -239,8 +239,8 @@ pnpm lint   # ESLint validation
 - Package: `@parcel/reporter-dev-server` (transitive via Plasmo)
 - Scope: Development only (not production)
 - Risk: Dev server source code exposure
-- Mitigation: Don't browse untrusted sites during `pnpm dev`
-- Status: Ignored in audit, awaiting upstream fix
+- Mitigation: Don't browse untrusted sites during `pnpm dev`; dev server now enforces host/origin validation (patched dependency)
+- Status: Locally patched via `pnpm patchedDependencies`; monitoring upstream release
 
 ---
 

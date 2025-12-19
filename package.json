@@ -25,6 +25,9 @@
       "ignoreCves": [
         "CVE-2025-56648"
       ]
+    },
+    "patchedDependencies": {
+      "@parcel/reporter-dev-server@2.9.3": "patches/@parcel__reporter-dev-server@2.9.3.patch"
     }
   },
   "workspaces": [

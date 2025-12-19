@@ -214,18 +214,24 @@ describe('TokenCounter', () => {
       expect(mockTabsSendMessage).not.toHaveBeenCalled()
     })
 
-    it('handles chrome runtime error gracefully', async () => {
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([{ id: 123 }])
-      })
-      mockTabsSendMessage.mockImplementation((_, __, callback) => {
-        // Simulate runtime error
-        globalThis.chrome.runtime.lastError = { message: 'Tab not found' }
-        callback(null)
-        globalThis.chrome.runtime.lastError = null
-      })
+	    it('handles chrome runtime error gracefully', async () => {
+	      mockTabsQuery.mockImplementation((_, callback) => {
+	        callback([{ id: 123 }])
+	      })
+	      mockTabsSendMessage.mockImplementation((_, __, callback) => {
+	        // Simulate runtime error
+	        Object.defineProperty(globalThis.chrome.runtime, 'lastError', {
+	          value: { message: 'Tab not found' },
+	          configurable: true
+	        })
+	        callback(null)
+	        Object.defineProperty(globalThis.chrome.runtime, 'lastError', {
+	          value: null,
+	          configurable: true
+	        })
+	      })
 
-      render(<TokenCounter />)
+	      render(<TokenCounter />)
 
       // Should not update stats when there's an error
       await waitFor(() => {

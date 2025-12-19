@@ -374,65 +374,98 @@ function generateEffectsCSS(effects: ThemeEffects, accentColor: string): string 
 }
 @media (prefers-reduced-motion: reduce) { .themegpt-snow-gradient { animation: none; } }`)
     } else if (style === 'shaking') {
-      // Pattern 2: Snowflakes with horizontal shake effect
+      // Pattern 2: CSSnowflakes - exact implementation from pajasevi.github.io/CSSnowflakes
       // 12 snowflakes with staggered positions, vertical descent + 80px horizontal shake
-      let snowflakesCSS = ''
-      const positions = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 25, 65]
-      const delays: [number, number][] = [[0,0], [1,1], [6,0.5], [4,2], [2,2], [8,3], [6,2], [2.5,1], [1,0], [3,1.5], [2,0], [4,2.5]]
-      for (let i = 0; i < Math.min(count, 12); i++) {
-        const left = positions[i] || Math.random() * 100
-        const [fallDelay, shakeDelay] = delays[i] || [Math.random() * 8, Math.random() * 3]
-        snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${fallDelay}s,${shakeDelay}s;}`
-      }
       cssBlocks.push(`
-/* Premium Effect: Shaking Snowfall */
-@keyframes themegpt-snowfall-shake {
+/* Premium Effect: Shaking Snowfall - CSSnowflakes */
+.themegpt-snowflake {
+  color: ${snowColor};
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 5px #000;
+}
+@-webkit-keyframes themegpt-snowflakes-fall {
   0% { top: -10%; }
   100% { top: 100%; }
 }
-@keyframes themegpt-snow-shake {
+@-webkit-keyframes themegpt-snowflakes-shake {
+  0%, 100% { -webkit-transform: translateX(0); transform: translateX(0); }
+  50% { -webkit-transform: translateX(80px); transform: translateX(80px); }
+}
+@keyframes themegpt-snowflakes-fall {
+  0% { top: -10%; }
+  100% { top: 100%; }
+}
+@keyframes themegpt-snowflakes-shake {
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(80px); }
 }
 .themegpt-snowflake {
   position: fixed;
   top: -10%;
-  width: 8px;
-  height: 8px;
-  background: ${snowColor};
-  border-radius: 50%;
-  box-shadow: 0 0 6px ${snowColor};
-  animation: themegpt-snowfall-shake ${duration}s linear infinite, themegpt-snow-shake 3s ease-in-out infinite;
-  z-index: -1;
-  pointer-events: none;
+  z-index: 9999;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  -webkit-animation-name: themegpt-snowflakes-fall, themegpt-snowflakes-shake;
+  -webkit-animation-duration: 10s, 3s;
+  -webkit-animation-timing-function: linear, ease-in-out;
+  -webkit-animation-iteration-count: infinite, infinite;
+  -webkit-animation-play-state: running, running;
+  animation-name: themegpt-snowflakes-fall, themegpt-snowflakes-shake;
+  animation-duration: 10s, 3s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-play-state: running, running;
 }
-${snowflakesCSS}
+.themegpt-snow-0 { left: 1%; -webkit-animation-delay: 0s, 0s; animation-delay: 0s, 0s; }
+.themegpt-snow-1 { left: 10%; -webkit-animation-delay: 1s, 1s; animation-delay: 1s, 1s; }
+.themegpt-snow-2 { left: 20%; -webkit-animation-delay: 6s, 0.5s; animation-delay: 6s, 0.5s; }
+.themegpt-snow-3 { left: 30%; -webkit-animation-delay: 4s, 2s; animation-delay: 4s, 2s; }
+.themegpt-snow-4 { left: 40%; -webkit-animation-delay: 2s, 2s; animation-delay: 2s, 2s; }
+.themegpt-snow-5 { left: 50%; -webkit-animation-delay: 8s, 3s; animation-delay: 8s, 3s; }
+.themegpt-snow-6 { left: 60%; -webkit-animation-delay: 6s, 2s; animation-delay: 6s, 2s; }
+.themegpt-snow-7 { left: 70%; -webkit-animation-delay: 2.5s, 1s; animation-delay: 2.5s, 1s; }
+.themegpt-snow-8 { left: 80%; -webkit-animation-delay: 1s, 0s; animation-delay: 1s, 0s; }
+.themegpt-snow-9 { left: 90%; -webkit-animation-delay: 3s, 1.5s; animation-delay: 3s, 1.5s; }
+.themegpt-snow-10 { left: 25%; -webkit-animation-delay: 2s, 0s; animation-delay: 2s, 0s; }
+.themegpt-snow-11 { left: 65%; -webkit-animation-delay: 4s, 2.5s; animation-delay: 4s, 2.5s; }
 @media (prefers-reduced-motion: reduce) { .themegpt-snowflake { animation: none; opacity: 0.3; } }`)
     } else {
-      // Pattern 1 (gentle): Slow, gentle descent with diagonal drift
-      // Opacity fades from 80% to 25%, drift range 5-15vw to the right
+      // Pattern 1 (gentle): Elegant falling snowflakes with cross pattern and rotation
+      // Based on CodePen by mark_sottek - converted from SCSS to dynamic CSS
       let snowflakesCSS = ''
       for (let i = 0; i < count; i++) {
-        const left = Math.random() * 100
-        const delay = Math.random() * duration
-        const size = 2 + Math.random() * 4
-        const drift = 5 + Math.random() * 10 // Always drift right (diagonal-fall style)
-        snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${delay}s;width:${size}px;height:${size}px;--drift:${drift}vw;}`
+        const flakeWidth = 5 + Math.random() * 15
+        const flakeVertical = -700 + Math.random() * 700
+        const flakeHorizontal = Math.random() * 100
+        const flakeBlur = 2 + Math.random() * 2
+        const flakeOpacity = (50 + Math.random() * 50) * 0.01
+        const flakeDelay = 15 + Math.random() * 55
+        const rotateX = 10 + Math.random() * 40
+        const rotateY = 10 + Math.random() * 40
+        snowflakesCSS += `.themegpt-snow-${i}{width:${flakeWidth.toFixed(1)}px;height:${flakeWidth.toFixed(1)}px;top:${flakeVertical.toFixed(0)}px;left:${flakeHorizontal.toFixed(1)}%;opacity:${flakeOpacity.toFixed(2)};filter:blur(${flakeBlur.toFixed(1)}px);animation:themegpt-flakes-${i} ${flakeDelay.toFixed(0)}s linear infinite;}
+@keyframes themegpt-flakes-${i}{100%{transform:translateY(1000px) rotateX(${rotateX.toFixed(0)}deg) rotateY(${rotateY.toFixed(0)}deg);opacity:0;}}`
       }
       cssBlocks.push(`
-/* Premium Effect: Gentle Snowfall */
-@keyframes themegpt-snowfall-gentle {
-  0% { opacity: 0; transform: translate(0, 0); }
-  10% { opacity: 0.8; }
-  100% { opacity: 0.25; transform: translate(var(--drift, 10vw), 100vh); }
+/* Premium Effect: Gentle Snowfall - Cross-pattern flakes with rotation */
+.themegpt-snow-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 .themegpt-snowflake {
-  position: fixed;
-  top: -10px;
-  background: ${snowColor};
+  position: absolute;
   border-radius: 50%;
-  animation: themegpt-snowfall-gentle ${duration}s linear infinite;
-  box-shadow: 0 0 4px ${snowColor};
+  transform: translateY(0) rotateX(0) rotateY(0);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0) 30%, ${snowColor} 50%, ${snowColor} 60%, rgba(255,255,255,0) 60%),
+    linear-gradient(90deg, rgba(255,255,255,0) 30%, ${snowColor} 50%, ${snowColor} 60%, rgba(255,255,255,0) 60%),
+    linear-gradient(45deg, rgba(255,255,255,0) 33%, ${snowColor} 53%, ${snowColor} 57%, rgba(255,255,255,0) 65%),
+    linear-gradient(135deg, rgba(255,255,255,0) 33%, ${snowColor} 53%, ${snowColor} 57%, rgba(255,255,255,0) 65%);
   z-index: -1;
   pointer-events: none;
 }
@@ -876,11 +909,19 @@ function createEffectsElements(effects: ThemeEffects): void {
       const gradientDiv = document.createElement('div')
       gradientDiv.className = 'themegpt-snow-gradient'
       container.appendChild(gradientDiv)
+    } else if (style === 'shaking') {
+      // Shaking style: 12 snowflakes with ❅ and ❆ text characters (CSSnowflakes pattern)
+      const snowflakeChars = ['❅', '❆']
+      for (let i = 0; i < 12; i++) {
+        const flake = document.createElement('div')
+        flake.className = `themegpt-snowflake themegpt-snow-${i}`
+        flake.textContent = snowflakeChars[i % 2]
+        container.appendChild(flake)
+      }
     } else {
-      // Gentle and shaking styles use individual snowflake elements
-      const count = style === 'shaking' ? 12 :
-                    (effects.animatedSnowfall.density === 'heavy' ? 40 :
-                     effects.animatedSnowfall.density === 'medium' ? 25 : 12)
+      // Gentle style uses individual div elements
+      const count = effects.animatedSnowfall.density === 'heavy' ? 40 :
+                    effects.animatedSnowfall.density === 'medium' ? 25 : 12
       for (let i = 0; i < count; i++) {
         const flake = document.createElement('div')
         flake.className = `themegpt-snowflake themegpt-snow-${i}`

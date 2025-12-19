@@ -487,7 +487,7 @@
       // PREMIUM THEMES - Christmas Collection (6)
       { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'christmas', density: 'few', withOrnaments: true }, animatedSnowfall: { enabled: true, density: 'light', speed: 'slow', style: 'gentle' } } },
       { id: 'frosted-windowpane', name: 'Frosted Windowpane', category: 'christmas', colors: { '--cgpt-bg': '#F5F7FB', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0F172A', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#D1D5DB', '--cgpt-accent': '#3B82F6' }, isPremium: true, effects: { animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', snowColor: '#B8D4E8', style: 'gradient' }, seasonalDecorations: { frostedGlass: true } } },
-      { id: 'midnight-evergreen', name: 'Midnight Evergreen', category: 'christmas', colors: { '--cgpt-bg': '#020817', '--cgpt-surface': '#07120E', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#14532D', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' }, twinklingStars: { enabled: true, count: 'medium' }, ambientEffects: { fogRising: true } } },
+      { id: 'midnight-evergreen', name: 'Midnight Evergreen', category: 'christmas', colors: { '--cgpt-bg': '#020817', '--cgpt-surface': '#07120E', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#14532D', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' }, twinklingStars: { enabled: true, count: 'medium', starColor: '#FFFFFF' }, ambientEffects: { fogRising: true } } },
       { id: 'candy-cane-chat', name: 'Candy Cane Chat', category: 'christmas', colors: { '--cgpt-bg': '#FDF2F2', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#111827', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#FECACA', '--cgpt-accent': '#DC2626' }, isPremium: true, noiseOverlay: true, effects: { seasonalDecorations: { candyCaneFrame: true, sparkleOverlay: true, sparkleColor: '#dc2626' } } },
       { id: 'silent-night-starfield', name: 'Silent Night (Starfield)', category: 'christmas', colors: { '--cgpt-bg': '#020617', '--cgpt-surface': '#02081C', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#CBD5F5', '--cgpt-border': '#1D4ED8', '--cgpt-accent': '#38BDF8' }, isPremium: true, glowOverlay: true, effects: { twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true, starColor: '#FFFFFF', animationDuration: 8 }, ambientEffects: { auroraWaves: true } } },
       { id: 'purple-twilight', name: 'Purple Twilight', category: 'christmas', colors: { '--cgpt-bg': '#0B0712', '--cgpt-surface': '#141021', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4C1D95', '--cgpt-accent': '#7C3AED' }, isPremium: true, noiseOverlay: true, glowOverlay: true, effects: { twinklingStars: { enabled: true, count: 'sparse', starColor: '#FFFFFF', animationDuration: 10 }, ambientEffects: { candleGlow: true }, seasonalDecorations: { frostEdge: true } } },
@@ -515,144 +515,307 @@
     let dynamicStyleEl = null;
     let effectsEnabled = true;
 
-    // === PATTERN GENERATORS (mirrors theme-injector.ts) ===
+    // === PATTERN GENERATORS (synced from theme-injector.ts) ===
     function generatePatternCSS(pattern, accentColor) {
       if (!pattern) return '';
       const color = pattern.color || accentColor;
       const opacity = pattern.opacity;
       const size = pattern.size || 1;
 
-      const dotRadius = Math.max(2, Math.round(2.5 * size));
-      const dotSpacing = Math.round(25 * size);
-      const patterns = {
-        dots: {
-          bg: `radial-gradient(${color} ${dotRadius}px, transparent ${dotRadius}px)`,
-          size: `${dotSpacing}px ${dotSpacing}px`
-        },
-        grid: {
-          bg: `linear-gradient(${color} 1px, transparent 1px), linear-gradient(90deg, ${color} 1px, transparent 1px)`,
-          size: `${24 * size}px ${24 * size}px`
-        },
-        snowflakes: {
-          bg: `radial-gradient(${color} 2px, transparent 2px), radial-gradient(${color} 1px, transparent 1px)`,
-          size: `${50 * size}px ${50 * size}px, ${30 * size}px ${30 * size}px`,
-          position: `0 0, ${15 * size}px ${15 * size}px`
-        },
-        stars: {
-          bg: `radial-gradient(${color} 1.5px, transparent 1.5px), radial-gradient(${color} 1px, transparent 1px), radial-gradient(${color} 0.5px, transparent 0.5px)`,
-          size: `${80 * size}px ${80 * size}px, ${60 * size}px ${60 * size}px, ${40 * size}px ${40 * size}px`,
-          position: `0 0, ${30 * size}px ${40 * size}px, ${15 * size}px ${20 * size}px`
-        },
-        giftwrap: {
-          bg: `radial-gradient(${color} 3px, transparent 3px), radial-gradient(${color} 2px, transparent 2px), repeating-linear-gradient(45deg, transparent, transparent 60px, ${color}33 60px, ${color}33 62px), repeating-linear-gradient(-45deg, transparent, transparent 60px, ${color}22 60px, ${color}22 62px)`,
-          size: `${40 * size}px ${40 * size}px, ${25 * size}px ${25 * size}px, 100% 100%, 100% 100%`,
-          position: `0 0, ${12 * size}px ${12 * size}px, 0 0, 0 0`
-        },
-        christmastrees: null,
-        peppermints: null,
-        christmaswrap: null,
-        noise: null
-      };
+      switch (pattern.type) {
+        case 'dots':
+          // Polka dot pattern - size controls both dot diameter and spacing
+          const dotRadius = Math.max(2, Math.round(2.5 * size));
+          const dotSpacing = Math.round(25 * size);
+          // Offset pattern to avoid alignment with UI elements like sidebar ribbon
+          const dotOffset = Math.round(dotSpacing / 3);
+          return `
+/* Pattern: Dots */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: radial-gradient(${color} ${dotRadius}px, transparent ${dotRadius}px);
+  background-size: ${dotSpacing}px ${dotSpacing}px;
+  background-position: ${dotOffset}px ${dotOffset}px;
+  opacity: ${opacity};
+}`;
 
-      // Handle Christmas trees pattern separately (needs SVG)
-      if (pattern.type === 'christmastrees') {
-        const treeSpacing = Math.round(100 * size);
-        const treeSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${treeSpacing}' height='${treeSpacing}' viewBox='0 0 100 100'>
-          <polygon points='50,8 35,35 42,35 30,55 38,55 22,80 78,80 62,55 70,55 58,35 65,35' fill='${color}' opacity='0.9'/>
-          <rect x='45' y='80' width='10' height='12' fill='${color}' opacity='0.7'/>
-          <circle cx='50' cy='15' r='3' fill='${color}' opacity='0.6'/>
-          <circle cx='20' cy='20' r='1.5' fill='${color}' opacity='0.4'/>
-          <circle cx='80' cy='30' r='1.5' fill='${color}' opacity='0.4'/>
-          <circle cx='15' cy='70' r='1.5' fill='${color}' opacity='0.4'/>
-          <circle cx='85' cy='85' r='1.5' fill='${color}' opacity='0.4'/>
-        </svg>`;
-        const treeEncoded = btoa(treeSvg);
-        return `body::before { background-image: url('data:image/svg+xml;base64,${treeEncoded}'); background-size: ${treeSpacing}px ${treeSpacing}px; background-position: ${Math.round(treeSpacing / 4)}px ${Math.round(treeSpacing / 4)}px; opacity: ${opacity}; z-index: -1; }`;
-      }
+        case 'grid':
+          // Fine grid lines (tartan-inspired)
+          return `
+/* Pattern: Grid */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    linear-gradient(${color} 1px, transparent 1px),
+    linear-gradient(90deg, ${color} 1px, transparent 1px);
+  background-size: ${24 * size}px ${24 * size}px;
+  opacity: ${opacity};
+}`;
 
-      // Handle peppermints pattern separately (needs SVG)
-      if (pattern.type === 'peppermints') {
-        const mintSpacing = Math.round(80 * size);
-        const mintSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${mintSpacing}' height='${mintSpacing}' viewBox='0 0 80 80'>
-          <defs>
-            <clipPath id='mintClip'>
-              <circle cx='40' cy='40' r='22'/>
-            </clipPath>
-          </defs>
-          <circle cx='40' cy='40' r='24' fill='#FFFFFF' opacity='0.95'/>
-          <g clip-path='url(#mintClip)'>
-            <path d='M40,18 L40,62 L52,62 L52,18 Z' fill='${color}' opacity='0.9'/>
-            <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(60,40,40)'/>
-            <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(120,40,40)'/>
-            <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(180,40,40)'/>
-            <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(240,40,40)'/>
-            <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(300,40,40)'/>
-          </g>
-          <circle cx='40' cy='40' r='22' fill='none' stroke='#FFFFFF' stroke-width='2' opacity='0.5'/>
-        </svg>`;
-        const mintEncoded = btoa(mintSvg);
-        return `body::before { background-image: url('data:image/svg+xml;base64,${mintEncoded}'); background-size: ${mintSpacing}px ${mintSpacing}px; background-position: ${Math.round(mintSpacing / 4)}px ${Math.round(mintSpacing / 4)}px; opacity: ${opacity}; z-index: -1; }`;
-      }
+        case 'snowflakes':
+          // Scattered snowflake-like pattern (multiple dot sizes)
+          return `
+/* Pattern: Snowflakes */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    radial-gradient(${color} 2px, transparent 2px),
+    radial-gradient(${color} 1px, transparent 1px);
+  background-size: ${50 * size}px ${50 * size}px, ${30 * size}px ${30 * size}px;
+  background-position: 0 0, ${15 * size}px ${15 * size}px;
+  opacity: ${opacity};
+}`;
 
-      // Handle Christmas wrap pattern (pure CSS conic gradients)
-      if (pattern.type === 'christmaswrap') {
-        const s = Math.round(132 * size);
-        const c1 = '#ffffff';
-        const c2 = '#a31e39';
-        const c3 = '#31570e';
-        return `body::before {
-          --s: ${s}px;
-          --c1: ${c1};
-          --c2: ${c2};
-          --c3: ${c3};
-          --_c: #0000, var(--c1) 1deg 79deg, #0000 81deg;
-          --g0: conic-gradient(from 140deg at 50% 87.5%, var(--_c));
-          --g1: conic-gradient(from 140deg at 50% 81.25%, var(--_c));
-          --g2: conic-gradient(from 140deg at 50% 75%, var(--_c));
-          --g3: conic-gradient(at 10% 20%, #0000 75%, var(--c1) 0);
-          background:
-            var(--g0) 0 calc(var(--s) / -4),
-            var(--g0) var(--s) calc(3 * var(--s) / 4),
-            var(--g1),
-            var(--g1) var(--s) var(--s),
-            var(--g2) 0 calc(var(--s) / 4),
-            var(--g2) var(--s) calc(5 * var(--s) / 4),
-            var(--g3) calc(var(--s) / -10) var(--s),
-            var(--g3) calc(9 * var(--s) / 10) calc(2 * var(--s)),
-            repeating-conic-gradient(from 45deg, var(--c2) 0 25%, var(--c3) 0 50%);
-          background-size: calc(2 * var(--s)) calc(2 * var(--s));
-          opacity: ${opacity};
-          z-index: -1;
-        }`;
-      }
+        case 'stars':
+          // Sparse star-like points
+          return `
+/* Pattern: Stars */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    radial-gradient(${color} 1.5px, transparent 1.5px),
+    radial-gradient(${color} 1px, transparent 1px),
+    radial-gradient(${color} 0.5px, transparent 0.5px);
+  background-size: ${80 * size}px ${80 * size}px, ${60 * size}px ${60 * size}px, ${40 * size}px ${40 * size}px;
+  background-position: 0 0, ${30 * size}px ${40 * size}px, ${15 * size}px ${20 * size}px;
+  opacity: ${opacity};
+}`;
 
-      if (pattern.type === 'noise') {
-        const svg = `<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='${opacity}'/></svg>`;
-        return `body::before { background-image: url("data:image/svg+xml,${encodeURIComponent(svg)}"); z-index: -1; }`;
-      }
+        case 'noise':
+          // Subtle noise texture using SVG
+          const noiseSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(#n)" opacity="${opacity}"/></svg>`;
+          const encodedSvg = btoa(noiseSvg);
+          return `
+/* Pattern: Noise */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url('data:image/svg+xml;base64,${encodedSvg}');
+  background-repeat: repeat;
+  opacity: ${opacity * 3};
+}`;
 
-      const p = patterns[pattern.type];
-      if (!p) return '';
-      // Add offset for dots pattern to avoid alignment with ribbon, or use pattern-specific position
-      let positionStyle = '';
-      if (pattern.type === 'dots') {
-        positionStyle = `background-position: ${Math.round(dotSpacing / 3)}px ${Math.round(dotSpacing / 3)}px;`;
-      } else if (p.position) {
-        positionStyle = `background-position: ${p.position};`;
+        case 'giftwrap':
+          // Gift wrapping paper pattern with polka dots and diagonal ribbons
+          return `
+/* Pattern: Gift Wrap */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image:
+    /* Polka dots */
+    radial-gradient(${color} 3px, transparent 3px),
+    radial-gradient(${color} 2px, transparent 2px),
+    /* Diagonal ribbon lines */
+    repeating-linear-gradient(45deg, transparent, transparent 60px, ${color}33 60px, ${color}33 62px),
+    repeating-linear-gradient(-45deg, transparent, transparent 60px, ${color}22 60px, ${color}22 62px);
+  background-size:
+    ${40 * size}px ${40 * size}px,
+    ${25 * size}px ${25 * size}px,
+    100% 100%,
+    100% 100%;
+  background-position:
+    0 0,
+    ${12 * size}px ${12 * size}px,
+    0 0,
+    0 0;
+  opacity: ${opacity};
+}`;
+
+        case 'christmastrees':
+          // Christmas tree pattern using SVG for crisp tree shapes
+          const treeSize = Math.round(60 * size);
+          const treeSpacing = Math.round(100 * size);
+          const treeSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${treeSpacing}' height='${treeSpacing}' viewBox='0 0 100 100'>
+        <polygon points='50,8 35,35 42,35 30,55 38,55 22,80 78,80 62,55 70,55 58,35 65,35' fill='${color}' opacity='0.9'/>
+        <rect x='45' y='80' width='10' height='12' fill='${color}' opacity='0.7'/>
+        <circle cx='50' cy='15' r='3' fill='${color}' opacity='0.6'/>
+        <circle cx='20' cy='20' r='1.5' fill='${color}' opacity='0.4'/>
+        <circle cx='80' cy='30' r='1.5' fill='${color}' opacity='0.4'/>
+        <circle cx='15' cy='70' r='1.5' fill='${color}' opacity='0.4'/>
+        <circle cx='85' cy='85' r='1.5' fill='${color}' opacity='0.4'/>
+      </svg>`;
+          const treeEncoded = btoa(treeSvg);
+          return `
+/* Pattern: Christmas Trees */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url('data:image/svg+xml;base64,${treeEncoded}');
+  background-size: ${treeSpacing}px ${treeSpacing}px;
+  background-position: ${Math.round(treeSpacing / 4)}px ${Math.round(treeSpacing / 4)}px;
+  opacity: ${opacity};
+}`;
+
+        case 'peppermints':
+          // Peppermint candy pattern using SVG for swirl design
+          const mintSpacing = Math.round(80 * size);
+          const mintRadius = Math.round(25 * size);
+          // Create peppermint with red swirls on white background
+          const mintSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${mintSpacing}' height='${mintSpacing}' viewBox='0 0 80 80'>
+        <defs>
+          <clipPath id='mintClip'>
+            <circle cx='40' cy='40' r='22'/>
+          </clipPath>
+        </defs>
+        <circle cx='40' cy='40' r='24' fill='#FFFFFF' opacity='0.95'/>
+        <g clip-path='url(#mintClip)'>
+          <path d='M40,18 L40,62 L52,62 L52,18 Z' fill='${color}' opacity='0.9'/>
+          <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(60,40,40)'/>
+          <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(120,40,40)'/>
+          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(180,40,40)'/>
+          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(240,40,40)'/>
+          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(300,40,40)'/>
+        </g>
+        <circle cx='40' cy='40' r='22' fill='none' stroke='#FFFFFF' stroke-width='2' opacity='0.5'/>
+      </svg>`;
+          const mintEncoded = btoa(mintSvg);
+          return `
+/* Pattern: Peppermints */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url('data:image/svg+xml;base64,${mintEncoded}');
+  background-size: ${mintSpacing}px ${mintSpacing}px;
+  background-position: ${Math.round(mintSpacing / 4)}px ${Math.round(mintSpacing / 4)}px;
+  opacity: ${opacity};
+}`;
+
+        case 'christmaswrap':
+          // Christmas tree wrapping paper pattern using pure CSS conic gradients
+          // Source: css-pattern.com/christmas-tree/
+          const s = Math.round(132 * size);
+          const c1 = '#ffffff';
+          const c2 = '#a31e39';
+          const c3 = '#31570e';
+          return `
+/* Pattern: Christmas Tree Wrap */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  --s: ${s}px;
+  --c1: ${c1};
+  --c2: ${c2};
+  --c3: ${c3};
+  --_c: #0000, var(--c1) 1deg 79deg, #0000 81deg;
+  --g0: conic-gradient(from 140deg at 50% 87.5%, var(--_c));
+  --g1: conic-gradient(from 140deg at 50% 81.25%, var(--_c));
+  --g2: conic-gradient(from 140deg at 50% 75%, var(--_c));
+  --g3: conic-gradient(at 10% 20%, #0000 75%, var(--c1) 0);
+  background:
+    var(--g0) 0 calc(var(--s) / -4),
+    var(--g0) var(--s) calc(3 * var(--s) / 4),
+    var(--g1),
+    var(--g1) var(--s) var(--s),
+    var(--g2) 0 calc(var(--s) / 4),
+    var(--g2) var(--s) calc(5 * var(--s) / 4),
+    var(--g3) calc(var(--s) / -10) var(--s),
+    var(--g3) calc(9 * var(--s) / 10) calc(2 * var(--s)),
+    repeating-conic-gradient(from 45deg, var(--c2) 0 25%, var(--c3) 0 50%);
+  background-size: calc(2 * var(--s)) calc(2 * var(--s));
+  opacity: ${opacity};
+}`;
+
+        default:
+          return '';
       }
-      return `body::before { background-image: ${p.bg}; background-size: ${p.size}; ${positionStyle} opacity: ${opacity}; z-index: -1; }`;
     }
 
     function generateNoiseOverlay() {
-      const svg = `<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>`;
-      return `body::after { background-image: url("data:image/svg+xml,${encodeURIComponent(svg)}"); opacity: 0.035; }`;
+      return `
+/* Premium: Subtle Noise Texture Overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}`;
     }
 
     function generateGlowOverlay(accentColor) {
-      return `body::after { background-image: radial-gradient(ellipse 80% 50% at 50% 0%, ${accentColor} 0%, transparent 50%), radial-gradient(ellipse 60% 40% at 20% 100%, ${accentColor} 0%, transparent 40%); opacity: 0.08; }`;
+      return `
+/* Premium: Ambient Radial Glow Overlay */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.08;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% 0%, ${accentColor} 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 20% 100%, ${accentColor} 0%, transparent 40%);
+}`;
     }
 
-    // === EFFECTS GENERATORS (mirrors theme-injector.ts) ===
+    // === EFFECTS GENERATORS (synced from theme-injector.ts) ===
     function generateEffectsCSS(effects, accentColor) {
       if (!effects || !effectsEnabled) return '';
       const cssBlocks = [];
@@ -665,9 +828,13 @@
         const duration = snow.speed === 'fast' ? 8 : snow.speed === 'medium' ? 12 : 18;
         const snowColor = snow.snowColor || 'white';
 
+        // Effects layer base styles
+        cssBlocks.push(`.themegpt-effects-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }`);
+
         if (style === 'gradient') {
-          // Pattern 3: Pure CSS radial gradient snowfall (no DOM elements)
+          // Pattern 3: Pure CSS radial gradient snowfall (no DOM elements needed)
           cssBlocks.push(`
+/* Premium Effect: Gradient Snowfall - Pure CSS */
 .themegpt-snow-gradient {
   position: fixed;
   top: -600px;
@@ -684,66 +851,104 @@
 @keyframes themegpt-snow-gradient {
   0% { background-position: 0px 0px; }
   100% { background-position: 500px 1000px; }
-}`);
+}
+@media (prefers-reduced-motion: reduce) { .themegpt-snow-gradient { animation: none; } }`);
         } else if (style === 'shaking') {
-          // Pattern 2: Snowflakes with horizontal shake
-          let snowflakesCSS = '';
-          const positions = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 25, 65];
-          const delays = [[0,0], [1,1], [6,0.5], [4,2], [2,2], [8,3], [6,2], [2.5,1], [1,0], [3,1.5], [2,0], [4,2.5]];
-          for (let i = 0; i < Math.min(count, 12); i++) {
-            const left = positions[i] || Math.random() * 100;
-            const [fallDelay, shakeDelay] = delays[i] || [Math.random() * 8, Math.random() * 3];
-            snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${fallDelay}s,${shakeDelay}s;}`;
-          }
+          // Pattern 2: CSSnowflakes - exact implementation from pajasevi.github.io/CSSnowflakes
           cssBlocks.push(`
-@keyframes themegpt-snowfall-shake {
+/* Premium Effect: Shaking Snowfall - CSSnowflakes */
+.themegpt-snowflake {
+  color: ${snowColor};
+  font-size: 1em;
+  font-family: Arial, sans-serif;
+  text-shadow: 0 0 5px #000;
+}
+@-webkit-keyframes themegpt-snowflakes-fall {
   0% { top: -10%; }
   100% { top: 100%; }
 }
-@keyframes themegpt-snow-shake {
+@-webkit-keyframes themegpt-snowflakes-shake {
+  0%, 100% { -webkit-transform: translateX(0); transform: translateX(0); }
+  50% { -webkit-transform: translateX(80px); transform: translateX(80px); }
+}
+@keyframes themegpt-snowflakes-fall {
+  0% { top: -10%; }
+  100% { top: 100%; }
+}
+@keyframes themegpt-snowflakes-shake {
   0%, 100% { transform: translateX(0); }
   50% { transform: translateX(80px); }
 }
 .themegpt-snowflake {
   position: fixed;
   top: -10%;
-  width: 8px;
-  height: 8px;
-  background: ${snowColor};
-  border-radius: 50%;
-  box-shadow: 0 0 6px ${snowColor};
-  animation: themegpt-snowfall-shake ${duration}s linear infinite, themegpt-snow-shake 3s ease-in-out infinite;
-  z-index: -1;
-  pointer-events: none;
+  z-index: 9999;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+  -webkit-animation-name: themegpt-snowflakes-fall, themegpt-snowflakes-shake;
+  -webkit-animation-duration: 10s, 3s;
+  -webkit-animation-timing-function: linear, ease-in-out;
+  -webkit-animation-iteration-count: infinite, infinite;
+  -webkit-animation-play-state: running, running;
+  animation-name: themegpt-snowflakes-fall, themegpt-snowflakes-shake;
+  animation-duration: 10s, 3s;
+  animation-timing-function: linear, ease-in-out;
+  animation-iteration-count: infinite, infinite;
+  animation-play-state: running, running;
 }
-${snowflakesCSS}`);
+.themegpt-snow-0 { left: 1%; -webkit-animation-delay: 0s, 0s; animation-delay: 0s, 0s; }
+.themegpt-snow-1 { left: 10%; -webkit-animation-delay: 1s, 1s; animation-delay: 1s, 1s; }
+.themegpt-snow-2 { left: 20%; -webkit-animation-delay: 6s, 0.5s; animation-delay: 6s, 0.5s; }
+.themegpt-snow-3 { left: 30%; -webkit-animation-delay: 4s, 2s; animation-delay: 4s, 2s; }
+.themegpt-snow-4 { left: 40%; -webkit-animation-delay: 2s, 2s; animation-delay: 2s, 2s; }
+.themegpt-snow-5 { left: 50%; -webkit-animation-delay: 8s, 3s; animation-delay: 8s, 3s; }
+.themegpt-snow-6 { left: 60%; -webkit-animation-delay: 6s, 2s; animation-delay: 6s, 2s; }
+.themegpt-snow-7 { left: 70%; -webkit-animation-delay: 2.5s, 1s; animation-delay: 2.5s, 1s; }
+.themegpt-snow-8 { left: 80%; -webkit-animation-delay: 1s, 0s; animation-delay: 1s, 0s; }
+.themegpt-snow-9 { left: 90%; -webkit-animation-delay: 3s, 1.5s; animation-delay: 3s, 1.5s; }
+.themegpt-snow-10 { left: 25%; -webkit-animation-delay: 2s, 0s; animation-delay: 2s, 0s; }
+.themegpt-snow-11 { left: 65%; -webkit-animation-delay: 4s, 2.5s; animation-delay: 4s, 2.5s; }`);
         } else {
-          // Pattern 1 (gentle): Slow, gentle descent with diagonal drift
+          // Pattern 1 (gentle): Elegant falling snowflakes with cross pattern and rotation
+          // Based on CodePen by mark_sottek - converted from SCSS to dynamic CSS
           let snowflakesCSS = '';
           for (let i = 0; i < count; i++) {
-            const left = Math.random() * 100;
-            const delay = Math.random() * duration;
-            const size = 2 + Math.random() * 4;
-            const drift = 5 + Math.random() * 10; // Always drift right (diagonal-fall style)
-            snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${delay}s;width:${size}px;height:${size}px;--drift:${drift}vw;}`;
+            const flakeWidth = 5 + Math.random() * 15;
+            const flakeVertical = -700 + Math.random() * 700;
+            const flakeHorizontal = Math.random() * 100;
+            const flakeBlur = 2 + Math.random() * 2;
+            const flakeOpacity = (50 + Math.random() * 50) * 0.01;
+            const flakeDelay = 15 + Math.random() * 55;
+            const rotateX = 10 + Math.random() * 40;
+            const rotateY = 10 + Math.random() * 40;
+            snowflakesCSS += `.themegpt-snow-${i}{width:${flakeWidth.toFixed(1)}px;height:${flakeWidth.toFixed(1)}px;top:${flakeVertical.toFixed(0)}px;left:${flakeHorizontal.toFixed(1)}%;opacity:${flakeOpacity.toFixed(2)};filter:blur(${flakeBlur.toFixed(1)}px);animation:themegpt-flakes-${i} ${flakeDelay.toFixed(0)}s linear infinite;}
+@keyframes themegpt-flakes-${i}{100%{transform:translateY(1000px) rotateX(${rotateX.toFixed(0)}deg) rotateY(${rotateY.toFixed(0)}deg);opacity:0;}}`;
           }
           cssBlocks.push(`
-@keyframes themegpt-snowfall-gentle {
-  0% { opacity: 0; transform: translate(0, 0); }
-  10% { opacity: 0.8; }
-  100% { opacity: 0.25; transform: translate(var(--drift, 10vw), 100vh); }
+/* Premium Effect: Gentle Snowfall - Cross-pattern flakes with rotation */
+.themegpt-snow-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 .themegpt-snowflake {
-  position: fixed;
-  top: -10px;
-  background: ${snowColor};
+  position: absolute;
   border-radius: 50%;
-  animation: themegpt-snowfall-gentle ${duration}s linear infinite;
-  box-shadow: 0 0 4px ${snowColor};
+  transform: translateY(0) rotateX(0) rotateY(0);
+  background-image:
+    linear-gradient(180deg, rgba(255,255,255,0) 30%, ${snowColor} 50%, ${snowColor} 60%, rgba(255,255,255,0) 60%),
+    linear-gradient(90deg, rgba(255,255,255,0) 30%, ${snowColor} 50%, ${snowColor} 60%, rgba(255,255,255,0) 60%),
+    linear-gradient(45deg, rgba(255,255,255,0) 33%, ${snowColor} 53%, ${snowColor} 57%, rgba(255,255,255,0) 65%),
+    linear-gradient(135deg, rgba(255,255,255,0) 33%, ${snowColor} 53%, ${snowColor} 57%, rgba(255,255,255,0) 65%);
   z-index: -1;
   pointer-events: none;
 }
-${snowflakesCSS}`);
+${snowflakesCSS}
+@media (prefers-reduced-motion: reduce) { .themegpt-snowflake { animation: none; opacity: 0.3; } }`);
         }
       }
 
@@ -783,6 +988,7 @@ ${snowflakesCSS}`);
   --peak-opacity: 0.8;
 }
 ${starsCSS}
+@media (prefers-reduced-motion: reduce) { .themegpt-star { animation: none; opacity: 0.6; } }
 ${stars.includeShootingStars ? `
 @keyframes themegpt-shooting {
   0% { transform: translateX(0) translateY(0); opacity: 1; }
@@ -1152,11 +1358,19 @@ ${sparklesCSS}
           const gradientDiv = document.createElement('div');
           gradientDiv.className = 'themegpt-snow-gradient';
           container.appendChild(gradientDiv);
+        } else if (style === 'shaking') {
+          // Shaking style: 12 snowflakes with ❅ and ❆ text characters (CSSnowflakes pattern)
+          const snowflakeChars = ['❅', '❆'];
+          for (let i = 0; i < 12; i++) {
+            const flake = document.createElement('div');
+            flake.className = `themegpt-snowflake themegpt-snow-${i}`;
+            flake.textContent = snowflakeChars[i % 2];
+            container.appendChild(flake);
+          }
         } else {
-          // Gentle and shaking styles use individual snowflake elements
-          const count = style === 'shaking' ? 12 :
-                        (effects.animatedSnowfall.density === 'heavy' ? 40 :
-                         effects.animatedSnowfall.density === 'medium' ? 25 : 12);
+          // Gentle style uses individual div elements
+          const count = effects.animatedSnowfall.density === 'heavy' ? 40 :
+                        effects.animatedSnowfall.density === 'medium' ? 25 : 12;
           for (let i = 0; i < count; i++) {
             const flake = document.createElement('div');
             flake.className = `themegpt-snowflake themegpt-snow-${i}`;

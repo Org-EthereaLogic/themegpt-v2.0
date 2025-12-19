@@ -10,9 +10,15 @@ import mascotUrl from "url:../assets/mascot-32.png"
 
 const storage = new Storage({ area: "local" })
 
+// DEV MODE: Toggle locally for testing (must remain `false` for production builds)
+const DEV_UNLOCK_ALL_PREMIUM = false
+
 export default function Popup() {
   const [activeThemeId, setActiveThemeId] = useState<string>("system")
-  const [unlockedThemeIds, setUnlockedThemeIds] = useState<string[]>([])
+  // In dev mode, initialize with all premium theme IDs
+  const [unlockedThemeIds, setUnlockedThemeIds] = useState<string[]>(
+    DEV_UNLOCK_ALL_PREMIUM ? DEFAULT_THEMES.filter(t => t.isPremium).map(t => t.id) : []
+  )
   
   // --- License Logic ---
   const [licenseKey, setLicenseKey] = useState("")

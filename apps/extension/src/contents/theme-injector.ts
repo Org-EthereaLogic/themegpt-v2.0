@@ -33,7 +33,11 @@ function generatePatternCSS(pattern: ThemePattern, accentColor: string): string 
 
   switch (pattern.type) {
     case 'dots':
-      // Subtle dot grid pattern
+      // Polka dot pattern - size controls both dot diameter and spacing
+      const dotRadius = Math.max(2, Math.round(2.5 * size))
+      const dotSpacing = Math.round(25 * size)
+      // Offset pattern to avoid alignment with UI elements like sidebar ribbon
+      const dotOffset = Math.round(dotSpacing / 3)
       return `
 /* Pattern: Dots */
 body::before {
@@ -44,9 +48,10 @@ body::before {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 0;
-  background-image: radial-gradient(${color} 1px, transparent 1px);
-  background-size: ${20 * size}px ${20 * size}px;
+  z-index: -1;
+  background-image: radial-gradient(${color} ${dotRadius}px, transparent ${dotRadius}px);
+  background-size: ${dotSpacing}px ${dotSpacing}px;
+  background-position: ${dotOffset}px ${dotOffset}px;
   opacity: ${opacity};
 }`
 
@@ -62,7 +67,7 @@ body::before {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   background-image:
     linear-gradient(${color} 1px, transparent 1px),
     linear-gradient(90deg, ${color} 1px, transparent 1px);
@@ -82,7 +87,7 @@ body::before {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   background-image:
     radial-gradient(${color} 2px, transparent 2px),
     radial-gradient(${color} 1px, transparent 1px);
@@ -103,7 +108,7 @@ body::before {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   background-image:
     radial-gradient(${color} 1.5px, transparent 1.5px),
     radial-gradient(${color} 1px, transparent 1px),
@@ -127,7 +132,7 @@ body::before {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   background-image: url('data:image/svg+xml;base64,${encodedSvg}');
   background-repeat: repeat;
   opacity: ${opacity * 3};
@@ -145,7 +150,7 @@ body::before {
   right: 0;
   bottom: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   background-image:
     /* Polka dots */
     radial-gradient(${color} 3px, transparent 3px),
@@ -163,6 +168,118 @@ body::before {
     ${12 * size}px ${12 * size}px,
     0 0,
     0 0;
+  opacity: ${opacity};
+}`
+
+    case 'christmastrees':
+      // Christmas tree pattern using SVG for crisp tree shapes
+      const treeSize = Math.round(60 * size)
+      const treeSpacing = Math.round(100 * size)
+      const treeSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${treeSpacing}' height='${treeSpacing}' viewBox='0 0 100 100'>
+        <polygon points='50,8 35,35 42,35 30,55 38,55 22,80 78,80 62,55 70,55 58,35 65,35' fill='${color}' opacity='0.9'/>
+        <rect x='45' y='80' width='10' height='12' fill='${color}' opacity='0.7'/>
+        <circle cx='50' cy='15' r='3' fill='${color}' opacity='0.6'/>
+        <circle cx='20' cy='20' r='1.5' fill='${color}' opacity='0.4'/>
+        <circle cx='80' cy='30' r='1.5' fill='${color}' opacity='0.4'/>
+        <circle cx='15' cy='70' r='1.5' fill='${color}' opacity='0.4'/>
+        <circle cx='85' cy='85' r='1.5' fill='${color}' opacity='0.4'/>
+      </svg>`
+      const treeEncoded = btoa(treeSvg)
+      return `
+/* Pattern: Christmas Trees */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url('data:image/svg+xml;base64,${treeEncoded}');
+  background-size: ${treeSpacing}px ${treeSpacing}px;
+  background-position: ${Math.round(treeSpacing / 4)}px ${Math.round(treeSpacing / 4)}px;
+  opacity: ${opacity};
+}`
+
+    case 'peppermints':
+      // Peppermint candy pattern using SVG for swirl design
+      const mintSpacing = Math.round(80 * size)
+      const mintRadius = Math.round(25 * size)
+      // Create peppermint with red swirls on white background
+      const mintSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${mintSpacing}' height='${mintSpacing}' viewBox='0 0 80 80'>
+        <defs>
+          <clipPath id='mintClip'>
+            <circle cx='40' cy='40' r='22'/>
+          </clipPath>
+        </defs>
+        <circle cx='40' cy='40' r='24' fill='#FFFFFF' opacity='0.95'/>
+        <g clip-path='url(#mintClip)'>
+          <path d='M40,18 L40,62 L52,62 L52,18 Z' fill='${color}' opacity='0.9'/>
+          <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(60,40,40)'/>
+          <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(120,40,40)'/>
+          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(180,40,40)'/>
+          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(240,40,40)'/>
+          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(300,40,40)'/>
+        </g>
+        <circle cx='40' cy='40' r='22' fill='none' stroke='#FFFFFF' stroke-width='2' opacity='0.5'/>
+      </svg>`
+      const mintEncoded = btoa(mintSvg)
+      return `
+/* Pattern: Peppermints */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: url('data:image/svg+xml;base64,${mintEncoded}');
+  background-size: ${mintSpacing}px ${mintSpacing}px;
+  background-position: ${Math.round(mintSpacing / 4)}px ${Math.round(mintSpacing / 4)}px;
+  opacity: ${opacity};
+}`
+
+    case 'christmaswrap':
+      // Christmas tree wrapping paper pattern using pure CSS conic gradients
+      // Source: css-pattern.com/christmas-tree/
+      const s = Math.round(132 * size)
+      const c1 = '#ffffff'
+      const c2 = '#a31e39'
+      const c3 = '#31570e'
+      return `
+/* Pattern: Christmas Tree Wrap */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  --s: ${s}px;
+  --c1: ${c1};
+  --c2: ${c2};
+  --c3: ${c3};
+  --_c: #0000, var(--c1) 1deg 79deg, #0000 81deg;
+  --g0: conic-gradient(from 140deg at 50% 87.5%, var(--_c));
+  --g1: conic-gradient(from 140deg at 50% 81.25%, var(--_c));
+  --g2: conic-gradient(from 140deg at 50% 75%, var(--_c));
+  --g3: conic-gradient(at 10% 20%, #0000 75%, var(--c1) 0);
+  background:
+    var(--g0) 0 calc(var(--s) / -4),
+    var(--g0) var(--s) calc(3 * var(--s) / 4),
+    var(--g1),
+    var(--g1) var(--s) var(--s),
+    var(--g2) 0 calc(var(--s) / 4),
+    var(--g2) var(--s) calc(5 * var(--s) / 4),
+    var(--g3) calc(var(--s) / -10) var(--s),
+    var(--g3) calc(9 * var(--s) / 10) calc(2 * var(--s)),
+    repeating-conic-gradient(from 45deg, var(--c2) 0 25%, var(--c3) 0 50%);
+  background-size: calc(2 * var(--s)) calc(2 * var(--s));
   opacity: ${opacity};
 }`
 
@@ -222,45 +339,106 @@ body::after {
 function generateEffectsCSS(effects: ThemeEffects, accentColor: string): string {
   const cssBlocks: string[] = []
 
-  // Animated snowfall effect
+  // Animated snowfall effect - supports three styles: gentle, shaking, gradient
   if (effects.animatedSnowfall?.enabled) {
     const snow = effects.animatedSnowfall
+    const style = snow.style || 'gentle'
     const count = snow.density === 'heavy' ? 40 : snow.density === 'medium' ? 25 : 12
     const duration = snow.speed === 'fast' ? 8 : snow.speed === 'medium' ? 12 : 18
-    // Support custom snow color for light backgrounds
     const snowColor = snow.snowColor || 'white'
-    const isLightSnow = snowColor === 'white' || snowColor === '#FFFFFF' || snowColor === '#fff'
-    const shadowColor = isLightSnow ? 'rgba(255,255,255,0.5)' : 'rgba(100,140,180,0.4)'
 
-    let snowflakesCSS = ''
-    for (let i = 0; i < count; i++) {
-      const left = Math.random() * 100
-      const delay = Math.random() * duration
-      const size = 2 + Math.random() * 4
-      const drift = -15 + Math.random() * 30
-      snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${delay}s;width:${size}px;height:${size}px;--drift:${drift}px;}`
-    }
+    // Effects layer base styles
+    cssBlocks.push(`.themegpt-effects-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }`)
 
-    cssBlocks.push(`
-/* Premium Effect: Animated Snowfall */
-@keyframes themegpt-snowfall {
-  0% { transform: translateY(-10px) translateX(0); opacity: 0; }
-  10% { opacity: 0.9; }
-  90% { opacity: 0.9; }
-  100% { transform: translateY(100vh) translateX(var(--drift, 20px)); opacity: 0; }
+    if (style === 'gradient') {
+      // Pattern 3: Pure CSS radial gradient snowfall (no DOM elements needed)
+      // Single element with 30 radial-gradient snowflakes, animated background position
+      cssBlocks.push(`
+/* Premium Effect: Gradient Snowfall - Pure CSS */
+.themegpt-snow-gradient {
+  position: fixed;
+  top: -600px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  z-index: -1;
+  background-image: radial-gradient(5px 5px at 34px 172px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 86px 25px, ${snowColor} 50%, transparent 50%), radial-gradient(5px 5px at 388px 47px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 53px 303px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 373px 475px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 196px 261px, ${snowColor} 50%, transparent 50%), radial-gradient(5px 5px at 434px 424px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 234px 213px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 393px 356px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 537px 497px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 151px 362px, ${snowColor} 50%, transparent 50%), radial-gradient(6px 6px at 110px 99px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 270px 111px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 351px 424px, ${snowColor} 50%, transparent 50%), radial-gradient(5px 5px at 459px 279px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 584px 126px, ${snowColor} 50%, transparent 50%), radial-gradient(6px 6px at 303px 486px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 132px 292px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 120px 162px, ${snowColor} 50%, transparent 50%), radial-gradient(5px 5px at 396px 460px, ${snowColor} 50%, transparent 50%), radial-gradient(5px 5px at 169px 508px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 177px 298px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 575px 410px, ${snowColor} 50%, transparent 50%), radial-gradient(6px 6px at 29px 140px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 82px 378px, ${snowColor} 50%, transparent 50%), radial-gradient(4px 4px at 482px 473px, ${snowColor} 50%, transparent 50%), radial-gradient(6px 6px at 56px 24px, ${snowColor} 50%, transparent 50%), radial-gradient(3px 3px at 157px 73px, ${snowColor} 50%, transparent 50%), radial-gradient(6px 6px at 97px 496px, ${snowColor} 50%, transparent 50%), radial-gradient(6px 6px at 240px 225px, ${snowColor} 50%, transparent 50%);
+  background-size: 600px 600px;
+  animation: themegpt-snow-gradient ${duration}s linear infinite;
+  opacity: 0.7;
 }
-.themegpt-effects-layer { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+@keyframes themegpt-snow-gradient {
+  0% { background-position: 0px 0px; }
+  100% { background-position: 500px 1000px; }
+}
+@media (prefers-reduced-motion: reduce) { .themegpt-snow-gradient { animation: none; } }`)
+    } else if (style === 'shaking') {
+      // Pattern 2: Snowflakes with horizontal shake effect
+      // 12 snowflakes with staggered positions, vertical descent + 80px horizontal shake
+      let snowflakesCSS = ''
+      const positions = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 25, 65]
+      const delays: [number, number][] = [[0,0], [1,1], [6,0.5], [4,2], [2,2], [8,3], [6,2], [2.5,1], [1,0], [3,1.5], [2,0], [4,2.5]]
+      for (let i = 0; i < Math.min(count, 12); i++) {
+        const left = positions[i] || Math.random() * 100
+        const [fallDelay, shakeDelay] = delays[i] || [Math.random() * 8, Math.random() * 3]
+        snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${fallDelay}s,${shakeDelay}s;}`
+      }
+      cssBlocks.push(`
+/* Premium Effect: Shaking Snowfall */
+@keyframes themegpt-snowfall-shake {
+  0% { top: -10%; }
+  100% { top: 100%; }
+}
+@keyframes themegpt-snow-shake {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(80px); }
+}
 .themegpt-snowflake {
-  position: absolute;
-  top: -10px;
+  position: fixed;
+  top: -10%;
+  width: 8px;
+  height: 8px;
   background: ${snowColor};
   border-radius: 50%;
-  animation: themegpt-snowfall ${duration}s linear infinite;
-  box-shadow: 0 0 4px ${shadowColor};
+  box-shadow: 0 0 6px ${snowColor};
+  animation: themegpt-snowfall-shake ${duration}s linear infinite, themegpt-snow-shake 3s ease-in-out infinite;
   z-index: -1;
+  pointer-events: none;
 }
 ${snowflakesCSS}
 @media (prefers-reduced-motion: reduce) { .themegpt-snowflake { animation: none; opacity: 0.3; } }`)
+    } else {
+      // Pattern 1 (gentle): Slow, gentle descent with diagonal drift
+      // Opacity fades from 80% to 25%, drift range 5-15vw to the right
+      let snowflakesCSS = ''
+      for (let i = 0; i < count; i++) {
+        const left = Math.random() * 100
+        const delay = Math.random() * duration
+        const size = 2 + Math.random() * 4
+        const drift = 5 + Math.random() * 10 // Always drift right (diagonal-fall style)
+        snowflakesCSS += `.themegpt-snow-${i}{left:${left}%;animation-delay:${delay}s;width:${size}px;height:${size}px;--drift:${drift}vw;}`
+      }
+      cssBlocks.push(`
+/* Premium Effect: Gentle Snowfall */
+@keyframes themegpt-snowfall-gentle {
+  0% { opacity: 0; transform: translate(0, 0); }
+  10% { opacity: 0.8; }
+  100% { opacity: 0.25; transform: translate(var(--drift, 10vw), 100vh); }
+}
+.themegpt-snowflake {
+  position: fixed;
+  top: -10px;
+  background: ${snowColor};
+  border-radius: 50%;
+  animation: themegpt-snowfall-gentle ${duration}s linear infinite;
+  box-shadow: 0 0 4px ${snowColor};
+  z-index: -1;
+  pointer-events: none;
+}
+${snowflakesCSS}
+@media (prefers-reduced-motion: reduce) { .themegpt-snowflake { animation: none; opacity: 0.3; } }`)
+    }
   }
 
   // Twinkling stars effect
@@ -591,6 +769,87 @@ ${sparklesCSS}
 }`)
   }
 
+  if (effects.seasonalDecorations?.ribbonBow) {
+    const ribbonColor = effects.seasonalDecorations.ribbonColor || '#FFFFFF'
+    cssBlocks.push(`
+/* Premium Effect: Gift Ribbon with Bow */
+.themegpt-ribbon-vertical {
+  position: fixed;
+  left: 260px;
+  top: 0;
+  bottom: 0;
+  width: 24px;
+  pointer-events: none;
+  z-index: 5;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    ${ribbonColor}15 10%,
+    ${ribbonColor}40 25%,
+    ${ribbonColor}60 50%,
+    ${ribbonColor}40 75%,
+    ${ribbonColor}15 90%,
+    transparent 100%);
+  box-shadow: 0 0 8px ${ribbonColor}30;
+}
+.themegpt-bow {
+  position: fixed;
+  left: 236px;
+  top: 80px;
+  width: 72px;
+  height: 48px;
+  pointer-events: none;
+  z-index: 6;
+}
+.themegpt-bow::before,
+.themegpt-bow::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 20px;
+  border-radius: 50% 50% 50% 50%;
+  background: linear-gradient(135deg, ${ribbonColor}90 0%, ${ribbonColor}60 100%);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+.themegpt-bow::before {
+  left: 4px;
+  top: 14px;
+  transform: rotate(-25deg);
+}
+.themegpt-bow::after {
+  right: 4px;
+  top: 14px;
+  transform: rotate(25deg);
+}
+.themegpt-bow-knot {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 16px;
+  height: 14px;
+  background: ${ribbonColor};
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.themegpt-bow-tail-left,
+.themegpt-bow-tail-right {
+  position: absolute;
+  top: 32px;
+  width: 10px;
+  height: 30px;
+  background: linear-gradient(180deg, ${ribbonColor}80 0%, ${ribbonColor}50 100%);
+  border-radius: 0 0 4px 4px;
+}
+.themegpt-bow-tail-left {
+  left: 24px;
+  transform: rotate(-8deg);
+}
+.themegpt-bow-tail-right {
+  right: 24px;
+  transform: rotate(8deg);
+}`)
+  }
+
   return cssBlocks.join('\n')
 }
 
@@ -608,14 +867,25 @@ function createEffectsElements(effects: ThemeEffects): void {
   container.id = 'themegpt-effects'
   container.className = 'themegpt-effects-layer'
 
-  // Add snowflakes
+  // Add snowflakes based on style
   if (effects.animatedSnowfall?.enabled) {
-    const count = effects.animatedSnowfall.density === 'heavy' ? 40 :
-                  effects.animatedSnowfall.density === 'medium' ? 25 : 12
-    for (let i = 0; i < count; i++) {
-      const flake = document.createElement('div')
-      flake.className = `themegpt-snowflake themegpt-snow-${i}`
-      container.appendChild(flake)
+    const style = effects.animatedSnowfall.style || 'gentle'
+
+    if (style === 'gradient') {
+      // Gradient style uses a single div with CSS background animation
+      const gradientDiv = document.createElement('div')
+      gradientDiv.className = 'themegpt-snow-gradient'
+      container.appendChild(gradientDiv)
+    } else {
+      // Gentle and shaking styles use individual snowflake elements
+      const count = style === 'shaking' ? 12 :
+                    (effects.animatedSnowfall.density === 'heavy' ? 40 :
+                     effects.animatedSnowfall.density === 'medium' ? 25 : 12)
+      for (let i = 0; i < count; i++) {
+        const flake = document.createElement('div')
+        flake.className = `themegpt-snowflake themegpt-snow-${i}`
+        container.appendChild(flake)
+      }
     }
   }
 
@@ -704,6 +974,26 @@ function createEffectsElements(effects: ThemeEffects): void {
     const condensation = document.createElement('div')
     condensation.className = 'themegpt-condensation'
     container.appendChild(condensation)
+  }
+  if (effects.seasonalDecorations?.ribbonBow) {
+    // Vertical ribbon at sidebar edge
+    const ribbon = document.createElement('div')
+    ribbon.className = 'themegpt-ribbon-vertical'
+    container.appendChild(ribbon)
+
+    // Bow at top of ribbon
+    const bow = document.createElement('div')
+    bow.className = 'themegpt-bow'
+    const knot = document.createElement('div')
+    knot.className = 'themegpt-bow-knot'
+    const tailLeft = document.createElement('div')
+    tailLeft.className = 'themegpt-bow-tail-left'
+    const tailRight = document.createElement('div')
+    tailRight.className = 'themegpt-bow-tail-right'
+    bow.appendChild(knot)
+    bow.appendChild(tailLeft)
+    bow.appendChild(tailRight)
+    container.appendChild(bow)
   }
 
   if (container.children.length > 0) {

@@ -17,7 +17,7 @@ export interface TokenStats {
   lastUpdated: number;
 }
 
-export type PatternType = 'dots' | 'grid' | 'snowflakes' | 'stars' | 'noise' | 'giftwrap';
+export type PatternType = 'dots' | 'grid' | 'snowflakes' | 'stars' | 'noise' | 'giftwrap' | 'christmastrees' | 'peppermints' | 'christmaswrap';
 
 export interface ThemePattern {
   type: PatternType;
@@ -32,6 +32,7 @@ export interface AnimatedSnowfall {
   density: 'light' | 'medium' | 'heavy';
   speed: 'slow' | 'medium' | 'fast';
   snowColor?: string; // Optional color for light backgrounds (default: white)
+  style?: 'gentle' | 'shaking' | 'gradient'; // Animation style (default: gentle)
 }
 
 export interface TwinklingStars {
@@ -65,6 +66,8 @@ export interface SeasonalDecorations {
   sparkleOverlay?: boolean; // Subtle festive sparkles
   sparkleColor?: string;    // Color for sparkles (default: white, use red for light backgrounds)
   frostedGlass?: boolean;   // Full frosted window pane effect with blur and ice crystals
+  ribbonBow?: boolean;      // Vertical ribbon with bow at sidebar edge
+  ribbonColor?: string;     // Color for ribbon (default: white)
 }
 
 export interface ThemeEffects {
@@ -198,7 +201,7 @@ export const DEFAULT_THEMES: Theme[] = [
     noiseOverlay: true,
     effects: {
       treeSilhouettes: { enabled: true, style: 'christmas', density: 'few', withOrnaments: true },
-      animatedSnowfall: { enabled: true, density: 'light', speed: 'slow' },
+      animatedSnowfall: { enabled: true, density: 'light', speed: 'slow', style: 'gentle' },
     },
   },
   {
@@ -215,7 +218,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', snowColor: '#B8D4E8' },
+      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', snowColor: '#B8D4E8', style: 'gradient' },
       seasonalDecorations: { frostedGlass: true },
     },
   },
@@ -318,7 +321,7 @@ export const DEFAULT_THEMES: Theme[] = [
     glowOverlay: true,
     pattern: { type: 'snowflakes', opacity: 0.04, size: 1.2 },
     effects: {
-      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow' },
+      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', style: 'gentle' },
       twinklingStars: { enabled: true, count: 'sparse', starColor: '#E0F2FE', animationDuration: 12 },
       seasonalDecorations: { frostEdge: true },
     },
@@ -328,22 +331,64 @@ export const DEFAULT_THEMES: Theme[] = [
     name: 'Holiday Gift Wrapping',
     category: 'christmas',
     colors: {
-      '--cgpt-bg': '#0D1F12',
-      '--cgpt-surface': '#14291A',
-      '--cgpt-text': '#E8F5E9',
-      '--cgpt-text-muted': '#A5D6A7',
-      '--cgpt-border': '#1B5E20',
-      '--cgpt-accent': '#EF5350',
+      '--cgpt-bg': '#B83A4B',
+      '--cgpt-surface': '#B83A4B90',
+      '--cgpt-text': '#FFF8F5',
+      '--cgpt-text-muted': '#FFE8E8',
+      '--cgpt-border': '#9A3040',
+      '--cgpt-accent': '#FFF8F5',
     },
     isPremium: true,
     pattern: {
-      type: 'giftwrap',
-      opacity: 0.08,
-      color: '#EF5350',
+      type: 'dots',
+      opacity: 0.35,
+      color: '#FFF8F5',
+      size: 3.0,
+    },
+    effects: {
+      seasonalDecorations: { ribbonBow: true, ribbonColor: '#FFF8F5' },
+    },
+  },
+  {
+    id: 'sage-forest-gift',
+    name: 'Sage Forest Gift',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#9DB4A0',
+      '--cgpt-surface': '#9DB4A090',
+      '--cgpt-text': '#FFFFFF',
+      '--cgpt-text-muted': '#F0F5F0',
+      '--cgpt-border': '#7A9A7E',
+      '--cgpt-accent': '#FFFFFF',
+    },
+    isPremium: true,
+    pattern: {
+      type: 'christmastrees',
+      opacity: 0.5,
+      color: '#FFFFFF',
       size: 1.2,
     },
     effects: {
-      seasonalDecorations: { sparkleOverlay: true },
+      seasonalDecorations: { ribbonBow: true, ribbonColor: '#FFFFFF' },
+    },
+  },
+  {
+    id: 'festive-tree-gift',
+    name: 'Festive Tree Gift',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#a31e39',
+      '--cgpt-surface': '#0A0A0A50',
+      '--cgpt-text': '#FFF8E1',
+      '--cgpt-text-muted': '#D4C8B0',
+      '--cgpt-border': '#FFFFFF30',
+      '--cgpt-accent': '#FFD700',
+    },
+    isPremium: true,
+    pattern: {
+      type: 'christmaswrap',
+      opacity: 1.0,
+      size: 1.0,
     },
   },
   {
@@ -380,7 +425,7 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      animatedSnowfall: { enabled: true, density: 'heavy', speed: 'medium' },
+      animatedSnowfall: { enabled: true, density: 'heavy', speed: 'medium', style: 'shaking' },
       seasonalDecorations: { frostEdge: true },
     },
   },
@@ -438,7 +483,6 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     noiseOverlay: true,
     glowOverlay: true,
-    pattern: { type: 'grid', opacity: 0.08, color: '#33FF33', size: 0.5 },
   },
   {
     id: 'tomorrow-night-blue',

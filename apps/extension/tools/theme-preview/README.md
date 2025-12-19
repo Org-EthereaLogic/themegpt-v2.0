@@ -5,7 +5,14 @@ Standalone HTML mockup for real-time theme visualization and quality verificatio
 ## Quick Start
 
 ```bash
-# Open in browser (from project root)
+# Start local server (recommended for verification features)
+cd apps/extension/tools/theme-preview
+python3 -m http.server 8889
+
+# Open in browser
+open http://localhost:8889/index.html
+
+# Or open directly (file:// - some features may be limited)
 open apps/extension/tools/theme-preview/index.html
 ```
 
@@ -56,17 +63,81 @@ interface Theme {
   colors: { /* CSS variables */ };
   isPremium: boolean;
   pattern?: {          // Background pattern (body::before)
-    type: 'dots' | 'grid' | 'snowflakes' | 'stars' | 'noise';
+    type: 'dots' | 'grid' | 'snowflakes' | 'stars' | 'noise' | 'giftwrap' | 'christmastrees' | 'peppermints' | 'christmaswrap';
     opacity: number;   // 0.01-0.15
     color?: string;
     size?: number;
   };
   noiseOverlay?: boolean;  // SVG noise texture (body::after)
   glowOverlay?: boolean;   // Radial glow from accent (body::after)
+  effects?: { /* Premium animated visual effects */ };
 }
 ```
 
-## LLM Agent Protocol
+## Theme Verification
+
+### Automated Verification
+
+Run the automated verification script in the browser console:
+
+```javascript
+// Load and run verification script
+fetch('verify-themes.js')
+  .then(r => r.text())
+  .then(code => eval(code))
+  .then(() => runAllVerifications());
+```
+
+This will test all priority themes and report on:
+- Theme loading success
+- Pattern and overlay presence
+- Effect rendering
+- Quality check compliance
+- Console errors
+
+### Manual Verification
+
+Open `verification-report.html` for a structured checklist with:
+- Expected features for each theme
+- Visual verification points
+- Checkbox tracking (persisted in localStorage)
+
+See `VERIFICATION_GUIDE.md` for detailed verification procedures.
+
+## ThemeGPT API
+
+The preview tool exposes `window.ThemeGPT` for programmatic control:
+
+```javascript
+// Get current state
+ThemeGPT.getState()
+// Returns: { theme, effectsEnabled, themeIndex, totalThemes }
+
+// List all themes
+ThemeGPT.list()
+// Returns: Array of { id, name, isPremium, hasEffects }
+
+// Apply a theme
+ThemeGPT.apply('purple-twilight')
+// Returns: { success, theme } or { success, error }
+
+// Validate quality
+ThemeGPT.validate()
+// Returns: { success, allPass, checks }
+
+// Modify current theme
+ThemeGPT.setColor('--cgpt-accent', '#FF1493')
+ThemeGPT.setColors({ '--cgpt-bg': '#000', '--cgpt-text': '#fff' })
+ThemeGPT.setPattern({ type: 'stars', opacity: 0.05, size: 1 })
+ThemeGPT.setOverlay('glow') // 'noise', 'glow', or 'none'
+
+// Toggle effects
+ThemeGPT.toggleEffects()
+
+// Export current theme
+ThemeGPT.export()
+// Returns theme object and copies JSON to clipboard
+```
 
 ### Console Output
 
@@ -76,6 +147,7 @@ All theme changes log to console:
 [ThemeGPT] Applied: theme-id { checks: [...] }
 [ThemeGPT] Export: { /* theme JSON */ }
 [ThemeGPT] Panel toggled
+[ThemeGPT] Agentic API ready. Use ThemeGPT.getState(), ThemeGPT.setColor(), etc.
 ```
 
 ### Keyboard Shortcuts
@@ -84,13 +156,7 @@ All theme changes log to console:
 |----------|--------|
 | `Ctrl+H` | Toggle theme panel |
 | `Ctrl+E` | Export current theme to console |
-
-### Programmatic Theme Application
-
-```javascript
-// From browser console
-applyTheme(THEMES.find(t => t.id === 'cozy-cabin-christmas'));
-```
+| `←` / `→` | Navigate between themes |
 
 ### Export Workflow
 
@@ -149,11 +215,14 @@ The preview tool architecture supports:
 
 ```
 tools/theme-preview/
-├── index.html           # Core preview tool (1,030 lines)
-├── catalog-complete.html # Marketing theme catalog (494 lines)
-├── REFERENCE.md         # UI element indexing system
-├── README.md            # This documentation
-└── archive/             # Deprecated prototypes
+├── index.html                # Core preview tool with ThemeGPT API
+├── verification-report.html  # Visual verification checklist
+├── verify-themes.js          # Automated verification script
+├── VERIFICATION_GUIDE.md     # Detailed verification instructions
+├── catalog-complete.html     # Marketing theme catalog
+├── REFERENCE.md              # UI element indexing system
+├── README.md                 # This documentation
+└── archive/                  # Deprecated prototypes
     ├── prototype-animated.html
     └── prototype-christmas-custom.html
 ```
@@ -162,12 +231,14 @@ tools/theme-preview/
 
 Per DIRECTIVES.md, files exceeding 500 lines require architectural review.
 
-**index.html (1,030 lines)**: Justified because it must:
+**index.html (>500 lines)**: Justified because it must:
 1. Mirror theme-injector.ts exactly for visual parity
 2. Include all 24 theme definitions inline (no external dependencies)
 3. Provide complete ChatGPT mockup UI for accurate preview
 4. Contain pattern/effect generators matching production code
 5. Include WCAG quality checks for accessibility validation
+
+**verification-report.html (>500 lines)**: Justified because it provides an explicit per-theme checklist UI with zero dependencies and persistent local state.
 
 **Archived files**: `prototype-animated.html` and `prototype-christmas-custom.html` were development exploration artifacts. Their patterns have been incorporated into the main tool or deemed unnecessary. Archived 2024-12 per complexity audit.
 
@@ -183,7 +254,7 @@ Theme definitions should match `packages/shared/src/index.ts`. When updating the
 
 **Patterns not showing**: Check `body::before` in DevTools. Ensure opacity > 0.
 
-**Overlays conflicting**: Only one overlay (noise OR glow) can be active. Noise takes priority.
+**Overlays conflicting**: Only one overlay is rendered; if both flags are set, noise takes priority.
 
 **Contrast check failing**: Adjust color values. Background-to-text ratio is critical for readability.
 

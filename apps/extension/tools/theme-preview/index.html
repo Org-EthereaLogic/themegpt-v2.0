@@ -214,7 +214,7 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 2;
+      z-index: 0;
       overflow: hidden;
     }
 
@@ -480,9 +480,9 @@
       { id: 'dracula', name: 'Dracula', category: 'core', colors: { '--cgpt-bg': '#282A36', '--cgpt-surface': '#343746', '--cgpt-text': '#F8F8F2', '--cgpt-text-muted': '#6272A4', '--cgpt-border': '#44475A', '--cgpt-accent': '#BD93F9' }, isPremium: false, glowOverlay: true, pattern: { type: 'dots', opacity: 0.03, size: 1 } },
       { id: 'monokai-pro', name: 'Monokai Pro', category: 'core', colors: { '--cgpt-bg': '#2D2A2E', '--cgpt-surface': '#403E41', '--cgpt-text': '#FCFCFA', '--cgpt-text-muted': '#939293', '--cgpt-border': '#49474A', '--cgpt-accent': '#FFD866' }, isPremium: false, noiseOverlay: true, pattern: { type: 'dots', opacity: 0.03, size: 1 } },
       { id: 'one-dark', name: 'One Dark', category: 'core', colors: { '--cgpt-bg': '#282C34', '--cgpt-surface': '#21252B', '--cgpt-text': '#ABB2BF', '--cgpt-text-muted': '#5C6370', '--cgpt-border': '#3E4451', '--cgpt-accent': '#61AFEF' }, isPremium: false, glowOverlay: true, pattern: { type: 'dots', opacity: 0.03, size: 1 } },
-      { id: 'aurora-borealis', name: 'Aurora Borealis', category: 'core', colors: { '--cgpt-bg': '#0A1628', '--cgpt-surface': '#0F2137', '--cgpt-text': '#E0F7FA', '--cgpt-text-muted': '#80DEEA', '--cgpt-border': '#164E63', '--cgpt-accent': '#00E5CC' }, isPremium: false, glowOverlay: true },
-      { id: 'sunset-blaze', name: 'Sunset Blaze', category: 'core', colors: { '--cgpt-bg': '#1A0A14', '--cgpt-surface': '#2D1220', '--cgpt-text': '#FFF5F0', '--cgpt-text-muted': '#FFAB91', '--cgpt-border': '#4A1A2E', '--cgpt-accent': '#FF6B4A' }, isPremium: false, glowOverlay: true },
-      { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false, glowOverlay: true, pattern: { type: 'grid', opacity: 0.02, size: 2 } },
+      { id: 'aurora-borealis', name: 'Aurora Borealis', category: 'core', colors: { '--cgpt-bg': '#0A1628', '--cgpt-surface': '#0F2137', '--cgpt-text': '#E0F7FA', '--cgpt-text-muted': '#80DEEA', '--cgpt-border': '#164E63', '--cgpt-accent': '#00E5CC' }, isPremium: false, glowOverlay: true, pattern: { type: 'stars', opacity: 0.04, size: 1 } },
+      { id: 'sunset-blaze', name: 'Sunset Blaze', category: 'core', colors: { '--cgpt-bg': '#1A0A14', '--cgpt-surface': '#2D1220', '--cgpt-text': '#FFF5F0', '--cgpt-text-muted': '#FFAB91', '--cgpt-border': '#4A1A2E', '--cgpt-accent': '#FF6B4A' }, isPremium: false, glowOverlay: true, pattern: { type: 'dots', opacity: 0.03, size: 1 } },
+      { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false, glowOverlay: true, pattern: { type: 'grid', opacity: 0.04, size: 2 } },
 
       // PREMIUM THEMES - Christmas Collection (6)
       { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'christmas', density: 'few', withOrnaments: true }, animatedSnowfall: { enabled: true, density: 'light', speed: 'slow', style: 'gentle' } } },
@@ -535,15 +535,18 @@
         },
         snowflakes: {
           bg: `radial-gradient(${color} 2px, transparent 2px), radial-gradient(${color} 1px, transparent 1px)`,
-          size: `${50 * size}px ${50 * size}px, ${30 * size}px ${30 * size}px`
+          size: `${50 * size}px ${50 * size}px, ${30 * size}px ${30 * size}px`,
+          position: `0 0, ${15 * size}px ${15 * size}px`
         },
         stars: {
           bg: `radial-gradient(${color} 1.5px, transparent 1.5px), radial-gradient(${color} 1px, transparent 1px), radial-gradient(${color} 0.5px, transparent 0.5px)`,
-          size: `${80 * size}px ${80 * size}px, ${60 * size}px ${60 * size}px, ${40 * size}px ${40 * size}px`
+          size: `${80 * size}px ${80 * size}px, ${60 * size}px ${60 * size}px, ${40 * size}px ${40 * size}px`,
+          position: `0 0, ${30 * size}px ${40 * size}px, ${15 * size}px ${20 * size}px`
         },
         giftwrap: {
           bg: `radial-gradient(${color} 3px, transparent 3px), radial-gradient(${color} 2px, transparent 2px), repeating-linear-gradient(45deg, transparent, transparent 60px, ${color}33 60px, ${color}33 62px), repeating-linear-gradient(-45deg, transparent, transparent 60px, ${color}22 60px, ${color}22 62px)`,
-          size: `${40 * size}px ${40 * size}px, ${25 * size}px ${25 * size}px, 100% 100%, 100% 100%`
+          size: `${40 * size}px ${40 * size}px, ${25 * size}px ${25 * size}px, 100% 100%, 100% 100%`,
+          position: `0 0, ${12 * size}px ${12 * size}px, 0 0, 0 0`
         },
         christmastrees: null,
         peppermints: null,
@@ -630,8 +633,13 @@
 
       const p = patterns[pattern.type];
       if (!p) return '';
-      // Add offset for dots pattern to avoid alignment with ribbon
-      const positionStyle = pattern.type === 'dots' ? `background-position: ${Math.round(dotSpacing / 3)}px ${Math.round(dotSpacing / 3)}px;` : '';
+      // Add offset for dots pattern to avoid alignment with ribbon, or use pattern-specific position
+      let positionStyle = '';
+      if (pattern.type === 'dots') {
+        positionStyle = `background-position: ${Math.round(dotSpacing / 3)}px ${Math.round(dotSpacing / 3)}px;`;
+      } else if (p.position) {
+        positionStyle = `background-position: ${p.position};`;
+      }
       return `body::before { background-image: ${p.bg}; background-size: ${p.size}; ${positionStyle} opacity: ${opacity}; z-index: -1; }`;
     }
 
@@ -882,7 +890,8 @@ ${treesCSS}`);
   height: 150px;
   background: linear-gradient(to top, rgba(255,255,255,0.15), transparent);
   animation: themegpt-fog 8s ease-in-out infinite;
-}`);
+}
+@media (prefers-reduced-motion: reduce) { .themegpt-fog { animation: none; } }`);
       }
 
       if (effects.ambientEffects?.neonGrid) {
@@ -920,6 +929,21 @@ ${treesCSS}`);
   background-size: 300% 100%;
   animation: themegpt-aurora 15s ease-in-out infinite;
   filter: blur(30px);
+}
+@media (prefers-reduced-motion: reduce) { .themegpt-aurora { animation: none; } }`);
+      }
+
+      if (effects.ambientEffects?.candleGlow) {
+        cssBlocks.push(`
+/* Premium Effect: Candle Glow */
+.themegpt-candle-glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 30% 40% at 10% 90%, rgba(255,183,77,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 25% 35% at 90% 85%, rgba(255,183,77,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 20% 30% at 50% 95%, rgba(255,152,0,0.05) 0%, transparent 60%);
 }`);
       }
 
@@ -1186,6 +1210,11 @@ ${sparklesCSS}
         const aurora = document.createElement('div');
         aurora.className = 'themegpt-aurora';
         container.appendChild(aurora);
+      }
+      if (effects.ambientEffects?.candleGlow) {
+        const glow = document.createElement('div');
+        glow.className = 'themegpt-candle-glow';
+        container.appendChild(glow);
       }
 
       // Add seasonal decorations

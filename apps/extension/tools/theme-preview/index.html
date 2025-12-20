@@ -480,6 +480,12 @@
   </aside>
 
   <script>
+    /**
+     * IMPORTANT: This is a standalone dev tool that duplicates code from the shared module.
+     * Source of truth for CSS generators: packages/shared/src/css/generators.ts
+     * If you modify the generators below, sync the changes to the shared module!
+     */
+
     // === THEME DATA (synced from packages/shared/src/index.ts) ===
     const THEMES = [
       // FREE THEMES - Original 5 (v1.0)
@@ -525,7 +531,7 @@
     let dynamicStyleEl = null;
     let effectsEnabled = true;
 
-    // === PATTERN GENERATORS (synced from theme-injector.ts) ===
+    // === PATTERN GENERATORS (synced from packages/shared/src/css/generators.ts) ===
     function generatePatternCSS(pattern, accentColor) {
       if (!pattern) return '';
       const color = pattern.color || accentColor;
@@ -825,7 +831,7 @@ body::after {
 }`;
     }
 
-    // === EFFECTS GENERATORS (synced from theme-injector.ts) ===
+    // === EFFECTS GENERATORS (synced from packages/shared/src/css/generators.ts) ===
     function generateEffectsCSS(effects, accentColor) {
       if (!effects || !effectsEnabled) return '';
       const cssBlocks = [];

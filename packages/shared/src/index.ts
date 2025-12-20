@@ -50,6 +50,14 @@ export interface TreeSilhouettes {
   withOrnaments?: boolean; // Add twinkling lights to trees
 }
 
+export interface AuroraGradient {
+  enabled: boolean;
+  palette?: 'arctic' | 'northern' | 'cosmic' | 'custom'; // Color scheme presets
+  speed?: 'slow' | 'medium' | 'fast'; // Animation speed
+  intensity?: 'subtle' | 'medium' | 'vivid'; // Blob opacity/vibrancy
+  customColors?: string[]; // Custom RGB values for blobs (if palette is 'custom')
+}
+
 export interface AmbientEffects {
   fogRising?: boolean;
   firefliesOrParticles?: boolean;
@@ -74,6 +82,7 @@ export interface ThemeEffects {
   animatedSnowfall?: AnimatedSnowfall;
   twinklingStars?: TwinklingStars;
   treeSilhouettes?: TreeSilhouettes;
+  auroraGradient?: AuroraGradient;
   ambientEffects?: AmbientEffects;
   seasonalDecorations?: SeasonalDecorations;
 }
@@ -203,7 +212,14 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#00E5CC',
     },
     isPremium: false,
-    glowOverlay: true,
+    effects: {
+      auroraGradient: {
+        enabled: true,
+        palette: 'northern',
+        speed: 'slow',
+        intensity: 'medium'
+      }
+    },
   },
   {
     id: 'sunset-blaze',
@@ -219,6 +235,15 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
+    effects: {
+      auroraGradient: {
+        enabled: true,
+        palette: 'custom',
+        speed: 'slow',
+        intensity: 'subtle',
+        customColors: ['255, 107, 74', '255, 152, 67', '255, 87, 51', '255, 171, 145', '230, 74, 25'],
+      },
+    },
   },
   {
     id: 'electric-dreams',
@@ -234,6 +259,14 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
+    effects: {
+      auroraGradient: {
+        enabled: true,
+        palette: 'cosmic',
+        speed: 'slow',
+        intensity: 'subtle',
+      },
+    },
   },
 
   // =============================================

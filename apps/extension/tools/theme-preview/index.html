@@ -490,9 +490,9 @@
       { id: 'high-contrast', name: 'High Contrast', category: 'core', colors: { '--cgpt-bg': '#000000', '--cgpt-surface': '#1A1A1A', '--cgpt-text': '#FFFFFF', '--cgpt-text-muted': '#CCCCCC', '--cgpt-border': '#FFFFFF', '--cgpt-accent': '#FFD700' }, isPremium: false },
       // FREE THEMES - Extended Collection (v2.0)
       { id: 'one-dark', name: 'One Dark', category: 'core', colors: { '--cgpt-bg': '#282C34', '--cgpt-surface': '#21252B', '--cgpt-text': '#ABB2BF', '--cgpt-text-muted': '#5C6370', '--cgpt-border': '#3E4451', '--cgpt-accent': '#61AFEF' }, isPremium: false, glowOverlay: true },
-      { id: 'aurora-borealis', name: 'Aurora Borealis', category: 'core', colors: { '--cgpt-bg': '#0A1628', '--cgpt-surface': '#0F2137', '--cgpt-text': '#E0F7FA', '--cgpt-text-muted': '#80DEEA', '--cgpt-border': '#164E63', '--cgpt-accent': '#00E5CC' }, isPremium: false, glowOverlay: true },
-      { id: 'sunset-blaze', name: 'Sunset Blaze', category: 'core', colors: { '--cgpt-bg': '#1A0A14', '--cgpt-surface': '#2D1220', '--cgpt-text': '#FFF5F0', '--cgpt-text-muted': '#FFAB91', '--cgpt-border': '#4A1A2E', '--cgpt-accent': '#FF6B4A' }, isPremium: false, glowOverlay: true },
-      { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false, glowOverlay: true },
+      { id: 'aurora-borealis', name: 'Aurora Borealis', category: 'core', colors: { '--cgpt-bg': '#0A1628', '--cgpt-surface': '#0F2137', '--cgpt-text': '#E0F7FA', '--cgpt-text-muted': '#80DEEA', '--cgpt-border': '#164E63', '--cgpt-accent': '#00E5CC' }, isPremium: false, effects: { auroraGradient: { enabled: true, palette: 'northern', speed: 'slow', intensity: 'medium' } } },
+      { id: 'sunset-blaze', name: 'Sunset Blaze', category: 'core', colors: { '--cgpt-bg': '#1A0A14', '--cgpt-surface': '#2D1220', '--cgpt-text': '#FFF5F0', '--cgpt-text-muted': '#FFAB91', '--cgpt-border': '#4A1A2E', '--cgpt-accent': '#FF6B4A' }, isPremium: false, glowOverlay: true, effects: { auroraGradient: { enabled: true, palette: 'custom', speed: 'slow', intensity: 'subtle', customColors: ['255, 107, 74', '255, 152, 67', '255, 87, 51', '255, 171, 145', '230, 74, 25'] } } },
+      { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false, glowOverlay: true, effects: { auroraGradient: { enabled: true, palette: 'cosmic', speed: 'slow', intensity: 'subtle' } } },
 
       // PREMIUM THEMES - Christmas Collection (6)
       { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'christmas', density: 'few', withOrnaments: true }, animatedSnowfall: { enabled: true, density: 'light', speed: 'slow', style: 'gentle' } } },
@@ -1091,6 +1091,129 @@ ${treesCSS}`);
         }
       }
 
+      // Aurora gradient effect - morphing blob animation (based on baunov/gradients-bg)
+      if (effects.auroraGradient?.enabled) {
+        const aurora = effects.auroraGradient;
+        const speed = aurora.speed === 'fast' ? 15 : aurora.speed === 'medium' ? 25 : 40;
+        // Reduced intensity values to prevent excessive brightness
+        const intensity = aurora.intensity === 'vivid' ? 0.6 : aurora.intensity === 'medium' ? 0.45 : 0.3;
+
+        const palettes = {
+          arctic: ['18, 180, 200', '80, 220, 230', '0, 150, 180', '100, 200, 220', '40, 190, 200'],
+          northern: ['0, 229, 204', '80, 222, 234', '0, 150, 136', '128, 222, 234', '0, 188, 212'],
+          cosmic: ['138, 43, 226', '75, 0, 130', '148, 0, 211', '186, 85, 211', '123, 104, 238'],
+          custom: aurora.customColors || ['0, 229, 204', '80, 222, 234', '0, 150, 136', '128, 222, 234', '0, 188, 212']
+        };
+        const colors = palettes[aurora.palette || 'northern'];
+
+        cssBlocks.push(`
+/* Premium Effect: Aurora Gradient - Morphing Blobs */
+@keyframes themegpt-aurora-vertical {
+  0% { transform: translateY(-50%); }
+  50% { transform: translateY(50%); }
+  100% { transform: translateY(-50%); }
+}
+@keyframes themegpt-aurora-horizontal {
+  0% { transform: translate(0%, 0%) translateX(-10%); }
+  50% { transform: translate(10%, 10%) translateX(10%); }
+  100% { transform: translate(0%, 0%) translateX(-10%); }
+}
+@keyframes themegpt-aurora-circle {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes themegpt-aurora-circle-reverse {
+  0% { transform: rotate(360deg); }
+  100% { transform: rotate(0deg); }
+}
+
+/* Wrapper provides isolation so blur doesn't affect page content */
+.themegpt-aurora-wrapper {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Background layer that receives the blur effect */
+.themegpt-aurora-container {
+  position: absolute;
+  inset: 0;
+  filter: url(#themegpt-goo) blur(40px);
+  contain: strict;
+}
+
+/* Interactive overlay ensures content remains crisp and readable */
+.themegpt-aurora-interactive {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.themegpt-aurora-blob {
+  position: absolute;
+  width: 80%;
+  height: 80%;
+  border-radius: 50%;
+  mix-blend-mode: hard-light;
+  opacity: ${intensity};
+}
+
+.themegpt-aurora-g1 {
+  background: radial-gradient(circle at center, rgba(${colors[0]}, 0.5) 0%, rgba(${colors[0]}, 0) 50%);
+  top: calc(50% - 40%);
+  left: calc(50% - 40%);
+  transform-origin: center center;
+  animation: themegpt-aurora-circle ${speed}s ease infinite;
+  animation-delay: -${speed * 0.25}s;
+}
+
+.themegpt-aurora-g2 {
+  background: radial-gradient(circle at center, rgba(${colors[1]}, 0.5) 0%, rgba(${colors[1]}, 0) 50%);
+  top: calc(50% - 40%);
+  left: calc(50% - 40%);
+  transform-origin: calc(50% - 200px);
+  animation: themegpt-aurora-circle-reverse ${speed * 0.8}s ease infinite;
+  animation-delay: -${speed * 0.4}s;
+}
+
+.themegpt-aurora-g3 {
+  background: radial-gradient(circle at center, rgba(${colors[2]}, 0.5) 0%, rgba(${colors[2]}, 0) 50%);
+  top: calc(50% - 40% + 100px);
+  left: calc(50% - 40% - 200px);
+  transform-origin: calc(50% + 200px);
+  animation: themegpt-aurora-vertical ${speed * 0.75}s ease infinite;
+  animation-delay: -${speed * 0.15}s;
+}
+
+.themegpt-aurora-g4 {
+  background: radial-gradient(circle at center, rgba(${colors[3]}, 0.45) 0%, rgba(${colors[3]}, 0) 50%);
+  top: calc(50% - 40% - 100px);
+  left: calc(50% - 40% + 200px);
+  transform-origin: calc(50% - 100px) calc(50% + 100px);
+  animation: themegpt-aurora-horizontal ${speed * 1.2}s ease infinite;
+  animation-delay: -${speed * 0.6}s;
+}
+
+.themegpt-aurora-g5 {
+  background: radial-gradient(circle at center, rgba(${colors[4]}, 0.4) 0%, rgba(${colors[4]}, 0) 50%);
+  width: 100%;
+  height: 100%;
+  top: calc(50% - 50%);
+  left: calc(50% - 50%);
+  transform-origin: calc(50% - 300px) calc(50% + 200px);
+  animation: themegpt-aurora-circle ${speed * 1.5}s linear infinite;
+  animation-delay: -${speed * 0.35}s;
+  opacity: ${intensity * 0.6};
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .themegpt-aurora-blob { animation: none; }
+}`);
+      }
+
       // Ambient effects
       if (effects.ambientEffects?.fogRising) {
         cssBlocks.push(`
@@ -1417,6 +1540,46 @@ ${sparklesCSS}
           tree.className = `themegpt-tree themegpt-tree-${i}`;
           container.appendChild(tree);
         }
+      }
+
+      // Add aurora gradient effect with proper isolation
+      if (effects.auroraGradient?.enabled) {
+        // Create SVG filter for goo/blob merging effect
+        const svgNS = 'http://www.w3.org/2000/svg';
+        const svg = document.createElementNS(svgNS, 'svg');
+        svg.setAttribute('style', 'position: absolute; width: 0; height: 0;');
+        svg.innerHTML = `
+          <defs>
+            <filter id="themegpt-goo">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+              <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+              <feBlend in="SourceGraphic" in2="goo" />
+            </filter>
+          </defs>
+        `;
+        container.appendChild(svg);
+
+        // Create wrapper with isolation to prevent blur from affecting page content
+        const auroraWrapper = document.createElement('div');
+        auroraWrapper.className = 'themegpt-aurora-wrapper';
+
+        // Create aurora container with blobs (receives the blur effect)
+        const auroraContainer = document.createElement('div');
+        auroraContainer.className = 'themegpt-aurora-container';
+
+        for (let i = 1; i <= 5; i++) {
+          const blob = document.createElement('div');
+          blob.className = `themegpt-aurora-blob themegpt-aurora-g${i}`;
+          auroraContainer.appendChild(blob);
+        }
+
+        // Interactive overlay ensures content layer stays crisp
+        const auroraInteractive = document.createElement('div');
+        auroraInteractive.className = 'themegpt-aurora-interactive';
+
+        auroraWrapper.appendChild(auroraContainer);
+        auroraWrapper.appendChild(auroraInteractive);
+        container.appendChild(auroraWrapper);
       }
 
       // Add ambient effects

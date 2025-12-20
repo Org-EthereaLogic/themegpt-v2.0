@@ -167,7 +167,7 @@ export const DEFAULT_THEMES: Theme[] = [
     category: 'core',
     colors: {
       '--cgpt-bg': '#000000',
-      '--cgpt-surface': '#0A0A0A',
+      '--cgpt-surface': '#1A1A1A',
       '--cgpt-text': '#FFFFFF',
       '--cgpt-text-muted': '#CCCCCC',
       '--cgpt-border': '#FFFFFF',

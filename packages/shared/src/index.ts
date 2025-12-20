@@ -115,7 +115,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     noiseOverlay: true,
-    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
   {
     id: 'solarized-dark',
@@ -131,7 +130,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     noiseOverlay: true,
-    pattern: { type: 'grid', opacity: 0.04, size: 1.5 },
   },
   {
     id: 'dracula',
@@ -147,7 +145,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
-    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
   {
     id: 'monokai-pro',
@@ -163,7 +160,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     noiseOverlay: true,
-    pattern: { type: 'dots', opacity: 0.03, size: 1 },
   },
   {
     id: 'one-dark',
@@ -179,7 +175,51 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: false,
     glowOverlay: true,
-    pattern: { type: 'dots', opacity: 0.03, size: 1 },
+  },
+  {
+    id: 'aurora-borealis',
+    name: 'Aurora Borealis',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#0A1628',
+      '--cgpt-surface': '#0F2137',
+      '--cgpt-text': '#E0F7FA',
+      '--cgpt-text-muted': '#80DEEA',
+      '--cgpt-border': '#164E63',
+      '--cgpt-accent': '#00E5CC',
+    },
+    isPremium: false,
+    glowOverlay: true,
+  },
+  {
+    id: 'sunset-blaze',
+    name: 'Sunset Blaze',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#1A0A14',
+      '--cgpt-surface': '#2D1220',
+      '--cgpt-text': '#FFF5F0',
+      '--cgpt-text-muted': '#FFAB91',
+      '--cgpt-border': '#4A1A2E',
+      '--cgpt-accent': '#FF6B4A',
+    },
+    isPremium: false,
+    glowOverlay: true,
+  },
+  {
+    id: 'electric-dreams',
+    name: 'Electric Dreams',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#0D0221',
+      '--cgpt-surface': '#150634',
+      '--cgpt-text': '#F5E6FF',
+      '--cgpt-text-muted': '#D4AAFF',
+      '--cgpt-border': '#3D1A6D',
+      '--cgpt-accent': '#FF2E97',
+    },
+    isPremium: false,
+    glowOverlay: true,
   },
 
   // =============================================
@@ -200,8 +240,18 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     noiseOverlay: true,
     effects: {
-      treeSilhouettes: { enabled: true, style: 'christmas', density: 'few', withOrnaments: true },
-      animatedSnowfall: { enabled: true, density: 'light', speed: 'slow', style: 'gentle' },
+      "treeSilhouettes": {
+        "enabled": true,
+        "style": "christmas",
+        "density": "few",
+        "withOrnaments": true
+      },
+      "animatedSnowfall": {
+        "enabled": true,
+        "density": "light",
+        "speed": "slow",
+        "style": "gentle"
+      }
     },
   },
   {
@@ -218,8 +268,16 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', snowColor: '#B8D4E8', style: 'gradient' },
-      seasonalDecorations: { frostedGlass: true },
+      "animatedSnowfall": {
+        "enabled": true,
+        "density": "medium",
+        "speed": "slow",
+        "snowColor": "#B8D4E8",
+        "style": "gradient"
+      },
+      "seasonalDecorations": {
+        "frostedGlass": true
+      }
     },
   },
   {
@@ -237,9 +295,19 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     noiseOverlay: true,
     effects: {
-      treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' },
-      twinklingStars: { enabled: true, count: 'medium', starColor: '#FFFFFF' },
-      ambientEffects: { fogRising: true },
+      "treeSilhouettes": {
+        "enabled": true,
+        "style": "pine",
+        "density": "forest"
+      },
+      "twinklingStars": {
+        "enabled": true,
+        "count": "medium",
+        "starColor": "#FFFFFF"
+      },
+      "ambientEffects": {
+        "fogRising": true
+      }
     },
   },
   {
@@ -257,7 +325,11 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     noiseOverlay: true,
     effects: {
-      seasonalDecorations: { candyCaneFrame: true, sparkleOverlay: true, sparkleColor: '#dc2626' },
+      "seasonalDecorations": {
+        "candyCaneFrame": true,
+        "sparkleOverlay": true,
+        "sparkleColor": "#dc2626"
+      }
     },
   },
   {
@@ -275,8 +347,16 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     glowOverlay: true,
     effects: {
-      twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true, starColor: '#FFFFFF', animationDuration: 8 },
-      ambientEffects: { auroraWaves: true },
+      "twinklingStars": {
+        "enabled": true,
+        "count": "dense",
+        "includeShootingStars": true,
+        "starColor": "#FFFFFF",
+        "animationDuration": 8
+      },
+      "ambientEffects": {
+        "auroraWaves": true
+      }
     },
   },
   {
@@ -295,15 +375,20 @@ export const DEFAULT_THEMES: Theme[] = [
     noiseOverlay: true,
     glowOverlay: true,
     effects: {
-      twinklingStars: { enabled: true, count: 'sparse', starColor: '#FFFFFF', animationDuration: 10 },
-      ambientEffects: { candleGlow: true },
-      seasonalDecorations: { frostEdge: true },
+      "twinklingStars": {
+        "enabled": true,
+        "count": "sparse",
+        "starColor": "#FFFFFF",
+        "animationDuration": 10
+      },
+      "ambientEffects": {
+        "candleGlow": true
+      },
+      "seasonalDecorations": {
+        "frostEdge": true
+      }
     },
   },
-
-  // =============================================
-  // PREMIUM THEMES - Christmas Pattern Collection
-  // =============================================
   {
     id: 'snowfall-serenity',
     name: 'Snowfall Serenity',
@@ -321,9 +406,21 @@ export const DEFAULT_THEMES: Theme[] = [
     glowOverlay: true,
     pattern: { type: 'snowflakes', opacity: 0.04, size: 1.2 },
     effects: {
-      animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', style: 'gentle' },
-      twinklingStars: { enabled: true, count: 'sparse', starColor: '#E0F2FE', animationDuration: 12 },
-      seasonalDecorations: { frostEdge: true },
+      "animatedSnowfall": {
+        "enabled": true,
+        "density": "medium",
+        "speed": "slow",
+        "style": "gentle"
+      },
+      "twinklingStars": {
+        "enabled": true,
+        "count": "sparse",
+        "starColor": "#E0F2FE",
+        "animationDuration": 12
+      },
+      "seasonalDecorations": {
+        "frostEdge": true
+      }
     },
   },
   {
@@ -339,14 +436,12 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FFF8F5',
     },
     isPremium: true,
-    pattern: {
-      type: 'dots',
-      opacity: 0.35,
-      color: '#FFF8F5',
-      size: 3.0,
-    },
+    pattern: { type: 'dots', opacity: 0.35, color: '#FFF8F5', size: 3 },
     effects: {
-      seasonalDecorations: { ribbonBow: true, ribbonColor: '#FFF8F5' },
+      "seasonalDecorations": {
+        "ribbonBow": true,
+        "ribbonColor": "#FFF8F5"
+      }
     },
   },
   {
@@ -362,14 +457,12 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FFFFFF',
     },
     isPremium: true,
-    pattern: {
-      type: 'christmastrees',
-      opacity: 0.5,
-      color: '#FFFFFF',
-      size: 1.2,
-    },
+    pattern: { type: 'christmastrees', opacity: 0.5, color: '#FFFFFF', size: 1.2 },
     effects: {
-      seasonalDecorations: { ribbonBow: true, ribbonColor: '#FFFFFF' },
+      "seasonalDecorations": {
+        "ribbonBow": true,
+        "ribbonColor": "#FFFFFF"
+      }
     },
   },
   {
@@ -385,11 +478,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FFD700',
     },
     isPremium: true,
-    pattern: {
-      type: 'christmaswrap',
-      opacity: 1.0,
-      size: 1.0,
-    },
+    pattern: { type: 'christmaswrap', opacity: 1, size: 1 },
   },
   {
     id: 'gingerbread-warmth',
@@ -404,12 +493,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FF8A65',
     },
     isPremium: true,
-    pattern: {
-      type: 'dots',
-      opacity: 0.05,
-      color: '#A1887F',
-      size: 1,
-    },
+    pattern: { type: 'dots', opacity: 0.05, color: '#A1887F', size: 1 },
   },
   {
     id: 'winter-wonderland',
@@ -425,8 +509,15 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      animatedSnowfall: { enabled: true, density: 'heavy', speed: 'medium', style: 'shaking' },
-      seasonalDecorations: { frostEdge: true },
+      "animatedSnowfall": {
+        "enabled": true,
+        "density": "heavy",
+        "speed": "medium",
+        "style": "shaking"
+      },
+      "seasonalDecorations": {
+        "frostEdge": true
+      }
     },
   },
   {
@@ -443,7 +534,11 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     effects: {
-      twinklingStars: { enabled: true, count: 'dense', includeShootingStars: true },
+      "twinklingStars": {
+        "enabled": true,
+        "count": "dense",
+        "includeShootingStars": true
+      }
     },
   },
 
@@ -465,7 +560,9 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     glowOverlay: true,
     effects: {
-      ambientEffects: { neonGrid: true },
+      "ambientEffects": {
+        "neonGrid": true
+      }
     },
   },
   {
@@ -499,7 +596,10 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     glowOverlay: true,
     effects: {
-      twinklingStars: { enabled: true, count: 'sparse' },
+      "twinklingStars": {
+        "enabled": true,
+        "count": "sparse"
+      }
     },
   },
   {
@@ -531,8 +631,15 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     noiseOverlay: true,
     effects: {
-      treeSilhouettes: { enabled: true, style: 'mixed', density: 'moderate' },
-      ambientEffects: { fogRising: true, firefliesOrParticles: true },
+      "treeSilhouettes": {
+        "enabled": true,
+        "style": "mixed",
+        "density": "moderate"
+      },
+      "ambientEffects": {
+        "fogRising": true,
+        "firefliesOrParticles": true
+      }
     },
   },
   {
@@ -549,58 +656,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
     isPremium: true,
     noiseOverlay: true,
-  },
-
-  // =============================================
-  // FREE THEMES - Vibrant Collection
-  // =============================================
-  {
-    id: 'aurora-borealis',
-    name: 'Aurora Borealis',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#0A1628',
-      '--cgpt-surface': '#0F2137',
-      '--cgpt-text': '#E0F7FA',
-      '--cgpt-text-muted': '#80DEEA',
-      '--cgpt-border': '#164E63',
-      '--cgpt-accent': '#00E5CC',
-    },
-    isPremium: false,
-    glowOverlay: true,
-    pattern: { type: 'stars', opacity: 0.04, size: 1 },
-  },
-  {
-    id: 'sunset-blaze',
-    name: 'Sunset Blaze',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#1A0A14',
-      '--cgpt-surface': '#2D1220',
-      '--cgpt-text': '#FFF5F0',
-      '--cgpt-text-muted': '#FFAB91',
-      '--cgpt-border': '#4A1A2E',
-      '--cgpt-accent': '#FF6B4A',
-    },
-    isPremium: false,
-    glowOverlay: true,
-    pattern: { type: 'dots', opacity: 0.03, size: 1 },
-  },
-  {
-    id: 'electric-dreams',
-    name: 'Electric Dreams',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#0D0221',
-      '--cgpt-surface': '#150634',
-      '--cgpt-text': '#F5E6FF',
-      '--cgpt-text-muted': '#D4AAFF',
-      '--cgpt-border': '#3D1A6D',
-      '--cgpt-accent': '#FF2E97',
-    },
-    isPremium: false,
-    glowOverlay: true,
-    pattern: { type: 'grid', opacity: 0.04, size: 2 },
   },
 ];
 

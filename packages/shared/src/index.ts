@@ -162,6 +162,20 @@ export const DEFAULT_THEMES: Theme[] = [
     noiseOverlay: true,
   },
   {
+    id: 'high-contrast',
+    name: 'High Contrast',
+    category: 'core',
+    colors: {
+      '--cgpt-bg': '#000000',
+      '--cgpt-surface': '#0A0A0A',
+      '--cgpt-text': '#FFFFFF',
+      '--cgpt-text-muted': '#A0A0A0',
+      '--cgpt-border': '#333333',
+      '--cgpt-accent': '#FFD700',
+    },
+    isPremium: false,
+  },
+  {
     id: 'one-dark',
     name: 'One Dark',
     category: 'core',

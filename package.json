@@ -11,7 +11,8 @@
     "lint:extension": "pnpm --filter extension lint",
     "lint:web": "pnpm --filter web lint",
     "test": "pnpm -r test",
-    "clean": "pnpm -r clean"
+    "clean": "pnpm -r clean",
+    "preview:sync": "node apps/extension/tools/theme-preview/sync-themes.js"
   },
   "pnpm": {
     "overrides": {

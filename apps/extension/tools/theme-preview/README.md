@@ -216,6 +216,7 @@ The preview tool architecture supports:
 ```
 tools/theme-preview/
 ├── index.html                # Core preview tool with ThemeGPT API
+├── sync-themes.js            # Sync script (pnpm preview:sync)
 ├── verification-report.html  # Visual verification checklist
 ├── verify-themes.js          # Automated verification script
 ├── VERIFICATION_GUIDE.md     # Detailed verification instructions
@@ -244,10 +245,42 @@ Per DIRECTIVES.md, files exceeding 500 lines require architectural review.
 
 ## Synchronization
 
-Theme definitions should match `packages/shared/src/index.ts`. When updating themes:
+### One-Click Sync (Recommended)
 
-1. Update source of truth in shared package
-2. Mirror changes to preview tool
+Use the sync script to automatically update the shared package from your previewer edits:
+
+```bash
+# From the monorepo root
+pnpm preview:sync
+```
+
+This extracts theme definitions from `index.html` and updates `packages/shared/src/index.ts`.
+
+### Full Workflow
+
+```bash
+# 1. Start the previewer
+cd apps/extension/tools/theme-preview
+python3 -m http.server 9999
+
+# 2. Open http://localhost:9999 and edit themes visually
+
+# 3. Sync changes to codebase (from monorepo root)
+pnpm preview:sync
+
+# 4. Review changes
+git diff packages/shared/src/index.ts
+
+# 5. Rebuild extension
+pnpm --filter extension build
+```
+
+### Manual Sync (Legacy)
+
+If needed, you can still sync manually:
+
+1. Export theme JSON from previewer (Ctrl+E)
+2. Copy to `packages/shared/src/index.ts`
 3. Verify visual parity
 
 ## Troubleshooting

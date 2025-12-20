@@ -13,7 +13,7 @@ overrides:
 
 patchedDependencies:
   '@parcel/reporter-dev-server@2.9.3':
-    hash: 5bcqxyiiwql5uaktkpoxfohksq
+    hash: xt2unzxfr53j7rty5vp4fmgzpe
     path: patches/@parcel__reporter-dev-server@2.9.3.patch
 
 importers:
@@ -31,7 +31,7 @@ importers:
         version: 24.32.1(typescript@5.9.3)
       vitest:
         specifier: ^4.0.15
-        version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2)
+        version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0)(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2)
 
   apps/extension:
     dependencies:
@@ -95,7 +95,7 @@ importers:
         version: 5.9.3
       vitest:
         specifier: ^4.0.15
-        version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2)
+        version: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0)(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2)
 
   apps/web:
     dependencies:
@@ -7350,7 +7350,7 @@ snapshots:
       '@parcel/packager-js': 2.9.3(@parcel/core@2.9.3)
       '@parcel/packager-raw': 2.9.3(@parcel/core@2.9.3)
       '@parcel/packager-svg': 2.9.3(@parcel/core@2.9.3)
-      '@parcel/reporter-dev-server': 2.9.3(patch_hash=5bcqxyiiwql5uaktkpoxfohksq)(@parcel/core@2.9.3)
+      '@parcel/reporter-dev-server': 2.9.3(patch_hash=xt2unzxfr53j7rty5vp4fmgzpe)(@parcel/core@2.9.3)
       '@parcel/resolver-default': 2.9.3(@parcel/core@2.9.3)
       '@parcel/runtime-browser-hmr': 2.9.3(@parcel/core@2.9.3)
       '@parcel/runtime-js': 2.9.3(@parcel/core@2.9.3)
@@ -7656,7 +7656,7 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/reporter-dev-server@2.9.3(patch_hash=5bcqxyiiwql5uaktkpoxfohksq)(@parcel/core@2.9.3)':
+  '@parcel/reporter-dev-server@2.9.3(patch_hash=xt2unzxfr53j7rty5vp4fmgzpe)(@parcel/core@2.9.3)':
     dependencies:
       '@parcel/plugin': 2.9.3(@parcel/core@2.9.3)
       '@parcel/utils': 2.9.3
@@ -9044,7 +9044,7 @@ snapshots:
       obug: 2.1.1
       std-env: 3.10.0
       tinyrainbow: 3.0.3
-      vitest: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2)
+      vitest: 4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0)(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2)
     transitivePeerDependencies:
       - supports-color
 
@@ -12786,7 +12786,7 @@ snapshots:
       sass: 1.94.2
       yaml: 2.8.2
 
-  vitest@4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0(postcss@8.5.6))(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2):
+  vitest@4.0.15(@opentelemetry/api@1.9.0)(@types/node@25.0.3)(jiti@2.6.1)(jsdom@27.3.0)(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2):
     dependencies:
       '@vitest/expect': 4.0.15
       '@vitest/mocker': 4.0.15(vite@7.2.7(@types/node@25.0.3)(jiti@2.6.1)(less@4.4.2)(lightningcss@1.30.2)(sass@1.94.2)(yaml@2.8.2))

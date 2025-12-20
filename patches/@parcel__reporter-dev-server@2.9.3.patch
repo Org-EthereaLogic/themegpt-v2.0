@@ -130,3 +130,78 @@ index 05c074d8f36f1e91b806bb746b204a1a09069a34..b8649d332ab6dbf7ec224b1f4a7fcdcd
        next();
      });
      await this.applyProxyTable(app);
+diff --git a/lib/ServerReporter.js b/lib/ServerReporter.js
+index 34be5b7c14f91d84a12d4571a08eba535d6d381e..e1ae8fa64e1bc8491f71248f20cdfc2176bd98b6 100644
+--- a/lib/ServerReporter.js
++++ b/lib/ServerReporter.js
+@@ -16629,11 +16629,48 @@ var $1c8bb537a9df82e5$exports = {};
+ 
+ 
+ var $c2eeb2f2a04d6455$var$$parcel$__dirname = $3uB8d$path.resolve(__dirname, "../src");
+-function $c2eeb2f2a04d6455$export$1c94a12dbc96ed70(res) {
+-    res.setHeader("Access-Control-Allow-Origin", "*");
++var $c2eeb2f2a04d6455$var$defaultAllowedHostsCache = null;
++function $c2eeb2f2a04d6455$var$getDefaultAllowedHosts() {
++    if (!$c2eeb2f2a04d6455$var$defaultAllowedHostsCache) {
++        $c2eeb2f2a04d6455$var$defaultAllowedHostsCache = [
++            "localhost"
++        ];
++        let interfaces = $3uB8d$os.networkInterfaces();
++        for(let name in interfaces)for (let addr of interfaces[name])$c2eeb2f2a04d6455$var$defaultAllowedHostsCache.push(addr.family === "IPv6" ? "[" + addr.address + "]" : addr.address);
++    }
++    return $c2eeb2f2a04d6455$var$defaultAllowedHostsCache;
++}
++function $c2eeb2f2a04d6455$var$verifyOrigin(origin, allowedHostname) {
++    try {
++        let url = new (0, $3uB8d$url.URL)(origin);
++        if (url.protocol === "file:" || url.protocol === "chrome-extension:" || url.protocol === "moz-extension:") return true;
++        return $c2eeb2f2a04d6455$var$verifyHost(url.hostname, allowedHostname);
++    } catch {
++        return false;
++    }
++}
++function $c2eeb2f2a04d6455$var$verifyHost(requestHost, allowedHostname) {
++    if (!requestHost) return false;
++    // IPv6 address
++    if (requestHost[0] === "[") {
++        let index = requestHost.indexOf("]");
++        if (index < 0) return false;
++        requestHost = requestHost.slice(0, index + 1);
++    } else {
++        // Remove port
++        let index = requestHost.indexOf(":");
++        if (index >= 0) requestHost = requestHost.slice(0, index);
++    }
++    if (allowedHostname) return requestHost === allowedHostname;
++    return $c2eeb2f2a04d6455$var$getDefaultAllowedHosts().includes(requestHost);
++}
++function $c2eeb2f2a04d6455$export$1c94a12dbc96ed70(origin, allowedHostname, res) {
++    res.setHeader("Cache-Control", "max-age=0, must-revalidate");
++    // Only set CORS headers when the Origin header is valid.
++    if (!origin || !$c2eeb2f2a04d6455$var$verifyOrigin(origin, allowedHostname)) return;
++    res.setHeader("Access-Control-Allow-Origin", origin);
+     res.setHeader("Access-Control-Allow-Methods", "GET, HEAD, PUT, PATCH, POST, DELETE");
+     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Content-Type");
+-    res.setHeader("Cache-Control", "max-age=0, must-revalidate");
+ }
+ const $c2eeb2f2a04d6455$var$SLASH_REGEX = /\//g;
+ const $c2eeb2f2a04d6455$export$48c584f74c55688f = "/__parcel_source_root";
+@@ -16892,7 +16929,17 @@ class $c2eeb2f2a04d6455$export$2e2bcd8739ae039 {
+     async start() {
+         const app = (0, (/*@__PURE__*/$parcel$interopDefault($82f7eeb611e5eb6a$exports)))();
+         app.use((req, res, next)=>{
+-            $c2eeb2f2a04d6455$export$1c94a12dbc96ed70(res);
++            if (!$c2eeb2f2a04d6455$var$verifyHost(req.headers.host, this.options.host)) {
++                res.statusCode = 403;
++                res.end("Host not allowed.");
++                return;
++            }
++            $c2eeb2f2a04d6455$export$1c94a12dbc96ed70(req.headers.origin, this.options.host, res);
++            if (req.method === "OPTIONS") {
++                res.statusCode = 200;
++                res.end();
++                return;
++            }
+             next();
+         });
+         await this.applyProxyTable(app);

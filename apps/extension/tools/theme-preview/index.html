@@ -71,6 +71,14 @@
       color: var(--cgpt-text);
     }
 
+    /* High Contrast theme fix: when border equals text color, use alternate styling */
+    .high-contrast .chat-item.active {
+      background: var(--cgpt-surface);
+      box-shadow: inset 3px 0 0 var(--cgpt-accent);
+      font-weight: 600;
+      font-size: 15px;
+    }
+
     .sidebar-footer {
       padding-top: 12px;
       border-top: 1px solid var(--cgpt-border);
@@ -1549,6 +1557,9 @@ ${sparklesCSS}
       Object.entries(theme.colors).forEach(([prop, value]) => {
         root.style.setProperty(prop, value);
       });
+
+      // Toggle high-contrast class for special styling
+      document.body.classList.toggle('high-contrast', theme.id === 'high-contrast');
 
       // Generate pattern and overlay CSS
       let additionalCSS = '';

@@ -114,7 +114,7 @@ describe('theme-injector', () => {
 
       const style = document.getElementById('themegpt-styles')
       expect(style?.textContent).toContain('pre code')
-      expect(style?.textContent).toContain('form:has(#prompt-textarea)')
+      expect(style?.textContent).toContain('themegpt-high-contrast form:has(#prompt-textarea)')
     })
 
     it('should not create style element when no theme is saved', async () => {

@@ -512,32 +512,32 @@ main pre code,
   color: var(--cgpt-text) !important;
 }
 
-/* Composer (match ThemeGPT preview tool, best-effort selectors for ChatGPT DOM) */
-form:has(#prompt-textarea),
-form:has([data-testid="prompt-textarea"]) {
-  background: var(--cgpt-surface) !important;
+/* Composer (High Contrast only): transparent input + bordered container to match preview */
+html.themegpt-high-contrast form:has(#prompt-textarea),
+html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) {
+  background: transparent !important;
   border: 1px solid var(--cgpt-border) !important;
   border-radius: 12px !important;
 }
 
-textarea#prompt-textarea,
-textarea[data-testid="prompt-textarea"],
-#prompt-textarea,
-[data-testid="prompt-textarea"] {
+html.themegpt-high-contrast textarea#prompt-textarea,
+html.themegpt-high-contrast textarea[data-testid="prompt-textarea"],
+html.themegpt-high-contrast #prompt-textarea,
+html.themegpt-high-contrast [data-testid="prompt-textarea"] {
   background: transparent !important;
   border: none !important;
   color: var(--cgpt-text) !important;
 }
 
-textarea#prompt-textarea::placeholder,
-textarea[data-testid="prompt-textarea"]::placeholder {
+html.themegpt-high-contrast textarea#prompt-textarea::placeholder,
+html.themegpt-high-contrast textarea[data-testid="prompt-textarea"]::placeholder {
   color: var(--cgpt-text-muted) !important;
 }
 
-form:has(#prompt-textarea) button[type="submit"],
-form:has([data-testid="prompt-textarea"]) button[type="submit"],
-button[data-testid="send-button"],
-button[data-testid="voice-button"] {
+html.themegpt-high-contrast form:has(#prompt-textarea) button[type="submit"],
+html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) button[type="submit"],
+html.themegpt-high-contrast button[data-testid="send-button"],
+html.themegpt-high-contrast button[data-testid="voice-button"] {
   background: var(--cgpt-accent) !important;
   color: var(--cgpt-bg) !important;
   border: none !important;

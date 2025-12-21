@@ -518,6 +518,23 @@ html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) {
   background: transparent !important;
   border: 1px solid var(--cgpt-border) !important;
   border-radius: 12px !important;
+  box-shadow: none !important;
+}
+
+/* ChatGPT often applies surface backgrounds and focus rings on nested wrappers */
+html.themegpt-high-contrast form:has(#prompt-textarea) > *,
+html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) > *,
+html.themegpt-high-contrast form:has(#prompt-textarea) > * > *,
+html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) > * > * {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+html.themegpt-high-contrast form:has(#prompt-textarea):focus-within,
+html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]):focus-within {
+  outline: none !important;
+  box-shadow: none !important;
+  border-color: var(--cgpt-border) !important;
 }
 
 html.themegpt-high-contrast textarea#prompt-textarea,
@@ -527,6 +544,14 @@ html.themegpt-high-contrast [data-testid="prompt-textarea"] {
   background: transparent !important;
   border: none !important;
   color: var(--cgpt-text) !important;
+}
+
+html.themegpt-high-contrast textarea#prompt-textarea:focus,
+html.themegpt-high-contrast textarea#prompt-textarea:focus-visible,
+html.themegpt-high-contrast textarea[data-testid="prompt-textarea"]:focus,
+html.themegpt-high-contrast textarea[data-testid="prompt-textarea"]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 html.themegpt-high-contrast textarea#prompt-textarea::placeholder,

@@ -31,9 +31,12 @@ export default function Popup() {
     storage.get<Theme>("activeTheme").then((t) => {
       if (t) setActiveThemeId(t.id)
     })
-    storage.get<string[]>("unlockedThemes").then((ids) => {
-      if (ids) setUnlockedThemeIds(ids)
-    })
+    // In dev mode, skip loading stored unlock state to keep all premium themes unlocked
+    if (!DEV_UNLOCK_ALL_PREMIUM) {
+      storage.get<string[]>("unlockedThemes").then((ids) => {
+        if (ids) setUnlockedThemeIds(ids)
+      })
+    }
     // Load saved license
     storage.get<string>("licenseKey").then((key) => {
       if (key) {

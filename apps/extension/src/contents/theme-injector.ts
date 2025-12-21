@@ -254,6 +254,39 @@ function applyTheme(theme: Theme | null): void {
     ? generatePatternCSS(pattern, theme.colors['--cgpt-accent'])
     : ''
 
+  // Patterns are rendered behind ChatGPT surfaces; for themes that use semi-transparent
+  // surfaces, ensure the underlying pattern is visible through the content area.
+  const surfaceColor = theme.colors['--cgpt-surface'] || ''
+  const hasSemiTransparentSurface = surfaceColor.length === 9 && surfaceColor.startsWith('#')
+  const transparencyCSS = (pattern && hasSemiTransparentSurface) ? `
+/* ============================================
+   PATTERN TRANSPARENCY: Make content areas see-through
+   for themes with patterns that should show through
+   ============================================ */
+
+/* Main content area - transparent to show pattern */
+[class*="react-scroll-to-bottom"] {
+  background: transparent !important;
+}
+
+/* Conversation container */
+main, main > div {
+  background: transparent !important;
+}
+
+/* Message area container */
+[data-testid="conversation-turn-list"],
+[class*="conversation-content"] {
+  background: transparent !important;
+}
+
+/* Override ChatGPT's main surface for pattern visibility */
+:root, :root.dark, :root.light, .dark, .light, html, html.dark, html.light {
+  --main-surface-primary: transparent !important;
+  --main-surface-background: transparent !important;
+}
+` : ''
+
   // Generate overlay effect if theme opts in (noise takes priority over glow)
   const hasNoise = currentDef?.noiseOverlay ?? theme.noiseOverlay
   const hasGlow = currentDef?.glowOverlay ?? theme.glowOverlay
@@ -466,6 +499,7 @@ code {
 }
 
 ${patternCSS}
+${transparencyCSS}
 ${overlayCSS}
 ${effectsCSS}
 `

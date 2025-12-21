@@ -27,6 +27,7 @@ extension/build
 # Misc
 .history/
 .DS_Store
+asset/istock/
 *.log
 *.pyc
 __pycache__/

@@ -110,7 +110,7 @@ export const KEYFRAMES_CSS = `
 // ============================================================================
 
 export const Z_INDEX = {
-  BACKGROUND: -1,
+  BACKGROUND: 0,
   EFFECTS_BASE: 0,
   EFFECTS_OVERLAY: 1,
   UI_HIGH: 5,

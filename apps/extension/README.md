@@ -1,32 +1,44 @@
-This is a [Plasmo extension](https://docs.plasmo.com/) project bootstrapped with [`plasmo init`](https://www.npmjs.com/package/plasmo).
+# ThemeGPT Chrome Extension
 
-## Getting Started
+A privacy-first Chrome extension for customizing ChatGPT's appearance.
 
-First, run the development server:
+## Development Workflow
+
+### Which Build to Load in Chrome
+
+| Phase | Command | Load This Directory | Hot Reload? |
+|-------|---------|---------------------|-------------|
+| **Development** | `pnpm dev` | `build/chrome-mv3-dev` | Yes |
+| **Production** | `pnpm build` | `build/chrome-mv3-prod` | No |
+
+**During development, always load `chrome-mv3-dev`** — it supports hot reloading so changes appear automatically without manual rebuilds.
+
+### Loading the Extension in Chrome
+
+1. Run `pnpm dev` to start the development server
+2. Open `chrome://extensions` in Chrome
+3. Enable "Developer mode" (toggle in top right)
+4. Click "Load unpacked"
+5. Select: `apps/extension/build/chrome-mv3-dev`
+
+The extension will auto-update as you edit files. If changes don't appear, click the refresh icon on the extension card.
+
+### Dev Mode Features
+
+The `DEV_UNLOCK_ALL_PREMIUM` flag in `popup.tsx` unlocks all premium themes during development. This must be set to `false` before production builds.
+
+## Commands
 
 ```bash
-pnpm dev
-# or
-npm run dev
+pnpm dev      # Start dev server with hot reload
+pnpm build    # Create production build
+pnpm test     # Run tests
+pnpm lint     # Type check
 ```
 
-Open your browser and load the appropriate development build. For example, if you are developing for the chrome browser, using manifest v3, use: `build/chrome-mv3-dev`.
+## Production Build
 
-You can start editing the popup by modifying `popup.tsx`. It should auto-update as you make changes. To add an options page, simply add a `options.tsx` file to the root of the project, with a react component default exported. Likewise to add a content page, add a `content.ts` file to the root of the project, importing some module and do some logic, then reload the extension on your browser.
-
-For further guidance, [visit our Documentation](https://docs.plasmo.com/)
-
-## Making production build
-
-Run the following:
-
-```bash
-pnpm build
-# or
-npm run build
-```
-
-This should create a production bundle for your extension, ready to be zipped and published to the stores.
+Run `pnpm build` to create an optimized bundle in `build/chrome-mv3-prod`, ready for packaging and store submission.
 
 ## Submit to the webstores
 

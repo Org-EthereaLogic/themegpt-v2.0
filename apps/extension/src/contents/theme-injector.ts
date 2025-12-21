@@ -240,6 +240,9 @@ function applyTheme(theme: Theme | null): void {
     return
   }
 
+  // Toggle High Contrast class for special styling parity with the preview tool.
+  document.documentElement.classList.toggle('themegpt-high-contrast', theme.id === 'high-contrast')
+
   // Look up current theme definition for latest properties (overlays, patterns)
   // This ensures stored themes get new features without re-selection
   const currentDef = DEFAULT_THEMES.find(t => t.id === theme.id)
@@ -481,16 +484,78 @@ html, body {
 
 /* Focus states */
 *:focus-visible {
-  outline-color: var(--cgpt-accent) !important;
+  outline: 2px solid var(--cgpt-accent) !important;
+  outline-offset: 2px !important;
 }
 
-/* Code blocks (ensure syntax highlighting works) */
-pre, code {
-  background-color: var(--cgpt-surface) !important;
+/* Code blocks (match ThemeGPT preview tool) */
+pre {
+  background: var(--cgpt-surface) !important;
+  border: 1px solid var(--cgpt-border) !important;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  overflow-x: auto !important;
+  margin: 12px 0 !important;
 }
 
 code {
+  font-family: ui-monospace, "JetBrains Mono", "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+  font-size: 14px !important;
   color: var(--cgpt-accent) !important;
+  background: transparent !important;
+}
+
+pre code {
+  color: var(--cgpt-text) !important;
+}
+
+/* Composer (match ThemeGPT preview tool, best-effort selectors for ChatGPT DOM) */
+form:has(#prompt-textarea),
+form:has([data-testid="prompt-textarea"]) {
+  background: var(--cgpt-surface) !important;
+  border: 1px solid var(--cgpt-border) !important;
+  border-radius: 12px !important;
+}
+
+textarea#prompt-textarea,
+textarea[data-testid="prompt-textarea"],
+#prompt-textarea,
+[data-testid="prompt-textarea"] {
+  background: transparent !important;
+  border: none !important;
+  color: var(--cgpt-text) !important;
+}
+
+textarea#prompt-textarea::placeholder,
+textarea[data-testid="prompt-textarea"]::placeholder {
+  color: var(--cgpt-text-muted) !important;
+}
+
+form:has(#prompt-textarea) button[type="submit"],
+form:has([data-testid="prompt-textarea"]) button[type="submit"],
+button[data-testid="send-button"],
+button[data-testid="voice-button"] {
+  background: var(--cgpt-accent) !important;
+  color: var(--cgpt-bg) !important;
+  border: none !important;
+}
+
+/* High Contrast parity: keep sidebar "active" state visible when border == text */
+html.themegpt-high-contrast,
+html.themegpt-high-contrast.dark,
+html.themegpt-high-contrast.light,
+.themegpt-high-contrast,
+.themegpt-high-contrast.dark,
+.themegpt-high-contrast.light {
+  --sidebar-surface-secondary: var(--cgpt-surface) !important;
+  --sidebar-surface-tertiary: var(--cgpt-surface) !important;
+  --main-surface-secondary-selected: var(--cgpt-surface) !important;
+}
+
+html.themegpt-high-contrast aside [aria-current="page"] {
+  background: var(--cgpt-surface) !important;
+  box-shadow: inset 3px 0 0 var(--cgpt-accent) !important;
+  font-weight: 600;
 }
 
 /* Overlay/backdrop for modals */
@@ -518,6 +583,7 @@ function removeTheme(): void {
     styleElement.remove()
     styleElement = null
   }
+  document.documentElement.classList.remove('themegpt-high-contrast')
   // Remove effects layer
   const effectsLayer = document.getElementById('themegpt-effects')
   if (effectsLayer) effectsLayer.remove()

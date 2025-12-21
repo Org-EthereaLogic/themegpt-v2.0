@@ -81,6 +81,42 @@ describe('theme-injector', () => {
       expect(style?.textContent).toContain('--text-primary: var(--cgpt-text)')
     })
 
+    it('should toggle themegpt-high-contrast class for High Contrast theme', async () => {
+      const mockTheme: Theme = {
+        id: 'high-contrast',
+        name: 'High Contrast',
+        category: 'core',
+        isPremium: false,
+        colors: defaultColors
+      }
+      mockGet.mockResolvedValue(mockTheme)
+
+      vi.resetModules()
+      await import('./theme-injector')
+      await new Promise(resolve => setTimeout(resolve, 50))
+
+      expect(document.documentElement.classList.contains('themegpt-high-contrast')).toBe(true)
+    })
+
+    it('should include preview parity CSS for code blocks and composer', async () => {
+      const mockTheme: Theme = {
+        id: 'test-theme',
+        name: 'Test Theme',
+        category: 'core',
+        isPremium: false,
+        colors: defaultColors
+      }
+      mockGet.mockResolvedValue(mockTheme)
+
+      vi.resetModules()
+      await import('./theme-injector')
+      await new Promise(resolve => setTimeout(resolve, 50))
+
+      const style = document.getElementById('themegpt-styles')
+      expect(style?.textContent).toContain('pre code')
+      expect(style?.textContent).toContain('form:has(#prompt-textarea)')
+    })
+
     it('should not create style element when no theme is saved', async () => {
       mockGet.mockResolvedValue(undefined)
 

@@ -568,6 +568,30 @@ html.themegpt-high-contrast button[data-testid="voice-button"] {
   border: none !important;
 }
 
+/* High Contrast: Remove gold/accent outlines from composer area to eliminate yellow line artifact */
+html.themegpt-high-contrast form:has(#prompt-textarea) *:focus-visible,
+html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) *:focus-visible,
+html.themegpt-high-contrast form:has(#prompt-textarea) *:focus,
+html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* High Contrast: Remove any divider/border above composer that might use accent color */
+html.themegpt-high-contrast main > div:last-child,
+html.themegpt-high-contrast [class*="composer"],
+html.themegpt-high-contrast [class*="Composer"] {
+  border-top: none !important;
+}
+
+/* High Contrast: Ensure contenteditable elements don't show accent outlines */
+html.themegpt-high-contrast [contenteditable]:focus,
+html.themegpt-high-contrast [contenteditable]:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
+  caret-color: var(--cgpt-text) !important;
+}
+
 /* High Contrast parity: keep sidebar "active" state visible when border == text */
 html.themegpt-high-contrast,
 html.themegpt-high-contrast.dark,

@@ -633,18 +633,28 @@ function generateAmbientCSS(ambient: NonNullable<ThemeEffects['ambientEffects']>
   }
 
   if (ambient.neonGrid) {
+    // Animated 3D perspective grid - synthwave aesthetic
+    // Uses original 1920x1080 viewBox to maintain proper 3D perspective
+    // background-position: bottom shows only the grid portion (below horizon)
     blocks.push(`
-/* Premium Effect: Neon Grid */
+/* Premium Effect: Animated 3D Neon Grid */
 .themegpt-neon-grid {
   position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(${accentColor}22 1px, transparent 1px),
-    linear-gradient(90deg, ${accentColor}22 1px, transparent 1px);
-  background-size: 40px 40px;
-  transform: perspective(500px) rotateX(60deg);
-  transform-origin: center bottom;
-  opacity: 0.4;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 50vh;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1920 1080'%3E%3Cdefs%3E%3Cpath id='a' fill='none' stroke='%23c026d3' stroke-width='1' d='M0 540h1920'/%3E%3C/defs%3E%3Cpath fill='none' stroke='%23c026d3' stroke-width='1' d='M20.6 540-9 543.7M81.2 540-9 552.1M141.8 540-9 561.7M202.4 540-9 572.9M263 540-9 586M323.6 540-9 601.6M384.2 540-9 620.5M444.8 540-9 643.8M505.4 540-9 673.4M566 540-9 712M626.6 540-9 764.7M687.2 540-9 840.8M747.8 540-9 960.4M808.4 540l-694.3 540M869 540l-416.6 540M929.6 540l-138.8 540M990.2 540l138.9 540M1050.8 540l416.6 540M1805.8 1080l-694.4-540M1929 960.5 1172 540M1929 840.9 1232.6 540M1929 764.8 1293.2 540M1929 712l-575.2-172M1929 673.4 1414.4 540M1929 643.8 1475 540M1929 620.5 1535.6 540M1929 601.6 1596.2 540M1929 586l-272.2-46M1929 572.9 1717.4 540M1929 561.7 1778 540M1929 552.1l-90.4-12.1M1929 543.7l-29.8-3.7'/%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-1'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-1.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-2'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-2.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-3'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-3.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-4'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-4.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-5.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-6'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-6.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-7'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-7.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-8'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-8.5'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-9'/%3E%3C/use%3E%3Cuse href='%23a'%3E%3Canimate attributeName='y' values='0%3B540' dur='13.33' calcMode='spline' keySplines='.8 0 1 .2' repeatCount='indefinite' begin='-9.5'/%3E%3C/use%3E%3C/svg%3E");
+  background-size: cover;
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .themegpt-neon-grid { background-image: none; }
 }`)
   }
 

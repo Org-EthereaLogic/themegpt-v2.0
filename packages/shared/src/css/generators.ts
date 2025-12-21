@@ -688,33 +688,28 @@ function generateAmbientCSS(ambient: NonNullable<ThemeEffects['ambientEffects']>
 
 /**
  * Generate forest landscape background layer
- * Renders behind all other effects for depth
+ * Paper Forest design from SVG Backgrounds, adapted for Cozy Cabin warmth
+ * Features layered pine trees with superior shape definition and texture
  */
 function generateForestBackgroundCSS(forest: NonNullable<ThemeEffects['forestBackground']>): string {
   const opacity = forest.opacity ?? 0.5
-  // Layered forest SVG with pine tree silhouettes - colors from Forest-1.svg
-  // Layer 1: Background hills, Layer 2-4: Pine trees at varying depths, Layer 5: Foreground vegetation
-  const forestSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice">
-<path fill="%2399ab91" d="M0 600V320c50-30 100-60 200-40s150 50 250 30 200-80 300-60 150 70 250 50 200-50 300-30 100 40 100 40V600Z"/>
-<g fill="%2345613a"><path d="M80 600V520l30-80 30 80V600H80zm60 0V540l25-60 25 60V600h-50zm280 0V500l35-100 35 100V600h-70zm70 0V520l28-70 28 70V600h-56zm320 0V480l40-120 40 120V600h-80zm90 0V510l32-90 32 90V600h-64zm280 0V490l38-110 38 110V600h-76zm75 0V520l30-80 30 80V600h-60zm250 0V500l35-100 35 100V600h-70z"/><path d="M0 600V550c80-20 160 10 240-10s160-40 240-20 160 30 240 10 160-30 240-10 160 20 240 0 160-20 200-10V600Z"/></g>
-<g fill="%2334522e"><path d="M0 600V540l40-100 40 100V600H0zm100 0V530l35-90 35 90V600h-70zm150 0V520l45-130 45 130V600h-90zm120 0V540l38-100 38 100V600h-76zm200 0V510l50-150 50 150V600h-100zm130 0V530l42-110 42 110V600h-84zm180 0V520l48-140 48 140V600h-96zm140 0V540l40-100 40 100V600h-80zm200 0V510l52-160 52 160V600h-104zm150 0V530l45-120 45 120V600h-90z"/><path d="M0 600V560c60-15 120 5 200-5s140-25 220-10 160 20 240 5 140-20 220-5 160 15 240 0 140-15 220-5 120 10 120 10V600Z"/></g>
-<g fill="%232d4729"><path d="M30 600V550l50-140 50 140V600H30zm130 0V560l45-120 45 120V600h-90zm180 0V545l55-160 55 160V600h-110zm150 0V555l48-140 48 140V600h-96zm200 0V540l58-180 58 180V600h-116zm160 0V555l52-150 52 150V600h-104zm190 0V545l56-165 56 165V600h-112zm170 0V560l50-140 50 140V600h-100zm200 0V550l55-160 55 160V600h-110z"/></g>
-<g fill="%2320301a"><path d="M0 600V570c30-5 50 5 80 0s50-10 80-5 60 10 90 5 50-8 80-3 60 8 90 3 50-6 80-2 60 6 90 2 50-5 80-2 60 5 90 2 50-4 80-1 60 4 90 1 50-3 80 0 60 3 90 1 50-2 80 1 60 2 90 0V600Z"/><path d="M60 600v-25l8-20 8 20v25H60zm100 0v-30l10-25 10 25v30h-20zm150 0v-28l9-22 9 22v28h-18zm200 0v-32l11-28 11 28v32h-22zm180 0v-26l8-20 8 20v26h-16zm220 0v-30l10-24 10 24v30h-20zm200 0v-28l9-22 9 22v28h-18zm180 0v-25l8-20 8 20v25h-16zm200 0v-30l10-25 10 25v30h-20z"/></g>
-</svg>`
-  const forestBase64 = btoa(forestSvg)
+  // Paper Forest SVG with warm cabin-adapted colors:
+  // Back trees: #8a9976 (muted sage), Middle: #5d7349 (forest olive), Front: #3d5230 (dark forest)
+  // Tree shadows: #2a1f14 (dark brown), Ground: #3d2e1f (warm brown blend)
 
   return `
-/* Premium Effect: Forest Background */
+/* Premium Effect: Paper Forest Background */
 .themegpt-forest-background {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 45vh;
-  background-image: url('data:image/svg+xml;base64,${forestBase64}');
+  height: 60vh;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 1500'%3E%3Cdefs%3E%3Cg id='t'%3E%3Cpath d='m444 650.5-104.1-147 77.1 5-115.8-163.9 46.3-3.6-79.3-115 53.3 3-114-141-79 130 40.4 2.3L79.5 362l62.8-4.9L55.5 485l60.9 4L7.5 650l436.5.5z'/%3E%3Cpath fill-opacity='0.53' fill='%232a1f14' d='m116.4 489-14.9 22 238.4-7.5L116.4 489zM301.2 344.6l-158.9 12.5 171.9 5.9-13-18.4zM168.9 220.3l-9.7 15.4 109-9.7-99.3-5.7z'/%3E%3C/g%3E%3Cg id='xl'%3E%3Cuse href='%23t' transform='translate(227 650) scale(1.1) translate(-227 -650)'/%3E%3C/g%3E%3Cg id='lg'%3E%3Cuse href='%23t' transform='translate(227 650) scale(.9) translate(-227 -650)'/%3E%3C/g%3E%3Cg id='md'%3E%3Cuse href='%23t' transform='translate(227 650) scale(.8) translate(-227 -650)'/%3E%3C/g%3E%3Cg id='sm'%3E%3Cuse href='%23t' transform='translate(227 650) scale(.7) translate(-227 -650)'/%3E%3C/g%3E%3Cg id='xs'%3E%3Cuse href='%23t' transform='translate(227 650) scale(.6) translate(-227 -650)'/%3E%3C/g%3E%3C/defs%3E%3Cg transform='translate(0 632)'%3E%3Cg transform='scale(0.7)' style='transform-origin:50%25 50%25'%3E%3Cg fill='%238a9976'%3E%3Cuse href='%23xs' x='-470'/%3E%3Cuse href='%23sm' x='-50'/%3E%3Cuse href='%23md' x='450'/%3E%3Cuse href='%23xs' x='850'/%3E%3Cuse href='%23sm' x='1200'/%3E%3Cuse href='%23xs' x='1680'/%3E%3C/g%3E%3Cg fill='%235d7349'%3E%3Cuse href='%23lg' x='160'/%3E%3Cuse href='%23t' x='650'/%3E%3Cuse href='%23md' x='1050'/%3E%3Cuse href='%23sm' x='1500'/%3E%3Cuse href='%23md' x='2110'/%3E%3C/g%3E%3Cg fill='%233d5230'%3E%3Cuse href='%23t' x='-270'/%3E%3Cuse href='%23xl' x='300'/%3E%3Cuse href='%23t' x='850'/%3E%3Cuse href='%23lg' x='1350'/%3E%3Cuse href='%23xl' x='1900'/%3E%3C/g%3E%3C/g%3E%3Cpath fill='%233d2e1f' d='M0 649s352-49 667-49 347 50 666 50 667-50 667-50v900H0V649Z'/%3E%3C/g%3E%3C/svg%3E");
   background-size: cover;
   background-position: bottom center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   opacity: ${opacity};
   z-index: -1;
   pointer-events: none;

@@ -279,8 +279,8 @@ export const DEFAULT_THEMES: Theme[] = [
   // PREMIUM THEMES - Christmas Collection
   // =============================================
   {
-    id: 'cozy-cabin-christmas',
-    name: 'Cozy Cabin Christmas',
+    id: 'woodland-retreat',
+    name: 'Woodland Retreat',
     category: 'christmas',
     colors: {
       '--cgpt-bg': '#140E0A',

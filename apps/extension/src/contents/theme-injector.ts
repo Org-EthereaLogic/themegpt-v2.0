@@ -489,7 +489,8 @@ html, body {
 }
 
 /* Code blocks (match ThemeGPT preview tool) */
-pre {
+main pre,
+[data-testid="conversation-turn-list"] pre {
   background: var(--cgpt-surface) !important;
   border: 1px solid var(--cgpt-border) !important;
   border-radius: 8px !important;
@@ -498,14 +499,16 @@ pre {
   margin: 12px 0 !important;
 }
 
-code {
+main code,
+[data-testid="conversation-turn-list"] code {
   font-family: ui-monospace, "JetBrains Mono", "Fira Code", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
   font-size: 14px !important;
   color: var(--cgpt-accent) !important;
   background: transparent !important;
 }
 
-pre code {
+main pre code,
+[data-testid="conversation-turn-list"] pre code {
   color: var(--cgpt-text) !important;
 }
 

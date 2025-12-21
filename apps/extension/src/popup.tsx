@@ -11,7 +11,7 @@ import mascotUrl from "url:../assets/mascot-32.png"
 const storage = new Storage({ area: "local" })
 
 // DEV MODE: Toggle locally for testing (must remain `false` for production builds)
-const DEV_UNLOCK_ALL_PREMIUM = false
+const DEV_UNLOCK_ALL_PREMIUM = true
 
 export default function Popup() {
   const [activeThemeId, setActiveThemeId] = useState<string>("system")

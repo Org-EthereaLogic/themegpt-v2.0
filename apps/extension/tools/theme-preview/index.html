@@ -501,7 +501,7 @@
       { id: 'electric-dreams', name: 'Electric Dreams', category: 'core', colors: { '--cgpt-bg': '#0D0221', '--cgpt-surface': '#150634', '--cgpt-text': '#F5E6FF', '--cgpt-text-muted': '#D4AAFF', '--cgpt-border': '#3D1A6D', '--cgpt-accent': '#FF2E97' }, isPremium: false, glowOverlay: true, effects: { auroraGradient: { enabled: true, palette: 'cosmic', speed: 'slow', intensity: 'subtle' } } },
 
       // PREMIUM THEMES - Christmas Collection (6)
-      { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'christmas', density: 'few', withOrnaments: true }, animatedSnowfall: { enabled: true, density: 'light', speed: 'slow', style: 'gentle' } } },
+      { id: 'cozy-cabin-christmas', name: 'Cozy Cabin Christmas', category: 'christmas', colors: { '--cgpt-bg': '#140E0A', '--cgpt-surface': '#1E1410', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#4B2E23', '--cgpt-accent': '#D97757' }, isPremium: true, noiseOverlay: true, effects: { forestBackground: { enabled: true, opacity: 0.5 }, animatedSnowfall: { enabled: true, density: 'light', speed: 'slow', style: 'gentle' } } },
       { id: 'frosted-windowpane', name: 'Frosted Windowpane', category: 'christmas', colors: { '--cgpt-bg': '#F5F7FB', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#0F172A', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#D1D5DB', '--cgpt-accent': '#3B82F6' }, isPremium: true, effects: { animatedSnowfall: { enabled: true, density: 'medium', speed: 'slow', snowColor: '#B8D4E8', style: 'gradient' }, seasonalDecorations: { frostedGlass: true } } },
       { id: 'midnight-evergreen', name: 'Midnight Evergreen', category: 'christmas', colors: { '--cgpt-bg': '#020817', '--cgpt-surface': '#07120E', '--cgpt-text': '#F9FAFB', '--cgpt-text-muted': '#E5E7EB', '--cgpt-border': '#14532D', '--cgpt-accent': '#22C55E' }, isPremium: true, noiseOverlay: true, effects: { treeSilhouettes: { enabled: true, style: 'pine', density: 'forest' }, twinklingStars: { enabled: true, count: 'medium', starColor: '#FFFFFF' }, ambientEffects: { fogRising: true } } },
       { id: 'candy-cane-chat', name: 'Candy Cane Chat', category: 'christmas', colors: { '--cgpt-bg': '#FDF2F2', '--cgpt-surface': '#FFFFFF', '--cgpt-text': '#111827', '--cgpt-text-muted': '#4B5563', '--cgpt-border': '#FECACA', '--cgpt-accent': '#DC2626' }, isPremium: true, noiseOverlay: true, effects: { seasonalDecorations: { candyCaneFrame: true, sparkleOverlay: true, sparkleColor: '#dc2626' } } },
@@ -539,7 +539,7 @@
       const size = pattern.size || 1;
 
       switch (pattern.type) {
-        case 'dots':
+        case 'dots': {
           // Polka dot pattern - size controls both dot diameter and spacing
           const dotRadius = Math.max(2, Math.round(2.5 * size));
           const dotSpacing = Math.round(25 * size);
@@ -550,82 +550,68 @@
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   background-image: radial-gradient(${color} ${dotRadius}px, transparent ${dotRadius}px);
   background-size: ${dotSpacing}px ${dotSpacing}px;
   background-position: ${dotOffset}px ${dotOffset}px;
   opacity: ${opacity};
 }`;
+        }
 
         case 'grid':
-          // Fine grid lines (tartan-inspired)
           return `
 /* Pattern: Grid */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   background-image:
-    linear-gradient(${color} 1px, transparent 1px),
-    linear-gradient(90deg, ${color} 1px, transparent 1px);
-  background-size: ${24 * size}px ${24 * size}px;
+    linear-gradient(${color}20 1px, transparent 1px),
+    linear-gradient(90deg, ${color}20 1px, transparent 1px);
+  background-size: ${20 * size}px ${20 * size}px;
   opacity: ${opacity};
 }`;
 
-        case 'snowflakes':
-          // Scattered snowflake-like pattern (multiple dot sizes)
+        case 'snowflakes': {
+          const flakeSize = Math.round(8 * size);
           return `
 /* Pattern: Snowflakes */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
-  background-image:
-    radial-gradient(${color} 2px, transparent 2px),
-    radial-gradient(${color} 1px, transparent 1px);
-  background-size: ${50 * size}px ${50 * size}px, ${30 * size}px ${30 * size}px;
-  background-position: 0 0, ${15 * size}px ${15 * size}px;
+  z-index: 0;
+  background-image: radial-gradient(${color} 1px, transparent 1px);
+  background-size: ${flakeSize * 4}px ${flakeSize * 4}px;
   opacity: ${opacity};
 }`;
+        }
 
-        case 'stars':
-          // Sparse star-like points
+        case 'stars': {
+          const starSize = Math.round(3 * size);
           return `
 /* Pattern: Stars */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   background-image:
-    radial-gradient(${color} 1.5px, transparent 1.5px),
-    radial-gradient(${color} 1px, transparent 1px),
-    radial-gradient(${color} 0.5px, transparent 0.5px);
-  background-size: ${80 * size}px ${80 * size}px, ${60 * size}px ${60 * size}px, ${40 * size}px ${40 * size}px;
-  background-position: 0 0, ${30 * size}px ${40 * size}px, ${15 * size}px ${20 * size}px;
+    radial-gradient(${color} ${starSize}px, transparent ${starSize}px),
+    radial-gradient(${color} ${Math.round(starSize * 0.5)}px, transparent ${Math.round(starSize * 0.5)}px);
+  background-size: ${50 * size}px ${50 * size}px, ${30 * size}px ${30 * size}px;
+  background-position: 0 0, ${15 * size}px ${15 * size}px;
   opacity: ${opacity};
 }`;
+        }
 
-        case 'noise':
+        case 'noise': {
           // Subtle noise texture using SVG
           const noiseSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="4" stitchTiles="stitch"/></filter><rect width="100" height="100" filter="url(#n)" opacity="${opacity}"/></svg>`;
           const encodedSvg = btoa(noiseSvg);
@@ -634,16 +620,14 @@ body::before {
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   background-image: url('data:image/svg+xml;base64,${encodedSvg}');
   background-repeat: repeat;
   opacity: ${opacity * 3};
 }`;
+        }
 
         case 'giftwrap':
           // Gift wrapping paper pattern with polka dots and diagonal ribbons
@@ -652,12 +636,9 @@ body::before {
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   background-image:
     /* Polka dots */
     radial-gradient(${color} 3px, transparent 3px),
@@ -678,99 +659,60 @@ body::before {
   opacity: ${opacity};
 }`;
 
-        case 'christmastrees':
-          // Christmas tree pattern using SVG for crisp tree shapes
-          const treeSize = Math.round(60 * size);
-          const treeSpacing = Math.round(100 * size);
-          const treeSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${treeSpacing}' height='${treeSpacing}' viewBox='0 0 100 100'>
-        <polygon points='50,8 35,35 42,35 30,55 38,55 22,80 78,80 62,55 70,55 58,35 65,35' fill='${color}' opacity='0.9'/>
-        <rect x='45' y='80' width='10' height='12' fill='${color}' opacity='0.7'/>
-        <circle cx='50' cy='15' r='3' fill='${color}' opacity='0.6'/>
-        <circle cx='20' cy='20' r='1.5' fill='${color}' opacity='0.4'/>
-        <circle cx='80' cy='30' r='1.5' fill='${color}' opacity='0.4'/>
-        <circle cx='15' cy='70' r='1.5' fill='${color}' opacity='0.4'/>
-        <circle cx='85' cy='85' r='1.5' fill='${color}' opacity='0.4'/>
-      </svg>`;
-          const treeEncoded = btoa(treeSvg);
+        case 'christmastrees': {
+          // Christmas tree pattern using simpler SVG path
+          const treeSpacing = Math.round(60 * size);
+          const treeBase64 = btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="${treeSpacing}" height="${treeSpacing}" viewBox="0 0 60 60"><path fill="${color}" d="M30 5 L45 25 L40 25 L50 40 L35 40 L35 50 L25 50 L25 40 L10 40 L20 25 L15 25 Z"/></svg>`);
           return `
 /* Pattern: Christmas Trees */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
-  background-image: url('data:image/svg+xml;base64,${treeEncoded}');
+  z-index: 0;
+  background-image: url('data:image/svg+xml;base64,${treeBase64}');
   background-size: ${treeSpacing}px ${treeSpacing}px;
-  background-position: ${Math.round(treeSpacing / 4)}px ${Math.round(treeSpacing / 4)}px;
   opacity: ${opacity};
 }`;
+        }
 
-        case 'peppermints':
-          // Peppermint candy pattern using SVG for swirl design
+        case 'peppermints': {
+          // Peppermint candy pattern using SVG arcs
+          const mintSize = Math.round(40 * size);
           const mintSpacing = Math.round(80 * size);
-          const mintRadius = Math.round(25 * size);
-          // Create peppermint with red swirls on white background
-          const mintSvg = `<svg xmlns='http://www.w3.org/2000/svg' width='${mintSpacing}' height='${mintSpacing}' viewBox='0 0 80 80'>
-        <defs>
-          <clipPath id='mintClip'>
-            <circle cx='40' cy='40' r='22'/>
-          </clipPath>
-        </defs>
-        <circle cx='40' cy='40' r='24' fill='#FFFFFF' opacity='0.95'/>
-        <g clip-path='url(#mintClip)'>
-          <path d='M40,18 L40,62 L52,62 L52,18 Z' fill='${color}' opacity='0.9'/>
-          <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(60,40,40)'/>
-          <path d='M40,18 L28,18 L28,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(120,40,40)'/>
-          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(180,40,40)'/>
-          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(240,40,40)'/>
-          <path d='M40,18 L52,18 L52,62 L40,62 Z' fill='${color}' opacity='0.9' transform='rotate(300,40,40)'/>
-        </g>
-        <circle cx='40' cy='40' r='22' fill='none' stroke='#FFFFFF' stroke-width='2' opacity='0.5'/>
-      </svg>`;
+          const mintSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="${mintSize}" height="${mintSize}" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="white" stroke="#dc2626" stroke-width="2"/><path d="M20 2 A18 18 0 0 1 38 20" fill="none" stroke="#dc2626" stroke-width="6"/><path d="M38 20 A18 18 0 0 1 20 38" fill="none" stroke="#dc2626" stroke-width="6"/><path d="M20 38 A18 18 0 0 1 2 20" fill="none" stroke="#dc2626" stroke-width="6"/><path d="M2 20 A18 18 0 0 1 20 2" fill="none" stroke="#dc2626" stroke-width="6"/></svg>`;
           const mintEncoded = btoa(mintSvg);
           return `
 /* Pattern: Peppermints */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   background-image: url('data:image/svg+xml;base64,${mintEncoded}');
   background-size: ${mintSpacing}px ${mintSpacing}px;
   background-position: ${Math.round(mintSpacing / 4)}px ${Math.round(mintSpacing / 4)}px;
   opacity: ${opacity};
 }`;
+        }
 
-        case 'christmaswrap':
+        case 'christmaswrap': {
           // Christmas tree wrapping paper pattern using pure CSS conic gradients
-          // Source: css-pattern.com/christmas-tree/
           const s = Math.round(132 * size);
-          const c1 = '#ffffff';
-          const c2 = '#a31e39';
-          const c3 = '#31570e';
           return `
 /* Pattern: Christmas Tree Wrap */
 body::before {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
-  z-index: -1;
+  z-index: 0;
   --s: ${s}px;
-  --c1: ${c1};
-  --c2: ${c2};
-  --c3: ${c3};
+  --c1: #ffffff;
+  --c2: #a31e39;
+  --c3: #31570e;
   --_c: #0000, var(--c1) 1deg 79deg, #0000 81deg;
   --g0: conic-gradient(from 140deg at 50% 87.5%, var(--_c));
   --g1: conic-gradient(from 140deg at 50% 81.25%, var(--_c));
@@ -789,6 +731,7 @@ body::before {
   background-size: calc(2 * var(--s)) calc(2 * var(--s));
   opacity: ${opacity};
 }`;
+        }
 
         default:
           return '';
@@ -801,10 +744,7 @@ body::before {
 body::after {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
   z-index: 1;
   opacity: 0.035;
@@ -818,10 +758,7 @@ body::after {
 body::after {
   content: '';
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  inset: 0;
   pointer-events: none;
   z-index: 1;
   opacity: 0.08;
@@ -1095,6 +1032,35 @@ ${treesCSS}`);
 }
 ${treesCSS}`);
         }
+      }
+
+      // Forest background
+      if (effects.forestBackground?.enabled) {
+        const opacity = effects.forestBackground.opacity ?? 0.5;
+        const forestSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 600" preserveAspectRatio="xMidYMax slice">
+<path fill="%2399ab91" d="M0 600V320c50-30 100-60 200-40s150 50 250 30 200-80 300-60 150 70 250 50 200-50 300-30 100 40 100 40V600Z"/>
+<g fill="%2345613a"><path d="M80 600V520l30-80 30 80V600H80zm60 0V540l25-60 25 60V600h-50zm280 0V500l35-100 35 100V600h-70zm70 0V520l28-70 28 70V600h-56zm320 0V480l40-120 40 120V600h-80zm90 0V510l32-90 32 90V600h-64zm280 0V490l38-110 38 110V600h-76zm75 0V520l30-80 30 80V600h-60zm250 0V500l35-100 35 100V600h-70z"/><path d="M0 600V550c80-20 160 10 240-10s160-40 240-20 160 30 240 10 160-30 240-10 160 20 240 0 160-20 200-10V600Z"/></g>
+<g fill="%2334522e"><path d="M0 600V540l40-100 40 100V600H0zm100 0V530l35-90 35 90V600h-70zm150 0V520l45-130 45 130V600h-90zm120 0V540l38-100 38 100V600h-76zm200 0V510l50-150 50 150V600h-100zm130 0V530l42-110 42 110V600h-84zm180 0V520l48-140 48 140V600h-96zm140 0V540l40-100 40 100V600h-80zm200 0V510l52-160 52 160V600h-104zm150 0V530l45-120 45 120V600h-90z"/><path d="M0 600V560c60-15 120 5 200-5s140-25 220-10 160 20 240 5 140-20 220-5 160 15 240 0 140-15 220-5 120 10 120 10V600Z"/></g>
+<g fill="%232d4729"><path d="M30 600V550l50-140 50 140V600H30zm130 0V560l45-120 45 120V600h-90zm180 0V545l55-160 55 160V600h-110zm150 0V555l48-140 48 140V600h-96zm200 0V540l58-180 58 180V600h-116zm160 0V555l52-150 52 150V600h-104zm190 0V545l56-165 56 165V600h-112zm170 0V560l50-140 50 140V600h-100zm200 0V550l55-160 55 160V600h-110z"/></g>
+<g fill="%2320301a"><path d="M0 600V570c30-5 50 5 80 0s50-10 80-5 60 10 90 5 50-8 80-3 60 8 90 3 50-6 80-2 60 6 90 2 50-5 80-2 60 5 90 2 50-4 80-1 60 4 90 1 50-3 80 0 60 3 90 1 50-2 80 1 60 2 90 0V600Z"/><path d="M60 600v-25l8-20 8 20v25H60zm100 0v-30l10-25 10 25v30h-20zm150 0v-28l9-22 9 22v28h-18zm200 0v-32l11-28 11 28v32h-22zm180 0v-26l8-20 8 20v26h-16zm220 0v-30l10-24 10 24v30h-20zm200 0v-28l9-22 9 22v28h-18zm180 0v-25l8-20 8 20v25h-16zm200 0v-30l10-25 10 25v30h-20z"/></g>
+</svg>`;
+        const forestBase64 = btoa(forestSvg);
+        cssBlocks.push(`
+/* Premium Effect: Forest Background */
+.themegpt-forest-background {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45vh;
+  background-image: url('data:image/svg+xml;base64,${forestBase64}');
+  background-size: cover;
+  background-position: bottom center;
+  background-repeat: no-repeat;
+  opacity: ${opacity};
+  z-index: -1;
+  pointer-events: none;
+}`);
       }
 
       // Aurora gradient effect - morphing blob animation (based on baunov/gradients-bg)
@@ -1548,6 +1514,13 @@ ${sparklesCSS}
         }
       }
 
+      // Add forest background
+      if (effects.forestBackground?.enabled) {
+        const forest = document.createElement('div');
+        forest.className = 'themegpt-forest-background';
+        container.appendChild(forest);
+      }
+
       // Add aurora gradient effect with proper isolation
       if (effects.auroraGradient?.enabled) {
         // Create SVG filter for goo/blob merging effect
@@ -1769,6 +1742,7 @@ ${sparklesCSS}
         if (theme.effects.animatedSnowfall?.enabled) fx.push('Snow');
         if (theme.effects.twinklingStars?.enabled) fx.push('Stars');
         if (theme.effects.treeSilhouettes?.enabled) fx.push('Trees');
+        if (theme.effects.forestBackground?.enabled) fx.push('Forest');
         if (theme.effects.ambientEffects?.fogRising) fx.push('Fog');
         if (theme.effects.ambientEffects?.neonGrid) fx.push('Neon');
         if (theme.effects.ambientEffects?.auroraWaves) fx.push('Aurora');

@@ -117,6 +117,13 @@ function createEffectsElements(effects: ThemeEffects): void {
     }
   }
 
+  // Add forest background
+  if (effects.forestBackground?.enabled) {
+    const forest = document.createElement('div')
+    forest.className = 'themegpt-forest-background'
+    container.appendChild(forest)
+  }
+
   // Add aurora gradient effect with proper isolation
   if (effects.auroraGradient?.enabled) {
     // Create SVG filter for goo/blob merging effect

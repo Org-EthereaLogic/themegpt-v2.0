@@ -78,10 +78,16 @@ export interface SeasonalDecorations {
   ribbonColor?: string;     // Color for ribbon (default: white)
 }
 
+export interface ForestBackground {
+  enabled: boolean;
+  opacity?: number; // Default: 0.3
+}
+
 export interface ThemeEffects {
   animatedSnowfall?: AnimatedSnowfall;
   twinklingStars?: TwinklingStars;
   treeSilhouettes?: TreeSilhouettes;
+  forestBackground?: ForestBackground;
   auroraGradient?: AuroraGradient;
   ambientEffects?: AmbientEffects;
   seasonalDecorations?: SeasonalDecorations;
@@ -287,11 +293,9 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: true,
     noiseOverlay: true,
     effects: {
-      "treeSilhouettes": {
+      "forestBackground": {
         "enabled": true,
-        "style": "christmas",
-        "density": "few",
-        "withOrnaments": true
+        "opacity": 0.5
       },
       "animatedSnowfall": {
         "enabled": true,

@@ -83,7 +83,17 @@ export interface ForestBackground {
   opacity?: number; // Default: 0.3
 }
 
+export interface DarkVeilConfig {
+  enabled: boolean;
+  hueShift?: number;    // Hue rotation in degrees (default: 120 for green/teal aurora)
+  noise?: number;       // Noise intensity (default: 0.08)
+  scan?: number;        // Scan line intensity (default: 0.15)
+  scanFreq?: number;    // Scan line frequency (default: 3.0)
+  warp?: number;        // Warp effect intensity (default: 0.2)
+}
+
 export interface ThemeEffects {
+  darkVeil?: DarkVeilConfig;
   animatedSnowfall?: AnimatedSnowfall;
   twinklingStars?: TwinklingStars;
   treeSilhouettes?: TreeSilhouettes;
@@ -96,7 +106,7 @@ export interface ThemeEffects {
 export interface Theme {
   id: string;
   name: string;
-  category: 'christmas' | 'core' | 'premium';
+  category: 'christmas' | 'core' | 'premium' | 'free';
   colors: {
     '--cgpt-bg': string;
     '--cgpt-surface': string;
@@ -324,62 +334,10 @@ export const DEFAULT_THEMES: Theme[] = [
         "density": "medium",
         "speed": "slow",
         "snowColor": "#B8D4E8",
-        "style": "gradient"
+        "style": "shaking"
       },
       "seasonalDecorations": {
         "frostedGlass": true
-      }
-    },
-  },
-  {
-    id: 'midnight-evergreen',
-    name: 'Midnight Evergreen',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#020817',
-      '--cgpt-surface': '#07120E',
-      '--cgpt-text': '#F9FAFB',
-      '--cgpt-text-muted': '#E5E7EB',
-      '--cgpt-border': '#14532D',
-      '--cgpt-accent': '#22C55E',
-    },
-    isPremium: true,
-    noiseOverlay: true,
-    effects: {
-      "treeSilhouettes": {
-        "enabled": true,
-        "style": "pine",
-        "density": "forest"
-      },
-      "twinklingStars": {
-        "enabled": true,
-        "count": "medium",
-        "starColor": "#FFFFFF"
-      },
-      "ambientEffects": {
-        "fogRising": true
-      }
-    },
-  },
-  {
-    id: 'candy-cane-chat',
-    name: 'Candy Cane Chat',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#FDF2F2',
-      '--cgpt-surface': '#FFFFFF',
-      '--cgpt-text': '#111827',
-      '--cgpt-text-muted': '#4B5563',
-      '--cgpt-border': '#FECACA',
-      '--cgpt-accent': '#DC2626',
-    },
-    isPremium: true,
-    noiseOverlay: true,
-    effects: {
-      "seasonalDecorations": {
-        "candyCaneFrame": true,
-        "sparkleOverlay": true,
-        "sparkleColor": "#dc2626"
       }
     },
   },
@@ -441,40 +399,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
   },
   {
-    id: 'snowfall-serenity',
-    name: 'Snowfall Serenity',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#0F172A',
-      '--cgpt-surface': '#1E293B',
-      '--cgpt-text': '#F1F5F9',
-      '--cgpt-text-muted': '#94A3B8',
-      '--cgpt-border': '#334155',
-      '--cgpt-accent': '#38BDF8',
-    },
-    isPremium: true,
-    noiseOverlay: true,
-    glowOverlay: true,
-    pattern: { type: 'snowflakes', opacity: 0.04, size: 1.2 },
-    effects: {
-      "animatedSnowfall": {
-        "enabled": true,
-        "density": "medium",
-        "speed": "slow",
-        "style": "gentle"
-      },
-      "twinklingStars": {
-        "enabled": true,
-        "count": "sparse",
-        "starColor": "#E0F2FE",
-        "animationDuration": 12
-      },
-      "seasonalDecorations": {
-        "frostEdge": true
-      }
-    },
-  },
-  {
     id: 'holiday-gift-wrapping',
     name: 'Holiday Gift Wrapping',
     category: 'christmas',
@@ -492,82 +416,6 @@ export const DEFAULT_THEMES: Theme[] = [
       "seasonalDecorations": {
         "ribbonBow": true,
         "ribbonColor": "#FFF8F5"
-      }
-    },
-  },
-  {
-    id: 'sage-forest-gift',
-    name: 'Sage Forest Gift',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#9DB4A0',
-      '--cgpt-surface': '#9DB4A090',
-      '--cgpt-text': '#FFFFFF',
-      '--cgpt-text-muted': '#F0F5F0',
-      '--cgpt-border': '#7A9A7E',
-      '--cgpt-accent': '#FFFFFF',
-    },
-    isPremium: true,
-    pattern: { type: 'christmastrees', opacity: 0.5, color: '#FFFFFF', size: 1.2 },
-    effects: {
-      "seasonalDecorations": {
-        "ribbonBow": true,
-        "ribbonColor": "#FFFFFF"
-      }
-    },
-  },
-  {
-    id: 'festive-tree-gift',
-    name: 'Festive Tree Gift',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#a31e39',
-      '--cgpt-surface': '#0A0A0A50',
-      '--cgpt-text': '#FFF8E1',
-      '--cgpt-text-muted': '#D4C8B0',
-      '--cgpt-border': '#FFFFFF30',
-      '--cgpt-accent': '#FFD700',
-    },
-    isPremium: true,
-    pattern: { type: 'christmaswrap', opacity: 1, size: 1 },
-  },
-  {
-    id: 'gingerbread-warmth',
-    name: 'Gingerbread Warmth',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#1C120D',
-      '--cgpt-surface': '#2A1B14',
-      '--cgpt-text': '#FFF8E1',
-      '--cgpt-text-muted': '#D7CCC8',
-      '--cgpt-border': '#4E342E',
-      '--cgpt-accent': '#FF8A65',
-    },
-    isPremium: true,
-    pattern: { type: 'dots', opacity: 0.05, color: '#A1887F', size: 1 },
-  },
-  {
-    id: 'winter-wonderland',
-    name: 'Winter Wonderland',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#E3F2FD',
-      '--cgpt-surface': '#FFFFFF',
-      '--cgpt-text': '#0D47A1',
-      '--cgpt-text-muted': '#5472D3',
-      '--cgpt-border': '#BBDEFB',
-      '--cgpt-accent': '#1976D2',
-    },
-    isPremium: true,
-    effects: {
-      "animatedSnowfall": {
-        "enabled": true,
-        "density": "heavy",
-        "speed": "medium",
-        "style": "shaking"
-      },
-      "seasonalDecorations": {
-        "frostEdge": true
       }
     },
   },
@@ -692,21 +540,6 @@ export const DEFAULT_THEMES: Theme[] = [
         "firefliesOrParticles": true
       }
     },
-  },
-  {
-    id: 'chocolate-caramel',
-    name: 'Chocolate Caramel',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#221A0F',
-      '--cgpt-surface': '#362712',
-      '--cgpt-text': '#FDEFD9',
-      '--cgpt-text-muted': '#D1B59A',
-      '--cgpt-border': '#4A3419',
-      '--cgpt-accent': '#FBBF77',
-    },
-    isPremium: true,
-    noiseOverlay: true,
   },
 ];
 

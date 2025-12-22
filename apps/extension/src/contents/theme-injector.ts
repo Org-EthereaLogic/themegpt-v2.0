@@ -5,6 +5,7 @@ import {
   type Theme,
   type ThemePattern,
   type ThemeEffects,
+  type DarkVeilConfig,
   // CSS Generators (R1-R3: Using shared module)
   BASE_OVERLAY_CSS,
   KEYFRAMES_CSS,
@@ -13,6 +14,7 @@ import {
   generateGlowOverlayCSS,
   generateEffectsCSS,
 } from "@themegpt/shared"
+import { mountDarkVeil } from "../components/DarkVeil"
 
 export const config: PlasmoCSConfig = {
   matches: ["https://chat.openai.com/*", "https://chatgpt.com/*"],
@@ -21,6 +23,7 @@ export const config: PlasmoCSConfig = {
 
 const storage = new Storage({ area: "local" })
 let styleElement: HTMLStyleElement | null = null
+let darkVeilCleanup: (() => void) | null = null
 
 /**
  * Check if extension context is still valid
@@ -42,6 +45,12 @@ function isContextValid(): boolean {
  * Create effects layer DOM elements
  */
 function createEffectsElements(effects: ThemeEffects): void {
+  // Clean up existing DarkVeil effect
+  if (darkVeilCleanup) {
+    darkVeilCleanup()
+    darkVeilCleanup = null
+  }
+
   // Remove existing effects layer
   const existing = document.getElementById('themegpt-effects')
   if (existing) existing.remove()
@@ -239,6 +248,23 @@ function createEffectsElements(effects: ThemeEffects): void {
   if (container.children.length > 0) {
     document.body.appendChild(container)
   }
+
+  // Mount DarkVeil WebGL effect (must be after container is in DOM)
+  if (effects.darkVeil?.enabled) {
+    const darkVeilContainer = document.createElement('div')
+    darkVeilContainer.id = 'themegpt-dark-veil'
+    darkVeilContainer.className = 'dark-veil-container'
+    darkVeilContainer.style.cssText = 'position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:-1;'
+    document.body.insertBefore(darkVeilContainer, document.body.firstChild)
+    darkVeilCleanup = mountDarkVeil(darkVeilContainer, {
+      hueShift: effects.darkVeil.hueShift,
+      noise: effects.darkVeil.noise,
+      scan: effects.darkVeil.scan,
+      scanFreq: effects.darkVeil.scanFreq,
+      warp: effects.darkVeil.warp,
+    })
+  }
+
 }
 
 function applyTheme(theme: Theme | null): void {
@@ -263,6 +289,9 @@ function applyTheme(theme: Theme | null): void {
   const patternCSS = pattern
     ? generatePatternCSS(pattern, theme.colors['--cgpt-accent'])
     : ''
+
+  // Get effects for generating CSS and DOM elements
+  const effects = currentDef?.effects ?? theme.effects
 
   // Patterns are rendered behind ChatGPT surfaces; for themes that use semi-transparent
   // surfaces, ensure the underlying pattern is visible through the content area.
@@ -308,7 +337,6 @@ main, main > div {
   }
 
   // Generate premium effects CSS if theme has effects
-  const effects = currentDef?.effects ?? theme.effects
   const effectsCSS = effects
     ? generateEffectsCSS(effects, theme.colors['--cgpt-accent'])
     : ''
@@ -646,6 +674,13 @@ function removeTheme(): void {
   // Remove effects layer
   const effectsLayer = document.getElementById('themegpt-effects')
   if (effectsLayer) effectsLayer.remove()
+  // Clean up DarkVeil WebGL effect
+  if (darkVeilCleanup) {
+    darkVeilCleanup()
+    darkVeilCleanup = null
+  }
+  const darkVeilContainer = document.getElementById('themegpt-dark-veil')
+  if (darkVeilContainer) darkVeilContainer.remove()
 }
 
 async function init(): Promise<void> {

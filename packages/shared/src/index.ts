@@ -399,27 +399,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
   },
   {
-    id: 'holiday-gift-wrapping',
-    name: 'Holiday Gift Wrapping',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#B83A4B',
-      '--cgpt-surface': '#B83A4B90',
-      '--cgpt-text': '#FFF8F5',
-      '--cgpt-text-muted': '#FFE8E8',
-      '--cgpt-border': '#9A3040',
-      '--cgpt-accent': '#FFF8F5',
-    },
-    isPremium: true,
-    pattern: { type: 'dots', opacity: 0.35, color: '#FFF8F5', size: 3 },
-    effects: {
-      "seasonalDecorations": {
-        "ribbonBow": true,
-        "ribbonColor": "#FFF8F5"
-      }
-    },
-  },
-  {
     id: 'starry-christmas-eve',
     name: 'Starry Christmas Eve',
     category: 'christmas',

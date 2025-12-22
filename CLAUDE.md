@@ -2,6 +2,41 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+---
+
+## ⚠️ CRITICAL: Development-Only Policy
+
+> **STATUS: DEVELOPMENT PHASE — DO NOT DEPLOY TO PRODUCTION**
+
+All code changes, builds, and updates MUST target the **development build only** until formal production approval is granted.
+
+### Mandatory Requirements
+
+| Requirement | Details |
+|-------------|---------|
+| **Build Target** | Always use `pnpm dev` for development builds |
+| **Extension Loading** | Load from `apps/extension/build/chrome-mv3-dev` only |
+| **Production Builds** | `pnpm build` creates `chrome-mv3-prod` — DO NOT load or distribute |
+| **Git Pushes** | Allowed to `main` branch for code storage, but NOT for production release |
+
+### Prohibited Actions
+
+- Loading `chrome-mv3-prod` build into Chrome for testing
+- Publishing to Chrome Web Store
+- Distributing production builds to users
+- Running production deployments of the web app
+
+### When Production Is Approved
+
+Production deployment will only occur when:
+1. User explicitly states "ready for production" or "deploy to production"
+2. All features are tested and verified in development
+3. User provides formal approval for the transition
+
+**Historical Context:** Multiple instances have occurred where changes intended for development were incorrectly applied to production. This policy prevents that pattern.
+
+---
+
 ## Project Overview
 
 **ThemeGPT v2.0** is a privacy-first Chrome extension that lets users customize ChatGPT's appearance and track token usage — all without data leaving the browser.
@@ -81,11 +116,18 @@ The SynthAI project archaeology (`doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`) doc
 
 ```bash
 pnpm install    # Install dependencies
-pnpm dev        # Development mode
-pnpm build      # Production build
+pnpm dev        # Development mode (USE THIS for all testing)
+pnpm build      # Production build (DO NOT USE until production approved)
 pnpm test       # Run tests
 pnpm lint       # Lint code
 ```
+
+### Development Workflow
+
+1. Run `pnpm dev` to start the development server
+2. Load extension from `apps/extension/build/chrome-mv3-dev`
+3. Changes hot-reload automatically
+4. **Never** load `chrome-mv3-prod` during development phase
 
 ## Key Resources
 

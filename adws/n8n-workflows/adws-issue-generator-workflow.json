@@ -1,0 +1,173 @@
+{
+  "name": "ADWS GitHub Issue Generator",
+  "description": "Transforms natural language requests into ADWS-ready GitHub issues with optional multi-LLM synthesis",
+  "version": "1.0.0",
+  "trigger": {
+    "type": "webhook",
+    "path": "adws-issue-generator",
+    "method": "POST",
+    "authentication": "none",
+    "responseMode": "responseNode"
+  },
+  "expectedInput": {
+    "request": "string - Natural language description of the task",
+    "project": "string - Project identifier (e.g., 'themegpt-v2.0')",
+    "useSynthesis": "boolean - Whether to use multi-LLM synthesis (default: auto-detect)",
+    "createGitHubIssue": "boolean - Whether to create the issue in GitHub (default: false)"
+  },
+  "nodes": [
+    {
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "position": [0, 200],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adws-issue-generator",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "classify-request",
+      "name": "Classify Request",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "position": [250, 200],
+      "parameters": {
+        "model": "claude-sonnet-4-5-20250929",
+        "maxTokens": 500,
+        "systemMessage": "You are a request classifier. Analyze the input and return JSON with: {\"type\": \"Feature|Fix|Refactor|Research|Documentation\", \"complexity\": \"Simple|Moderate|Complex\", \"useSynthesis\": true|false, \"title\": \"Action-oriented title\", \"reasoning\": \"brief explanation\"}",
+        "prompt": "={{ $json.body.request }}"
+      }
+    },
+    {
+      "id": "parse-classification",
+      "name": "Parse Classification",
+      "type": "n8n-nodes-base.code",
+      "position": [450, 200],
+      "parameters": {
+        "jsCode": "const response = $input.first().json.message.content;\nlet classification;\ntry {\n  const jsonMatch = response.match(/```json\\n?([\\s\\S]*?)\\n?```/) || response.match(/\\{[\\s\\S]*\\}/);\n  classification = JSON.parse(jsonMatch ? jsonMatch[1] || jsonMatch[0] : response);\n} catch (e) {\n  classification = { type: 'Feature', complexity: 'Moderate', useSynthesis: true, title: 'Issue from request', reasoning: 'Parse failed' };\n}\nconst webhookData = $('Webhook Trigger').first().json.body;\nreturn {\n  json: {\n    request: webhookData.request,\n    project: webhookData.project || 'themegpt-v2.0',\n    classification,\n    useSynthesis: webhookData.useSynthesis !== undefined ? webhookData.useSynthesis : classification.useSynthesis,\n    createGitHubIssue: webhookData.createGitHubIssue || false\n  }\n};"
+      }
+    },
+    {
+      "id": "route-by-complexity",
+      "name": "Route by Complexity",
+      "type": "n8n-nodes-base.if",
+      "position": [650, 200],
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.useSynthesis }}",
+              "value2": true
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "call-synthesis-workflow",
+      "name": "Call Synthesis Workflow",
+      "type": "n8n-nodes-base.httpRequest",
+      "position": [900, 100],
+      "parameters": {
+        "method": "POST",
+        "url": "https://etherealogic.app.n8n.cloud/webhook/adws-synthesis",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "issue",
+              "value": "={{ $json.request }}"
+            },
+            {
+              "name": "project",
+              "value": "={{ $json.project }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "simple-analysis",
+      "name": "Simple Analysis (Single Provider)",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "position": [900, 300],
+      "parameters": {
+        "model": "claude-sonnet-4-5-20250929",
+        "maxTokens": 1500,
+        "systemMessage": "You are a technical analyst. Provide a brief analysis including: 1. Technical approach recommendation, 2. Files likely to be modified, 3. Potential risks or edge cases, 4. Estimated complexity. Output in markdown format."
+      }
+    },
+    {
+      "id": "merge-analysis",
+      "name": "Merge Analysis Results",
+      "type": "n8n-nodes-base.merge",
+      "position": [1150, 200],
+      "parameters": {
+        "mode": "chooseBranch"
+      }
+    },
+    {
+      "id": "generate-issue",
+      "name": "Generate GitHub Issue",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "position": [1350, 200],
+      "parameters": {
+        "model": "claude-sonnet-4-5-20250929",
+        "maxTokens": 4000,
+        "systemMessage": "You are the ADWS GitHub Issue Generator. Transform the input into a well-structured GitHub issue. Include: Classification (Type/Complexity/ADWS Mode/Labels), Description, Technical Context, Problem-State Table, Acceptance Criteria, Implementation Guidance (Pre-Flight Checks, Suggested Approach, Verification Commands), Guardrails (Forbidden/Required), Edge Cases, Out of Scope, ADWS Execution Command, Success Signals. ALL file paths must be explicit. ALL commands must be copy-pasteable. Include Anti-Shortcut verification. Issue must be self-contained."
+      }
+    },
+    {
+      "id": "format-response",
+      "name": "Format Response",
+      "type": "n8n-nodes-base.code",
+      "position": [1550, 200],
+      "parameters": {
+        "jsCode": "const issueContent = $input.first().json.message?.content || $input.first().json;\nconst classification = $('Parse Classification').first().json.classification;\nconst usedSynthesis = $('Parse Classification').first().json.useSynthesis;\nconst request = $('Parse Classification').first().json.request;\nconst titleMatch = issueContent.match(/^#\\s*(.+?)$/m);\nconst title = titleMatch ? titleMatch[1] : classification.title;\nreturn {\n  json: {\n    success: true,\n    originalRequest: request,\n    classification: { type: classification.type, complexity: classification.complexity, usedSynthesis },\n    issue: { title, markdown: issueContent },\n    adwsCommand: `cd adws && uv run adw_plan_build.py ${usedSynthesis ? '--synthesis' : ''} \"${title}\"`\n  }\n};"
+      }
+    },
+    {
+      "id": "webhook-response",
+      "name": "Webhook Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "position": [1750, 200],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}"
+      }
+    }
+  ],
+  "connections": {
+    "webhook-trigger": { "main": [["classify-request"]] },
+    "classify-request": { "main": [["parse-classification"]] },
+    "parse-classification": { "main": [["route-by-complexity"]] },
+    "route-by-complexity": { "true": [["call-synthesis-workflow"]], "false": [["simple-analysis"]] },
+    "call-synthesis-workflow": { "main": [["merge-analysis"]] },
+    "simple-analysis": { "main": [["merge-analysis"]] },
+    "merge-analysis": { "main": [["generate-issue"]] },
+    "generate-issue": { "main": [["format-response"]] },
+    "format-response": { "main": [["webhook-response"]] }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "availableInMCP": true
+  },
+  "documentation": {
+    "endpoints": {
+      "production": "https://etherealogic.app.n8n.cloud/webhook/adws-issue-generator",
+      "test": "https://etherealogic.app.n8n.cloud/webhook-test/adws-issue-generator"
+    },
+    "exampleRequest": {
+      "method": "POST",
+      "headers": { "Content-Type": "application/json" },
+      "body": {
+        "request": "Add animated snowfall effect to the Frozen theme",
+        "project": "themegpt-v2.0",
+        "useSynthesis": true,
+        "createGitHubIssue": false
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "adw_id": "adw-20251223-013537",
+  "issue_number": "manual",
+  "provider": "anthropic",
+  "synthesis_enabled": true,
+  "all_adws": [
+    "adw_plan",
+    "adw_build",
+    "adw_complete"
+  ],
+  "started_at": "2025-12-23T01:35:37.831971",
+  "plan_file": "specs/latest_plan.md",
+  "completed_at": "2025-12-23T01:37:45.761356"
+}

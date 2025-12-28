@@ -419,6 +419,32 @@ export const DEFAULT_THEMES: Theme[] = [
       }
     },
   },
+  {
+    id: 'frozen',
+    name: 'Frozen',
+    category: 'christmas',
+    colors: {
+      '--cgpt-bg': '#000428',
+      '--cgpt-surface': '#081830',
+      '--cgpt-text': '#E2E8F0',
+      '--cgpt-text-muted': '#94A3B8',
+      '--cgpt-border': '#1E3A8A',
+      '--cgpt-accent': '#4FC3F7',
+    },
+    isPremium: true,
+    glowOverlay: true,
+    effects: {
+      "animatedSnowfall": {
+        "enabled": true,
+        "density": "medium",
+        "speed": "slow",
+        "style": "gentle"
+      },
+      "seasonalDecorations": {
+        "frostEdge": true
+      }
+    },
+  },
 
   // =============================================
   // PREMIUM THEMES - Core Collection

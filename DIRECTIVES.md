@@ -38,8 +38,8 @@ These directives are enforced by hooks. Violations block the operation until res
 
 | Category | Count | Themes |
 |----------|-------|--------|
-| Free | 9 | VS Code Dark+, Solarized Dark, Dracula, Monokai Pro, High Contrast, One Dark, Aurora Borealis, Sunset Blaze, Electric Dreams |
-| Premium | 5 | Woodland Retreat, Frosted Windowpane, Silent Night (Starfield), Synth Wave, Shades of Purple |
+| Free | 6 | VS Code Dark+, Solarized Dark, Dracula, Monokai Pro, High Contrast, One Dark |
+| Premium | 8 | Aurora Borealis, Sunset Blaze, Electric Dreams, Woodland Retreat, Frosted Windowpane, Silent Night (Starfield), Synth Wave, Shades of Purple |
 
 **FORBIDDEN UNTIL JAN 1, 2026:**
 

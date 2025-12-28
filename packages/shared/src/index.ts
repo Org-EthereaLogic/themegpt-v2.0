@@ -215,6 +215,9 @@ export const DEFAULT_THEMES: Theme[] = [
     isPremium: false,
     glowOverlay: true,
   },
+  // =============================================
+  // PREMIUM THEMES - Animated Effects Collection
+  // =============================================
   {
     id: 'aurora-borealis',
     name: 'Aurora Borealis',
@@ -227,7 +230,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#164E63',
       '--cgpt-accent': '#00E5CC',
     },
-    isPremium: false,
+    isPremium: true,
     effects: {
       auroraGradient: {
         enabled: true,
@@ -249,7 +252,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#4A1A2E',
       '--cgpt-accent': '#FF6B4A',
     },
-    isPremium: false,
+    isPremium: true,
     glowOverlay: true,
     effects: {
       auroraGradient: {
@@ -273,7 +276,7 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-border': '#3D1A6D',
       '--cgpt-accent': '#FF2E97',
     },
-    isPremium: false,
+    isPremium: true,
     glowOverlay: true,
     effects: {
       auroraGradient: {

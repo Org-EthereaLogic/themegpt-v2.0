@@ -43,7 +43,7 @@ Production deployment will only occur when:
 
 The following themes have been finalized for the product launch and **must not be modified or added to** until after the release date.
 
-### Free Themes (9)
+### Free Themes (6)
 
 | Theme | Category |
 |-------|----------|
@@ -53,19 +53,19 @@ The following themes have been finalized for the product launch and **must not b
 | Monokai Pro | Core |
 | High Contrast | Core |
 | One Dark | Core |
-| Aurora Borealis | Core |
-| Sunset Blaze | Core |
-| Electric Dreams | Core |
 
-### Premium Themes (5)
+### Premium Themes (8)
 
-| Theme | Category |
-|-------|----------|
-| Woodland Retreat | Christmas |
-| Frosted Windowpane | Christmas |
-| Silent Night (Starfield) | Christmas |
-| Synth Wave | Core |
-| Shades of Purple | Core |
+| Theme | Category | Highlight |
+|-------|----------|-----------|
+| Aurora Borealis | Animated Effects | Northern lights aurora |
+| Sunset Blaze | Animated Effects | Warm sunset gradient |
+| Electric Dreams | Animated Effects | Cosmic neon aurora |
+| Woodland Retreat | Christmas | Forest with snowfall |
+| Frosted Windowpane | Christmas | Frosted glass effect |
+| Silent Night (Starfield) | Christmas | Twinkling stars |
+| Synth Wave | Core | Retro neon grid |
+| Shades of Purple | Core | Rich purple tones |
 
 ### Prohibited Theme Actions (Until Jan 1, 2026)
 

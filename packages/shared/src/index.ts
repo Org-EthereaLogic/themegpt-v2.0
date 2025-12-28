@@ -368,84 +368,6 @@ export const DEFAULT_THEMES: Theme[] = [
       }
     },
   },
-  {
-    id: 'purple-twilight',
-    name: 'Purple Twilight',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#0B0712',
-      '--cgpt-surface': '#141021',
-      '--cgpt-text': '#F9FAFB',
-      '--cgpt-text-muted': '#E5E7EB',
-      '--cgpt-border': '#4C1D95',
-      '--cgpt-accent': '#7C3AED',
-    },
-    isPremium: true,
-    noiseOverlay: true,
-    glowOverlay: true,
-    effects: {
-      "twinklingStars": {
-        "enabled": true,
-        "count": "sparse",
-        "starColor": "#FFFFFF",
-        "animationDuration": 10
-      },
-      "ambientEffects": {
-        "candleGlow": true
-      },
-      "seasonalDecorations": {
-        "frostEdge": true
-      }
-    },
-  },
-  {
-    id: 'starry-christmas-eve',
-    name: 'Starry Christmas Eve',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#0A0A1A',
-      '--cgpt-surface': '#12122A',
-      '--cgpt-text': '#FAFAFA',
-      '--cgpt-text-muted': '#B8B8D1',
-      '--cgpt-border': '#2A2A4A',
-      '--cgpt-accent': '#FFD700',
-    },
-    isPremium: true,
-    effects: {
-      "twinklingStars": {
-        "enabled": true,
-        "count": "dense",
-        "includeShootingStars": true
-      }
-    },
-  },
-  {
-    id: 'frozen',
-    name: 'Frozen',
-    category: 'christmas',
-    colors: {
-      '--cgpt-bg': '#000428',
-      '--cgpt-surface': '#081830',
-      '--cgpt-text': '#E2E8F0',
-      '--cgpt-text-muted': '#94A3B8',
-      '--cgpt-border': '#1E3A8A',
-      '--cgpt-accent': '#4FC3F7',
-    },
-    isPremium: true,
-    glowOverlay: true,
-    effects: {
-      "animatedSnowfall": {
-        "enabled": true,
-        "density": "medium",
-        "speed": "slow",
-        "style": "gentle"
-      },
-      "seasonalDecorations": {
-        "frostEdge": true
-      }
-    },
-  },
-
   // =============================================
   // PREMIUM THEMES - Core Collection
   // =============================================
@@ -470,43 +392,6 @@ export const DEFAULT_THEMES: Theme[] = [
     },
   },
   {
-    id: 'apple-ii-phosphor',
-    name: 'Apple II Phosphor',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#000000',
-      '--cgpt-surface': '#0A120A',
-      '--cgpt-text': '#33FF33',
-      '--cgpt-text-muted': '#22AA22',
-      '--cgpt-border': '#1A3A1A',
-      '--cgpt-accent': '#00FF41',
-    },
-    isPremium: true,
-    noiseOverlay: true,
-    glowOverlay: true,
-  },
-  {
-    id: 'tomorrow-night-blue',
-    name: 'Tomorrow Night Blue',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#002451',
-      '--cgpt-surface': '#001C40',
-      '--cgpt-text': '#E0F2FF',
-      '--cgpt-text-muted': '#BFDBFE',
-      '--cgpt-border': '#003566',
-      '--cgpt-accent': '#4FC3F7',
-    },
-    isPremium: true,
-    glowOverlay: true,
-    effects: {
-      "twinklingStars": {
-        "enabled": true,
-        "count": "sparse"
-      }
-    },
-  },
-  {
     id: 'shades-of-purple',
     name: 'Shades of Purple',
     category: 'core',
@@ -519,32 +404,6 @@ export const DEFAULT_THEMES: Theme[] = [
       '--cgpt-accent': '#FAD000',
     },
     isPremium: true,
-  },
-  {
-    id: 'dark-forest',
-    name: 'Dark Forest',
-    category: 'core',
-    colors: {
-      '--cgpt-bg': '#101917',
-      '--cgpt-surface': '#131F1D',
-      '--cgpt-text': '#E5F5F0',
-      '--cgpt-text-muted': '#94A3B8',
-      '--cgpt-border': '#1F2933',
-      '--cgpt-accent': '#22C55E',
-    },
-    isPremium: true,
-    noiseOverlay: true,
-    effects: {
-      "treeSilhouettes": {
-        "enabled": true,
-        "style": "mixed",
-        "density": "moderate"
-      },
-      "ambientEffects": {
-        "fogRising": true,
-        "firefliesOrParticles": true
-      }
-    },
   },
 ];
 

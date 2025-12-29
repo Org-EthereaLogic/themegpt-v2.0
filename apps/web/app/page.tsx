@@ -2,18 +2,48 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import { DEFAULT_THEMES, type Theme } from "@themegpt/shared"
 
-const PREMIUM_THEMES = [
-  { id: 'dracula', name: 'Dracula' },
-  { id: 'rose-garden', name: 'Rose Garden' },
-  { id: 'ocean-breeze', name: 'Ocean Breeze' },
-  { id: 'monokai-pro', name: 'Monokai Pro' },
-  { id: 'lavender-dreams', name: 'Lavender Dreams' },
-  { id: 'midnight-blue', name: 'Midnight Blue' },
-]
+// Separate themes by premium status
+const FREE_THEMES = DEFAULT_THEMES.filter(t => !t.isPremium)
+const PREMIUM_THEMES = DEFAULT_THEMES.filter(t => t.isPremium)
+
+// Helper to determine theme type label
+function getThemeTypeLabel(theme: Theme): string {
+  // Check for animated effects
+  if (theme.effects?.auroraGradient?.enabled) return "✨ Aurora Effect"
+  if (theme.effects?.animatedSnowfall?.enabled) return "❄️ Snowfall Effect"
+  if (theme.effects?.twinklingStars?.enabled) return "⭐ Starfield Effect"
+  if (theme.effects?.ambientEffects?.neonGrid) return "🌆 Neon Grid Effect"
+
+  // Check if light or dark based on background
+  const bg = theme.colors['--cgpt-bg']
+  const isLight = isLightColor(bg)
+  return isLight ? "☀️ Light Theme" : "🌙 Dark Theme"
+}
+
+// Helper to check if a color is light
+function isLightColor(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance > 0.5
+}
+
+// Helper to check if theme has animated effects
+function hasAnimatedEffects(theme: Theme): boolean {
+  return !!(
+    theme.effects?.auroraGradient?.enabled ||
+    theme.effects?.animatedSnowfall?.enabled ||
+    theme.effects?.twinklingStars?.enabled ||
+    theme.effects?.ambientEffects?.neonGrid ||
+    theme.effects?.ambientEffects?.auroraWaves
+  )
+}
 
 export default function Home() {
-  const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0].id)
+  const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0]?.id || '')
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   const handleCheckout = async (type: 'subscription' | 'single', themeId?: string) => {
@@ -106,7 +136,7 @@ export default function Home() {
                 <h3 className="text-xl font-bold mb-2">Infinite Style</h3>
                 <div className="text-4xl font-bold text-brown-900 mb-2">$1.99<span className="text-base font-normal opacity-60">/mo</span></div>
                 <p className="opacity-70 text-sm mb-6 min-h-[40px]">Access to 3 active premium themes at once. Swap anytime.</p>
-                <button 
+                <button
                   onClick={() => handleCheckout('subscription')}
                   className="w-full py-3 rounded-xl bg-teal-500 text-white font-bold hover:bg-teal-600 transition-colors"
                 >
@@ -129,7 +159,9 @@ export default function Home() {
                   className="w-full mb-4 py-2.5 px-3 rounded-lg border border-brown-900/20 bg-white text-brown-900 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
                 >
                   {PREMIUM_THEMES.map((theme) => (
-                    <option key={theme.id} value={theme.id}>{theme.name}</option>
+                    <option key={theme.id} value={theme.id}>
+                      {theme.name} {hasAnimatedEffects(theme) ? '✨' : ''}
+                    </option>
                   ))}
                 </select>
                 <button
@@ -147,74 +179,49 @@ export default function Home() {
         )}
       </section>
 
-      {/* Section Header */}
+      {/* Premium Themes Section */}
       <div className="bg-cream px-8 pt-[50px] pb-[30px] text-center">
         <h2 className="mb-2 text-[32px] font-bold text-brown-900">
-          Premium Gallery
+          ✨ Premium Collection
         </h2>
         <p className="text-base text-brown-600 max-w-2xl mx-auto">
-          Unlock our full collection of professionally designed themes.
+          Stunning themes with animated effects — aurora lights, snowfall, starfields, and more.
         </p>
       </div>
 
-      {/* Theme Gallery */}
-      <section id="themes" className="px-8 pb-[70px] pt-5">
+      {/* Premium Theme Gallery */}
+      <section id="themes" className="px-8 pb-[50px] pt-5">
         <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
-          
-          <ThemeCard
-            name="Dracula"
-            type="🌙 Dark Theme"
-            bg="bg-[#282a36]"
-            bubble="bg-[#343746] text-[#f8f8f2]"
-            label="text-[#bd93f9]"
-            input="bg-[#21222c] text-[#6272a4] border-[#44475a]"
-            onBuy={() => handleCheckout('single', 'dracula')}
-          />
-          <ThemeCard
-            name="Rose Garden"
-            type="☀️ Light Theme"
-            bg="bg-[#FFF0F3]"
-            bubble="bg-[#FFFFFF] text-[#5C374C]"
-            label="text-[#E91E63]"
-            input="bg-[#FFFFFF] text-[#8B6B7B] border-[#F8D7DA]"
-             onBuy={() => handleCheckout('single', 'rose-garden')}
-          />
-          <ThemeCard
-            name="Ocean Breeze"
-            type="☀️ Light Theme"
-            bg="bg-[#E8F4F8]"
-            bubble="bg-[#FFFFFF] text-[#1A535C]"
-            label="text-[#00A896]"
-            input="bg-[#FFFFFF] text-[#4A7C82] border-[#B8D8E0]"
-             onBuy={() => handleCheckout('single', 'ocean-breeze')}
-          />
-          <ThemeCard
-            name="Monokai Pro"
-            type="🌙 Dark Theme"
-            bg="bg-[#2D2A2E]"
-            bubble="bg-[#403E41] text-[#FCFCFA]"
-            label="text-[#FFD866]"
-            input="bg-[#221F22] text-[#939293] border-[#49474A]"
-            onBuy={() => handleCheckout('single', 'monokai-pro')}
-          />
-          <ThemeCard
-            name="Lavender Dreams"
-            type="☀️ Light Theme"
-            bg="bg-[#F3E8FF]"
-            bubble="bg-[#FFFFFF] text-[#4A3560]"
-            label="text-[#9333EA]"
-            input="bg-[#FFFFFF] text-[#7C6B8E] border-[#E2D1F0]"
-             onBuy={() => handleCheckout('single', 'lavender-dreams')}
-          />
-          <ThemeCard
-            name="Midnight Blue"
-            type="🌙 Dark Theme"
-            bg="bg-[#0F172A]"
-            bubble="bg-[#1E293B] text-[#E2E8F0]"
-            label="text-[#38BDF8]"
-            input="bg-[#0F172A] text-[#64748B] border-[#334155]"
-             onBuy={() => handleCheckout('single', 'midnight-blue')}
-          />
+          {PREMIUM_THEMES.map((theme) => (
+            <ThemeCard
+              key={theme.id}
+              theme={theme}
+              onBuy={() => handleCheckout('single', theme.id)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Free Themes Section */}
+      <div className="bg-cream-dark/30 px-8 pt-[50px] pb-[30px] text-center">
+        <h2 className="mb-2 text-[32px] font-bold text-brown-900">
+          🎁 Free Themes
+        </h2>
+        <p className="text-base text-brown-600 max-w-2xl mx-auto">
+          Classic IDE themes included free with the extension. No purchase required.
+        </p>
+      </div>
+
+      {/* Free Theme Gallery */}
+      <section className="bg-cream-dark/30 px-8 pb-[70px] pt-5">
+        <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
+          {FREE_THEMES.map((theme) => (
+            <ThemeCard
+              key={theme.id}
+              theme={theme}
+              isFree
+            />
+          ))}
         </div>
       </section>
 
@@ -283,43 +290,111 @@ export default function Home() {
 // --- Helper Components ---
 
 interface ThemeCardProps {
-  name: string;
-  type: string;
-  bg: string;
-  bubble: string;
-  label: string;
-  input: string;
+  theme: Theme;
   onBuy?: () => void;
+  isFree?: boolean;
 }
 
-function ThemeCard({ name, type, bg, bubble, label, input, onBuy }: ThemeCardProps) {
+function ThemeCard({ theme, onBuy, isFree }: ThemeCardProps) {
+  const typeLabel = getThemeTypeLabel(theme)
+  const hasEffects = hasAnimatedEffects(theme)
+  const isLight = isLightColor(theme.colors['--cgpt-bg'])
+
   return (
     <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(75,46,30,0.15)]">
+      {/* Animated effect badge */}
+      {hasEffects && (
+        <div className="absolute top-5 right-5 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-full shadow-lg">
+          ✨ Animated
+        </div>
+      )}
+
       <div className="overflow-hidden rounded-xl">
-        <div className={`flex min-h-[160px] flex-col gap-2.5 p-[22px] ${bg}`}>
-          <div className={`rounded-[14px] p-3.5 text-xs leading-relaxed ${bubble}`}>
-            <span className={`mr-1.5 font-semibold ${label}`}>ChatGPT:</span>
+        {/* Theme preview mockup */}
+        <div
+          className="flex min-h-[180px] flex-col gap-2.5 p-[22px] relative"
+          style={{ backgroundColor: theme.colors['--cgpt-bg'] }}
+        >
+          {/* Subtle effect indicator overlay for animated themes */}
+          {hasEffects && (
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {theme.effects?.auroraGradient?.enabled && (
+                <div className="absolute inset-0 opacity-30 bg-gradient-to-t from-transparent via-emerald-500/20 to-cyan-500/30 animate-pulse" />
+              )}
+              {theme.effects?.animatedSnowfall?.enabled && (
+                <div className="absolute inset-0 opacity-40">
+                  <div className="absolute top-2 left-[20%] w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }} />
+                  <div className="absolute top-4 left-[50%] w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.5s', animationDuration: '2.5s' }} />
+                  <div className="absolute top-1 left-[80%] w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '2s' }} />
+                  <div className="absolute top-6 left-[35%] w-1 h-1 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '0.3s', animationDuration: '2.2s' }} />
+                </div>
+              )}
+              {theme.effects?.twinklingStars?.enabled && (
+                <div className="absolute inset-0 opacity-60">
+                  <div className="absolute top-3 left-[15%] w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s' }} />
+                  <div className="absolute top-5 left-[45%] w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.5s', animationDuration: '2s' }} />
+                  <div className="absolute top-2 left-[75%] w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDelay: '1s', animationDuration: '1.8s' }} />
+                  <div className="absolute top-8 left-[60%] w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s', animationDuration: '2.2s' }} />
+                </div>
+              )}
+              {theme.effects?.ambientEffects?.neonGrid && (
+                <div className="absolute bottom-0 left-0 right-0 h-1/2 opacity-20 bg-gradient-to-t from-pink-500/30 to-transparent" />
+              )}
+            </div>
+          )}
+
+          {/* Chat bubble mockup */}
+          <div
+            className="rounded-[14px] p-3.5 text-xs leading-relaxed relative z-10"
+            style={{
+              backgroundColor: theme.colors['--cgpt-surface'],
+              color: theme.colors['--cgpt-text']
+            }}
+          >
+            <span
+              className="mr-1.5 font-semibold"
+              style={{ color: theme.colors['--cgpt-accent'] }}
+            >
+              ChatGPT:
+            </span>
             Here&apos;s a quick summary of your notes from today...
           </div>
-          <div className={`rounded-[22px] border border-solid px-4 py-3 text-[11px] ${input}`}>
+
+          {/* Input field mockup */}
+          <div
+            className="rounded-[22px] border border-solid px-4 py-3 text-[11px] relative z-10"
+            style={{
+              backgroundColor: theme.colors['--cgpt-surface'],
+              color: theme.colors['--cgpt-text-muted'],
+              borderColor: theme.colors['--cgpt-border']
+            }}
+          >
             Message ChatGPT...
           </div>
         </div>
       </div>
+
+      {/* Card footer */}
       <div className="flex items-center justify-between bg-white px-1.5 pt-3.5 pb-1.5">
         <div>
-          <div className="text-[15px] font-semibold text-brown-900">{name}</div>
-          <div className="mt-0.5 text-xs text-brown-600">{type}</div>
+          <div className="text-[15px] font-semibold text-brown-900">{theme.name}</div>
+          <div className="mt-0.5 text-xs text-brown-600">{typeLabel}</div>
         </div>
-        <button 
-          onClick={(e) => {
-              e.stopPropagation()
-              onBuy?.()
-          }}
-          className="cursor-pointer rounded-[20px] bg-teal-500/10 text-teal-600 hover:bg-teal-500 hover:text-white px-4 py-2 text-[13px] font-medium transition-colors"
-        >
-          Buy $0.99
-        </button>
+        {isFree ? (
+          <span className="rounded-[20px] bg-green-500/10 text-green-600 px-4 py-2 text-[13px] font-medium">
+            Free
+          </span>
+        ) : (
+          <button
+            onClick={(e) => {
+                e.stopPropagation()
+                onBuy?.()
+            }}
+            className="cursor-pointer rounded-[20px] bg-teal-500/10 text-teal-600 hover:bg-teal-500 hover:text-white px-4 py-2 text-[13px] font-medium transition-colors"
+          >
+            Buy $0.99
+          </button>
+        )}
       </div>
     </div>
   );

@@ -2,18 +2,70 @@
 
 import { useState } from "react"
 import Image from "next/image"
+import { DEFAULT_THEMES, type Theme } from "@themegpt/shared"
 
-const PREMIUM_THEMES = [
-  { id: 'dracula', name: 'Dracula' },
-  { id: 'rose-garden', name: 'Rose Garden' },
-  { id: 'ocean-breeze', name: 'Ocean Breeze' },
-  { id: 'monokai-pro', name: 'Monokai Pro' },
-  { id: 'lavender-dreams', name: 'Lavender Dreams' },
-  { id: 'midnight-blue', name: 'Midnight Blue' },
-]
+// Separate themes by premium status
+const FREE_THEMES = DEFAULT_THEMES.filter(t => !t.isPremium)
+const PREMIUM_THEMES = DEFAULT_THEMES.filter(t => t.isPremium)
+
+// Helper to determine theme type label
+function getThemeTypeLabel(theme: Theme): string {
+  // Check for animated effects
+  if (theme.effects?.auroraGradient?.enabled) return "✨ Aurora Effect"
+  if (theme.effects?.animatedSnowfall?.enabled) return "❄️ Snowfall Effect"
+  if (theme.effects?.twinklingStars?.enabled) return "⭐ Starfield Effect"
+  if (theme.effects?.ambientEffects?.neonGrid) return "🌆 Neon Grid Effect"
+
+  // Check if light or dark based on background
+  const bg = theme.colors['--cgpt-bg']
+  const isLight = isLightColor(bg)
+  return isLight ? "☀️ Light Theme" : "🌙 Dark Theme"
+}
+
+// Helper to check if a color is light
+function isLightColor(hex: string): boolean {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance > 0.5
+}
+
+// Helper to check if theme has animated effects
+function hasAnimatedEffects(theme: Theme): boolean {
+  return !!(
+    theme.effects?.auroraGradient?.enabled ||
+    theme.effects?.animatedSnowfall?.enabled ||
+    theme.effects?.twinklingStars?.enabled ||
+    theme.effects?.ambientEffects?.neonGrid ||
+    theme.effects?.ambientEffects?.auroraWaves
+  )
+}
+
+// Map theme IDs to screenshot filenames
+function getThemeScreenshots(themeId: string): { home: string; content: string } {
+  const mapping: Record<string, { home: string; content: string }> = {
+    'themegpt-dark': { home: '/themes/themegpt_dark_1.png', content: '/themes/themegpt_dark_2.png' },
+    'themegpt-light': { home: '/themes/themegpt_light_1.png', content: '/themes/themegpt_light_2.png' },
+    'solarized-dark': { home: '/themes/solarized_dark_1.png', content: '/themes/solarized_dark_2.png' },
+    'dracula': { home: '/themes/dracula_1.png', content: '/themes/dracula_2.png' },
+    'monokai-pro': { home: '/themes/monokai_pro_1.png', content: '/themes/monokai_pro_2.png' },
+    'high-contrast': { home: '/themes/high_contrast_1.png', content: '/themes/high_contrast_2.png' },
+    'one-dark': { home: '/themes/one_dark_1.png', content: '/themes/one_dark_2.png' },
+    'aurora-borealis': { home: '/themes/aurora_borealis_1.png', content: '/themes/aurora_borealis_2.png' },
+    'sunset-blaze': { home: '/themes/sunset_blaze_1.png', content: '/themes/sunset_blaze_2.png' },
+    'electric-dreams': { home: '/themes/electric_dreams_1.png', content: '/themes/electric_dreams_2.png' },
+    'woodland-retreat': { home: '/themes/woodland_retreat_1.png', content: '/themes/woodland_retreat_2.png' },
+    'frosted-windowpane': { home: '/themes/frosted_windowpane_1.png', content: '/themes/frosted_windowpane_2.png' },
+    'silent-night-starfield': { home: '/themes/silent_night_1.png', content: '/themes/silent_night_2.png' },
+    'synth-wave': { home: '/themes/synth_wave_1.png', content: '/themes/synth_wave_2.png' },
+    'shades-of-purple': { home: '/themes/shades_of_purple_1.png', content: '/themes/shades_of_purple_2.png' },
+  }
+  return mapping[themeId] || { home: '', content: '' }
+}
 
 export default function Home() {
-  const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0].id)
+  const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0]?.id || '')
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
   const handleCheckout = async (type: 'subscription' | 'single', themeId?: string) => {
@@ -37,7 +89,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-cream font-sans text-brown-900">
+    <div className="noise-texture min-h-screen bg-cream font-sans text-brown-900">
 
       {/* Header */}
       <header className="flex items-center justify-between border-b border-cream-dark bg-cream px-8 py-4">
@@ -106,7 +158,7 @@ export default function Home() {
                 <h3 className="text-xl font-bold mb-2">Infinite Style</h3>
                 <div className="text-4xl font-bold text-brown-900 mb-2">$1.99<span className="text-base font-normal opacity-60">/mo</span></div>
                 <p className="opacity-70 text-sm mb-6 min-h-[40px]">Access to 3 active premium themes at once. Swap anytime.</p>
-                <button 
+                <button
                   onClick={() => handleCheckout('subscription')}
                   className="w-full py-3 rounded-xl bg-teal-500 text-white font-bold hover:bg-teal-600 transition-colors"
                 >
@@ -129,7 +181,9 @@ export default function Home() {
                   className="w-full mb-4 py-2.5 px-3 rounded-lg border border-brown-900/20 bg-white text-brown-900 focus:outline-none focus:ring-2 focus:ring-teal-500/50"
                 >
                   {PREMIUM_THEMES.map((theme) => (
-                    <option key={theme.id} value={theme.id}>{theme.name}</option>
+                    <option key={theme.id} value={theme.id}>
+                      {theme.name} {hasAnimatedEffects(theme) ? '✨' : ''}
+                    </option>
                   ))}
                 </select>
                 <button
@@ -147,74 +201,49 @@ export default function Home() {
         )}
       </section>
 
-      {/* Section Header */}
+      {/* Premium Themes Section */}
       <div className="bg-cream px-8 pt-[50px] pb-[30px] text-center">
         <h2 className="mb-2 text-[32px] font-bold text-brown-900">
-          Premium Gallery
+          ✨ Premium Collection
         </h2>
         <p className="text-base text-brown-600 max-w-2xl mx-auto">
-          Unlock our full collection of professionally designed themes.
+          Stunning themes with animated effects — aurora lights, snowfall, starfields, and more.
         </p>
       </div>
 
-      {/* Theme Gallery */}
-      <section id="themes" className="px-8 pb-[70px] pt-5">
+      {/* Premium Theme Gallery */}
+      <section id="themes" className="px-8 pb-[50px] pt-5">
         <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
-          
-          <ThemeCard
-            name="Dracula"
-            type="🌙 Dark Theme"
-            bg="bg-[#282a36]"
-            bubble="bg-[#343746] text-[#f8f8f2]"
-            label="text-[#bd93f9]"
-            input="bg-[#21222c] text-[#6272a4] border-[#44475a]"
-            onBuy={() => handleCheckout('single', 'dracula')}
-          />
-          <ThemeCard
-            name="Rose Garden"
-            type="☀️ Light Theme"
-            bg="bg-[#FFF0F3]"
-            bubble="bg-[#FFFFFF] text-[#5C374C]"
-            label="text-[#E91E63]"
-            input="bg-[#FFFFFF] text-[#8B6B7B] border-[#F8D7DA]"
-             onBuy={() => handleCheckout('single', 'rose-garden')}
-          />
-          <ThemeCard
-            name="Ocean Breeze"
-            type="☀️ Light Theme"
-            bg="bg-[#E8F4F8]"
-            bubble="bg-[#FFFFFF] text-[#1A535C]"
-            label="text-[#00A896]"
-            input="bg-[#FFFFFF] text-[#4A7C82] border-[#B8D8E0]"
-             onBuy={() => handleCheckout('single', 'ocean-breeze')}
-          />
-          <ThemeCard
-            name="Monokai Pro"
-            type="🌙 Dark Theme"
-            bg="bg-[#2D2A2E]"
-            bubble="bg-[#403E41] text-[#FCFCFA]"
-            label="text-[#FFD866]"
-            input="bg-[#221F22] text-[#939293] border-[#49474A]"
-            onBuy={() => handleCheckout('single', 'monokai-pro')}
-          />
-          <ThemeCard
-            name="Lavender Dreams"
-            type="☀️ Light Theme"
-            bg="bg-[#F3E8FF]"
-            bubble="bg-[#FFFFFF] text-[#4A3560]"
-            label="text-[#9333EA]"
-            input="bg-[#FFFFFF] text-[#7C6B8E] border-[#E2D1F0]"
-             onBuy={() => handleCheckout('single', 'lavender-dreams')}
-          />
-          <ThemeCard
-            name="Midnight Blue"
-            type="🌙 Dark Theme"
-            bg="bg-[#0F172A]"
-            bubble="bg-[#1E293B] text-[#E2E8F0]"
-            label="text-[#38BDF8]"
-            input="bg-[#0F172A] text-[#64748B] border-[#334155]"
-             onBuy={() => handleCheckout('single', 'midnight-blue')}
-          />
+          {PREMIUM_THEMES.map((theme) => (
+            <ThemeCard
+              key={theme.id}
+              theme={theme}
+              onBuy={() => handleCheckout('single', theme.id)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Free Themes Section */}
+      <div className="bg-cream-dark/30 px-8 pt-[50px] pb-[30px] text-center">
+        <h2 className="mb-2 text-[32px] font-bold text-brown-900">
+          🎁 Free Themes
+        </h2>
+        <p className="text-base text-brown-600 max-w-2xl mx-auto">
+          Classic IDE themes included free with the extension. No purchase required.
+        </p>
+      </div>
+
+      {/* Free Theme Gallery */}
+      <section className="bg-cream-dark/30 px-8 pb-[70px] pt-5">
+        <div className="mx-auto grid max-w-[1000px] grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3">
+          {FREE_THEMES.map((theme) => (
+            <ThemeCard
+              key={theme.id}
+              theme={theme}
+              isFree
+            />
+          ))}
         </div>
       </section>
 
@@ -283,43 +312,72 @@ export default function Home() {
 // --- Helper Components ---
 
 interface ThemeCardProps {
-  name: string;
-  type: string;
-  bg: string;
-  bubble: string;
-  label: string;
-  input: string;
+  theme: Theme;
   onBuy?: () => void;
+  isFree?: boolean;
 }
 
-function ThemeCard({ name, type, bg, bubble, label, input, onBuy }: ThemeCardProps) {
+function ThemeCard({ theme, onBuy, isFree }: ThemeCardProps) {
+  const typeLabel = getThemeTypeLabel(theme)
+  const hasEffects = hasAnimatedEffects(theme)
+  const screenshots = getThemeScreenshots(theme.id)
+
   return (
-    <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(75,46,30,0.15)]">
+    <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all duration-300 ease-out hover:scale-[1.15] hover:z-20 hover:shadow-[0_16px_48px_rgba(75,46,30,0.25)]">
+      {/* Animated effect badge */}
+      {hasEffects && (
+        <div className="absolute top-5 right-5 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-full shadow-lg">
+          ✨ Animated
+        </div>
+      )}
+
       <div className="overflow-hidden rounded-xl">
-        <div className={`flex min-h-[160px] flex-col gap-2.5 p-[22px] ${bg}`}>
-          <div className={`rounded-[14px] p-3.5 text-xs leading-relaxed ${bubble}`}>
-            <span className={`mr-1.5 font-semibold ${label}`}>ChatGPT:</span>
-            Here&apos;s a quick summary of your notes from today...
-          </div>
-          <div className={`rounded-[22px] border border-solid px-4 py-3 text-[11px] ${input}`}>
-            Message ChatGPT...
+        {/* Theme screenshot preview with hover transition */}
+        <div className="relative min-h-[180px] overflow-hidden">
+          {/* Home screen (default) */}
+          <Image
+            src={screenshots.home}
+            alt={`${theme.name} home screen`}
+            width={400}
+            height={225}
+            className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+          />
+          {/* Content screen (on hover) */}
+          <Image
+            src={screenshots.content}
+            alt={`${theme.name} content view`}
+            width={400}
+            height={225}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          />
+          {/* Hover indicator */}
+          <div className="absolute bottom-2 right-2 bg-black/50 text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+            Content View
           </div>
         </div>
       </div>
+
+      {/* Card footer */}
       <div className="flex items-center justify-between bg-white px-1.5 pt-3.5 pb-1.5">
         <div>
-          <div className="text-[15px] font-semibold text-brown-900">{name}</div>
-          <div className="mt-0.5 text-xs text-brown-600">{type}</div>
+          <div className="text-[15px] font-semibold text-brown-900">{theme.name}</div>
+          <div className="mt-0.5 text-xs text-brown-600">{typeLabel}</div>
         </div>
-        <button 
-          onClick={(e) => {
-              e.stopPropagation()
-              onBuy?.()
-          }}
-          className="cursor-pointer rounded-[20px] bg-teal-500/10 text-teal-600 hover:bg-teal-500 hover:text-white px-4 py-2 text-[13px] font-medium transition-colors"
-        >
-          Buy $0.99
-        </button>
+        {isFree ? (
+          <span className="rounded-[20px] bg-green-500/10 text-green-600 px-4 py-2 text-[13px] font-medium">
+            Free
+          </span>
+        ) : (
+          <button
+            onClick={(e) => {
+                e.stopPropagation()
+                onBuy?.()
+            }}
+            className="cursor-pointer rounded-[20px] bg-teal-500/10 text-teal-600 hover:bg-teal-500 hover:text-white px-4 py-2 text-[13px] font-medium transition-colors"
+          >
+            Buy $0.99
+          </button>
+        )}
       </div>
     </div>
   );

@@ -89,7 +89,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-cream font-sans text-brown-900">
+    <div className="noise-texture min-h-screen bg-cream font-sans text-brown-900">
 
       {/* Header */}
       <header className="flex items-center justify-between border-b border-cream-dark bg-cream px-8 py-4">

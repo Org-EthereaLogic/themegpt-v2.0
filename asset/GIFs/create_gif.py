@@ -72,23 +72,70 @@ MASCOT_SVG = "source-mascot.svg"
 def render_svg_to_pil(svg_path, size):
     """
     Render an SVG file to a PIL Image at the specified size.
-    
+
     Args:
         svg_path: Path to the SVG file
         size: Output size in pixels (square)
-    
+
     Returns:
         PIL Image in RGBA mode
     """
     if not os.path.exists(svg_path):
         raise FileNotFoundError(f"SVG file not found: {svg_path}")
-    
+
     png_data = cairosvg.svg2png(
         url=svg_path,
         output_width=size,
         output_height=size
     )
-    return Image.open(io.BytesIO(png_data)).convert('RGBA')
+    img = Image.open(io.BytesIO(png_data)).convert('RGBA')
+
+    # If transparent mode, replace cream background color with transparency
+    if TRANSPARENT_BG:
+        img = remove_cream_background(img)
+
+    return img
+
+
+def remove_cream_background(img):
+    """
+    Replace cream background color (#fffaf1) with transparency.
+    Uses color distance to handle anti-aliased edges.
+
+    Args:
+        img: PIL Image in RGBA mode
+
+    Returns:
+        PIL Image with cream pixels made transparent
+    """
+    import numpy as np
+
+    # Convert to numpy array for efficient processing
+    data = np.array(img)
+
+    # Target cream color: #fffaf1 = (255, 250, 241)
+    target_r, target_g, target_b = 255, 250, 241
+
+    # Calculate color distance from cream for each pixel
+    r, g, b, a = data[:,:,0], data[:,:,1], data[:,:,2], data[:,:,3]
+
+    # Color distance threshold (pixels within this distance are made transparent)
+    threshold = 15
+
+    # Calculate Euclidean distance from cream color
+    distance = np.sqrt(
+        (r.astype(float) - target_r)**2 +
+        (g.astype(float) - target_g)**2 +
+        (b.astype(float) - target_b)**2
+    )
+
+    # Create mask for cream-like pixels
+    cream_mask = distance < threshold
+
+    # Set alpha to 0 for cream pixels
+    data[:,:,3] = np.where(cream_mask, 0, a)
+
+    return Image.fromarray(data, 'RGBA')
 
 
 def draw_mini_sparkle(draw, cx, cy, size, color_with_alpha):

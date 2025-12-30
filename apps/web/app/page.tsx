@@ -323,7 +323,7 @@ function ThemeCard({ theme, onBuy, isFree }: ThemeCardProps) {
   const screenshots = getThemeScreenshots(theme.id)
 
   return (
-    <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(75,46,30,0.15)]">
+    <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all duration-300 ease-out hover:scale-[1.15] hover:z-20 hover:shadow-[0_16px_48px_rgba(75,46,30,0.25)]">
       {/* Animated effect badge */}
       {hasEffects && (
         <div className="absolute top-5 right-5 z-10 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[10px] uppercase font-bold px-2.5 py-1 rounded-full shadow-lg">

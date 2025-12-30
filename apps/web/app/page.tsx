@@ -95,11 +95,11 @@ export default function Home() {
       <header className="flex items-center justify-between border-b border-cream-dark bg-cream px-8 py-4">
         <div className="flex items-center gap-2.5">
           <Image
-            src="/mascot-48.png"
+            src="/mascot-transparent.png"
             alt="ThemeGPT mascot"
-            width={40}
-            height={40}
-            className="h-10 w-10 rounded-full shadow-sm"
+            width={48}
+            height={48}
+            className="h-12 w-12"
             priority
           />
           <span className="text-xl font-bold text-brown-900">ThemeGPT</span>

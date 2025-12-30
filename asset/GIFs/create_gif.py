@@ -52,6 +52,9 @@ OUTPUT_SIZES = [512, 400]  # Generate these sizes
 TEAL_SPARKLE = (129, 200, 183)   # #81c8b7 - sparkle color
 CREAM_BG = (255, 250, 241)       # #fffaf1 - background color
 
+# Transparency flag (set to True for transparent GIFs)
+TRANSPARENT_BG = True
+
 # Sparkle position ratios (relative to image size)
 # Based on the logo SVG where sparkle is at approximately (355, 93) in 512x512
 SPARKLE_X_RATIO = 0.694
@@ -142,8 +145,11 @@ def create_animation_frame(frame_num, total_frames, base_image, size):
     padding = 8
     frame_height = size + padding * 2
     
-    # Create frame with cream background
-    frame = Image.new('RGBA', (size, frame_height), CREAM_BG + (255,))
+    # Create frame with cream or transparent background
+    if TRANSPARENT_BG:
+        frame = Image.new('RGBA', (size, frame_height), (0, 0, 0, 0))
+    else:
+        frame = Image.new('RGBA', (size, frame_height), CREAM_BG + (255,))
     
     # Calculate animation phase (0 to 2π)
     phase = (frame_num / total_frames) * 2 * math.pi
@@ -225,37 +231,63 @@ def generate_animation_frames(svg_path, size, num_frames):
     frames = []
     for i in range(num_frames):
         frame = create_animation_frame(i, num_frames, base_image, size)
-        # Convert to palette mode for GIF
-        frame_p = frame.convert('RGB').convert('P', 
-                                                palette=Image.Palette.ADAPTIVE, 
-                                                colors=128)
-        frames.append(frame_p)
-    
+
+        if TRANSPARENT_BG:
+            # For transparent GIFs, preserve alpha channel
+            # Convert to palette mode with transparency support
+            alpha = frame.getchannel('A')
+            frame_rgb = frame.convert('RGB')
+            frame_p = frame_rgb.convert('P', palette=Image.Palette.ADAPTIVE, colors=255)
+            # Set transparency for fully transparent pixels
+            mask = Image.eval(alpha, lambda a: 255 if a <= 128 else 0)
+            frame_p.paste(255, mask)
+            frames.append((frame_p, alpha))
+        else:
+            # Convert to palette mode for GIF
+            frame_p = frame.convert('RGB').convert('P',
+                                                    palette=Image.Palette.ADAPTIVE,
+                                                    colors=128)
+            frames.append(frame_p)
+
     return frames
 
 
 def save_animated_gif(frames, output_path, duration_ms):
     """
     Save frames as an animated GIF.
-    
+
     Args:
-        frames: List of PIL Image frames
+        frames: List of PIL Image frames (or tuples of (frame, alpha) for transparent)
         output_path: Output file path
         duration_ms: Duration per frame in milliseconds
     """
     if not frames:
         print(f"  Warning: No frames to save for {output_path}")
         return
-    
-    frames[0].save(
-        output_path,
-        save_all=True,
-        append_images=frames[1:],
-        duration=duration_ms,
-        loop=0,
-        optimize=True,
-        disposal=2
-    )
+
+    if TRANSPARENT_BG:
+        # Handle transparent GIF - frames are tuples (frame_p, alpha)
+        frame_images = [f[0] for f in frames]
+        frame_images[0].save(
+            output_path,
+            save_all=True,
+            append_images=frame_images[1:],
+            duration=duration_ms,
+            loop=0,
+            optimize=False,
+            disposal=2,
+            transparency=255
+        )
+    else:
+        frames[0].save(
+            output_path,
+            save_all=True,
+            append_images=frames[1:],
+            duration=duration_ms,
+            loop=0,
+            optimize=True,
+            disposal=2
+        )
     
     # Report file size
     size_kb = os.path.getsize(output_path) / 1024

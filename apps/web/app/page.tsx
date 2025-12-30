@@ -45,7 +45,8 @@ function hasAnimatedEffects(theme: Theme): boolean {
 // Map theme IDs to screenshot filenames
 function getThemeScreenshots(themeId: string): { home: string; content: string } {
   const mapping: Record<string, { home: string; content: string }> = {
-    'vscode-dark-plus': { home: '/themes/vs_code_dark_1.png', content: '/themes/vs_code_dark_2.png' },
+    'themegpt-dark': { home: '/themes/themegpt_dark_1.png', content: '/themes/themegpt_dark_2.png' },
+    'themegpt-light': { home: '/themes/themegpt_light_1.png', content: '/themes/themegpt_light_2.png' },
     'solarized-dark': { home: '/themes/solarized_dark_1.png', content: '/themes/solarized_dark_2.png' },
     'dracula': { home: '/themes/dracula_1.png', content: '/themes/dracula_2.png' },
     'monokai-pro': { home: '/themes/monokai_pro_1.png', content: '/themes/monokai_pro_2.png' },

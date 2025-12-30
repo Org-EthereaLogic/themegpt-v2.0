@@ -12,8 +12,9 @@ This directory contains preview screenshots for each theme. These are displayed 
 
 ## Required Screenshots
 
-### Free Themes (6)
-- `vscode-dark-plus.png`
+### Free Themes (7)
+- `themegpt-dark.png` - Brand dark theme with warm chocolate tones and teal accent
+- `themegpt-light.png` - Brand light theme with cream background and teal accent
 - `solarized-dark.png`
 - `dracula.png`
 - `monokai-pro.png`

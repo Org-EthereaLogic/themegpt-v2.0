@@ -43,11 +43,12 @@ Production deployment will only occur when:
 
 The following themes have been finalized for the product launch and **must not be modified or added to** until after the release date.
 
-### Free Themes (6)
+### Free Themes (7)
 
 | Theme | Category |
 |-------|----------|
-| VS Code Dark+ | Core |
+| ThemeGPT Dark | Core |
+| ThemeGPT Light | Core |
 | Solarized Dark | Core |
 | Dracula | Core |
 | Monokai Pro | Core |

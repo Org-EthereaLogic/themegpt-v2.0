@@ -2,8 +2,8 @@
 
 Complete reference documentation for all ThemeGPT themes, including color variables, effects, and configuration details.
 
-**Last Updated:** 2025-12-20
-**Total Themes:** 28 (9 Free, 19 Premium)
+**Last Updated:** 2025-12-29
+**Total Themes:** 15 (7 Free, 8 Premium)
 
 ## Table of Contents
 
@@ -157,25 +157,51 @@ interface ThemePattern {
 
 ## Free Themes
 
-### VS Code Dark+
+### ThemeGPT Dark
 
 | Property | Value |
 |----------|-------|
-| **ID** | `vscode-dark-plus` |
+| **ID** | `themegpt-dark` |
 | **Category** | core |
 | **Premium** | No |
 
 **Colors:**
 | Variable | Hex | Preview |
 |----------|-----|---------|
-| `--cgpt-bg` | `#1E1E1E` | ![#1E1E1E](https://via.placeholder.com/20/1E1E1E/1E1E1E) |
-| `--cgpt-surface` | `#252526` | ![#252526](https://via.placeholder.com/20/252526/252526) |
-| `--cgpt-text` | `#D4D4D4` | ![#D4D4D4](https://via.placeholder.com/20/D4D4D4/D4D4D4) |
-| `--cgpt-text-muted` | `#808080` | ![#808080](https://via.placeholder.com/20/808080/808080) |
-| `--cgpt-border` | `#3C3C3C` | ![#3C3C3C](https://via.placeholder.com/20/3C3C3C/3C3C3C) |
-| `--cgpt-accent` | `#569CD6` | ![#569CD6](https://via.placeholder.com/20/569CD6/569CD6) |
+| `--cgpt-bg` | `#1A1512` | ![#1A1512](https://via.placeholder.com/20/1A1512/1A1512) |
+| `--cgpt-surface` | `#252019` | ![#252019](https://via.placeholder.com/20/252019/252019) |
+| `--cgpt-text` | `#F5F0EB` | ![#F5F0EB](https://via.placeholder.com/20/F5F0EB/F5F0EB) |
+| `--cgpt-text-muted` | `#A89B8C` | ![#A89B8C](https://via.placeholder.com/20/A89B8C/A89B8C) |
+| `--cgpt-border` | `#3D342A` | ![#3D342A](https://via.placeholder.com/20/3D342A/3D342A) |
+| `--cgpt-accent` | `#7ECEC5` | ![#7ECEC5](https://via.placeholder.com/20/7ECEC5/7ECEC5) |
 
 **Effects:** `noiseOverlay: true`
+
+**Design Notes:** Brand dark theme using warm chocolate-toned grays with Teal accent for visual cohesion with ThemeGPT Light.
+
+---
+
+### ThemeGPT Light
+
+| Property | Value |
+|----------|-------|
+| **ID** | `themegpt-light` |
+| **Category** | core |
+| **Premium** | No |
+
+**Colors:**
+| Variable | Hex | Preview |
+|----------|-----|---------|
+| `--cgpt-bg` | `#FAF6F0` | ![#FAF6F0](https://via.placeholder.com/20/FAF6F0/FAF6F0) |
+| `--cgpt-surface` | `#FFFFFF` | ![#FFFFFF](https://via.placeholder.com/20/FFFFFF/FFFFFF) |
+| `--cgpt-text` | `#4B2E1E` | ![#4B2E1E](https://via.placeholder.com/20/4B2E1E/4B2E1E) |
+| `--cgpt-text-muted` | `#7D5A4A` | ![#7D5A4A](https://via.placeholder.com/20/7D5A4A/7D5A4A) |
+| `--cgpt-border` | `#E5DDD5` | ![#E5DDD5](https://via.placeholder.com/20/E5DDD5/E5DDD5) |
+| `--cgpt-accent` | `#7ECEC5` | ![#7ECEC5](https://via.placeholder.com/20/7ECEC5/7ECEC5) |
+
+**Effects:** `noiseOverlay: true`
+
+**Design Notes:** Brand light theme using Cream background with Chocolate text and Teal accent from the design system.
 
 ---
 
@@ -911,15 +937,17 @@ noiseOverlay: true
 | Theme | ID | Premium | Key Effects |
 |-------|-----|---------|-------------|
 | **Free - Core** ||||
-| VS Code Dark+ | `vscode-dark-plus` | No | noiseOverlay |
+| ThemeGPT Dark | `themegpt-dark` | No | noiseOverlay |
+| ThemeGPT Light | `themegpt-light` | No | noiseOverlay |
 | Solarized Dark | `solarized-dark` | No | noiseOverlay |
 | Dracula | `dracula` | No | glowOverlay |
 | Monokai Pro | `monokai-pro` | No | noiseOverlay |
 | High Contrast | `high-contrast` | No | - |
 | One Dark | `one-dark` | No | glowOverlay |
-| Aurora Borealis | `aurora-borealis` | No | auroraGradient (northern) |
-| Sunset Blaze | `sunset-blaze` | No | auroraGradient (custom), glowOverlay |
-| Electric Dreams | `electric-dreams` | No | auroraGradient (cosmic), glowOverlay |
+| **Premium - Animated Effects** ||||
+| Aurora Borealis | `aurora-borealis` | Yes | auroraGradient (northern) |
+| Sunset Blaze | `sunset-blaze` | Yes | auroraGradient (custom), glowOverlay |
+| Electric Dreams | `electric-dreams` | Yes | auroraGradient (cosmic), glowOverlay |
 | **Premium - Christmas** ||||
 | Cozy Cabin Christmas | `cozy-cabin-christmas` | Yes | treeSilhouettes, animatedSnowfall |
 | Frosted Windowpane | `frosted-windowpane` | Yes | animatedSnowfall, frostedGlass |

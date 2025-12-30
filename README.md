@@ -40,11 +40,12 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 ## Available Themes
 
-### Free Themes (6)
+### Free Themes (7)
 
 | Theme | Description |
 |-------|-------------|
-| VS Code Dark+ | Classic VS Code dark theme |
+| ThemeGPT Dark | Brand dark theme with warm chocolate tones and teal accent |
+| ThemeGPT Light | Brand light theme with cream background and teal accent |
 | Solarized Dark | Precision colors for readability |
 | Dracula | Popular dark theme with purple accents |
 | Monokai Pro | Warm, golden syntax highlighting colors |

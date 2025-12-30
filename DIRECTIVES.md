@@ -12,6 +12,7 @@ Enforcement rules for AI coding agents working on ThemeGPT v2.0. Rules derive fr
 
 | Directive | Priority | Category | Primary Files |
 |-----------|----------|----------|---------------|
+| Theme Freeze | Critical | Content | packages/shared/src/index.ts |
 | Complexity Budget | Critical | Architecture | All code files |
 | No Placeholder Content | Critical | Content | All files |
 | Accessibility Standards | Critical | Markup | *.tsx,*.html |
@@ -26,6 +27,44 @@ Enforcement rules for AI coding agents working on ThemeGPT v2.0. Rules derive fr
 ## Critical Directives
 
 These directives are enforced by hooks. Violations block the operation until resolved.
+
+### Theme Freeze (Until January 1, 2026)
+
+**Principle:** Launch Stability
+
+**Why this matters:** The theme roster has been finalized for product launch. Changes to themes before the release date risk introducing bugs, inconsistencies, or scope creep.
+
+**FROZEN THEME ROSTER:**
+
+| Category | Count | Themes |
+|----------|-------|--------|
+| Free | 6 | VS Code Dark+, Solarized Dark, Dracula, Monokai Pro, High Contrast, One Dark |
+| Premium | 8 | Aurora Borealis, Sunset Blaze, Electric Dreams, Woodland Retreat, Frosted Windowpane, Silent Night (Starfield), Synth Wave, Shades of Purple |
+
+**FORBIDDEN UNTIL JAN 1, 2026:**
+
+| Action | Reason |
+|--------|--------|
+| Adding new themes | Launch roster is complete |
+| Modifying theme colors | Visual consistency for launch |
+| Changing theme effects | Stability for launch |
+| Altering premium status | Business model is set |
+| Renaming themes | Brand consistency |
+| Removing themes | Launch roster is final |
+
+**PERMITTED:**
+
+- Critical bug fixes that don't alter visual appearance
+- Documentation updates about themes
+- Test improvements for theme functionality
+
+**Verification:**
+
+```bash
+# Ensure theme count hasn't changed (should be 14 total)
+grep -c "id: '" packages/shared/src/index.ts
+# Expected: 14
+```
 
 ### Complexity Budget
 

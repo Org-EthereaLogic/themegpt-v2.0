@@ -10,8 +10,8 @@ import mascotUrl from "url:../assets/mascot-32.png"
 
 const storage = new Storage({ area: "local" })
 
-// DEV MODE: Toggle locally for testing (must remain `false` for production builds)
-const DEV_UNLOCK_ALL_PREMIUM = true
+// Environment-controlled: true in dev, false in production
+const DEV_UNLOCK_ALL_PREMIUM = process.env.PLASMO_PUBLIC_DEV_UNLOCK_PREMIUM === 'true'
 
 export default function Popup() {
   const [activeThemeId, setActiveThemeId] = useState<string>("system")
@@ -256,14 +256,34 @@ export default function Popup() {
  * Screenshots should be 280x160px PNG files placed in apps/extension/assets/themes/
  * and named after theme IDs (e.g., vscode-dark-plus.png).
  *
- * If screenshots are not available, the ThemeCard will show a multi-color preview
- * of the theme palette as a fallback.
+ * If screenshots are not available, the ThemeCard will show a ChatGPT-style preview
+ * mockup with animated effect indicators.
  */
 function getThemeScreenshotUrl(themeId: string): string | null {
   // Check if chrome.runtime is available (not available in tests)
   if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
     return chrome.runtime.getURL(`assets/themes/${themeId}.png`)
   }
+  return null
+}
+
+// Helper to check if theme has animated effects
+function hasAnimatedEffects(theme: Theme): boolean {
+  return !!(
+    theme.effects?.auroraGradient?.enabled ||
+    theme.effects?.animatedSnowfall?.enabled ||
+    theme.effects?.twinklingStars?.enabled ||
+    theme.effects?.ambientEffects?.neonGrid ||
+    theme.effects?.ambientEffects?.auroraWaves
+  )
+}
+
+// Get effect type for display
+function getEffectType(theme: Theme): string | null {
+  if (theme.effects?.auroraGradient?.enabled) return "aurora"
+  if (theme.effects?.animatedSnowfall?.enabled) return "snow"
+  if (theme.effects?.twinklingStars?.enabled) return "stars"
+  if (theme.effects?.ambientEffects?.neonGrid) return "neon"
   return null
 }
 
@@ -281,20 +301,31 @@ function ThemeCard({
   const [imgError, setImgError] = useState(false)
   const screenshotUrl = getThemeScreenshotUrl(theme.id)
   const hasScreenshot = screenshotUrl && !imgError
+  const hasEffects = hasAnimatedEffects(theme)
+  const effectType = getEffectType(theme)
 
   return (
     <button
       onClick={onSelect}
       aria-label={isLocked ? `${theme.name} - Premium, click to unlock` : `Apply ${theme.name} theme`}
       className={`
-        group relative flex flex-col items-start p-3 rounded-xl border transition-all duration-200 text-left w-full
+        group relative flex flex-col items-start p-2.5 rounded-xl border transition-all duration-200 text-left w-full
         ${isActive
           ? "border-brand-teal bg-white shadow-md ring-1 ring-brand-teal transform scale-[1.02]"
           : "border-transparent bg-white/40 hover:bg-white hover:shadow-sm"
         }
       `}
     >
-      <div className="w-full h-16 rounded-lg mb-2 border border-brand-text/5 overflow-hidden relative">
+      {/* Animated effect badge */}
+      {hasEffects && (
+        <div className="absolute top-1 right-1 z-20 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[8px] uppercase font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
+          <span className="animate-pulse">✨</span>
+          <span>FX</span>
+        </div>
+      )}
+
+      {/* Preview area - increased height */}
+      <div className="w-full h-24 rounded-lg mb-2 border border-brand-text/5 overflow-hidden relative">
         {hasScreenshot ? (
           <img
             src={screenshotUrl}
@@ -303,24 +334,64 @@ function ThemeCard({
             onError={() => setImgError(true)}
           />
         ) : (
-          // Name-first preview with accent color stripe (Option A: theme name as primary identifier)
+          // ChatGPT-style mockup preview
           <div
-            className="absolute inset-0 flex flex-col items-center justify-center"
+            className="absolute inset-0 flex flex-col p-2 gap-1.5"
             style={{ backgroundColor: theme.colors["--cgpt-bg"] }}
           >
-            <span
-              className="text-sm font-semibold text-center px-2 leading-tight"
-              style={{ color: theme.colors["--cgpt-text"] }}
-            >
-              {theme.name}
-            </span>
+            {/* Animated effect overlay hints */}
+            {hasEffects && (
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                {effectType === "aurora" && (
+                  <div className="absolute inset-0 opacity-25 bg-gradient-to-t from-transparent via-emerald-500/30 to-cyan-500/40 animate-pulse" />
+                )}
+                {effectType === "snow" && (
+                  <>
+                    <div className="absolute top-1 left-[15%] w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDuration: '2s' }} />
+                    <div className="absolute top-2 left-[45%] w-0.5 h-0.5 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '0.3s', animationDuration: '2.2s' }} />
+                    <div className="absolute top-0 left-[75%] w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.7s', animationDuration: '1.8s' }} />
+                  </>
+                )}
+                {effectType === "stars" && (
+                  <>
+                    <div className="absolute top-2 left-[20%] w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s' }} />
+                    <div className="absolute top-4 left-[60%] w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.5s', animationDuration: '2s' }} />
+                    <div className="absolute top-1 left-[80%] w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '1s', animationDuration: '1.8s' }} />
+                  </>
+                )}
+                {effectType === "neon" && (
+                  <div className="absolute bottom-0 left-0 right-0 h-1/3 opacity-30 bg-gradient-to-t from-pink-500/40 to-transparent" />
+                )}
+              </div>
+            )}
+
+            {/* Mini chat bubble */}
             <div
-              className="absolute bottom-0 left-0 right-0 h-1"
-              style={{ backgroundColor: theme.colors["--cgpt-accent"] }}
-            />
+              className="rounded-md px-2 py-1.5 text-[8px] leading-tight relative z-10"
+              style={{
+                backgroundColor: theme.colors["--cgpt-surface"],
+                color: theme.colors["--cgpt-text"]
+              }}
+            >
+              <span style={{ color: theme.colors["--cgpt-accent"] }} className="font-semibold">AI: </span>
+              Hello! How can I help?
+            </div>
+
+            {/* Mini input field */}
+            <div
+              className="mt-auto rounded-full px-2 py-1 text-[7px] border relative z-10"
+              style={{
+                backgroundColor: theme.colors["--cgpt-surface"],
+                color: theme.colors["--cgpt-text-muted"],
+                borderColor: theme.colors["--cgpt-border"]
+              }}
+            >
+              Message...
+            </div>
           </div>
         )}
 
+        {/* Lock overlay */}
         {isLocked && (
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center z-10 transition-opacity group-hover:bg-black/50">
             <div className="bg-white/20 p-1.5 rounded-full backdrop-blur-md">
@@ -343,13 +414,24 @@ function ThemeCard({
         )}
       </div>
 
-      <div className="flex items-center justify-between w-full">
-        <span className="text-sm font-medium truncate opacity-90">{theme.name}</span>
-        {isLocked && (
-          <span className="text-[10px] font-bold text-brand-text/40 bg-brand-text/5 px-1.5 py-0.5 rounded uppercase">
-            Pro
-          </span>
-        )}
+      {/* Theme name and badges */}
+      <div className="flex items-center justify-between w-full gap-1">
+        <span className="text-xs font-medium truncate opacity-90">{theme.name}</span>
+        <div className="flex items-center gap-1 flex-shrink-0">
+          {effectType && (
+            <span className="text-[9px] opacity-60" title={`${effectType} effect`}>
+              {effectType === "aurora" && "🌌"}
+              {effectType === "snow" && "❄️"}
+              {effectType === "stars" && "⭐"}
+              {effectType === "neon" && "🌆"}
+            </span>
+          )}
+          {isLocked && (
+            <span className="text-[9px] font-bold text-brand-text/40 bg-brand-text/5 px-1 py-0.5 rounded uppercase">
+              Pro
+            </span>
+          )}
+        </div>
       </div>
     </button>
   )

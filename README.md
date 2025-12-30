@@ -38,6 +38,35 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 ---
 
+## Available Themes
+
+### Free Themes (7)
+
+| Theme | Description |
+|-------|-------------|
+| ThemeGPT Dark | Brand dark theme with warm chocolate tones and teal accent |
+| ThemeGPT Light | Brand light theme with cream background and teal accent |
+| Solarized Dark | Precision colors for readability |
+| Dracula | Popular dark theme with purple accents |
+| Monokai Pro | Warm, golden syntax highlighting colors |
+| High Contrast | Maximum readability with pure black/white |
+| One Dark | Atom editor's signature dark theme |
+
+### Premium Themes (8)
+
+| Theme | Description |
+|-------|-------------|
+| Aurora Borealis | Northern lights with animated aurora effect |
+| Sunset Blaze | Warm sunset gradient with ambient glow |
+| Electric Dreams | Cyberpunk neon with cosmic aurora |
+| Woodland Retreat | Forest background with gentle snowfall |
+| Frosted Windowpane | Light theme with frosted glass and snow |
+| Silent Night (Starfield) | Deep space with twinkling stars and aurora |
+| Synth Wave | Retro 80s neon with animated grid |
+| Shades of Purple | Rich purple tones with golden accents |
+
+---
+
 ## Repository Structure
 
 ```

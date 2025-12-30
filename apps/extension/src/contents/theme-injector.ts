@@ -684,7 +684,17 @@ function removeTheme(): void {
 }
 
 async function init(): Promise<void> {
-  if (!isContextValid()) return
+  // Retry context validation (production may need time to initialize)
+  let attempts = 0
+  while (!isContextValid() && attempts < 5) {
+    await new Promise(resolve => setTimeout(resolve, 100))
+    attempts++
+  }
+
+  if (!isContextValid()) {
+    console.warn('[ThemeGPT] Extension context not available after retries')
+    return
+  }
 
   try {
     const theme = await storage.get<Theme>("activeTheme")
@@ -698,8 +708,8 @@ async function init(): Promise<void> {
         applyTheme(change.newValue as Theme | null)
       }
     })
-  } catch {
-    // Context invalidated during storage operations
+  } catch (e) {
+    console.error('[ThemeGPT] Theme initialization failed:', e)
   }
 }
 

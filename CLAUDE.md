@@ -37,6 +37,53 @@ Production deployment will only occur when:
 
 ---
 
+## 🎨 Theme Freeze Policy (Launch Themes)
+
+> **STATUS: THEME ROSTER FROZEN UNTIL JANUARY 1, 2026**
+
+The following themes have been finalized for the product launch and **must not be modified or added to** until after the release date.
+
+### Free Themes (7)
+
+| Theme | Category |
+|-------|----------|
+| ThemeGPT Dark | Core |
+| ThemeGPT Light | Core |
+| Solarized Dark | Core |
+| Dracula | Core |
+| Monokai Pro | Core |
+| High Contrast | Core |
+| One Dark | Core |
+
+### Premium Themes (8)
+
+| Theme | Category | Highlight |
+|-------|----------|-----------|
+| Aurora Borealis | Animated Effects | Northern lights aurora |
+| Sunset Blaze | Animated Effects | Warm sunset gradient |
+| Electric Dreams | Animated Effects | Cosmic neon aurora |
+| Woodland Retreat | Christmas | Forest with snowfall |
+| Frosted Windowpane | Christmas | Frosted glass effect |
+| Silent Night (Starfield) | Christmas | Twinkling stars |
+| Synth Wave | Core | Retro neon grid |
+| Shades of Purple | Core | Rich purple tones |
+
+### Prohibited Theme Actions (Until Jan 1, 2026)
+
+- Adding new themes to `DEFAULT_THEMES` array
+- Modifying existing theme colors, effects, or properties
+- Changing theme categories or premium status
+- Renaming or removing any launch themes
+
+### When Theme Changes Are Allowed
+
+Theme modifications will only occur when:
+1. The date is **after January 1, 2026**
+2. User explicitly requests theme additions or modifications
+3. Critical bug fixes that don't alter visual appearance
+
+---
+
 ## Project Overview
 
 **ThemeGPT v2.0** is a privacy-first Chrome extension that lets users customize ChatGPT's appearance and track token usage — all without data leaving the browser.

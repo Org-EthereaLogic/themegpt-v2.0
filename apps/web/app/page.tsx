@@ -42,6 +42,27 @@ function hasAnimatedEffects(theme: Theme): boolean {
   )
 }
 
+// Map theme IDs to screenshot filenames
+function getThemeScreenshots(themeId: string): { home: string; content: string } {
+  const mapping: Record<string, { home: string; content: string }> = {
+    'vscode-dark-plus': { home: '/themes/vs_code_dark_1.png', content: '/themes/vs_code_dark_2.png' },
+    'solarized-dark': { home: '/themes/solarized_dark_1.png', content: '/themes/solarized_dark_2.png' },
+    'dracula': { home: '/themes/dracula_1.png', content: '/themes/dracula_2.png' },
+    'monokai-pro': { home: '/themes/monokai_pro_1.png', content: '/themes/monokai_pro_2.png' },
+    'high-contrast': { home: '/themes/high_contrast_1.png', content: '/themes/high_contrast_2.png' },
+    'one-dark': { home: '/themes/one_dark_1.png', content: '/themes/one_dark_2.png' },
+    'aurora-borealis': { home: '/themes/aurora_borealis_1.png', content: '/themes/aurora_borealis_2.png' },
+    'sunset-blaze': { home: '/themes/sunset_blaze_1.png', content: '/themes/sunset_blaze_2.png' },
+    'electric-dreams': { home: '/themes/electric_dreams_1.png', content: '/themes/electric_dreams_2.png' },
+    'woodland-retreat': { home: '/themes/woodland_retreat_1.png', content: '/themes/woodland_retreat_2.png' },
+    'frosted-windowpane': { home: '/themes/frosted_windowpane_1.png', content: '/themes/frosted_windowpane_2.png' },
+    'silent-night-starfield': { home: '/themes/silent_night_1.png', content: '/themes/silent_night_2.png' },
+    'synth-wave': { home: '/themes/synth_wave_1.png', content: '/themes/synth_wave_2.png' },
+    'shades-of-purple': { home: '/themes/shades_of_purple_1.png', content: '/themes/shades_of_purple_2.png' },
+  }
+  return mapping[themeId] || { home: '', content: '' }
+}
+
 export default function Home() {
   const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0]?.id || '')
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
@@ -298,7 +319,7 @@ interface ThemeCardProps {
 function ThemeCard({ theme, onBuy, isFree }: ThemeCardProps) {
   const typeLabel = getThemeTypeLabel(theme)
   const hasEffects = hasAnimatedEffects(theme)
-  const isLight = isLightColor(theme.colors['--cgpt-bg'])
+  const screenshots = getThemeScreenshots(theme.id)
 
   return (
     <div className="group relative cursor-pointer overflow-hidden rounded-[20px] bg-white p-3 shadow-[0_4px_24px_rgba(75,46,30,0.1)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(75,46,30,0.15)]">
@@ -310,66 +331,27 @@ function ThemeCard({ theme, onBuy, isFree }: ThemeCardProps) {
       )}
 
       <div className="overflow-hidden rounded-xl">
-        {/* Theme preview mockup */}
-        <div
-          className="flex min-h-[180px] flex-col gap-2.5 p-[22px] relative"
-          style={{ backgroundColor: theme.colors['--cgpt-bg'] }}
-        >
-          {/* Subtle effect indicator overlay for animated themes */}
-          {hasEffects && (
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-              {theme.effects?.auroraGradient?.enabled && (
-                <div className="absolute inset-0 opacity-30 bg-gradient-to-t from-transparent via-emerald-500/20 to-cyan-500/30 animate-pulse" />
-              )}
-              {theme.effects?.animatedSnowfall?.enabled && (
-                <div className="absolute inset-0 opacity-40">
-                  <div className="absolute top-2 left-[20%] w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }} />
-                  <div className="absolute top-4 left-[50%] w-1 h-1 bg-white/50 rounded-full animate-bounce" style={{ animationDelay: '0.5s', animationDuration: '2.5s' }} />
-                  <div className="absolute top-1 left-[80%] w-1.5 h-1.5 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '1s', animationDuration: '2s' }} />
-                  <div className="absolute top-6 left-[35%] w-1 h-1 bg-white/40 rounded-full animate-bounce" style={{ animationDelay: '0.3s', animationDuration: '2.2s' }} />
-                </div>
-              )}
-              {theme.effects?.twinklingStars?.enabled && (
-                <div className="absolute inset-0 opacity-60">
-                  <div className="absolute top-3 left-[15%] w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDuration: '1.5s' }} />
-                  <div className="absolute top-5 left-[45%] w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.5s', animationDuration: '2s' }} />
-                  <div className="absolute top-2 left-[75%] w-1 h-1 bg-white rounded-full animate-pulse" style={{ animationDelay: '1s', animationDuration: '1.8s' }} />
-                  <div className="absolute top-8 left-[60%] w-0.5 h-0.5 bg-white rounded-full animate-pulse" style={{ animationDelay: '0.3s', animationDuration: '2.2s' }} />
-                </div>
-              )}
-              {theme.effects?.ambientEffects?.neonGrid && (
-                <div className="absolute bottom-0 left-0 right-0 h-1/2 opacity-20 bg-gradient-to-t from-pink-500/30 to-transparent" />
-              )}
-            </div>
-          )}
-
-          {/* Chat bubble mockup */}
-          <div
-            className="rounded-[14px] p-3.5 text-xs leading-relaxed relative z-10"
-            style={{
-              backgroundColor: theme.colors['--cgpt-surface'],
-              color: theme.colors['--cgpt-text']
-            }}
-          >
-            <span
-              className="mr-1.5 font-semibold"
-              style={{ color: theme.colors['--cgpt-accent'] }}
-            >
-              ChatGPT:
-            </span>
-            Here&apos;s a quick summary of your notes from today...
-          </div>
-
-          {/* Input field mockup */}
-          <div
-            className="rounded-[22px] border border-solid px-4 py-3 text-[11px] relative z-10"
-            style={{
-              backgroundColor: theme.colors['--cgpt-surface'],
-              color: theme.colors['--cgpt-text-muted'],
-              borderColor: theme.colors['--cgpt-border']
-            }}
-          >
-            Message ChatGPT...
+        {/* Theme screenshot preview with hover transition */}
+        <div className="relative min-h-[180px] overflow-hidden">
+          {/* Home screen (default) */}
+          <Image
+            src={screenshots.home}
+            alt={`${theme.name} home screen`}
+            width={400}
+            height={225}
+            className="w-full h-full object-cover transition-opacity duration-300 group-hover:opacity-0"
+          />
+          {/* Content screen (on hover) */}
+          <Image
+            src={screenshots.content}
+            alt={`${theme.name} content view`}
+            width={400}
+            height={225}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          />
+          {/* Hover indicator */}
+          <div className="absolute bottom-2 right-2 bg-black/50 text-white text-[9px] px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+            Content View
           </div>
         </div>
       </div>

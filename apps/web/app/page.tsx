@@ -118,8 +118,8 @@ export default function Home() {
               {item.label}
             </a>
           ))}
-          <a href="#waitlist" className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30">
-            Join Waitlist
+          <a href="#pricing" className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30">
+            Subscribe Now
           </a>
         </nav>
       </header>
@@ -135,8 +135,8 @@ export default function Home() {
           and transform your ChatGPT experience.
         </p>
         <div className="flex justify-center gap-3.5">
-          <a href="#waitlist" className="cursor-pointer rounded-full bg-brown-900 px-7 py-3.5 text-base font-semibold text-white transition-transform hover:-translate-y-px">
-            Join Waitlist
+          <a href="#pricing" className="cursor-pointer rounded-full bg-brown-900 px-7 py-3.5 text-base font-semibold text-white transition-transform hover:-translate-y-px">
+            Subscribe Now
           </a>
           <a href="#themes" className="cursor-pointer rounded-full border-[2px] border-brown-900 bg-transparent px-6 py-3 text-base font-semibold text-brown-900 transition-all hover:bg-brown-900 hover:text-white">
             View Themes
@@ -271,13 +271,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Waitlist */}
-      <section id="waitlist" className="bg-brown-900 px-8 py-[70px] text-center">
+      {/* Newsletter */}
+      <section id="newsletter" className="bg-brown-900 px-8 py-[70px] text-center">
         <h2 className="mb-4 text-[32px] font-bold text-cream">
-          Join the Waitlist
+          Stay Updated
         </h2>
         <p className="mx-auto mb-8 max-w-[480px] text-lg text-cream/80">
-          Be the first to know when ThemeGPT launches. Get early access and exclusive themes.
+          Get notified about new premium themes, product updates, and exclusive offers.
         </p>
         <div className="mx-auto flex max-w-md gap-3">
           <input
@@ -286,7 +286,7 @@ export default function Home() {
             className="flex-1 rounded-full bg-white/10 px-5 py-3 text-cream placeholder:text-cream/50 border border-cream/20 focus:outline-none focus:border-teal-500"
           />
           <button className="rounded-full bg-teal-500 px-6 py-3 font-semibold text-white hover:bg-teal-600 transition-colors">
-            Notify Me
+            Subscribe
           </button>
         </div>
       </section>

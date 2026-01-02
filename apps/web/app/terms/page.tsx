@@ -36,10 +36,10 @@ export default function TermsOfService() {
             Pricing
           </Link>
           <Link
-            href="/#waitlist"
+            href="/#pricing"
             className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30"
           >
-            Join Waitlist
+            Subscribe Now
           </Link>
         </nav>
       </header>

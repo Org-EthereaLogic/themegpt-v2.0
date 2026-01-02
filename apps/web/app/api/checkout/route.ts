@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
 import { getStripe, STRIPE_PRICES } from "@/lib/stripe";
 
 const corsHeaders = {
@@ -16,13 +18,17 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { type, themeId } = body as { type: "subscription" | "single"; themeId?: string };
 
+    // Get user session if logged in
+    const session = await getServerSession(authOptions);
+    const userId = session?.user?.id;
+
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
 
     const priceId = type === "subscription"
       ? STRIPE_PRICES.subscription
       : STRIPE_PRICES.singleTheme;
 
-    const session = await getStripe().checkout.sessions.create({
+    const checkoutSession = await getStripe().checkout.sessions.create({
       mode: type === "subscription" ? "subscription" : "payment",
       payment_method_types: ["card"],
       line_items: [
@@ -34,6 +40,7 @@ export async function POST(request: Request) {
       metadata: {
         type,
         themeId: themeId || "",
+        userId: userId || "",
       },
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/?canceled=true`,
@@ -42,7 +49,7 @@ export async function POST(request: Request) {
     return NextResponse.json(
       {
         success: true,
-        checkoutUrl: session.url
+        checkoutUrl: checkoutSession.url
       },
       { headers: corsHeaders }
     );

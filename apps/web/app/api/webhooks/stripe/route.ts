@@ -34,9 +34,19 @@ export async function POST(request: Request) {
       await handleCheckoutComplete(session);
       break;
     }
+    case "invoice.paid": {
+      const invoice = event.data.object as Stripe.Invoice;
+      await handleInvoicePaid(invoice);
+      break;
+    }
+    case "customer.subscription.updated": {
+      const subscription = event.data.object as Stripe.Subscription;
+      await handleSubscriptionUpdated(subscription);
+      break;
+    }
     case "customer.subscription.deleted": {
       const subscription = event.data.object as Stripe.Subscription;
-      await handleSubscriptionCanceled(subscription);
+      await handleSubscriptionDeleted(subscription);
       break;
     }
   }
@@ -45,7 +55,7 @@ export async function POST(request: Request) {
 }
 
 async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
-  const { type, themeId } = session.metadata || {};
+  const { type, themeId, userId } = session.metadata || {};
   const licenseKey = `KEY-${uuidv4().substring(0, 8).toUpperCase()}`;
 
   let entitlement: LicenseEntitlement;
@@ -58,6 +68,34 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
       permanentlyUnlocked: [],
       activeSlotThemes: [],
     };
+
+    // If user is logged in, create subscription record for credit tracking
+    if (userId && session.subscription) {
+      const stripeSubscription = await getStripe().subscriptions.retrieve(
+        session.subscription as string,
+        { expand: ['items.data'] }
+      ) as Stripe.Subscription;
+
+      // Get billing period from the first subscription item
+      const firstItem = stripeSubscription.items?.data?.[0];
+      const currentPeriodStart = firstItem?.current_period_start
+        ? new Date(firstItem.current_period_start * 1000)
+        : new Date();
+      const currentPeriodEnd = firstItem?.current_period_end
+        ? new Date(firstItem.current_period_end * 1000)
+        : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // Default 30 days
+
+      await db.createSubscription({
+        userId,
+        stripeSubscriptionId: stripeSubscription.id,
+        stripeCustomerId: session.customer as string,
+        status: 'active',
+        currentPeriodStart,
+        currentPeriodEnd,
+      });
+
+      console.log(`Subscription record created for user: ${userId}`);
+    }
   } else {
     entitlement = {
       active: true,
@@ -80,10 +118,88 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   console.log(`License created: ${licenseKey} for ${type}`);
 }
 
-async function handleSubscriptionCanceled(subscription: Stripe.Subscription) {
+async function handleInvoicePaid(invoice: Stripe.Invoice) {
+  // Only process subscription renewals (not initial payment)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const invoiceAny = invoice as any;
+  const subscriptionId = typeof invoiceAny.subscription === 'string'
+    ? invoiceAny.subscription
+    : invoiceAny.subscription?.id;
+
+  if (!subscriptionId || invoice.billing_reason === 'subscription_create') {
+    return;
+  }
+
+  const subscription = await db.getSubscriptionByStripeId(subscriptionId);
+
+  if (!subscription) {
+    console.log(`No subscription record found for Stripe ID: ${subscriptionId}`);
+    return;
+  }
+
+  // Get updated subscription details from Stripe
+  const stripeSubscription = await getStripe().subscriptions.retrieve(
+    subscriptionId,
+    { expand: ['items.data'] }
+  ) as Stripe.Subscription;
+
+  // Get billing period from the first subscription item
+  const firstItem = stripeSubscription.items?.data?.[0];
+  const currentPeriodStart = firstItem?.current_period_start
+    ? new Date(firstItem.current_period_start * 1000)
+    : new Date();
+  const currentPeriodEnd = firstItem?.current_period_end
+    ? new Date(firstItem.current_period_end * 1000)
+    : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+
+  // Reset credits for the new billing period
+  await db.resetCredits(subscription.id, currentPeriodStart, currentPeriodEnd);
+
+  console.log(`Credits reset for subscription: ${subscription.id}`);
+}
+
+async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
+  const dbSubscription = await db.getSubscriptionByStripeId(subscription.id);
+
+  if (!dbSubscription) {
+    return;
+  }
+
+  // Check if subscription was canceled (entering grace period)
+  if (subscription.cancel_at_period_end && dbSubscription.status === 'active') {
+    await db.updateSubscription(dbSubscription.id, {
+      status: 'canceled',
+      canceledAt: new Date(),
+    });
+
+    console.log(`Subscription entering grace period: ${dbSubscription.id}`);
+  }
+
+  // Check if cancellation was reversed
+  if (!subscription.cancel_at_period_end && dbSubscription.status === 'canceled') {
+    await db.updateSubscription(dbSubscription.id, {
+      status: 'active',
+      canceledAt: null,
+    });
+
+    console.log(`Subscription cancellation reversed: ${dbSubscription.id}`);
+  }
+}
+
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string;
 
   try {
+    // Update subscription record to expired
+    const dbSubscription = await db.getSubscriptionByStripeId(subscription.id);
+    if (dbSubscription) {
+      await db.updateSubscription(dbSubscription.id, {
+        status: 'expired',
+      });
+      console.log(`Subscription expired: ${dbSubscription.id}`);
+    }
+
+    // Also deactivate legacy license key
     const customer = await getStripe().customers.retrieve(customerId);
     if (customer.deleted) return;
 
@@ -99,6 +215,6 @@ async function handleSubscriptionCanceled(subscription: Stripe.Subscription) {
       console.log(`Subscription canceled, license deactivated: ${licenseKey}`);
     }
   } catch (error) {
-    console.error("Error handling subscription cancellation:", error);
+    console.error("Error handling subscription deletion:", error);
   }
 }

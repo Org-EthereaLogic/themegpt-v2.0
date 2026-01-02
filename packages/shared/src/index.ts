@@ -454,6 +454,66 @@ export interface VerifyResponse {
   message?: string;
 }
 
+// --- User Account System (v2.0) ---
+
+export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'expired';
+
+export interface User {
+  email: string;
+  provider: 'google' | 'github';
+  providerId: string;
+  name?: string | null;
+  image?: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Subscription {
+  userId: string;
+  stripeSubscriptionId: string;
+  stripeCustomerId: string;
+  status: SubscriptionStatus;
+  currentPeriodStart: Date;
+  currentPeriodEnd: Date;
+  creditsUsed: number; // 0-3
+  canceledAt: Date | null;
+  createdAt: Date;
+}
+
+export interface Download {
+  userId: string;
+  subscriptionId: string;
+  themeId: string;
+  downloadedAt: Date;
+  billingPeriod: string; // YYYY-MM format
+}
+
+export interface LicenseLink {
+  userId: string | null;
+  linkedAt: Date | null;
+}
+
+export interface CreditStatus {
+  remaining: number;
+  used: number;
+  total: number;
+  resetsAt: Date;
+  isGracePeriod: boolean;
+}
+
+export interface DownloadHistoryItem {
+  themeId: string;
+  themeName: string;
+  downloadedAt: Date;
+  billingPeriod: string;
+}
+
+export interface SubscriptionResponse {
+  status: SubscriptionStatus;
+  credits: CreditStatus;
+  gracePeriodEnds?: Date;
+}
+
 const globalLocation =
   typeof globalThis !== 'undefined'
     ? (globalThis as { location?: { hostname?: string } }).location

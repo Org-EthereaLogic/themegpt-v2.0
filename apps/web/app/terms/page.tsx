@@ -3,29 +3,50 @@ import Link from "next/link";
 import Image from "next/image";
 
 export const metadata: Metadata = {
-  title: "Terms of Service - ThemeGPT",
-  description: "Terms of Service for ThemeGPT Chrome extension",
+  title: "Terms of Service | ThemeGPT",
+  description: "ThemeGPT terms of service - Usage terms, licensing, and policies.",
 };
 
 export default function TermsOfService() {
   return (
-    <div className="min-h-screen bg-cream font-sans text-brown-900">
+    <div className="noise-texture min-h-screen bg-cream font-sans text-brown-900">
       <header className="flex items-center justify-between border-b border-cream-dark bg-cream px-8 py-4">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
-            src="/mascot-48.png"
+            src="/mascot-transparent.png"
             alt="ThemeGPT mascot"
-            width={40}
-            height={40}
-            className="h-10 w-10 rounded-full shadow-sm"
+            width={48}
+            height={48}
+            className="h-12 w-12"
+            priority
           />
           <span className="text-xl font-bold text-brown-900">ThemeGPT</span>
         </Link>
+        <nav className="flex items-center gap-7">
+          <Link
+            href="/#themes"
+            className="text-[15px] font-medium text-brown-900 hover:text-teal-500 transition-colors"
+          >
+            Themes
+          </Link>
+          <Link
+            href="/#pricing"
+            className="text-[15px] font-medium text-brown-900 hover:text-teal-500 transition-colors"
+          >
+            Pricing
+          </Link>
+          <Link
+            href="/#waitlist"
+            className="cursor-pointer rounded-full bg-teal-500 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:-translate-y-px hover:shadow-lg hover:shadow-teal-500/30"
+          >
+            Join Waitlist
+          </Link>
+        </nav>
       </header>
 
       <main className="mx-auto max-w-3xl px-8 py-12">
         <h1 className="mb-8 text-4xl font-bold text-brown-900">Terms of Service</h1>
-        <p className="mb-6 text-sm text-brown-600">Last updated: December 2024</p>
+        <p className="mb-6 text-sm text-brown-600">Last updated: January 2025</p>
 
         <div className="prose prose-brown max-w-none space-y-8">
           <section>
@@ -82,8 +103,8 @@ export default function TermsOfService() {
             </ul>
             <p className="text-brown-700 leading-relaxed mt-4">
               For refund requests, contact{" "}
-              <a href="mailto:support@themegpt.app" className="text-teal-600 hover:underline">
-                support@themegpt.app
+              <a href="mailto:support@themegpt.ai" className="text-teal-600 hover:underline">
+                support@themegpt.ai
               </a>
             </p>
           </section>
@@ -150,8 +171,8 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-bold text-brown-900 mb-4">11. Contact</h2>
             <p className="text-brown-700 leading-relaxed">
               For questions about these terms, contact us at{" "}
-              <a href="mailto:legal@themegpt.app" className="text-teal-600 hover:underline">
-                legal@themegpt.app
+              <a href="mailto:legal@themegpt.ai" className="text-teal-600 hover:underline">
+                legal@themegpt.ai
               </a>
             </p>
           </section>

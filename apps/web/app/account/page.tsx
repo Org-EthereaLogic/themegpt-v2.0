@@ -1,6 +1,7 @@
 "use client";
 
 import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubscriptionResponse, DownloadHistoryItem } from "@themegpt/shared";
@@ -161,12 +162,12 @@ export default function AccountPage() {
               <p className="text-[#7D5A4A] mb-4">
                 You don&apos;t have an active subscription.
               </p>
-              <a
+              <Link
                 href="/#pricing"
                 className="inline-block px-6 py-3 bg-[#7ECEC5] text-white font-medium rounded-lg hover:bg-[#6ABEB5] transition-colors"
               >
                 Subscribe Now
-              </a>
+              </Link>
             </div>
           )}
         </div>

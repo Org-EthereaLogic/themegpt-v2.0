@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { Storage } from "@plasmohq/storage"
-import { API_BASE_URL, DEFAULT_THEMES, type LicenseEntitlement, type Theme, type VerifyResponse } from "@themegpt/shared"
+import { API_BASE_URL, DEFAULT_THEMES, type Theme } from "@themegpt/shared"
 import { TokenCounter } from "./components/TokenCounter"
 
 import "../style.css"
@@ -13,19 +13,36 @@ const storage = new Storage({ area: "local" })
 // Environment-controlled: true in dev, false in production
 const DEV_UNLOCK_ALL_PREMIUM = process.env.PLASMO_PUBLIC_DEV_UNLOCK_PREMIUM === 'true'
 
+interface AccountStatus {
+  connected: boolean
+  email?: string
+  hasSubscription: boolean
+  isActive: boolean
+  planType?: string
+  isLifetime?: boolean
+  accessibleThemes: string[]
+  creditsRemaining?: number
+}
+
 export default function Popup() {
   const [activeThemeId, setActiveThemeId] = useState<string>("system")
   // In dev mode, initialize with all premium theme IDs
   const [unlockedThemeIds, setUnlockedThemeIds] = useState<string[]>(
     DEV_UNLOCK_ALL_PREMIUM ? DEFAULT_THEMES.filter(t => t.isPremium).map(t => t.id) : []
   )
-  
-  // --- License Logic ---
-  const [licenseKey, setLicenseKey] = useState("")
-  const [entitlement, setEntitlement] = useState<LicenseEntitlement | null>(null)
-  const [showLicenseInput, setShowLicenseInput] = useState(false)
+
+  // --- Account Logic ---
+  const [showAccountPanel, setShowAccountPanel] = useState(false)
+  const [tokenInput, setTokenInput] = useState("")
+  const [accountStatus, setAccountStatus] = useState<AccountStatus>({
+    connected: false,
+    hasSubscription: false,
+    isActive: false,
+    accessibleThemes: []
+  })
   const [statusMsg, setStatusMsg] = useState("")
   const [slotError, setSlotError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     storage.get<Theme>("activeTheme").then((t) => {
@@ -37,58 +54,126 @@ export default function Popup() {
         if (ids) setUnlockedThemeIds(ids)
       })
     }
-    // Load saved license
-    storage.get<string>("licenseKey").then((key) => {
-      if (key) {
-        setLicenseKey(key)
-        validateLicense(key)
+    // Load saved auth token and check status
+    storage.get<string>("authToken").then((token) => {
+      if (token) {
+        checkAccountStatus(token)
       }
     })
   }, [])
 
-  const validateLicense = async (key: string) => {
-    if (!key) return
-    setStatusMsg("Validating...")
+  const checkAccountStatus = async (token: string) => {
+    setIsLoading(true)
     try {
-      const res = await fetch(`${API_BASE_URL}/api/verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ licenseKey: key })
+      const res = await fetch(`${API_BASE_URL}/api/extension/status`, {
+        headers: { "Authorization": `Bearer ${token}` }
       })
+
       if (!res.ok) {
-        setStatusMsg("Validation failed. Try again.")
-        return
+        if (res.status === 401) {
+          // Token expired, clear it
+          await storage.remove("authToken")
+          setAccountStatus({
+            connected: false,
+            hasSubscription: false,
+            isActive: false,
+            accessibleThemes: []
+          })
+          setStatusMsg("Session expired. Please reconnect.")
+          return
+        }
+        throw new Error("Failed to check status")
       }
 
-      const data: VerifyResponse = await res.json()
-      
-      if (data.valid && data.entitlement) {
-        setEntitlement(data.entitlement)
-        setStatusMsg("License Active ✅")
-        // Update local unlocked state based on entitlement
-        updateUnlockedState(data.entitlement)
-        storage.set("licenseKey", key)
-        return
-      }
+      const data = await res.json()
 
-      setEntitlement(null)
-      setStatusMsg(`Error: ${data.message ?? "Invalid key"}`)
+      if (data.success) {
+        const newStatus: AccountStatus = {
+          connected: true,
+          email: data.user?.email,
+          hasSubscription: data.hasSubscription,
+          isActive: data.subscription?.isActive || false,
+          planType: data.subscription?.planType,
+          isLifetime: data.subscription?.isLifetime,
+          accessibleThemes: data.accessibleThemes || [],
+          creditsRemaining: data.subscription?.creditsRemaining
+        }
+        setAccountStatus(newStatus)
+
+        // Update unlocked themes
+        if (!DEV_UNLOCK_ALL_PREMIUM) {
+          setUnlockedThemeIds(data.accessibleThemes || [])
+          storage.set("unlockedThemes", data.accessibleThemes || [])
+        }
+
+        setStatusMsg(newStatus.isActive ? "Account Connected ✅" : "Account Connected")
+      }
     } catch (e) {
-      console.error(e)
+      console.error("Status check error:", e)
       setStatusMsg("Connection Error")
+    } finally {
+      setIsLoading(false)
     }
   }
 
-  const updateUnlockedState = (ent: LicenseEntitlement) => {
-    const unlocked: string[] = []
-    if (ent.permanentlyUnlocked?.length) unlocked.push(...ent.permanentlyUnlocked)
-    if (ent.activeSlotThemes?.length) unlocked.push(...ent.activeSlotThemes)
-    setUnlockedThemeIds(unlocked)
-    storage.set("unlockedThemes", unlocked)
+  const handleConnect = () => {
+    // Open auth page in new tab
+    window.open(`${API_BASE_URL}/auth/extension`, '_blank')
   }
 
-  const handleApply = (theme: Theme) => {
+  const handleTokenSubmit = async () => {
+    if (!tokenInput.trim()) return
+
+    setIsLoading(true)
+    setStatusMsg("Connecting...")
+
+    try {
+      // Verify the token works
+      const res = await fetch(`${API_BASE_URL}/api/extension/status`, {
+        headers: { "Authorization": `Bearer ${tokenInput.trim()}` }
+      })
+
+      if (!res.ok) {
+        setStatusMsg("Invalid token. Please try again.")
+        setIsLoading(false)
+        return
+      }
+
+      const data = await res.json()
+      if (data.success) {
+        // Save the token
+        await storage.set("authToken", tokenInput.trim())
+        setTokenInput("")
+
+        // Update status
+        await checkAccountStatus(tokenInput.trim())
+        setStatusMsg("Account Connected ✅")
+      } else {
+        setStatusMsg("Connection failed. Please try again.")
+      }
+    } catch {
+      setStatusMsg("Connection Error")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleDisconnect = async () => {
+    await storage.remove("authToken")
+    await storage.remove("unlockedThemes")
+    setAccountStatus({
+      connected: false,
+      hasSubscription: false,
+      isActive: false,
+      accessibleThemes: []
+    })
+    setUnlockedThemeIds([])
+    setStatusMsg("")
+  }
+
+  const handleApply = async (theme: Theme) => {
     setSlotError(null) // Clear any previous error
+
     // Check if unlocked
     if (!theme.isPremium || unlockedThemeIds.includes(theme.id)) {
       setActiveThemeId(theme.id)
@@ -96,42 +181,56 @@ export default function Popup() {
       return
     }
 
-    // Handle Subscription Slot Logic
-    if (entitlement?.type === 'subscription') {
-      const currentEntitlement = entitlement as LicenseEntitlement
-      const currentSlots = currentEntitlement.activeSlotThemes ?? []
-      if (currentSlots.length < entitlement.maxSlots) {
-        const newSlots = [...currentSlots, theme.id]
-        const newEntitlement: LicenseEntitlement = {
-          ...currentEntitlement,
-          activeSlotThemes: newSlots
-        }
-        setEntitlement(newEntitlement)
-        updateUnlockedState(newEntitlement)
-        
-        setActiveThemeId(theme.id)
-        storage.set("activeTheme", theme)
-        storage.set("localEntitlement", newEntitlement)
-        
-        // Sync to server
-        fetch(`${API_BASE_URL}/api/sync`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-                licenseKey, 
-                activeSlotThemes: newSlots 
-            })
-        }).catch(err => console.error("Sync failed", err))
-
-        return
-      } else {
-        setSlotError(`Subscription limit reached (${entitlement.maxSlots} themes). Deactivate another theme via web settings to continue.`)
+    // Premium theme - check if user has active subscription
+    if (accountStatus.isActive) {
+      // Check credits
+      if (accountStatus.creditsRemaining !== undefined && accountStatus.creditsRemaining <= 0) {
+        setSlotError("No downloads remaining this period. Manage your account at themegpt.app")
         return
       }
+
+      // Download the theme
+      const token = await storage.get<string>("authToken")
+      if (!token) {
+        setSlotError("Please connect your account first.")
+        return
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/extension/download`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({ themeId: theme.id })
+        })
+
+        if (res.ok) {
+          // Add theme to unlocked list
+          const newUnlocked = [...unlockedThemeIds, theme.id]
+          setUnlockedThemeIds(newUnlocked)
+          storage.set("unlockedThemes", newUnlocked)
+
+          // Apply the theme
+          setActiveThemeId(theme.id)
+          storage.set("activeTheme", theme)
+
+          // Refresh status to update credits
+          checkAccountStatus(token)
+        } else {
+          const data = await res.json()
+          setSlotError(data.message || "Failed to unlock theme")
+        }
+      } catch {
+        setSlotError("Connection error. Please try again.")
+      }
+      return
     }
-    
-    // Fallback: Open buy page
-    window.open(`https://themegpt.ai/themes/${theme.id}`, '_blank')
+
+    // Not subscribed - prompt to subscribe
+    setSlotError("Subscribe to unlock premium themes!")
+    window.open(`${API_BASE_URL}/#pricing`, '_blank')
   }
 
   const freeThemes = DEFAULT_THEMES.filter(t => !t.isPremium)
@@ -144,40 +243,104 @@ export default function Popup() {
         <img src={mascotUrl} alt="ThemeGPT" className="w-8 h-8" />
         <h1 className="text-lg font-bold tracking-tight">ThemeGPT</h1>
         <div className="ml-auto flex items-center gap-2">
-           <button 
-             onClick={() => setShowLicenseInput(!showLicenseInput)}
+           <button
+             onClick={() => setShowAccountPanel(!showAccountPanel)}
              className="text-xs font-medium text-brand-teal hover:text-brand-text transition-colors"
            >
-             {entitlement ? "Premium" : "Activate"}
+             {accountStatus.connected ? (accountStatus.isLifetime ? "Lifetime" : "Premium") : "Connect"}
            </button>
-          <div className="w-2 h-2 rounded-full bg-brand-teal shadow-[0_0_8px_rgba(126,206,197,0.8)]" title="Active" />
+          {accountStatus.connected && (
+            <div
+              className={`w-2 h-2 rounded-full ${accountStatus.isActive ? 'bg-brand-teal shadow-[0_0_8px_rgba(126,206,197,0.8)]' : 'bg-brand-peach'}`}
+              title={accountStatus.isActive ? "Active" : "Connected"}
+            />
+          )}
         </div>
       </header>
-      
-      {/* LICENSE INPUT DROPDOWN */}
-      {showLicenseInput && (
+
+      {/* ACCOUNT PANEL */}
+      {showAccountPanel && (
         <div className="bg-white/90 p-4 border-b border-brand-text/10 animate-in slide-in-from-top-2">
-            <h3 className="text-xs font-bold uppercase mb-2">License Key</h3>
-            <div className="flex gap-2">
-                <input 
-                  value={licenseKey}
-                  onChange={(e) => setLicenseKey(e.target.value)}
-                  className="flex-1 text-xs p-2 rounded border border-brand-text/20"
-                  placeholder="Enter key..."
-                />
-                <button 
-                  onClick={() => validateLicense(licenseKey)}
-                  className="bg-brand-teal text-white text-xs px-3 rounded font-bold"
+          {accountStatus.connected ? (
+            <>
+              <div className="flex items-center justify-between mb-3">
+                <h3 className="text-xs font-bold uppercase">Account</h3>
+                <button
+                  onClick={handleDisconnect}
+                  className="text-[10px] text-red-500 hover:text-red-600"
                 >
-                  Verify
+                  Disconnect
                 </button>
-            </div>
-            {statusMsg && <div className="text-[10px] mt-1 opacity-70">{statusMsg}</div>}
-            {entitlement?.type === 'subscription' && (
-                <div className="text-[10px] mt-2 text-brand-text/60">
-                    Slots Used: {(entitlement.activeSlotThemes?.length ?? 0)} / {entitlement.maxSlots}
+              </div>
+              <div className="text-xs opacity-70 mb-2">{accountStatus.email}</div>
+              {accountStatus.hasSubscription && (
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${
+                    accountStatus.isLifetime
+                      ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white'
+                      : accountStatus.isActive
+                        ? 'bg-brand-teal/10 text-brand-teal'
+                        : 'bg-brand-peach/10 text-brand-peach'
+                  }`}>
+                    {accountStatus.isLifetime ? 'Lifetime Access' : accountStatus.planType === 'yearly' ? 'Yearly' : 'Monthly'}
+                  </span>
+                  {accountStatus.isActive && !accountStatus.isLifetime && accountStatus.creditsRemaining !== undefined && (
+                    <span className="text-[10px] opacity-60">
+                      {accountStatus.creditsRemaining} downloads left
+                    </span>
+                  )}
                 </div>
-            )}
+              )}
+              {!accountStatus.hasSubscription && (
+                <button
+                  onClick={() => window.open(`${API_BASE_URL}/#pricing`, '_blank')}
+                  className="mt-2 text-xs bg-brand-teal text-white px-3 py-1.5 rounded-full font-medium hover:bg-brand-teal/90"
+                >
+                  Subscribe
+                </button>
+              )}
+            </>
+          ) : (
+            <>
+              <h3 className="text-xs font-bold uppercase mb-2">Connect Account</h3>
+              <p className="text-[10px] opacity-70 mb-3">
+                Sign in to access your premium themes and subscription.
+              </p>
+              <button
+                onClick={handleConnect}
+                disabled={isLoading}
+                className="w-full bg-brand-teal text-white text-xs py-2 rounded-lg font-bold hover:bg-brand-teal/90 disabled:opacity-50 mb-3"
+              >
+                {isLoading ? "Connecting..." : "Connect with Google/GitHub"}
+              </button>
+
+              <div className="relative my-3">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-brand-text/10"></div>
+                </div>
+                <div className="relative flex justify-center text-[10px]">
+                  <span className="bg-white px-2 opacity-50">or paste token</span>
+                </div>
+              </div>
+
+              <div className="flex gap-2">
+                <input
+                  value={tokenInput}
+                  onChange={(e) => setTokenInput(e.target.value)}
+                  className="flex-1 text-xs p-2 rounded border border-brand-text/20"
+                  placeholder="Paste token..."
+                />
+                <button
+                  onClick={handleTokenSubmit}
+                  disabled={isLoading || !tokenInput.trim()}
+                  className="bg-brand-text text-white text-xs px-3 rounded font-bold disabled:opacity-50"
+                >
+                  Go
+                </button>
+              </div>
+              {statusMsg && <div className="text-[10px] mt-2 opacity-70">{statusMsg}</div>}
+            </>
+          )}
         </div>
       )}
 
@@ -242,8 +405,8 @@ export default function Popup() {
             <TokenCounter />
         </div>
         <footer className="p-3 text-center border-t border-brand-text/5">
-            <a href="https://themegpt.ai" target="_blank" className="text-xs font-medium text-brand-text/60 hover:text-brand-text">
-            Manage Subscription &rarr;
+            <a href={`${API_BASE_URL}/account`} target="_blank" className="text-xs font-medium text-brand-text/60 hover:text-brand-text">
+            Manage Account &rarr;
             </a>
         </footer>
       </div>

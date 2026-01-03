@@ -95,11 +95,14 @@ export default function AccountPage() {
 
           {subscription ? (
             <div className="space-y-4">
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Status Badge */}
                 <span
                   className={`px-3 py-1 rounded-full text-sm font-medium ${
                     subscription.status === "active"
                       ? "bg-green-100 text-green-800"
+                      : subscription.status === "trialing"
+                      ? "bg-blue-100 text-blue-800"
                       : subscription.status === "canceled"
                       ? "bg-yellow-100 text-yellow-800"
                       : "bg-red-100 text-red-800"
@@ -107,10 +110,24 @@ export default function AccountPage() {
                 >
                   {subscription.status === "active"
                     ? "Active"
+                    : subscription.status === "trialing"
+                    ? "Trial"
                     : subscription.status === "canceled"
                     ? "Canceling"
                     : "Expired"}
                 </span>
+
+                {/* Plan Type Badge */}
+                {subscription.isLifetime ? (
+                  <span className="px-3 py-1 rounded-full text-sm font-medium bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+                    Lifetime Member
+                  </span>
+                ) : (
+                  <span className="px-3 py-1 rounded-full text-sm font-medium bg-[#E5DDD5] text-[#4B2E1E]">
+                    {subscription.planType === "yearly" ? "Yearly Plan" : "Monthly Plan"}
+                  </span>
+                )}
+
                 {subscription.credits.isGracePeriod && (
                   <span className="text-sm text-[#7D5A4A]">
                     Access until{" "}
@@ -119,33 +136,68 @@ export default function AccountPage() {
                 )}
               </div>
 
-              {/* Credits Display */}
-              <div className="bg-[#FAF6F0] rounded-lg p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-[#4B2E1E] font-medium">
-                    Monthly Credits
-                  </span>
-                  <span className="text-[#7ECEC5] font-bold text-lg">
-                    {subscription.credits.remaining} / {subscription.credits.total}
-                  </span>
+              {/* Trial Info */}
+              {subscription.status === "trialing" && subscription.trialEndsAt && (
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    Your free trial ends on{" "}
+                    <strong>{new Date(subscription.trialEndsAt).toLocaleDateString()}</strong>.
+                    You will be charged after the trial period.
+                  </p>
                 </div>
-                <div className="w-full bg-[#E5DDD5] rounded-full h-2">
-                  <div
-                    className="bg-[#7ECEC5] h-2 rounded-full transition-all"
-                    style={{
-                      width: `${
-                        (subscription.credits.remaining /
-                          subscription.credits.total) *
-                        100
-                      }%`,
-                    }}
-                  />
+              )}
+
+              {/* Commitment Info for Yearly (non-lifetime) */}
+              {subscription.planType === "yearly" && !subscription.isLifetime && subscription.commitmentEndsAt && (
+                <div className="text-sm text-[#7D5A4A]">
+                  Commitment period ends:{" "}
+                  <strong>{new Date(subscription.commitmentEndsAt).toLocaleDateString()}</strong>
                 </div>
-                <p className="text-sm text-[#7D5A4A] mt-2">
-                  Resets on{" "}
-                  {new Date(subscription.credits.resetsAt).toLocaleDateString()}
-                </p>
-              </div>
+              )}
+
+              {/* Credits Display - Hidden for Lifetime */}
+              {subscription.isLifetime ? (
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#4B2E1E] font-medium">
+                      Theme Access
+                    </span>
+                    <span className="text-purple-600 font-bold text-lg">
+                      Unlimited
+                    </span>
+                  </div>
+                  <p className="text-sm text-[#7D5A4A] mt-2">
+                    As a lifetime member, you have unlimited access to all current and future premium themes.
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-[#FAF6F0] rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-[#4B2E1E] font-medium">
+                      Monthly Credits
+                    </span>
+                    <span className="text-[#7ECEC5] font-bold text-lg">
+                      {subscription.credits.remaining} / {subscription.credits.total}
+                    </span>
+                  </div>
+                  <div className="w-full bg-[#E5DDD5] rounded-full h-2">
+                    <div
+                      className="bg-[#7ECEC5] h-2 rounded-full transition-all"
+                      style={{
+                        width: `${
+                          (subscription.credits.remaining /
+                            subscription.credits.total) *
+                          100
+                        }%`,
+                      }}
+                    />
+                  </div>
+                  <p className="text-sm text-[#7D5A4A] mt-2">
+                    Resets on{" "}
+                    {new Date(subscription.credits.resetsAt).toLocaleDateString()}
+                  </p>
+                </div>
+              )}
 
               {subscription.credits.isGracePeriod && (
                 <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">

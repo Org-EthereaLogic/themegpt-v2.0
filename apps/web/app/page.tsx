@@ -68,7 +68,7 @@ export default function Home() {
   const [selectedTheme, setSelectedTheme] = useState<string>(PREMIUM_THEMES[0]?.id || '')
   const [checkoutError, setCheckoutError] = useState<string | null>(null)
 
-  const handleCheckout = async (type: 'subscription' | 'single', themeId?: string) => {
+  const handleCheckout = async (type: 'yearly' | 'monthly' | 'single', themeId?: string) => {
     setCheckoutError(null)
     try {
       const res = await fetch('/api/checkout', {
@@ -147,30 +147,57 @@ export default function Home() {
       {/* Pricing Section */}
       <section id="pricing" className="bg-cream px-8 pt-[30px] pb-[30px] text-center">
         <h2 className="mb-6 text-[32px] font-bold text-brown-900">
-          ✨ Simple Pricing
+          Choose Your Plan
         </h2>
-        <div className="flex flex-wrap justify-center gap-6 max-w-4xl mx-auto">
-            {/* Subscription Card */}
-            <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[280px] border-2 border-teal-500 relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-teal-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-bl-lg">
-                    Best Value
-                </div>
-                <h3 className="text-xl font-bold mb-2">Infinite Style</h3>
-                <div className="text-4xl font-bold text-brown-900 mb-2">$1.99<span className="text-base font-normal opacity-60">/mo</span></div>
-                <p className="opacity-70 text-sm mb-6 min-h-[40px]">Access to 3 active premium themes at once. Swap anytime.</p>
+        <div className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto">
+            {/* Monthly Card */}
+            <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[260px] max-w-[320px] border border-brown-900/10">
+                <h3 className="text-xl font-bold mb-2">Monthly</h3>
+                <div className="text-4xl font-bold text-brown-900 mb-1">$1.99<span className="text-base font-normal opacity-60">/mo</span></div>
+                <div className="text-sm text-teal-600 font-medium mb-2">First month free</div>
+                <p className="opacity-70 text-sm mb-4 min-h-[40px]">Try free for 30 days. Access 3 premium themes at once. Cancel anytime.</p>
+                <ul className="text-left text-sm space-y-2 mb-6">
+                  <li className="flex items-center gap-2"><span className="text-teal-500">✓</span> 30-day free trial</li>
+                  <li className="flex items-center gap-2"><span className="text-teal-500">✓</span> 3 active premium themes</li>
+                  <li className="flex items-center gap-2"><span className="text-teal-500">✓</span> Swap themes anytime</li>
+                  <li className="flex items-center gap-2"><span className="text-teal-500">✓</span> Cancel anytime</li>
+                </ul>
                 <button
-                  onClick={() => handleCheckout('subscription')}
-                  className="w-full py-3 rounded-xl bg-teal-500 text-white font-bold hover:bg-teal-600 transition-colors"
+                  onClick={() => handleCheckout('monthly')}
+                  className="w-full py-3 rounded-xl bg-brown-900 text-white font-bold hover:bg-brown-800 transition-colors"
                 >
-                    Subscribe Now
+                    Start Free Month
                 </button>
             </div>
 
-            {/* Pay Per Theme Card */}
-            <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[280px] border border-brown-900/10">
+            {/* Yearly Card - Best Value */}
+            <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[260px] max-w-[320px] border-2 border-teal-500 relative overflow-hidden">
+                <div className="absolute top-0 right-0 bg-teal-500 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-bl-lg">
+                    Best Value
+                </div>
+                <h3 className="text-xl font-bold mb-2">Yearly</h3>
+                <div className="text-4xl font-bold text-brown-900 mb-1">$14.99<span className="text-base font-normal opacity-60">/yr</span></div>
+                <div className="text-sm text-teal-600 font-medium mb-2">Lifetime access for early adopters</div>
+                <p className="opacity-70 text-sm mb-4 min-h-[40px]">Early adopters get lifetime access. Subscribe yearly and never pay again.</p>
+                <ul className="text-left text-sm space-y-2 mb-6">
+                  <li className="flex items-center gap-2"><span className="text-peach">★</span> Lifetime access potential</li>
+                  <li className="flex items-center gap-2"><span className="text-teal-500">✓</span> 3 active premium themes</li>
+                  <li className="flex items-center gap-2"><span className="text-teal-500">✓</span> Swap themes anytime</li>
+                  <li className="flex items-center gap-2"><span className="text-teal-500">✓</span> All future theme updates</li>
+                </ul>
+                <button
+                  onClick={() => handleCheckout('yearly')}
+                  className="w-full py-3 rounded-xl bg-teal-500 text-white font-bold hover:bg-teal-600 transition-colors"
+                >
+                    Get Lifetime Access
+                </button>
+            </div>
+
+            {/* Single Theme Card */}
+            <div className="bg-white p-6 rounded-[24px] shadow-sm flex-1 min-w-[260px] max-w-[320px] border border-brown-900/10">
                 <h3 className="text-xl font-bold mb-2">Single Theme</h3>
                 <div className="text-4xl font-bold text-brown-900 mb-2">$0.99<span className="text-base font-normal opacity-60">/ea</span></div>
-                <p className="opacity-70 text-sm mb-4 min-h-[40px]">Own a specific theme forever. One-time purchase.</p>
+                <p className="opacity-70 text-sm mb-4 min-h-[40px]">Own a specific theme forever. One-time purchase, lifetime ownership.</p>
                 <label htmlFor="theme-select" className="block text-sm font-medium text-brown-900/70 mb-2 text-left">
                   Select Theme
                 </label>
@@ -190,12 +217,12 @@ export default function Home() {
                    onClick={() => handleCheckout('single', selectedTheme)}
                    className="w-full py-3 rounded-xl bg-brown-900 text-white font-bold hover:bg-brown-800 transition-colors"
                 >
-                    Buy One Theme
+                    Buy Theme
                 </button>
             </div>
         </div>
         {checkoutError && (
-          <div className="mt-4 max-w-4xl mx-auto p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm" role="alert">
+          <div className="mt-4 max-w-5xl mx-auto p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm" role="alert">
             {checkoutError}
           </div>
         )}

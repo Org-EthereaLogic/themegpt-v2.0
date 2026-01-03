@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { getStripe } from "@/lib/stripe";
+import { getStripe, TRIAL_DAYS } from "@/lib/stripe";
 import { db } from "@/lib/db";
-import { LicenseEntitlement } from "@themegpt/shared";
+import { LicenseEntitlement, PlanType } from "@themegpt/shared";
 import { v4 as uuidv4 } from "uuid";
 import Stripe from "stripe";
 
@@ -49,18 +49,26 @@ export async function POST(request: Request) {
       await handleSubscriptionDeleted(subscription);
       break;
     }
+    case "customer.subscription.trial_will_end": {
+      const subscription = event.data.object as Stripe.Subscription;
+      await handleTrialWillEnd(subscription);
+      break;
+    }
   }
 
   return NextResponse.json({ received: true });
 }
 
 async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
-  const { type, themeId, userId } = session.metadata || {};
+  const { type, themeId, userId, planType, isEarlyAdopterEligible } = session.metadata || {};
   const licenseKey = `KEY-${uuidv4().substring(0, 8).toUpperCase()}`;
 
   let entitlement: LicenseEntitlement;
 
-  if (type === "subscription") {
+  // Handle subscription types (monthly, yearly, or legacy "subscription")
+  const isSubscription = type === "monthly" || type === "yearly" || type === "subscription";
+
+  if (isSubscription) {
     entitlement = {
       active: true,
       type: "subscription",
@@ -85,18 +93,46 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
         ? new Date(firstItem.current_period_end * 1000)
         : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // Default 30 days
 
+      // Determine plan type (normalize legacy "subscription" to "monthly")
+      const normalizedPlanType: PlanType =
+        (planType === "yearly" ? "yearly" : "monthly");
+
+      // Calculate trial end date for yearly plans
+      const trialEndsAt = normalizedPlanType === "yearly" && stripeSubscription.trial_end
+        ? new Date(stripeSubscription.trial_end * 1000)
+        : null;
+
+      // Calculate commitment end date (12 months from start for yearly)
+      const commitmentEndsAt = normalizedPlanType === "yearly"
+        ? new Date(currentPeriodStart.getTime() + 365 * 24 * 60 * 60 * 1000)
+        : null;
+
+      // Check if this yearly subscriber should get lifetime access
+      let shouldBeLifetime = false;
+      if (normalizedPlanType === "yearly" && isEarlyAdopterEligible === "true") {
+        shouldBeLifetime = await db.claimEarlyAdopterSlot();
+      }
+
       await db.createSubscription({
         userId,
         stripeSubscriptionId: stripeSubscription.id,
         stripeCustomerId: session.customer as string,
-        status: 'active',
+        status: stripeSubscription.status === 'trialing' ? 'trialing' : 'active',
+        planType: shouldBeLifetime ? 'lifetime' : normalizedPlanType,
         currentPeriodStart,
         currentPeriodEnd,
+        trialEndsAt,
+        commitmentEndsAt,
+        isLifetime: shouldBeLifetime,
       });
 
-      console.log(`Subscription record created for user: ${userId}`);
+      if (shouldBeLifetime) {
+        console.log(`Early adopter lifetime access granted for user: ${userId}`);
+      }
+      console.log(`Subscription record created for user: ${userId} (plan: ${normalizedPlanType})`);
     }
   } else {
+    // Single theme purchase
     entitlement = {
       active: true,
       type: "lifetime",
@@ -217,4 +253,20 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   } catch (error) {
     console.error("Error handling subscription deletion:", error);
   }
+}
+
+async function handleTrialWillEnd(subscription: Stripe.Subscription) {
+  // This event fires 3 days before trial ends
+  // Can be used to send reminder emails or perform pre-conversion tasks
+  const dbSubscription = await db.getSubscriptionByStripeId(subscription.id);
+
+  if (!dbSubscription) {
+    console.log(`No subscription record found for trial ending: ${subscription.id}`);
+    return;
+  }
+
+  console.log(`Trial ending soon for subscription: ${dbSubscription.id}, user: ${dbSubscription.userId}`);
+
+  // Future: Send email reminder about trial ending
+  // Future: Can trigger early adopter conversion check here if needed
 }

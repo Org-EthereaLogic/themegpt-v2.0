@@ -66,8 +66,12 @@ export default function TermsOfService() {
             </p>
             <ul className="list-disc pl-6 space-y-2 text-brown-700 mt-4">
               <li>
-                <strong>Subscription ($1.99/month):</strong> Access to 3 active premium themes
-                at a time. You may swap themes freely within your subscription period.
+                <strong>Monthly Subscription ($1.99/month):</strong> Access to 3 active premium themes
+                at a time. You may swap themes freely. Cancel anytime with no commitment.
+              </li>
+              <li>
+                <strong>Yearly Subscription ($14.99/year):</strong> Access to 3 active premium themes
+                at a time with a 30-day free trial. Includes a 12-month commitment period.
               </li>
               <li>
                 <strong>Single Theme ($0.99):</strong> Permanent access to one specific theme.
@@ -80,9 +84,11 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-bold text-brown-900 mb-4">3. Payment Terms</h2>
             <ul className="list-disc pl-6 space-y-2 text-brown-700">
               <li>All payments are processed securely through Stripe</li>
-              <li>Subscription fees are billed monthly on your purchase anniversary date</li>
+              <li>Monthly subscription fees are billed monthly on your purchase anniversary date</li>
+              <li>Yearly subscription fees are billed annually after the 30-day free trial</li>
               <li>Prices are in USD and subject to applicable taxes</li>
-              <li>You may cancel your subscription at any time through Stripe</li>
+              <li>Monthly subscriptions may be canceled at any time through Stripe</li>
+              <li>Yearly subscriptions include a 12-month commitment period</li>
             </ul>
           </section>
 
@@ -93,8 +99,12 @@ export default function TermsOfService() {
             </p>
             <ul className="list-disc pl-6 space-y-2 text-brown-700 mt-4">
               <li>
-                <strong>Subscriptions:</strong> Refunds available within 7 days of initial
+                <strong>Monthly subscriptions:</strong> Refunds available within 7 days of initial
                 purchase if you have not activated any premium themes
+              </li>
+              <li>
+                <strong>Yearly subscriptions:</strong> Full refund available within 7 days of purchase
+                or during the 30-day free trial if you have not activated any premium themes
               </li>
               <li>
                 <strong>Single themes:</strong> No refunds once the license key has been
@@ -152,10 +162,19 @@ export default function TermsOfService() {
             <h2 className="text-2xl font-bold text-brown-900 mb-4">9. Termination</h2>
             <p className="text-brown-700 leading-relaxed">
               We may terminate or suspend your license if you violate these terms. Upon
-              termination for cause, no refund will be provided. You may terminate your
-              subscription at any time, which takes effect at the end of the current billing
-              period.
+              termination for cause, no refund will be provided.
             </p>
+            <ul className="list-disc pl-6 space-y-2 text-brown-700 mt-4">
+              <li>
+                <strong>Monthly subscriptions:</strong> You may cancel at any time, effective at
+                the end of the current billing period.
+              </li>
+              <li>
+                <strong>Yearly subscriptions:</strong> You may cancel within the first 7 days for
+                a full refund with no penalty. After the first week, yearly subscriptions include
+                a 12-month commitment period.
+              </li>
+            </ul>
           </section>
 
           <section>

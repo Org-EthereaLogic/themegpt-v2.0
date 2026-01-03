@@ -428,6 +428,7 @@ export const DEFAULT_THEMES: Theme[] = [
 // --- License & Payments ---
 
 export type LicenseType = 'subscription' | 'lifetime';
+export type PlanType = 'monthly' | 'yearly' | 'lifetime';
 
 export interface LicenseEntitlement {
   active: boolean;
@@ -456,7 +457,7 @@ export interface VerifyResponse {
 
 // --- User Account System (v2.0) ---
 
-export type SubscriptionStatus = 'active' | 'canceled' | 'past_due' | 'expired';
+export type SubscriptionStatus = 'active' | 'trialing' | 'canceled' | 'past_due' | 'expired';
 
 export interface User {
   email: string;
@@ -473,11 +474,17 @@ export interface Subscription {
   stripeSubscriptionId: string;
   stripeCustomerId: string;
   status: SubscriptionStatus;
+  planType: PlanType;
   currentPeriodStart: Date;
   currentPeriodEnd: Date;
-  creditsUsed: number; // 0-3
+  creditsUsed: number; // 0-3 (unlimited for lifetime)
   canceledAt: Date | null;
   createdAt: Date;
+  // New fields for yearly/lifetime support
+  trialEndsAt: Date | null;
+  commitmentEndsAt: Date | null; // 12 months from subscription start for yearly
+  isLifetime: boolean;
+  earlyAdopterConvertedAt: Date | null;
 }
 
 export interface Download {
@@ -510,8 +517,21 @@ export interface DownloadHistoryItem {
 
 export interface SubscriptionResponse {
   status: SubscriptionStatus;
+  planType: PlanType;
   credits: CreditStatus;
   gracePeriodEnds?: Date;
+  isLifetime: boolean;
+  trialEndsAt?: Date;
+  commitmentEndsAt?: Date;
+}
+
+// Early Adopter Program tracking
+export interface EarlyAdopterProgram {
+  launchDate: Date;
+  maxSlots: number;
+  usedSlots: number;
+  cutoffDate: Date; // launchDate + 60 days
+  isActive: boolean;
 }
 
 const globalLocation =

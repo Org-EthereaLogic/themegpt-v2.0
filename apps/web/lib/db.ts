@@ -4,6 +4,8 @@ import {
   Download,
   LicenseLink,
   SubscriptionStatus,
+  PlanType,
+  EarlyAdopterProgram,
   DEFAULT_THEMES
 } from "@themegpt/shared";
 import { db as firestore } from "./firebase-admin";
@@ -14,6 +16,7 @@ const USERS_COLLECTION = 'users';
 const SUBSCRIPTIONS_COLLECTION = 'subscriptions';
 const DOWNLOADS_COLLECTION = 'downloads';
 const LICENSE_LINKS_COLLECTION = 'license_links';
+const EARLY_ADOPTER_COLLECTION = 'early_adopter_program';
 
 // Helper to get current billing period string (YYYY-MM)
 function getCurrentBillingPeriod(): string {
@@ -87,11 +90,16 @@ export const db = {
         stripeSubscriptionId: data.stripeSubscriptionId,
         stripeCustomerId: data.stripeCustomerId,
         status: data.status as SubscriptionStatus,
+        planType: (data.planType as PlanType) || 'monthly', // Default for legacy subscriptions
         currentPeriodStart: data.currentPeriodStart.toDate(),
         currentPeriodEnd: data.currentPeriodEnd.toDate(),
         creditsUsed: data.creditsUsed || 0,
         canceledAt: data.canceledAt?.toDate() || null,
         createdAt: data.createdAt.toDate(),
+        trialEndsAt: data.trialEndsAt?.toDate() || null,
+        commitmentEndsAt: data.commitmentEndsAt?.toDate() || null,
+        isLifetime: data.isLifetime || false,
+        earlyAdopterConvertedAt: data.earlyAdopterConvertedAt?.toDate() || null,
       };
     } catch (error) {
       console.error("Error fetching subscription:", error);
@@ -119,11 +127,16 @@ export const db = {
         stripeSubscriptionId: data.stripeSubscriptionId,
         stripeCustomerId: data.stripeCustomerId,
         status: data.status as SubscriptionStatus,
+        planType: (data.planType as PlanType) || 'monthly',
         currentPeriodStart: data.currentPeriodStart.toDate(),
         currentPeriodEnd: data.currentPeriodEnd.toDate(),
         creditsUsed: data.creditsUsed || 0,
         canceledAt: data.canceledAt?.toDate() || null,
         createdAt: data.createdAt.toDate(),
+        trialEndsAt: data.trialEndsAt?.toDate() || null,
+        commitmentEndsAt: data.commitmentEndsAt?.toDate() || null,
+        isLifetime: data.isLifetime || false,
+        earlyAdopterConvertedAt: data.earlyAdopterConvertedAt?.toDate() || null,
       };
     } catch (error) {
       console.error("Error fetching subscription by Stripe ID:", error);
@@ -131,13 +144,15 @@ export const db = {
     }
   },
 
-  async createSubscription(subscription: Omit<Subscription, 'creditsUsed' | 'canceledAt' | 'createdAt'>): Promise<string> {
+  async createSubscription(subscription: Omit<Subscription, 'creditsUsed' | 'canceledAt' | 'createdAt' | 'isLifetime' | 'earlyAdopterConvertedAt'> & { isLifetime?: boolean }): Promise<string> {
     try {
       const docRef = await firestore.collection(SUBSCRIPTIONS_COLLECTION).add({
         ...subscription,
         creditsUsed: 0,
         canceledAt: null,
         createdAt: new Date(),
+        isLifetime: subscription.isLifetime || false,
+        earlyAdopterConvertedAt: null,
       });
       return docRef.id;
     } catch (error) {
@@ -348,5 +363,127 @@ export const db = {
   getThemeName(themeId: string): string {
     const theme = DEFAULT_THEMES.find(t => t.id === themeId);
     return theme?.name || themeId;
+  },
+
+  // === Early Adopter Program Methods ===
+  async getEarlyAdopterProgram(): Promise<EarlyAdopterProgram | null> {
+    try {
+      const doc = await firestore.collection(EARLY_ADOPTER_COLLECTION).doc('config').get();
+      if (!doc.exists) {
+        return null;
+      }
+      const data = doc.data();
+      return {
+        launchDate: data?.launchDate?.toDate(),
+        maxSlots: data?.maxSlots || 60,
+        usedSlots: data?.usedSlots || 0,
+        cutoffDate: data?.cutoffDate?.toDate(),
+        isActive: data?.isActive ?? true,
+      };
+    } catch (error) {
+      console.error("Error fetching early adopter program:", error);
+      return null;
+    }
+  },
+
+  async initializeEarlyAdopterProgram(launchDate: Date, maxSlots: number = 60, windowDays: number = 60): Promise<void> {
+    try {
+      const cutoffDate = new Date(launchDate);
+      cutoffDate.setDate(cutoffDate.getDate() + windowDays);
+
+      await firestore.collection(EARLY_ADOPTER_COLLECTION).doc('config').set({
+        launchDate,
+        maxSlots,
+        usedSlots: 0,
+        cutoffDate,
+        isActive: true,
+      });
+    } catch (error) {
+      console.error("Error initializing early adopter program:", error);
+      throw error;
+    }
+  },
+
+  async isEarlyAdopterEligible(): Promise<boolean> {
+    try {
+      const program = await this.getEarlyAdopterProgram();
+      if (!program || !program.isActive) {
+        return false;
+      }
+
+      const now = new Date();
+      const withinWindow = now <= program.cutoffDate;
+      const slotsAvailable = program.usedSlots < program.maxSlots;
+
+      return withinWindow && slotsAvailable;
+    } catch (error) {
+      console.error("Error checking early adopter eligibility:", error);
+      return false;
+    }
+  },
+
+  async claimEarlyAdopterSlot(): Promise<boolean> {
+    try {
+      const configRef = firestore.collection(EARLY_ADOPTER_COLLECTION).doc('config');
+
+      // Use transaction to safely increment the slot count
+      const result = await firestore.runTransaction(async (transaction) => {
+        const doc = await transaction.get(configRef);
+        if (!doc.exists) {
+          return false;
+        }
+
+        const data = doc.data();
+        const currentSlots = data?.usedSlots || 0;
+        const maxSlots = data?.maxSlots || 60;
+        const isActive = data?.isActive ?? true;
+        const cutoffDate = data?.cutoffDate?.toDate();
+
+        // Check if still eligible
+        if (!isActive || currentSlots >= maxSlots || (cutoffDate && new Date() > cutoffDate)) {
+          return false;
+        }
+
+        transaction.update(configRef, {
+          usedSlots: currentSlots + 1,
+          // Auto-deactivate if this was the last slot
+          isActive: currentSlots + 1 < maxSlots,
+        });
+
+        return true;
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Error claiming early adopter slot:", error);
+      return false;
+    }
+  },
+
+  async convertToLifetime(subscriptionId: string): Promise<boolean> {
+    try {
+      await firestore
+        .collection(SUBSCRIPTIONS_COLLECTION)
+        .doc(subscriptionId)
+        .update({
+          isLifetime: true,
+          planType: 'lifetime',
+          earlyAdopterConvertedAt: new Date(),
+        });
+      return true;
+    } catch (error) {
+      console.error("Error converting to lifetime:", error);
+      return false;
+    }
+  },
+
+  async getEarlyAdopterCount(): Promise<number> {
+    try {
+      const program = await this.getEarlyAdopterProgram();
+      return program?.usedSlots || 0;
+    } catch (error) {
+      console.error("Error getting early adopter count:", error);
+      return 0;
+    }
   },
 };

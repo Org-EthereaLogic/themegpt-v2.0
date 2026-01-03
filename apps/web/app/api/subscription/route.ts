@@ -29,8 +29,12 @@ export async function GET() {
 
     const response: SubscriptionResponse = {
       status: subscription.status,
+      planType: subscription.planType,
       credits,
       gracePeriodEnds: subscription.status === 'canceled' ? subscription.currentPeriodEnd : undefined,
+      isLifetime: subscription.isLifetime,
+      trialEndsAt: subscription.trialEndsAt || undefined,
+      commitmentEndsAt: subscription.commitmentEndsAt || undefined,
     };
 
     return NextResponse.json(response);

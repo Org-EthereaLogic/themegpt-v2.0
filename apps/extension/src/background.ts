@@ -19,8 +19,7 @@ chrome.runtime.onMessageExternal.addListener(
     // Verify sender is from our trusted domains
     const allowedOrigins = [
       "https://themegpt.app",
-      "https://www.themegpt.app",
-      "http://localhost:3000"
+      "https://www.themegpt.app"
     ]
     const senderOrigin = sender.url ? new URL(sender.url).origin : ""
     if (!allowedOrigins.includes(senderOrigin)) {

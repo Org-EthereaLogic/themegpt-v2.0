@@ -37,13 +37,13 @@
   },
   "manifest": {
     "host_permissions": [
-      "https://*/*"
+      "https://chat.openai.com/*",
+      "https://chatgpt.com/*"
     ],
     "externally_connectable": {
       "matches": [
         "https://themegpt.app/*",
-        "https://*.themegpt.app/*",
-        "http://localhost:3000/*"
+        "https://*.themegpt.app/*"
       ]
     }
   }

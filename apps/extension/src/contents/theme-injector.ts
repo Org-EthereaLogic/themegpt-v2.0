@@ -45,9 +45,13 @@ function isContextValid(): boolean {
  * Create effects layer DOM elements
  */
 function createEffectsElements(effects: ThemeEffects): void {
-  // Clean up existing DarkVeil effect
+  // Clean up existing DarkVeil effect (safely handle context invalidation)
   if (darkVeilCleanup) {
-    darkVeilCleanup()
+    try {
+      darkVeilCleanup()
+    } catch {
+      // Context may have been invalidated - ignore cleanup errors
+    }
     darkVeilCleanup = null
   }
 
@@ -547,6 +551,45 @@ main pre code,
   color: var(--cgpt-text) !important;
 }
 
+/* Canvas/Artifact areas - ensure dark backgrounds have light text */
+[data-testid="canvas-preview"],
+[data-testid="artifact"],
+[class*="artifact"],
+[class*="canvas-preview"],
+[class*="code-block"],
+.hljs,
+.markdown pre,
+.prose pre,
+article pre {
+  background: var(--cgpt-surface) !important;
+  color: var(--cgpt-text) !important;
+}
+
+/* More specific code block wrapper targeting */
+[class*="code-block"] pre,
+[class*="markdown"] pre,
+div[class*="bg-black"] pre,
+div[class*="bg-gray-950"] pre,
+div[class*="bg-zinc-950"] pre {
+  background: var(--cgpt-surface) !important;
+  color: var(--cgpt-text) !important;
+}
+
+/* Override ChatGPT's dark code block backgrounds */
+pre[class*="bg-"],
+code[class*="bg-"],
+div[class*="overflow-y-auto"] pre {
+  background: var(--cgpt-surface) !important;
+}
+
+/* Ensure code block header bars also match theme */
+[class*="code-block"] > div:first-child,
+pre + div,
+div:has(> pre) > div:first-child {
+  background: var(--cgpt-border) !important;
+  color: var(--cgpt-text-muted) !important;
+}
+
 /* Composer (High Contrast only): transparent input + bordered container to match preview */
 html.themegpt-high-contrast form:has(#prompt-textarea),
 html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) {
@@ -674,9 +717,13 @@ function removeTheme(): void {
   // Remove effects layer
   const effectsLayer = document.getElementById('themegpt-effects')
   if (effectsLayer) effectsLayer.remove()
-  // Clean up DarkVeil WebGL effect
+  // Clean up DarkVeil WebGL effect (safely handle context invalidation)
   if (darkVeilCleanup) {
-    darkVeilCleanup()
+    try {
+      darkVeilCleanup()
+    } catch {
+      // Context may have been invalidated - ignore cleanup errors
+    }
     darkVeilCleanup = null
   }
   const darkVeilContainer = document.getElementById('themegpt-dark-veil')
@@ -705,7 +752,16 @@ async function init(): Promise<void> {
     storage.watch({
       activeTheme: (change) => {
         if (!isContextValid()) return
-        applyTheme(change.newValue as Theme | null)
+        try {
+          applyTheme(change.newValue as Theme | null)
+        } catch (e) {
+          // Check if error is due to context invalidation
+          if (!isContextValid()) {
+            console.warn('[ThemeGPT] Context invalidated during theme application')
+            return
+          }
+          console.error('[ThemeGPT] Theme application error:', e)
+        }
       }
     })
   } catch (e) {

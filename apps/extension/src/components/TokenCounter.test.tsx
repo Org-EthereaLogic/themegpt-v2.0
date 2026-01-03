@@ -56,6 +56,7 @@ describe('TokenCounter', () => {
           sendMessage: mockTabsSendMessage
         },
         runtime: {
+          id: 'test-extension-id', // Required for isPopupContextValid() check
           lastError: null,
           onMessage: {
             addListener: mockAddListener,

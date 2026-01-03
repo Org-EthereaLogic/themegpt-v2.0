@@ -4,6 +4,18 @@ import { MSG_GET_TOKENS, MSG_TOKEN_UPDATE, STORAGE_TOKEN_ENABLED, type TokenStat
 
 const storage = new Storage({ area: "local" })
 
+/**
+ * Check if popup extension context is still valid
+ * Returns false when extension has been reloaded/updated
+ */
+function isPopupContextValid(): boolean {
+    try {
+        return Boolean(chrome?.runtime?.id)
+    } catch {
+        return false
+    }
+}
+
 export function TokenCounter() {
     const [enabled, setEnabled] = useState(true)
     const [stats, setStats] = useState<TokenStats | null>(null)
@@ -18,12 +30,22 @@ export function TokenCounter() {
         if (!enabled) return
 
         const fetchStats = () => {
+            if (!isPopupContextValid()) return
+
             chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+                if (!isPopupContextValid()) return
+
                 const tabId = tabs[0]?.id
                 if (!tabId) return
-                chrome.tabs.sendMessage(tabId, { type: MSG_GET_TOKENS }, (res) => {
-                    if (!chrome.runtime.lastError && res) setStats(res)
-                })
+
+                try {
+                    chrome.tabs.sendMessage(tabId, { type: MSG_GET_TOKENS }, (res) => {
+                        if (!isPopupContextValid()) return
+                        if (!chrome.runtime.lastError && res) setStats(res)
+                    })
+                } catch {
+                    // Context invalidated
+                }
             })
         }
         
@@ -37,7 +59,13 @@ export function TokenCounter() {
         }
         
         chrome.runtime.onMessage.addListener(listener)
-        return () => chrome.runtime.onMessage.removeListener(listener)
+        return () => {
+            try {
+                chrome.runtime.onMessage.removeListener(listener)
+            } catch {
+                // Context might already be gone
+            }
+        }
     }, [enabled])
 
     const toggle = () => {

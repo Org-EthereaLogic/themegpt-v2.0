@@ -77,13 +77,27 @@ function updateCounts(): void {
     }
 }
 
+/**
+ * Safe wrapper that checks context validity before executing updateCounts
+ * This prevents errors when setTimeout fires after context invalidation
+ */
+function safeUpdateCounts(): void {
+    if (!isContextValid()) {
+        clearTimeout(debounceTimer)
+        observer.disconnect()
+        return
+    }
+    updateCounts()
+}
+
 const observer = new MutationObserver(() => {
     if (!isContextValid()) {
+        clearTimeout(debounceTimer)
         observer.disconnect()
         return
     }
     clearTimeout(debounceTimer)
-    debounceTimer = setTimeout(updateCounts, 1000)
+    debounceTimer = setTimeout(safeUpdateCounts, 1000)
 })
 
 function initObserver(): void {
@@ -96,14 +110,29 @@ function initObserver(): void {
     }
 }
 
+/**
+ * Named message listener that can remove itself on context invalidation
+ */
+function messageListener(
+    req: { type: string },
+    _sender: chrome.runtime.MessageSender,
+    sendResponse: (response: TokenStats) => void
+): boolean | undefined {
+    if (!isContextValid()) {
+        try {
+            chrome.runtime.onMessage.removeListener(messageListener)
+        } catch {
+            // Context already fully gone
+        }
+        return
+    }
+    if (req.type === MSG_GET_TOKENS) {
+        sendResponse(latestStats)
+        return true
+    }
+}
+
 if (isContextValid()) {
     initObserver()
-
-    chrome.runtime.onMessage.addListener((req, _sender, sendResponse) => {
-        if (!isContextValid()) return
-        if (req.type === MSG_GET_TOKENS) {
-            sendResponse(latestStats)
-            return true
-        }
-    })
+    chrome.runtime.onMessage.addListener(messageListener)
 }

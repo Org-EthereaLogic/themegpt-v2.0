@@ -148,8 +148,8 @@ export const DEFAULT_THEMES: Theme[] = [
     colors: {
       '--cgpt-bg': '#FAF6F0',
       '--cgpt-surface': '#FFFFFF',
-      '--cgpt-text': '#4B2E1E',
-      '--cgpt-text-muted': '#7D5A4A',
+      '--cgpt-text': '#5A3D2D',
+      '--cgpt-text-muted': '#8B7366',
       '--cgpt-border': '#E5DDD5',
       '--cgpt-accent': '#7ECEC5',
     },

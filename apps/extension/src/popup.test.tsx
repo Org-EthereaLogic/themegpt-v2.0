@@ -1,15 +1,19 @@
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { DEFAULT_THEMES, type VerifyResponse, API_BASE_URL } from '@themegpt/shared'
+import { DEFAULT_THEMES, API_BASE_URL } from '@themegpt/shared'
 
 // Hoisted mocks - must be defined before vi.mock
-const { mockGet, mockSet, mockStorageData } = vi.hoisted(() => {
+const { mockGet, mockSet, mockRemove, mockStorageData } = vi.hoisted(() => {
   const data: Record<string, unknown> = {}
   return {
     mockStorageData: data,
     mockGet: vi.fn((key: string) => Promise.resolve(data[key])),
     mockSet: vi.fn((key: string, value: unknown) => {
       data[key] = value
+      return Promise.resolve()
+    }),
+    mockRemove: vi.fn((key: string) => {
+      delete data[key]
       return Promise.resolve()
     })
   }
@@ -19,6 +23,7 @@ vi.mock('@plasmohq/storage', () => ({
   Storage: class {
     get = mockGet
     set = mockSet
+    remove = mockRemove
   }
 }))
 
@@ -34,6 +39,7 @@ describe('Popup', () => {
     Object.keys(mockStorageData).forEach(key => delete mockStorageData[key])
     mockGet.mockClear()
     mockSet.mockClear()
+    mockRemove.mockClear()
 
     // Mock fetch
     mockFetch = vi.fn()
@@ -66,14 +72,14 @@ describe('Popup', () => {
       expect(screen.getByText('Premium Collection')).toBeInTheDocument()
     })
 
-    it('renders subscription link in footer', () => {
+    it('renders Manage Account link in footer', () => {
       render(<Popup />)
-      expect(screen.getByText(/manage subscription/i)).toBeInTheDocument()
+      expect(screen.getByText(/Manage Account/)).toBeInTheDocument()
     })
 
-    it('renders activate button when no license', () => {
+    it('renders Connect button when not authenticated', () => {
       render(<Popup />)
-      expect(screen.getByText('Activate')).toBeInTheDocument()
+      expect(screen.getByText('Connect')).toBeInTheDocument()
     })
 
     it('renders Free Collection section with theme count badge', () => {
@@ -93,209 +99,223 @@ describe('Popup', () => {
     it('renders theme cards with names', () => {
       render(<Popup />)
       DEFAULT_THEMES.forEach(theme => {
-        // Theme name appears in both preview area and label, so use getAllByText
         const nameElements = screen.getAllByText(theme.name)
         expect(nameElements.length).toBeGreaterThanOrEqual(1)
       })
     })
   })
 
-  describe('License Input Toggle', () => {
-    it('shows license input when Activate button is clicked', () => {
+  describe('Account Panel Toggle', () => {
+    it('shows account panel when Connect button is clicked', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Activate'))
+      fireEvent.click(screen.getByText('Connect'))
 
-      expect(screen.getByText('License Key')).toBeInTheDocument()
-      expect(screen.getByPlaceholderText('Enter key...')).toBeInTheDocument()
-      expect(screen.getByText('Verify')).toBeInTheDocument()
+      expect(screen.getByText('Connect Account')).toBeInTheDocument()
+      expect(screen.getByText('Connect with Google/GitHub')).toBeInTheDocument()
     })
 
-    it('hides license input when clicked again', () => {
+    it('hides account panel when clicked again', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Activate'))
-      expect(screen.getByText('License Key')).toBeInTheDocument()
+      fireEvent.click(screen.getByText('Connect'))
+      expect(screen.getByText('Connect Account')).toBeInTheDocument()
 
-      fireEvent.click(screen.getByText('Activate'))
-      expect(screen.queryByText('License Key')).not.toBeInTheDocument()
+      fireEvent.click(screen.getByText('Connect'))
+      expect(screen.queryByText('Connect Account')).not.toBeInTheDocument()
     })
 
-    it('updates license key input value on change', () => {
+    it('shows token input field with placeholder', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Activate'))
+      fireEvent.click(screen.getByText('Connect'))
 
-      const input = screen.getByPlaceholderText('Enter key...') as HTMLInputElement
-      fireEvent.change(input, { target: { value: 'test-license-key' } })
+      expect(screen.getByPlaceholderText('Paste token...')).toBeInTheDocument()
+      expect(screen.getByText('Go')).toBeInTheDocument()
+    })
 
-      expect(input.value).toBe('test-license-key')
+    it('updates token input value on change', () => {
+      render(<Popup />)
+
+      fireEvent.click(screen.getByText('Connect'))
+
+      const input = screen.getByPlaceholderText('Paste token...') as HTMLInputElement
+      fireEvent.change(input, { target: { value: 'test-token' } })
+
+      expect(input.value).toBe('test-token')
     })
   })
 
-  describe('License Validation', () => {
-    it('shows validating status when verify is clicked', async () => {
+  describe('OAuth Connection', () => {
+    it('opens auth page when Connect with Google/GitHub is clicked', () => {
+      render(<Popup />)
+
+      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Connect with Google/GitHub'))
+
+      expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/auth/extension`, '_blank')
+    })
+
+    it('shows connecting status when token is submitted', async () => {
       mockFetch.mockImplementation(() => new Promise(() => {}))
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
+      fireEvent.click(screen.getByText('Connect'))
 
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'test-key' } })
-      fireEvent.click(screen.getByText('Verify'))
+      const input = screen.getByPlaceholderText('Paste token...')
+      fireEvent.change(input, { target: { value: 'test-token' } })
+      fireEvent.click(screen.getByText('Go'))
 
-      expect(await screen.findByText('Validating...')).toBeInTheDocument()
+      // "Connecting..." appears in both button and status - just check that at least one exists
+      const connectingElements = await screen.findAllByText('Connecting...')
+      expect(connectingElements.length).toBeGreaterThan(0)
     })
 
-    it('shows License Active on successful validation', async () => {
-      const mockResponse: VerifyResponse = {
-        valid: true,
-        entitlement: {
-          active: true,
-          type: 'subscription',
-          maxSlots: 3,
-          permanentlyUnlocked: [],
-          activeSlotThemes: []
-        }
-      }
+    it('shows Premium button after successful token validation', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve({
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: true,
+          subscription: { isActive: true, planType: 'monthly' },
+          accessibleThemes: []
+        })
       })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
+      fireEvent.click(screen.getByText('Connect'))
 
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'valid-key' } })
-      fireEvent.click(screen.getByText('Verify'))
+      const input = screen.getByPlaceholderText('Paste token...')
+      fireEvent.change(input, { target: { value: 'valid-token' } })
+      fireEvent.click(screen.getByText('Go'))
 
-      expect(await screen.findByText('License Active ✅')).toBeInTheDocument()
-    })
-
-    it('shows Premium button when license is valid', async () => {
-      const mockResponse: VerifyResponse = {
-        valid: true,
-        entitlement: {
-          active: true,
-          type: 'subscription',
-          maxSlots: 3,
-          permanentlyUnlocked: [],
-          activeSlotThemes: []
-        }
-      }
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve(mockResponse)
-      })
-
-      render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
-
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'valid-key' } })
-      fireEvent.click(screen.getByText('Verify'))
-
+      // After successful connection, header button changes from "Connect" to "Premium"
       expect(await screen.findByText('Premium')).toBeInTheDocument()
     })
 
-    it('shows error message on failed validation', async () => {
-      mockFetch.mockResolvedValue({ ok: false })
+    it('shows error message on failed token validation', async () => {
+      mockFetch.mockResolvedValue({ ok: false, status: 401 })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
+      fireEvent.click(screen.getByText('Connect'))
 
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'invalid-key' } })
-      fireEvent.click(screen.getByText('Verify'))
+      const input = screen.getByPlaceholderText('Paste token...')
+      fireEvent.change(input, { target: { value: 'invalid-token' } })
+      fireEvent.click(screen.getByText('Go'))
 
-      expect(await screen.findByText('Validation failed. Try again.')).toBeInTheDocument()
+      expect(await screen.findByText('Invalid token. Please try again.')).toBeInTheDocument()
     })
 
     it('shows connection error on network failure', async () => {
       mockFetch.mockRejectedValue(new Error('Network error'))
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
+      fireEvent.click(screen.getByText('Connect'))
 
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'any-key' } })
-      fireEvent.click(screen.getByText('Verify'))
+      const input = screen.getByPlaceholderText('Paste token...')
+      fireEvent.change(input, { target: { value: 'any-token' } })
+      fireEvent.click(screen.getByText('Go'))
 
       expect(await screen.findByText('Connection Error')).toBeInTheDocument()
     })
 
-    it('shows error when API returns invalid license', async () => {
-      const mockResponse: VerifyResponse = {
-        valid: false,
-        message: 'License expired'
-      }
+    it('saves auth token to storage on successful validation', async () => {
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve({
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: false,
+          accessibleThemes: []
+        })
       })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
+      fireEvent.click(screen.getByText('Connect'))
 
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'expired-key' } })
-      fireEvent.click(screen.getByText('Verify'))
+      const input = screen.getByPlaceholderText('Paste token...')
+      fireEvent.change(input, { target: { value: 'my-token' } })
+      fireEvent.click(screen.getByText('Go'))
 
-      expect(await screen.findByText('Error: License expired')).toBeInTheDocument()
+      // Wait for Premium button to appear (indicates successful connection)
+      await screen.findByText('Premium')
+      expect(mockSet).toHaveBeenCalledWith('authToken', 'my-token')
     })
 
-    it('saves license key to storage on successful validation', async () => {
-      const mockResponse: VerifyResponse = {
-        valid: true,
-        entitlement: {
-          active: true,
-          type: 'subscription',
-          maxSlots: 3,
-          permanentlyUnlocked: [],
-          activeSlotThemes: []
-        }
-      }
+    it('displays subscription info when connected with active subscription', async () => {
+      mockStorageData['authToken'] = 'saved-token'
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve({
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: true,
+          subscription: { isActive: true, planType: 'monthly', creditsRemaining: 5 },
+          accessibleThemes: []
+        })
       })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
 
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'my-key' } })
-      fireEvent.click(screen.getByText('Verify'))
+      // Wait for auto-check on mount
+      await waitFor(() => {
+        expect(screen.getByText('Premium')).toBeInTheDocument()
+      })
+    })
+  })
 
-      await screen.findByText('License Active ✅')
-      expect(mockSet).toHaveBeenCalledWith('licenseKey', 'my-key')
+  describe('Account Disconnect', () => {
+    it('shows disconnect button when connected', async () => {
+      mockStorageData['authToken'] = 'saved-token'
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: false,
+          accessibleThemes: []
+        })
+      })
+
+      render(<Popup />)
+
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled()
+      })
+
+      // Open account panel
+      fireEvent.click(screen.getByText('Premium'))
+
+      expect(screen.getByText('Disconnect')).toBeInTheDocument()
     })
 
-    it('displays slot usage for subscription license', async () => {
-      const mockResponse: VerifyResponse = {
-        valid: true,
-        entitlement: {
-          active: true,
-          type: 'subscription',
-          maxSlots: 3,
-          permanentlyUnlocked: [],
-          activeSlotThemes: ['theme-1']
-        }
-      }
+    it('clears auth data when disconnect is clicked', async () => {
+      mockStorageData['authToken'] = 'saved-token'
       mockFetch.mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve({
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: false,
+          accessibleThemes: []
+        })
       })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Activate'))
 
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'sub-key' } })
-      fireEvent.click(screen.getByText('Verify'))
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled()
+      })
 
-      expect(await screen.findByText(/Slots Used: 1 \/ 3/)).toBeInTheDocument()
+      // Open account panel and disconnect
+      fireEvent.click(screen.getByText('Premium'))
+      fireEvent.click(screen.getByText('Disconnect'))
+
+      await waitFor(() => {
+        expect(mockRemove).toHaveBeenCalledWith('authToken')
+        expect(mockRemove).toHaveBeenCalledWith('unlockedThemes')
+      })
     })
   })
 
@@ -312,17 +332,14 @@ describe('Popup', () => {
       })
     })
 
-    it('opens buy page for locked premium theme', () => {
+    it('opens pricing page for locked premium theme when not subscribed', () => {
       render(<Popup />)
 
       const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
       const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
       fireEvent.click(themeCard)
 
-      expect(window.open).toHaveBeenCalledWith(
-        `https://themegpt.ai/themes/${premiumTheme.id}`,
-        '_blank'
-      )
+      expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/#pricing`, '_blank')
     })
 
     it('applies unlocked premium theme', async () => {
@@ -341,107 +358,39 @@ describe('Popup', () => {
       expect(themeCard).toBeInTheDocument()
     })
 
-    it('activates theme in subscription slot when available', async () => {
+    it('downloads premium theme when subscribed with credits', async () => {
       const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
-      const mockResponse: VerifyResponse = {
-        valid: true,
-        entitlement: {
-          active: true,
-          type: 'subscription',
-          maxSlots: 3,
-          permanentlyUnlocked: [],
-          activeSlotThemes: []
-        }
-      }
-      mockFetch.mockResolvedValue({
+      mockStorageData['authToken'] = 'valid-token'
+
+      // Mock status check
+      mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve({
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: true,
+          subscription: { isActive: true, creditsRemaining: 5 },
+          accessibleThemes: []
+        })
       })
 
       render(<Popup />)
 
-      // Validate license
-      fireEvent.click(screen.getByText('Activate'))
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'sub-key' } })
-      fireEvent.click(screen.getByText('Verify'))
-
-      await screen.findByText('License Active ✅')
-
-      // Click premium theme - should use slot
-      mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve({}) })
-      const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
-      fireEvent.click(themeCard)
-
+      // Wait for status check
       await waitFor(() => {
-        expect(mockSet).toHaveBeenCalledWith('activeTheme', premiumTheme)
+        expect(mockFetch).toHaveBeenCalled()
       })
-    })
 
-    it('shows slot error when subscription limit reached', async () => {
-      const premiumThemes = DEFAULT_THEMES.filter(t => t.isPremium)
-      const mockResponse: VerifyResponse = {
-        valid: true,
-        entitlement: {
-          active: true,
-          type: 'subscription',
-          maxSlots: 2,
-          permanentlyUnlocked: [],
-          activeSlotThemes: [premiumThemes[0].id, premiumThemes[1].id]
-        }
-      }
-      mockFetch.mockResolvedValue({
+      // Mock download endpoint
+      mockFetch.mockResolvedValueOnce({ ok: true })
+      // Mock subsequent status check
+      mockFetch.mockResolvedValueOnce({
         ok: true,
-        json: () => Promise.resolve(mockResponse)
+        json: () => Promise.resolve({
+          success: true,
+          accessibleThemes: [premiumTheme.id]
+        })
       })
-
-      render(<Popup />)
-
-      // Validate license
-      fireEvent.click(screen.getByText('Activate'))
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'sub-key' } })
-      fireEvent.click(screen.getByText('Verify'))
-
-      await screen.findByText('License Active ✅')
-
-      // Try to activate a third theme (use aria-label since name appears twice)
-      const thirdPremiumTheme = premiumThemes[2]
-      const themeCard = screen.getByLabelText(`${thirdPremiumTheme.name} - Premium, click to unlock`)
-      fireEvent.click(themeCard)
-
-      expect(await screen.findByRole('alert')).toHaveTextContent(/Subscription limit reached/)
-    })
-
-    it('syncs slot changes to server', async () => {
-      const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
-      const mockResponse: VerifyResponse = {
-        valid: true,
-        entitlement: {
-          active: true,
-          type: 'subscription',
-          maxSlots: 3,
-          permanentlyUnlocked: [],
-          activeSlotThemes: []
-        }
-      }
-      mockFetch.mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve(mockResponse)
-      })
-
-      render(<Popup />)
-
-      // Validate license
-      fireEvent.click(screen.getByText('Activate'))
-      const input = screen.getByPlaceholderText('Enter key...')
-      fireEvent.change(input, { target: { value: 'sub-key' } })
-      fireEvent.click(screen.getByText('Verify'))
-
-      await screen.findByText('License Active ✅')
-
-      mockFetch.mockClear()
-      mockFetch.mockResolvedValue({ ok: true, json: () => Promise.resolve({}) })
 
       // Click premium theme
       const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
@@ -449,13 +398,41 @@ describe('Popup', () => {
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          `${API_BASE_URL}/api/sync`,
+          `${API_BASE_URL}/api/extension/download`,
           expect.objectContaining({
             method: 'POST',
-            body: expect.stringContaining(premiumTheme.id)
+            body: JSON.stringify({ themeId: premiumTheme.id })
           })
         )
       })
+    })
+
+    it('shows error when no credits remaining', async () => {
+      const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
+      mockStorageData['authToken'] = 'valid-token'
+
+      mockFetch.mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: true,
+          subscription: { isActive: true, creditsRemaining: 0 },
+          accessibleThemes: []
+        })
+      })
+
+      render(<Popup />)
+
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled()
+      })
+
+      // Click premium theme
+      const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
+      fireEvent.click(themeCard)
+
+      expect(await screen.findByRole('alert')).toHaveTextContent(/No downloads remaining/)
     })
   })
 
@@ -470,19 +447,15 @@ describe('Popup', () => {
       expect(mockGet).toHaveBeenCalledWith('unlockedThemes')
     })
 
-    it('validates saved license key on mount', async () => {
-      mockStorageData['licenseKey'] = 'saved-key'
+    it('checks account status with saved token on mount', async () => {
+      mockStorageData['authToken'] = 'saved-token'
       mockFetch.mockResolvedValue({
         ok: true,
         json: () => Promise.resolve({
-          valid: true,
-          entitlement: {
-            active: true,
-            type: 'subscription',
-            maxSlots: 3,
-            permanentlyUnlocked: [],
-            activeSlotThemes: []
-          }
+          success: true,
+          user: { email: 'test@example.com' },
+          hasSubscription: false,
+          accessibleThemes: []
         })
       })
 
@@ -490,10 +463,9 @@ describe('Popup', () => {
 
       await waitFor(() => {
         expect(mockFetch).toHaveBeenCalledWith(
-          `${API_BASE_URL}/api/verify`,
+          `${API_BASE_URL}/api/extension/status`,
           expect.objectContaining({
-            method: 'POST',
-            body: JSON.stringify({ licenseKey: 'saved-key' })
+            headers: { Authorization: 'Bearer saved-token' }
           })
         )
       })

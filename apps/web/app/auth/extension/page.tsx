@@ -1,8 +1,69 @@
 "use client"
 
 import { useSession, signIn } from "next-auth/react"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import Image from "next/image"
+import Link from "next/link"
+
+// Chrome Web Store extension ID
+const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
+
+// Check if we can communicate with the extension
+async function pingExtension(): Promise<boolean> {
+  return new Promise((resolve) => {
+    // Check if chrome.runtime is available (only in Chrome)
+    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
+      resolve(false)
+      return
+    }
+
+    try {
+      chrome.runtime.sendMessage(
+        EXTENSION_ID,
+        { type: "themegpt-ping" },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            // Extension not installed or not responding
+            resolve(false)
+            return
+          }
+          resolve(!!(response?.success && response?.installed))
+        }
+      )
+      // Timeout after 2 seconds
+      setTimeout(() => resolve(false), 2000)
+    } catch {
+      resolve(false)
+    }
+  })
+}
+
+// Send auth token to extension
+async function sendTokenToExtension(token: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
+      resolve(false)
+      return
+    }
+
+    try {
+      chrome.runtime.sendMessage(
+        EXTENSION_ID,
+        { type: "themegpt-auth", token },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            resolve(false)
+            return
+          }
+          resolve(response?.success === true ? true : false)
+        }
+      )
+      setTimeout(() => resolve(false), 3000)
+    } catch {
+      resolve(false)
+    }
+  })
+}
 
 export default function ExtensionAuthPage() {
   const { data: session, status } = useSession()
@@ -10,14 +71,15 @@ export default function ExtensionAuthPage() {
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [extensionDetected, setExtensionDetected] = useState<boolean | null>(null)
+  const [tokenSent, setTokenSent] = useState(false)
 
+  // Check for extension on mount
   useEffect(() => {
-    if (session?.user && !token && !isGenerating) {
-      generateToken()
-    }
-  }, [session, token, isGenerating])
+    pingExtension().then(setExtensionDetected)
+  }, [])
 
-  async function generateToken() {
+  const generateToken = useCallback(async () => {
     setIsGenerating(true)
     try {
       const res = await fetch("/api/extension/auth", {
@@ -27,9 +89,11 @@ export default function ExtensionAuthPage() {
 
       if (data.success) {
         setToken(data.token)
-        // Post message to extension if in popup
-        if (window.opener) {
-          window.opener.postMessage({ type: "themegpt-auth", token: data.token }, "*")
+
+        // Try to send token directly to extension
+        if (extensionDetected) {
+          const sent = await sendTokenToExtension(data.token)
+          setTokenSent(sent)
         }
       } else {
         setError(data.message || "Failed to generate token")
@@ -39,7 +103,13 @@ export default function ExtensionAuthPage() {
     } finally {
       setIsGenerating(false)
     }
-  }
+  }, [extensionDetected])
+
+  useEffect(() => {
+    if (session?.user && !token && !isGenerating) {
+      generateToken()
+    }
+  }, [session, token, isGenerating, generateToken])
 
   async function handleCopy() {
     if (!token) return
@@ -52,17 +122,24 @@ export default function ExtensionAuthPage() {
     }
   }
 
+  // Retry sending to extension
+  async function handleRetrySend() {
+    if (!token) return
+    const sent = await sendTokenToExtension(token)
+    setTokenSent(sent)
+  }
+
   if (status === "loading" || isGenerating) {
     return (
       <div className="min-h-screen bg-cream font-sans text-brown-900 flex flex-col items-center justify-center p-8">
         <div className="bg-white p-8 rounded-[30px] shadow-[0_8px_32px_rgba(75,46,30,0.1)] max-w-md w-full text-center">
           <div className="mb-6 flex justify-center">
             <Image
-              src="/mascot-transparent.png"
-              alt="ThemeGPT mascot"
-              width={64}
-              height={64}
-              className="rounded-full shadow-sm animate-pulse"
+              src="/animated-logo-400.gif"
+              alt="ThemeGPT"
+              width={100}
+              height={100}
+              unoptimized
             />
           </div>
           <h1 className="text-xl font-bold mb-2">Connecting...</h1>
@@ -89,6 +166,33 @@ export default function ExtensionAuthPage() {
           <p className="text-sm opacity-70 mb-6">
             Sign in to connect your ThemeGPT extension with your account.
           </p>
+
+          {/* Extension status indicator */}
+          {extensionDetected !== null && (
+            <div className={`mb-4 p-3 rounded-xl text-sm ${
+              extensionDetected
+                ? "bg-teal-50 text-teal-700 border border-teal-200"
+                : "bg-amber-50 text-amber-700 border border-amber-200"
+            }`}>
+              {extensionDetected ? (
+                <span className="flex items-center justify-center gap-2">
+                  <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
+                  Extension detected
+                </span>
+              ) : (
+                <span>
+                  Extension not detected.{" "}
+                  <Link
+                    href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba"
+                    target="_blank"
+                    className="underline font-medium"
+                  >
+                    Install it first
+                  </Link>
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="space-y-3">
             <button
@@ -155,6 +259,42 @@ export default function ExtensionAuthPage() {
     )
   }
 
+  // Successfully sent token to extension
+  if (tokenSent) {
+    return (
+      <div className="min-h-screen bg-cream font-sans text-brown-900 flex flex-col items-center justify-center p-8">
+        <div className="bg-white p-8 rounded-[30px] shadow-[0_8px_32px_rgba(75,46,30,0.1)] max-w-md w-full text-center">
+          <div className="mb-6 flex justify-center">
+            <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center">
+              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+
+          <h1 className="text-2xl font-bold mb-2 text-teal-600">Extension Connected!</h1>
+          <p className="text-sm opacity-70 mb-6">
+            Signed in as <strong>{session.user?.email}</strong>
+          </p>
+
+          <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
+            <p className="text-sm text-teal-700">
+              Your extension is now connected to your account. You can close this page and start using ThemeGPT!
+            </p>
+          </div>
+
+          <button
+            onClick={() => window.close()}
+            className="w-full py-3 rounded-xl font-semibold bg-brown-900 text-white hover:bg-brown-900/90 transition-colors"
+          >
+            Close This Page
+          </button>
+        </div>
+      </div>
+    )
+  }
+
+  // Token generated but extension not detected or send failed - show manual copy
   return (
     <div className="min-h-screen bg-cream font-sans text-brown-900 flex flex-col items-center justify-center p-8">
       <div className="bg-white p-8 rounded-[30px] shadow-[0_8px_32px_rgba(75,46,30,0.1)] max-w-md w-full text-center">
@@ -171,10 +311,42 @@ export default function ExtensionAuthPage() {
           Signed in as <strong>{session.user?.email}</strong>
         </p>
 
+        {/* Extension not detected warning */}
+        {extensionDetected === false && (
+          <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
+            <h3 className="font-semibold text-amber-700 mb-2">Extension Not Detected</h3>
+            <p className="text-sm text-amber-600 mb-3">
+              Install the ThemeGPT extension to unlock premium themes.
+            </p>
+            <Link
+              href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba"
+              target="_blank"
+              className="inline-block bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-amber-600 transition-colors"
+            >
+              Install Extension
+            </Link>
+          </div>
+        )}
+
+        {/* Extension detected but send failed */}
+        {extensionDetected === true && !tokenSent && (
+          <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
+            <p className="text-sm text-amber-700 mb-3">
+              Couldn&apos;t auto-connect to the extension. You may need to reload the extension.
+            </p>
+            <button
+              onClick={handleRetrySend}
+              className="text-sm text-amber-700 underline font-medium"
+            >
+              Try Again
+            </button>
+          </div>
+        )}
+
         <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-          <h3 className="font-semibold text-teal-700 mb-2">Next Steps</h3>
+          <h3 className="font-semibold text-teal-700 mb-2">Manual Connection</h3>
           <p className="text-sm text-teal-600">
-            Copy the connection token below and paste it in the ThemeGPT extension.
+            Copy the token below and paste it in the ThemeGPT extension.
           </p>
         </div>
 
@@ -193,7 +365,7 @@ export default function ExtensionAuthPage() {
                   : "bg-brown-900 text-white hover:bg-brown-900/90"
               }`}
             >
-              {copied ? "✓ Copied!" : "Copy Connection Token"}
+              {copied ? "Copied!" : "Copy Connection Token"}
             </button>
           </div>
         )}

@@ -5,6 +5,10 @@ import { Suspense, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
+// Chrome Web Store extension ID
+const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
+const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba"
+
 interface SessionData {
   success: boolean
   planType?: 'yearly' | 'monthly' | 'single'
@@ -15,12 +19,78 @@ interface SessionData {
   message?: string
 }
 
+// Check if extension is installed
+async function checkExtensionInstalled(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
+      resolve(false)
+      return
+    }
+
+    try {
+      chrome.runtime.sendMessage(
+        EXTENSION_ID,
+        { type: "themegpt-ping" },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            resolve(false)
+            return
+          }
+          resolve(!!(response?.success && response?.installed))
+        }
+      )
+      setTimeout(() => resolve(false), 2000)
+    } catch {
+      resolve(false)
+    }
+  })
+}
+
+// Check if extension already has an auth token
+async function checkExtensionAuthStatus(): Promise<boolean> {
+  return new Promise((resolve) => {
+    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
+      resolve(false)
+      return
+    }
+
+    try {
+      chrome.runtime.sendMessage(
+        EXTENSION_ID,
+        { type: "themegpt-check-status" },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            resolve(false)
+            return
+          }
+          resolve(!!(response?.success && response?.hasToken))
+        }
+      )
+      setTimeout(() => resolve(false), 2000)
+    } catch {
+      resolve(false)
+    }
+  })
+}
+
 function SuccessContent() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get("session_id")
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [extensionInstalled, setExtensionInstalled] = useState<boolean | null>(null)
+  const [extensionConnected, setExtensionConnected] = useState<boolean>(false)
+
+  useEffect(() => {
+    // Check extension status on mount
+    checkExtensionInstalled().then((installed) => {
+      setExtensionInstalled(installed)
+      if (installed) {
+        checkExtensionAuthStatus().then(setExtensionConnected)
+      }
+    })
+  }, [])
 
   useEffect(() => {
     if (!sessionId) {
@@ -107,12 +177,46 @@ function SuccessContent() {
             You now own <strong>{sessionData.themeName || 'your theme'}</strong> forever.
           </p>
 
-          <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-            <h3 className="font-semibold text-teal-700 mb-2">Activate in Extension</h3>
-            <p className="text-sm text-teal-600">
-              Sign in to your account in the ThemeGPT extension to access your purchased theme.
-            </p>
-          </div>
+          {/* Extension status - single theme */}
+          {extensionInstalled === false && (
+            <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
+              <h3 className="font-semibold text-amber-700 mb-2">Get the Extension</h3>
+              <p className="text-sm text-amber-600 mb-3">
+                Install the ThemeGPT Chrome extension to use your theme.
+              </p>
+              <Link
+                href={CHROME_STORE_URL}
+                target="_blank"
+                className="inline-block bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-amber-600 transition-colors"
+              >
+                Install Extension
+              </Link>
+            </div>
+          )}
+
+          {extensionInstalled === true && !extensionConnected && (
+            <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
+              <h3 className="font-semibold text-teal-700 mb-2">Connect Your Extension</h3>
+              <p className="text-sm text-teal-600 mb-3">
+                Sign in to access your purchased theme.
+              </p>
+              <Link
+                href="/auth/extension"
+                className="inline-block bg-teal-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-teal-600 transition-colors"
+              >
+                Connect Now
+              </Link>
+            </div>
+          )}
+
+          {extensionInstalled === true && extensionConnected && (
+            <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
+              <p className="text-sm text-teal-700 flex items-center justify-center gap-2">
+                <span className="w-2 h-2 bg-teal-500 rounded-full"></span>
+                Extension connected! Open the extension to use your theme.
+              </p>
+            </div>
+          )}
 
           <Link href="/" className="inline-block bg-brown-900 text-white px-6 py-3 rounded-full font-semibold hover:-translate-y-1 transition-transform">
             Back to Home
@@ -152,23 +256,77 @@ function SuccessContent() {
             : "Your monthly subscription is now active. Your first month is free!"}
         </p>
 
-        <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-          <h3 className="font-semibold text-teal-700 mb-2">Next Step: Connect Your Extension</h3>
-          <ol className="text-sm text-teal-600 text-left space-y-2">
-            <li className="flex items-start gap-2">
-              <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
-              <span>Open the ThemeGPT extension in Chrome</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
-              <span>Click &quot;Connect Account&quot; in the header</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
-              <span>Sign in with the same account you used here</span>
-            </li>
-          </ol>
-        </div>
+        {/* Extension not installed - prominent download CTA */}
+        {extensionInstalled === false && (
+          <div className="bg-gradient-to-br from-teal-50 to-amber-50 p-5 rounded-xl border-2 border-teal-200 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+              </svg>
+              <h3 className="font-bold text-teal-700 text-lg">Install the Extension</h3>
+            </div>
+            <p className="text-sm text-teal-600 mb-4">
+              Get the ThemeGPT Chrome extension to start using your premium themes.
+            </p>
+            <Link
+              href={CHROME_STORE_URL}
+              target="_blank"
+              className="inline-flex items-center gap-2 bg-teal-500 text-white px-5 py-2.5 rounded-full font-semibold hover:bg-teal-600 transition-colors shadow-md"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.454 5.454 0 0 1-6.865-2.78L1.931 5.47zm13.281 2.166A5.454 5.454 0 0 1 12 17.455c-1.019 0-1.975-.28-2.791-.766L5.256 23.536A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12 0-1.924-.453-3.741-1.258-5.352l-7.53-.012z"/>
+              </svg>
+              Add to Chrome - Free
+            </Link>
+          </div>
+        )}
+
+        {/* Extension installed but not connected */}
+        {extensionInstalled === true && !extensionConnected && (
+          <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
+            <h3 className="font-semibold text-teal-700 mb-2">Connect Your Extension</h3>
+            <p className="text-sm text-teal-600 mb-3">
+              Sign in to sync your subscription with the extension.
+            </p>
+            <Link
+              href="/auth/extension"
+              className="inline-block bg-teal-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-teal-600 transition-colors"
+            >
+              Connect Now
+            </Link>
+          </div>
+        )}
+
+        {/* Extension installed and connected */}
+        {extensionInstalled === true && extensionConnected && (
+          <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
+            <p className="text-sm text-teal-700 flex items-center justify-center gap-2">
+              <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
+              Extension connected! Open the extension to browse premium themes.
+            </p>
+          </div>
+        )}
+
+        {/* Fallback instructions when extension status unknown or not detected */}
+        {extensionInstalled === null && (
+          <div className="bg-cream p-4 rounded-xl border border-brown-900/10 mb-6">
+            <h3 className="font-semibold text-brown-900 mb-2">Next Steps</h3>
+            <ol className="text-sm text-left space-y-2 text-brown-900/80">
+              <li className="flex items-start gap-2">
+                <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
+                <span>Install the <Link href={CHROME_STORE_URL} target="_blank" className="text-teal-600 underline">ThemeGPT extension</Link></span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
+                <span>Click &quot;Connect&quot; in the extension header</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
+                <span>Sign in with the same account you used here</span>
+              </li>
+            </ol>
+          </div>
+        )}
 
         <div className="flex flex-col gap-3">
           <Link href="/account" className="inline-block bg-teal-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-teal-600 transition-colors">

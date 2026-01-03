@@ -38,6 +38,13 @@
   "manifest": {
     "host_permissions": [
       "https://*/*"
-    ]
+    ],
+    "externally_connectable": {
+      "matches": [
+        "https://themegpt.app/*",
+        "https://*.themegpt.app/*",
+        "http://localhost:3000/*"
+      ]
+    }
   }
 }

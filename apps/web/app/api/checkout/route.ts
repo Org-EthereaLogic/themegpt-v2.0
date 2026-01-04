@@ -68,7 +68,7 @@ export async function POST(request: Request) {
     }
 
     if (!priceId) {
-      console.error(`Missing price ID for ${sanitizeForLog(normalizedType)}. STRIPE_PRICES:`, {
+      console.error("Missing price ID for checkout type:", normalizedType, "STRIPE_PRICES:", {
         monthly: STRIPE_PRICES.monthly ? "set" : "empty",
         yearly: STRIPE_PRICES.yearly ? "set" : "empty",
         singleTheme: STRIPE_PRICES.singleTheme ? "set" : "empty",

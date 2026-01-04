@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useCallback, MouseEvent } from "react";
+
 interface FloatingCardProps {
   gradient: string;
   label: string;
@@ -29,18 +31,45 @@ export function FloatingCard({
   size,
   className = "",
 }: FloatingCardProps) {
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const mouseX = e.clientX - centerX;
+    const mouseY = e.clientY - centerY;
+    const rotateY = (mouseX / (rect.width / 2)) * 8;
+    const rotateX = -(mouseY / (rect.height / 2)) * 8;
+    setTilt({ rotateX, rotateY });
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    setTilt({ rotateX: 0, rotateY: 0 });
+    setIsHovered(false);
+  }, []);
+
   return (
     <div
-      className={`absolute rounded-[20px] shadow-[0_20px_50px_rgba(74,55,40,0.12)] transition-all duration-400 cursor-pointer hover:shadow-[0_30px_60px_rgba(74,55,40,0.18)] ${className}`}
+      className={`absolute rounded-[20px] transition-all duration-300 cursor-pointer ${className}`}
       style={{
         width: size.width,
         height: size.height,
         background: gradient,
-        transform: `rotate(${rotation}deg)`,
-        animation: `${animationName} 6s ease-in-out infinite`,
+        transform: isHovered
+          ? `rotate(${rotation}deg) perspective(1000px) rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg)`
+          : `rotate(${rotation}deg)`,
+        animation: isHovered ? "none" : `${animationName} 6s ease-in-out infinite`,
         animationDelay,
+        boxShadow: isHovered
+          ? "0 4px 8px rgba(74,55,40,0.1), 0 16px 32px rgba(74,55,40,0.15), 0 32px 64px rgba(74,55,40,0.1)"
+          : "0 20px 50px rgba(74,55,40,0.12)",
         ...position,
       }}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
     >
       <div className="p-4 h-full flex flex-col">
         {/* Window dots */}

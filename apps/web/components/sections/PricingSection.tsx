@@ -115,21 +115,41 @@ export function PricingSection({
               ))}
             </select>
 
-            <ul className="text-left mb-6 space-y-2">
+            <motion.ul
+              className="text-left mb-6 space-y-2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.08 } },
+              }}
+            >
               {["Choose any premium theme", "Keep it forever", "Free updates included"].map(
                 (item) => (
-                  <li key={item} className="flex items-center gap-2.5 text-[0.9rem]">
-                    <span
+                  <motion.li
+                    key={item}
+                    className="flex items-center gap-2.5 text-[0.9rem]"
+                    variants={{
+                      hidden: { opacity: 0, x: -10 },
+                      visible: { opacity: 1, x: 0 },
+                    }}
+                  >
+                    <motion.span
                       className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
                       style={{ background: "#5BB5A2" }}
+                      variants={{
+                        hidden: { scale: 0 },
+                        visible: { scale: 1 },
+                      }}
+                      transition={{ type: "spring", stiffness: 500, damping: 25 }}
                     >
                       ✓
-                    </span>
+                    </motion.span>
                     {item}
-                  </li>
+                  </motion.li>
                 )
               )}
-            </ul>
+            </motion.ul>
 
             <button
               onClick={() => onCheckout("single", selectedTheme)}
@@ -156,10 +176,13 @@ export function PricingSection({
               boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)",
             }}
           >
-            {/* Best Value Badge */}
+            {/* Best Value Badge - Floating Animation */}
             <span
-              className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[0.75rem] font-semibold uppercase tracking-wider text-white"
-              style={{ background: "#E8A87C" }}
+              className="absolute -top-3.5 left-1/2 px-4 py-1.5 rounded-full text-[0.75rem] font-semibold uppercase tracking-wider text-white"
+              style={{
+                background: "#E8A87C",
+                animation: "badgeFloat 3s ease-in-out infinite, badgeGlow 3s ease-in-out infinite",
+              }}
             >
               Best Value
             </span>
@@ -173,24 +196,44 @@ export function PricingSection({
             <div className="text-[2.5rem] font-bold mb-1">$14.99</div>
             <p className="opacity-60 text-[0.85rem] mb-5">per year</p>
 
-            <ul className="text-left mb-6 space-y-2">
+            <motion.ul
+              className="text-left mb-6 space-y-2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.08 } },
+              }}
+            >
               {[
                 "30-day free trial",
                 "Access to 3 premium themes",
                 "Swap themes anytime",
                 "All future updates included",
               ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5 text-[0.9rem]">
-                  <span
+                <motion.li
+                  key={item}
+                  className="flex items-center gap-2.5 text-[0.9rem]"
+                  variants={{
+                    hidden: { opacity: 0, x: -10 },
+                    visible: { opacity: 1, x: 0 },
+                  }}
+                >
+                  <motion.span
                     className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
                     style={{ background: "#E8A87C" }}
+                    variants={{
+                      hidden: { scale: 0 },
+                      visible: { scale: 1 },
+                    }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
                   >
                     ✓
-                  </span>
+                  </motion.span>
                   {item}
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
 
             <button
               onClick={() => onCheckout("yearly")}
@@ -222,24 +265,44 @@ export function PricingSection({
             <div className="text-[2.5rem] font-bold mb-1">$1.99</div>
             <p className="opacity-60 text-[0.85rem] mb-5">per month</p>
 
-            <ul className="text-left mb-6 space-y-2">
+            <motion.ul
+              className="text-left mb-6 space-y-2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.08 } },
+              }}
+            >
               {[
                 "Access all themes",
                 "New themes every month",
                 "Seasonal exclusives",
                 "Cancel anytime",
               ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5 text-[0.9rem]">
-                  <span
+                <motion.li
+                  key={item}
+                  className="flex items-center gap-2.5 text-[0.9rem]"
+                  variants={{
+                    hidden: { opacity: 0, x: -10 },
+                    visible: { opacity: 1, x: 0 },
+                  }}
+                >
+                  <motion.span
                     className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
                     style={{ background: "#5BB5A2" }}
+                    variants={{
+                      hidden: { scale: 0 },
+                      visible: { scale: 1 },
+                    }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
                   >
                     ✓
-                  </span>
+                  </motion.span>
                   {item}
-                </li>
+                </motion.li>
               ))}
-            </ul>
+            </motion.ul>
 
             <button
               onClick={() => onCheckout("monthly")}

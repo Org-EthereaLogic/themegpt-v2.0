@@ -2,8 +2,10 @@
 
 import { OrganicBlob } from "@/components/ui/OrganicBlob";
 import { FloatingCard } from "@/components/ui/FloatingCard";
+import { useRipple, RippleContainer } from "@/components/ui/ButtonRipple";
 
 export function Hero() {
+  const { ripples, createRipple } = useRipple();
   return (
     <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-16 px-6 py-32 lg:px-24 overflow-hidden">
       {/* Background Blobs */}
@@ -80,12 +82,14 @@ export function Hero() {
             href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02]"
+            className="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
             style={{
               background: "#E8A87C",
               boxShadow: "0 8px 24px rgba(232, 168, 124, 0.35)",
             }}
+            onClick={createRipple}
           >
+            <RippleContainer ripples={ripples} />
             Install Extension
             <svg
               width="16"
@@ -95,6 +99,7 @@ export function Hero() {
               stroke="currentColor"
               strokeWidth="2.5"
               strokeLinecap="round"
+              className="transition-transform duration-300 group-hover:translate-x-1"
             >
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>

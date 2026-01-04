@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, LayoutGroup } from "framer-motion";
 import Image from "next/image";
 import { DEFAULT_THEMES, type Theme } from "@themegpt/shared";
 
@@ -68,7 +68,7 @@ function getThemeDescription(theme: Theme): { category: string; description: str
   };
 }
 
-// Tab Button Component
+// Tab Button Component with sliding indicator
 interface TabButtonProps {
   active: boolean;
   onClick: () => void;
@@ -81,25 +81,35 @@ function TabButton({ active, onClick, label, count, accentColor }: TabButtonProp
   return (
     <button
       onClick={onClick}
-      className={`relative px-6 py-3 rounded-full font-semibold text-[0.95rem] transition-all duration-300 ${
-        active ? "text-white" : ""
-      }`}
+      className="relative px-6 py-3 rounded-full font-semibold text-[0.95rem] transition-colors duration-300"
       style={{
-        background: active ? accentColor : "transparent",
-        border: `2px solid ${active ? accentColor : "#4A3728"}`,
         color: active ? "white" : "#4A3728",
-        boxShadow: active ? `0 4px 16px ${accentColor}40` : "none",
+        border: "2px solid transparent",
       }}
     >
-      {label}
-      <span
-        className="ml-2 px-2 py-0.5 rounded-full text-[0.75rem]"
-        style={{
-          background: active ? "rgba(255,255,255,0.2)" : `${accentColor}20`,
-          color: active ? "white" : accentColor,
-        }}
-      >
-        {count}
+      {/* Sliding background pill */}
+      {active && (
+        <motion.div
+          layoutId="activeTabPill"
+          className="absolute inset-0 rounded-full"
+          style={{
+            background: accentColor,
+            boxShadow: `0 4px 16px ${accentColor}40`,
+          }}
+          transition={{ type: "spring", stiffness: 400, damping: 30 }}
+        />
+      )}
+      <span className="relative z-10 flex items-center">
+        {label}
+        <span
+          className="ml-2 px-2 py-0.5 rounded-full text-[0.75rem] transition-colors duration-300"
+          style={{
+            background: active ? "rgba(255,255,255,0.2)" : `${accentColor}20`,
+            color: active ? "white" : accentColor,
+          }}
+        >
+          {count}
+        </span>
       </span>
     </button>
   );
@@ -141,7 +151,7 @@ function ThemeCard({ theme, index, isPremium }: ThemeCardProps) {
       className="group relative rounded-[20px] overflow-hidden cursor-pointer transition-all duration-400 hover:scale-[1.03] hover:z-10 aspect-[16/10]"
       style={{
         boxShadow: isHovered
-          ? `0 20px 40px rgba(74, 55, 40, 0.15), 0 0 0 2px ${accentColor}40`
+          ? `0 4px 8px rgba(74, 55, 40, 0.08), 0 16px 32px rgba(74, 55, 40, 0.12), 0 32px 48px rgba(74, 55, 40, 0.08), 0 0 0 2px ${accentColor}40`
           : "0 8px 24px rgba(74, 55, 40, 0.08)",
       }}
     >
@@ -274,22 +284,24 @@ export function ThemesSection() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="flex justify-center gap-4 mb-12">
-        <TabButton
-          active={activeTab === "premium"}
-          onClick={() => setActiveTab("premium")}
-          label="Premium Themes"
-          count={PREMIUM_THEMES.length}
-          accentColor="#E8A87C"
-        />
-        <TabButton
-          active={activeTab === "free"}
-          onClick={() => setActiveTab("free")}
-          label="Free Themes"
-          count={FREE_THEMES.length}
-          accentColor="#5BB5A2"
-        />
-      </div>
+      <LayoutGroup>
+        <div className="flex justify-center gap-4 mb-12">
+          <TabButton
+            active={activeTab === "premium"}
+            onClick={() => setActiveTab("premium")}
+            label="Premium Themes"
+            count={PREMIUM_THEMES.length}
+            accentColor="#E8A87C"
+          />
+          <TabButton
+            active={activeTab === "free"}
+            onClick={() => setActiveTab("free")}
+            label="Free Themes"
+            count={FREE_THEMES.length}
+            accentColor="#5BB5A2"
+          />
+        </div>
+      </LayoutGroup>
 
       {/* Theme Grid */}
       <motion.div

@@ -10,18 +10,23 @@ export function Hero() {
     <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-16 px-6 py-32 lg:px-24 overflow-hidden">
       {/* Background Blobs */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {/* Teal blob - RIGHT side, constrained to stay right of center */}
         <OrganicBlob
           color="teal-soft"
           size={500}
           position={{ top: "-100px", right: "10%" }}
           animationDelay="0s"
+          animationVariant="right"
         />
+        {/* Coral blob - LEFT side, constrained to stay left of center */}
         <OrganicBlob
           color="coral-soft"
           size={400}
           position={{ bottom: "10%", left: "-100px" }}
           animationDelay="-7s"
+          animationVariant="left"
         />
+        {/* Yellow blob - center, uses default animation */}
         <OrganicBlob
           color="yellow"
           size={300}

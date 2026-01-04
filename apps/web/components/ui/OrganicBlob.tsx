@@ -5,6 +5,7 @@ interface OrganicBlobProps {
   size: number;
   position: { top?: string; right?: string; bottom?: string; left?: string };
   animationDelay?: string;
+  animationVariant?: "default" | "left" | "right";
   blur?: number;
   opacity?: number;
   className?: string;
@@ -18,15 +19,24 @@ const colorMap = {
   coral: "#E8A87C",
 };
 
+const animationMap = {
+  default: "blobFloat",
+  left: "blobFloatLeft",
+  right: "blobFloatRight",
+};
+
 export function OrganicBlob({
   color,
   size,
   position,
   animationDelay = "0s",
+  animationVariant = "default",
   blur = 60,
   opacity = 0.5,
   className = "",
 }: OrganicBlobProps) {
+  const animationName = animationMap[animationVariant];
+
   return (
     <div
       className={`absolute rounded-full pointer-events-none ${className}`}
@@ -37,7 +47,7 @@ export function OrganicBlob({
         filter: `blur(${blur}px)`,
         opacity,
         ...position,
-        animation: `blobFloat 20s ease-in-out infinite`,
+        animation: `${animationName} 25s ease-in-out infinite`,
         animationDelay,
       }}
     />

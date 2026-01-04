@@ -30,7 +30,7 @@ export function FeaturesSection() {
       <div className="text-center mb-16">
         <p
           className="text-[0.8rem] font-semibold uppercase tracking-[0.2em] mb-3"
-          style={{ color: "var(--teal)" }}
+          style={{ color: "#5BB5A2" }}
         >
           Why ThemeGPT
         </p>
@@ -66,7 +66,7 @@ export function FeaturesSection() {
             </h3>
             <p
               className="text-[0.95rem] leading-relaxed"
-              style={{ color: "var(--brown-soft)" }}
+              style={{ color: "#7A6555" }}
             >
               {feature.description}
             </p>

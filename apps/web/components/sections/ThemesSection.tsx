@@ -40,13 +40,13 @@ export function ThemesSection() {
     <section
       id="themes"
       className="py-24 px-8 lg:px-16"
-      style={{ background: "var(--cream-warm)" }}
+      style={{ background: "#FFF9F2" }}
     >
       {/* Section Header */}
       <div className="text-center mb-16">
         <p
           className="text-[0.8rem] font-semibold uppercase tracking-[0.2em] mb-3"
-          style={{ color: "var(--teal)" }}
+          style={{ color: "#5BB5A2" }}
         >
           Theme Gallery
         </p>
@@ -122,7 +122,7 @@ function ThemeItem({ theme, index }: ThemeItemProps) {
           className="text-base font-semibold"
           style={{
             fontFamily: "var(--font-fraunces), serif",
-            color: isLight ? "var(--brown)" : "white",
+            color: isLight ? "#4A3728" : "white",
             textShadow: isLight ? "none" : "0 2px 8px rgba(0,0,0,0.3)",
           }}
         >
@@ -132,7 +132,7 @@ function ThemeItem({ theme, index }: ThemeItemProps) {
           className="px-2.5 py-1 rounded-md text-[0.65rem] font-semibold uppercase tracking-wider"
           style={{
             background: isLight ? "rgba(74, 55, 40, 0.1)" : "rgba(255,255,255,0.2)",
-            color: isLight ? "var(--brown)" : "white",
+            color: isLight ? "#4A3728" : "white",
           }}
         >
           Premium

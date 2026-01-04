@@ -13,7 +13,7 @@ export function Footer() {
   return (
     <footer
       className="py-16 px-8 text-center"
-      style={{ background: "var(--brown)", color: "var(--cream)" }}
+      style={{ background: "#4A3728", color: "#FDF8F3" }}
     >
       {/* Brand */}
       <div className="inline-flex items-center gap-3 mb-8">
@@ -22,10 +22,10 @@ export function Footer() {
           style={{
             background: `conic-gradient(
               from 0deg,
-              var(--coral) 0deg,
-              var(--teal) 120deg,
-              var(--yellow) 240deg,
-              var(--coral) 360deg
+              #E8A87C 0deg,
+              #5BB5A2 120deg,
+              #F4E4BA 240deg,
+              #E8A87C 360deg
             )`,
           }}
         />

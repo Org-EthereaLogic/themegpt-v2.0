@@ -24,10 +24,10 @@ export function AnimatedMascot({ size = "md", className = "" }: AnimatedMascotPr
         style={{
           background: `conic-gradient(
             from 0deg at 50% 50%,
-            var(--coral) 0deg,
-            var(--teal) 120deg,
-            var(--yellow) 240deg,
-            var(--coral) 360deg
+            #E8A87C 0deg,
+            #5BB5A2 120deg,
+            #F4E4BA 240deg,
+            #E8A87C 360deg
           )`,
           animation: "mascotWobble 4s ease-in-out infinite",
         }}
@@ -35,7 +35,7 @@ export function AnimatedMascot({ size = "md", className = "" }: AnimatedMascotPr
         {/* Inner face */}
         <div
           className="absolute inset-1 rounded-full flex flex-col items-center justify-center gap-1"
-          style={{ background: "var(--cream)" }}
+          style={{ background: "#FDF8F3" }}
         >
           {/* Eyes */}
           <div className={`flex ${sizes.eye} mt-1`}>
@@ -44,7 +44,7 @@ export function AnimatedMascot({ size = "md", className = "" }: AnimatedMascotPr
               style={{
                 width: size === "sm" ? "4px" : size === "md" ? "6px" : "8px",
                 height: size === "sm" ? "4px" : size === "md" ? "6px" : "8px",
-                background: "var(--brown)",
+                background: "#4A3728",
                 animation: "blink 4s ease-in-out infinite",
               }}
             />
@@ -53,7 +53,7 @@ export function AnimatedMascot({ size = "md", className = "" }: AnimatedMascotPr
               style={{
                 width: size === "sm" ? "4px" : size === "md" ? "6px" : "8px",
                 height: size === "sm" ? "4px" : size === "md" ? "6px" : "8px",
-                background: "var(--brown)",
+                background: "#4A3728",
                 animation: "blink 4s ease-in-out infinite",
               }}
             />
@@ -61,7 +61,7 @@ export function AnimatedMascot({ size = "md", className = "" }: AnimatedMascotPr
           {/* Smile */}
           <div
             className={`${sizes.smile} border-2 border-t-0 rounded-b-full`}
-            style={{ borderColor: "var(--brown)" }}
+            style={{ borderColor: "#4A3728" }}
           />
         </div>
       </div>

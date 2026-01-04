@@ -50,7 +50,7 @@ export function CustomCursor() {
         left: position.x,
         top: position.y,
         transform: `translate(-50%, -50%) ${isHovering ? "scale(1.5)" : "scale(1)"}`,
-        borderColor: isHovering ? "var(--coral)" : "var(--teal)",
+        borderColor: isHovering ? "#E8A87C" : "#5BB5A2",
         background: isHovering ? "rgba(232, 168, 124, 0.1)" : "transparent",
       }}
     />

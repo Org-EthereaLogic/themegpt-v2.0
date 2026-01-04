@@ -33,7 +33,7 @@ export function PricingSection({
     <section
       id="pricing"
       className="relative py-24 px-8 lg:px-16 overflow-hidden"
-      style={{ background: "var(--cream-warm)" }}
+      style={{ background: "#FFF9F2" }}
     >
       {/* Background blobs */}
       <div className="absolute inset-0 pointer-events-none">
@@ -58,7 +58,7 @@ export function PricingSection({
         <div className="text-center mb-16">
           <p
             className="text-[0.8rem] font-semibold uppercase tracking-[0.2em] mb-3"
-            style={{ color: "var(--teal)" }}
+            style={{ color: "#5BB5A2" }}
           >
             Pricing
           </p>
@@ -94,7 +94,7 @@ export function PricingSection({
             <label
               htmlFor="theme-select"
               className="block text-sm font-medium mb-2 text-left"
-              style={{ color: "var(--brown-soft)" }}
+              style={{ color: "#7A6555" }}
             >
               Select Theme
             </label>
@@ -105,7 +105,7 @@ export function PricingSection({
               className="w-full mb-6 py-2.5 px-3 rounded-lg border focus:outline-none focus:ring-2"
               style={{
                 borderColor: "rgba(74, 55, 40, 0.2)",
-                color: "var(--brown)",
+                color: "#4A3728",
               }}
             >
               {PREMIUM_THEMES.map((theme) => (
@@ -121,7 +121,7 @@ export function PricingSection({
                   <li key={item} className="flex items-center gap-2.5 text-[0.95rem]">
                     <span
                       className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
-                      style={{ background: "var(--teal)" }}
+                      style={{ background: "#5BB5A2" }}
                     >
                       ✓
                     </span>
@@ -135,7 +135,7 @@ export function PricingSection({
               onClick={() => onCheckout("single", selectedTheme)}
               className="w-full py-4 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
               style={{
-                background: "var(--brown)",
+                background: "#4A3728",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
               }}
             >
@@ -151,15 +151,15 @@ export function PricingSection({
             transition={{ duration: 0.5, delay: 0.2 }}
             className="relative rounded-[28px] p-10 w-full md:w-[340px] text-center transition-all duration-400 hover:-translate-y-2.5"
             style={{
-              background: "var(--brown)",
-              color: "var(--cream)",
+              background: "#4A3728",
+              color: "#FDF8F3",
               boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)",
             }}
           >
             {/* Best Value Badge */}
             <span
               className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[0.75rem] font-semibold uppercase tracking-wider text-white"
-              style={{ background: "var(--coral)" }}
+              style={{ background: "#E8A87C" }}
             >
               Best Value
             </span>
@@ -183,7 +183,7 @@ export function PricingSection({
                 <li key={item} className="flex items-center gap-2.5 text-[0.95rem]">
                   <span
                     className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
-                    style={{ background: "var(--coral)" }}
+                    style={{ background: "#E8A87C" }}
                   >
                     ✓
                   </span>
@@ -196,7 +196,7 @@ export function PricingSection({
               onClick={() => onCheckout("monthly")}
               className="w-full py-4 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
               style={{
-                background: "var(--coral)",
+                background: "#E8A87C",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
               }}
             >

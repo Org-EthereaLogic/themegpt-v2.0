@@ -27,7 +27,7 @@ export function Navigation() {
         <AnimatedMascot size="md" />
         <span
           className="text-[1.6rem] font-semibold tracking-tight"
-          style={{ fontFamily: "var(--font-fraunces), serif", color: "var(--brown)" }}
+          style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
         >
           ThemeGPT
         </span>
@@ -40,12 +40,12 @@ export function Navigation() {
             key={item}
             href={`#${item.toLowerCase()}`}
             className="group relative py-2 text-[0.95rem] font-medium no-underline transition-colors"
-            style={{ color: "var(--brown-soft)" }}
+            style={{ color: "#7A6555" }}
           >
             <span className="group-hover:text-brown transition-colors">{item}</span>
             <span
               className="absolute bottom-0 left-1/2 h-[3px] w-0 -translate-x-1/2 rounded-sm transition-all duration-300 group-hover:w-full"
-              style={{ background: "var(--coral)" }}
+              style={{ background: "#E8A87C" }}
             />
           </a>
         ))}
@@ -53,7 +53,7 @@ export function Navigation() {
           href="#pricing"
           className="rounded-full px-6 py-3 font-semibold text-white no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(91,181,162,0.35)]"
           style={{
-            background: "var(--teal)",
+            background: "#5BB5A2",
             boxShadow: "0 4px 16px rgba(91, 181, 162, 0.25)",
           }}
         >

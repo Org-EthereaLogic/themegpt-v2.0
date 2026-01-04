@@ -34,14 +34,14 @@ export function Hero() {
         <div
           className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-[0.85rem] font-medium mb-6"
           style={{
-            background: "var(--cream-deep)",
-            color: "var(--brown-soft)",
+            background: "#F5EDE3",
+            color: "#7A6555",
             animation: "slideInLeft 0.6s ease-out",
           }}
         >
           <span
             className="w-2 h-2 rounded-full"
-            style={{ background: "var(--teal)" }}
+            style={{ background: "#5BB5A2" }}
           />
           Free on Chrome Web Store
         </div>
@@ -63,7 +63,7 @@ export function Hero() {
         <p
           className="text-lg mb-8 max-w-[480px] mx-auto lg:mx-0"
           style={{
-            color: "var(--brown-soft)",
+            color: "#7A6555",
             animation: "slideInLeft 0.6s ease-out 0.2s both",
           }}
         >
@@ -82,7 +82,7 @@ export function Hero() {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02]"
             style={{
-              background: "var(--coral)",
+              background: "#E8A87C",
               boxShadow: "0 8px 24px rgba(232, 168, 124, 0.35)",
             }}
           >
@@ -103,8 +103,8 @@ export function Hero() {
             href="#themes"
             className="inline-flex items-center rounded-full border-2 px-6 py-3.5 font-semibold transition-all duration-300 hover:-translate-y-0.5"
             style={{
-              borderColor: "var(--brown)",
-              color: "var(--brown)",
+              borderColor: "#4A3728",
+              color: "#4A3728",
             }}
           >
             See Themes

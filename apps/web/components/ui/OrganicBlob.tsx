@@ -11,11 +11,11 @@ interface OrganicBlobProps {
 }
 
 const colorMap = {
-  "teal-soft": "var(--teal-soft)",
-  "coral-soft": "var(--coral-soft)",
-  yellow: "var(--yellow)",
-  teal: "var(--teal)",
-  coral: "var(--coral)",
+  "teal-soft": "#7BCBB9",
+  "coral-soft": "#F4C4A0",
+  yellow: "#F4E4BA",
+  teal: "#5BB5A2",
+  coral: "#E8A87C",
 };
 
 export function OrganicBlob({

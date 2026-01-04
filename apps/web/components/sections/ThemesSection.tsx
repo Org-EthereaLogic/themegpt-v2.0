@@ -165,7 +165,9 @@ function ThemeCard({ theme, index, isPremium }: ThemeCardProps) {
 
       {/* Category Badge - Top Right */}
       <div
-        className="absolute top-3 right-3 px-3 py-1.5 rounded-full text-[0.7rem] font-semibold uppercase tracking-wider backdrop-blur-sm"
+        className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-[0.7rem] font-semibold uppercase tracking-wider backdrop-blur-sm transition-all duration-300 ${
+          isHovered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+        }`}
         style={{
           background: badgeBg,
           color: textColor,
@@ -174,10 +176,10 @@ function ThemeCard({ theme, index, isPremium }: ThemeCardProps) {
         {category}
       </div>
 
-      {/* Bottom Overlay - Expands on Hover */}
+      {/* Bottom Overlay - Hidden by default, expands on hover */}
       <div
         className={`absolute bottom-0 left-0 right-0 transition-all duration-400 ${
-          isHovered ? "h-[50%]" : "h-[35%]"
+          isHovered ? "h-[50%] opacity-100" : "h-0 opacity-0"
         }`}
         style={{
           background: `linear-gradient(to top, ${isLight ? "rgba(255,255,255,0.95)" : "rgba(0,0,0,0.85)"} 0%, transparent 100%)`,
@@ -185,7 +187,10 @@ function ThemeCard({ theme, index, isPremium }: ThemeCardProps) {
       >
         <div className="absolute bottom-4 left-4 right-4">
           {/* Theme Name */}
-          <h3
+          <motion.h3
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
+            transition={{ duration: 0.3 }}
             className="text-[1.1rem] font-semibold mb-1"
             style={{
               fontFamily: "var(--font-fraunces), serif",
@@ -194,7 +199,7 @@ function ThemeCard({ theme, index, isPremium }: ThemeCardProps) {
             }}
           >
             {theme.name}
-          </h3>
+          </motion.h3>
 
           {/* Description - Only on Hover */}
           <motion.p
@@ -208,7 +213,12 @@ function ThemeCard({ theme, index, isPremium }: ThemeCardProps) {
           </motion.p>
 
           {/* Badge Row */}
-          <div className="flex items-center gap-2">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+            className="flex items-center gap-2"
+          >
             <span
               className="px-2.5 py-1 rounded-md text-[0.65rem] font-semibold uppercase tracking-wider"
               style={{
@@ -228,7 +238,7 @@ function ThemeCard({ theme, index, isPremium }: ThemeCardProps) {
             >
               Content View
             </motion.span>
-          </div>
+          </motion.div>
         </div>
       </div>
     </motion.div>

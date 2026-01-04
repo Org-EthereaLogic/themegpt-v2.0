@@ -249,7 +249,7 @@ export function PricingSection({
                 boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
               }}
             >
-              Get Started
+              Subscribe Now
             </button>
           </motion.div>
         </div>

@@ -16,19 +16,8 @@ export function Footer() {
       style={{ background: "#4A3728", color: "#FDF8F3" }}
     >
       {/* Brand */}
-      <div className="inline-flex items-center gap-3 mb-8">
-        <div
-          className="w-10 h-10 rounded-full"
-          style={{
-            background: `conic-gradient(
-              from 0deg,
-              #E8A87C 0deg,
-              #5BB5A2 120deg,
-              #F4E4BA 240deg,
-              #E8A87C 360deg
-            )`,
-          }}
-        />
+      <div className="inline-flex items-center gap-3.5 mb-8">
+        <AnimatedMascot size="sm" />
         <span
           className="text-[1.35rem] font-semibold"
           style={{ fontFamily: "var(--font-fraunces), serif" }}

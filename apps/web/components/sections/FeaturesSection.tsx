@@ -360,14 +360,16 @@ export function FeaturesSection() {
             Ready to transform your ChatGPT?
           </p>
           <a
-            href="#pricing"
+            href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-block px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 hover:-translate-y-1"
             style={{
               background: "#5BB5A2",
               boxShadow: "0 8px 24px rgba(91, 181, 162, 0.3)",
             }}
           >
-            Get Started Free
+            Add to Chrome — Free
           </a>
         </motion.div>
       </div>

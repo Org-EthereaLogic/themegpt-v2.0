@@ -50,14 +50,16 @@ export function Navigation() {
           </a>
         ))}
         <a
-          href="#pricing"
+          href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb"
+          target="_blank"
+          rel="noopener noreferrer"
           className="rounded-full px-6 py-3 font-semibold text-white no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(91,181,162,0.35)]"
           style={{
             background: "#5BB5A2",
             boxShadow: "0 4px 16px rgba(91, 181, 162, 0.25)",
           }}
         >
-          Get Started
+          Add to Chrome — Free
         </a>
       </div>
     </nav>

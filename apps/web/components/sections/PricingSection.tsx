@@ -71,24 +71,24 @@ export function PricingSection({
         </div>
 
         {/* Pricing Cards */}
-        <div className="flex flex-col md:flex-row justify-center gap-8 flex-wrap max-w-[800px] mx-auto">
+        <div className="flex flex-col lg:flex-row justify-center gap-6 flex-wrap max-w-[1100px] mx-auto">
           {/* Single Theme Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0 }}
-            className="bg-white rounded-[28px] p-10 w-full md:w-[340px] text-center transition-all duration-400 hover:-translate-y-2.5"
+            className="bg-white rounded-[28px] p-8 w-full lg:w-[320px] text-center transition-all duration-400 hover:-translate-y-2.5"
             style={{ boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)" }}
           >
             <h3
-              className="text-[1.35rem] font-semibold mb-2"
+              className="text-[1.25rem] font-semibold mb-2"
               style={{ fontFamily: "var(--font-fraunces), serif" }}
             >
               Single Theme
             </h3>
-            <div className="text-[3rem] font-bold mb-1">$0.99</div>
-            <p className="opacity-60 text-[0.9rem] mb-6">one-time purchase</p>
+            <div className="text-[2.5rem] font-bold mb-1">$0.99</div>
+            <p className="opacity-60 text-[0.85rem] mb-5">one-time purchase</p>
 
             {/* Theme Selector */}
             <label
@@ -102,7 +102,7 @@ export function PricingSection({
               id="theme-select"
               value={selectedTheme}
               onChange={(e) => onThemeChange(e.target.value)}
-              className="w-full mb-6 py-2.5 px-3 rounded-lg border focus:outline-none focus:ring-2"
+              className="w-full mb-5 py-2.5 px-3 rounded-lg border focus:outline-none focus:ring-2"
               style={{
                 borderColor: "rgba(74, 55, 40, 0.2)",
                 color: "#4A3728",
@@ -115,10 +115,10 @@ export function PricingSection({
               ))}
             </select>
 
-            <ul className="text-left mb-8 space-y-2.5">
+            <ul className="text-left mb-6 space-y-2">
               {["Choose any premium theme", "Keep it forever", "Free updates included"].map(
                 (item) => (
-                  <li key={item} className="flex items-center gap-2.5 text-[0.95rem]">
+                  <li key={item} className="flex items-center gap-2.5 text-[0.9rem]">
                     <span
                       className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
                       style={{ background: "#5BB5A2" }}
@@ -133,7 +133,7 @@ export function PricingSection({
 
             <button
               onClick={() => onCheckout("single", selectedTheme)}
-              className="w-full py-4 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
+              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
               style={{
                 background: "#4A3728",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
@@ -143,13 +143,13 @@ export function PricingSection({
             </button>
           </motion.div>
 
-          {/* Subscription Card (Featured) */}
+          {/* Yearly Subscription Card (Featured - Best Value) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="relative rounded-[28px] p-10 w-full md:w-[340px] text-center transition-all duration-400 hover:-translate-y-2.5"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="relative rounded-[28px] p-8 w-full lg:w-[320px] text-center transition-all duration-400 hover:-translate-y-2.5"
             style={{
               background: "#4A3728",
               color: "#FDF8F3",
@@ -165,22 +165,22 @@ export function PricingSection({
             </span>
 
             <h3
-              className="text-[1.35rem] font-semibold mb-2"
+              className="text-[1.25rem] font-semibold mb-2"
               style={{ fontFamily: "var(--font-fraunces), serif" }}
             >
-              Infinite Style
+              Yearly Pass
             </h3>
-            <div className="text-[3rem] font-bold mb-1">$1.99</div>
-            <p className="opacity-60 text-[0.9rem] mb-6">per month</p>
+            <div className="text-[2.5rem] font-bold mb-1">$14.99</div>
+            <p className="opacity-60 text-[0.85rem] mb-5">per year</p>
 
-            <ul className="text-left mb-8 space-y-2.5">
+            <ul className="text-left mb-6 space-y-2">
               {[
-                "Access all themes",
-                "New themes every month",
-                "Seasonal exclusives",
-                "Priority support",
+                "30-day free trial",
+                "Access to 3 premium themes",
+                "Swap themes anytime",
+                "All future updates included",
               ].map((item) => (
-                <li key={item} className="flex items-center gap-2.5 text-[0.95rem]">
+                <li key={item} className="flex items-center gap-2.5 text-[0.9rem]">
                   <span
                     className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
                     style={{ background: "#E8A87C" }}
@@ -193,10 +193,59 @@ export function PricingSection({
             </ul>
 
             <button
-              onClick={() => onCheckout("monthly")}
-              className="w-full py-4 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
+              onClick={() => onCheckout("yearly")}
+              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
               style={{
                 background: "#E8A87C",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+              }}
+            >
+              Start Free Trial
+            </button>
+          </motion.div>
+
+          {/* Monthly Subscription Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white rounded-[28px] p-8 w-full lg:w-[320px] text-center transition-all duration-400 hover:-translate-y-2.5"
+            style={{ boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)" }}
+          >
+            <h3
+              className="text-[1.25rem] font-semibold mb-2"
+              style={{ fontFamily: "var(--font-fraunces), serif" }}
+            >
+              Monthly
+            </h3>
+            <div className="text-[2.5rem] font-bold mb-1">$1.99</div>
+            <p className="opacity-60 text-[0.85rem] mb-5">per month</p>
+
+            <ul className="text-left mb-6 space-y-2">
+              {[
+                "Access all themes",
+                "New themes every month",
+                "Seasonal exclusives",
+                "Cancel anytime",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2.5 text-[0.9rem]">
+                  <span
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
+                    style={{ background: "#5BB5A2" }}
+                  >
+                    ✓
+                  </span>
+                  {item}
+                </li>
+              ))}
+            </ul>
+
+            <button
+              onClick={() => onCheckout("monthly")}
+              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                background: "#4A3728",
                 boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
               }}
             >

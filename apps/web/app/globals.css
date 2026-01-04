@@ -1,31 +1,16 @@
 @import "tailwindcss";
 
-:root {
-  /* ThemeGPT Brand - Warm & Organic */
-  --cream: #FDF8F3;
-  --cream-warm: #FFF9F2;
-  --cream-deep: #F5EDE3;
-  --teal: #5BB5A2;
-  --teal-soft: #7BCBB9;
-  --teal-bright: #3AA08C;
-  --coral: #E8A87C;
-  --coral-soft: #F4C4A0;
-  --coral-bright: #E08A54;
-  --brown: #4A3728;
-  --brown-soft: #7A6555;
-  --yellow: #F4E4BA;
-  --yellow-bright: #FFDF82;
-
-  /* Semantic */
-  --background: var(--cream);
-  --foreground: var(--brown);
-}
+/*
+ * ThemeGPT Design System - Single Source of Truth
+ * All color tokens are defined in @theme inline for Tailwind CSS 4
+ */
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Semantic tokens */
+  --color-background: #FDF8F3;
+  --color-foreground: #4A3728;
 
-  /* Organic Color Utilities */
+  /* Brand Colors - Warm & Organic Palette */
   --color-cream: #FDF8F3;
   --color-cream-warm: #FFF9F2;
   --color-cream-deep: #F5EDE3;
@@ -40,6 +25,7 @@
   --color-yellow: #F4E4BA;
   --color-yellow-bright: #FFDF82;
 
+  /* Typography */
   --font-sans: var(--font-dm-sans);
   --font-serif: var(--font-fraunces);
 }
@@ -49,8 +35,8 @@ html {
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-background);
+  color: var(--color-foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
   overflow-x: hidden;
   line-height: 1.6;

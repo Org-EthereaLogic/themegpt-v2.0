@@ -11,6 +11,22 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { token, licenseKey } = body;
 
+    // Type validation - ensure inputs are strings (prevents type confusion attacks)
+    if (typeof token !== 'string' || typeof licenseKey !== 'string') {
+      return NextResponse.json(
+        { error: "Invalid input types" },
+        { status: 400 }
+      );
+    }
+
+    // Length validation - prevent DoS via oversized payloads
+    if (token.length > 2000 || licenseKey.length > 100) {
+      return NextResponse.json(
+        { error: "Input exceeds maximum length" },
+        { status: 400 }
+      );
+    }
+
     if (!token || !licenseKey) {
       return NextResponse.json(
         { error: "Token and license key required" },

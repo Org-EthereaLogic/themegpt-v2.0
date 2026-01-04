@@ -6,6 +6,14 @@ import { db } from "@/lib/db";
 import type { PlanType } from "@themegpt/shared";
 import Stripe from "stripe";
 
+/** Sanitize user input for safe logging (prevents log injection attacks) */
+function sanitizeForLog(input: string, maxLength = 50): string {
+  return input
+    .replace(/[\r\n\t]/g, ' ')     // Replace control chars with space
+    .replace(/[^\x20-\x7E]/g, '')  // Remove non-printable chars
+    .substring(0, maxLength);
+}
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
@@ -71,7 +79,7 @@ export async function POST(request: Request) {
       );
     }
 
-    console.log(`Checkout request: type=${normalizedType}, priceId=${priceId.substring(0, 20)}...`);
+    console.log(`Checkout request: type=${sanitizeForLog(normalizedType)}, priceId=${priceId.substring(0, 20)}...`);
 
     // Check early adopter eligibility for yearly subscriptions
     let isEarlyAdopterEligible = false;

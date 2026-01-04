@@ -1,56 +1,144 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand Palette - Option B */
-  --cream: #FFF8E8;
-  --cream-dark: #E5DECF;
-  --brown-900: #4B2E1E;
-  --brown-600: #7a5a49;
-  --teal-500: #1F9E8F;
-  --teal-600: #178a7b;
-  --orange-accent: #E8956A;
-  
-  /* Semantic Mappings */
+  /* ThemeGPT Brand - Warm & Organic */
+  --cream: #FDF8F3;
+  --cream-warm: #FFF9F2;
+  --cream-deep: #F5EDE3;
+  --teal: #5BB5A2;
+  --teal-soft: #7BCBB9;
+  --teal-bright: #3AA08C;
+  --coral: #E8A87C;
+  --coral-soft: #F4C4A0;
+  --coral-bright: #E08A54;
+  --brown: #4A3728;
+  --brown-soft: #7A6555;
+  --yellow: #F4E4BA;
+  --yellow-bright: #FFDF82;
+
+  /* Semantic */
   --background: var(--cream);
-  --foreground: var(--brown-900);
+  --foreground: var(--brown);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  
-  /* Custom Color Utilities */
-  --color-cream: var(--cream);
-  --color-cream-dark: var(--cream-dark);
-  --color-brown-900: var(--brown-900);
-  --color-brown-600: var(--brown-600);
-  --color-teal-500: var(--teal-500);
-  --color-teal-600: var(--teal-600);
-  --color-orange-accent: var(--orange-accent);
 
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Organic Color Utilities */
+  --color-cream: #FDF8F3;
+  --color-cream-warm: #FFF9F2;
+  --color-cream-deep: #F5EDE3;
+  --color-teal: #5BB5A2;
+  --color-teal-soft: #7BCBB9;
+  --color-teal-bright: #3AA08C;
+  --color-coral: #E8A87C;
+  --color-coral-soft: #F4C4A0;
+  --color-coral-bright: #E08A54;
+  --color-brown: #4A3728;
+  --color-brown-soft: #7A6555;
+  --color-yellow: #F4E4BA;
+  --color-yellow-bright: #FFDF82;
+
+  --font-sans: var(--font-dm-sans);
+  --font-serif: var(--font-fraunces);
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+  line-height: 1.6;
 }
 
-/* Subtle noise texture overlay for tactile warmth */
-.noise-texture {
-  position: relative;
+/* ===== ANIMATIONS ===== */
+
+/* Blob float animation - organic shape morphing */
+@keyframes blobFloat {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+    border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+  }
+  33% {
+    transform: translate(30px, -30px) rotate(120deg) scale(1.05);
+    border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+  }
+  66% {
+    transform: translate(-20px, 20px) rotate(240deg) scale(0.95);
+    border-radius: 30% 60% 70% 40% / 50% 30% 50% 70%;
+  }
 }
 
-.noise-texture::before {
+/* Mascot wobble animation */
+@keyframes mascotWobble {
+  0%, 100% { border-radius: 50% 50% 50% 50%; }
+  25% { border-radius: 45% 55% 55% 45%; }
+  50% { border-radius: 55% 45% 45% 55%; }
+  75% { border-radius: 50% 50% 45% 55%; }
+}
+
+/* Eye blink animation */
+@keyframes blink {
+  0%, 45%, 55%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.1); }
+}
+
+/* Wave underline flow */
+@keyframes waveFlow {
+  from { background-position-x: 0; }
+  to { background-position-x: 50px; }
+}
+
+/* Float animations for hero cards */
+@keyframes float1 {
+  0%, 100% { transform: rotate(-8deg) translateY(0); }
+  50% { transform: rotate(-6deg) translateY(-15px); }
+}
+
+@keyframes float2 {
+  0%, 100% { transform: rotate(6deg) translateY(0); }
+  50% { transform: rotate(4deg) translateY(-12px); }
+}
+
+@keyframes float3 {
+  0%, 100% { transform: rotate(4deg) translateY(0); }
+  50% { transform: rotate(6deg) translateY(-18px); }
+}
+
+/* Slide in animations */
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+
+/* Wave underline for hero title */
+.wave-underline::after {
   content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 180px 180px;
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 Q25 0 50 5 T100 5' stroke='%23E8A87C' stroke-width='3' fill='none'/%3E%3C/svg%3E") repeat-x;
+  background-size: 50px 10px;
+  animation: waveFlow 2s linear infinite;
+}
+
+/* Custom cursor hidden on touch devices */
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
 }

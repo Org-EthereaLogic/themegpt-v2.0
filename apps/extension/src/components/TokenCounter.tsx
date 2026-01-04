@@ -48,7 +48,7 @@ export function TokenCounter() {
                 }
             })
         }
-        
+
         // Initial fetch
         fetchStats()
 
@@ -57,7 +57,7 @@ export function TokenCounter() {
                 setStats(message.payload)
             }
         }
-        
+
         chrome.runtime.onMessage.addListener(listener)
         return () => {
             try {
@@ -76,10 +76,10 @@ export function TokenCounter() {
 
     if (!enabled) {
         return (
-            <div className="pt-2 border-t border-brand-text/10 mt-2">
+            <div className="pt-2 border-t border-brown/10 mt-2">
                 <button
                     onClick={toggle}
-                    className="text-xs text-brand-text/50 hover:text-brand-text w-full text-center"
+                    className="text-xs text-brown-soft hover:text-brown w-full text-center transition-colors"
                 >
                     Show Token Counter
                 </button>
@@ -88,20 +88,20 @@ export function TokenCounter() {
     }
 
     return (
-        <div className="pt-3 border-t border-brand-text/10 mt-2">
+        <div className="pt-3 border-t border-brown/10 mt-2">
             <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold uppercase tracking-wider opacity-60">
+                <span className="text-xs font-semibold uppercase tracking-[0.15em] text-brown-soft">
                     Session Tokens
                 </span>
                 <button
                     onClick={toggle}
-                    className="text-[10px] opacity-40 hover:opacity-100 hover:text-red-600"
+                    className="text-[10px] text-brown-soft hover:text-coral-bright transition-colors"
                 >
                     Hide
                 </button>
             </div>
 
-            <div className="bg-brand-text/5 rounded-lg p-3 flex items-center justify-between text-brand-text">
+            <div className="bg-cream-deep rounded-[16px] p-4 flex items-center justify-between text-brown shadow-card">
                 <StatBlock label="Input" value={stats?.user} />
                 <Divider />
                 <StatBlock label="Output" value={stats?.assistant} />
@@ -109,7 +109,7 @@ export function TokenCounter() {
                 <StatBlock label="Total" value={stats?.total} highlight />
             </div>
 
-            <p className="text-[10px] text-center mt-2 opacity-40">
+            <p className="text-[10px] text-center mt-2 text-brown-soft">
                 Estimated count. No data leaves your browser.
             </p>
         </div>
@@ -118,13 +118,13 @@ export function TokenCounter() {
 
 function StatBlock({ label, value, highlight }: { label: string; value?: number; highlight?: boolean }) {
     return (
-        <div className={`text-center ${highlight ? "text-brand-teal" : ""}`}>
-            <div className={`text-xs ${highlight ? "opacity-80 font-bold" : "opacity-50"}`}>{label}</div>
-            <div className="font-mono text-sm font-bold">{value?.toLocaleString() ?? "-"}</div>
+        <div className={`text-center ${highlight ? "text-teal" : ""}`}>
+            <div className={`text-[10px] uppercase tracking-wider font-semibold ${highlight ? "text-teal" : "text-brown-soft"}`}>{label}</div>
+            <div className="font-mono text-base font-bold mt-0.5">{value?.toLocaleString() ?? "-"}</div>
         </div>
     )
 }
 
 function Divider() {
-    return <div className="h-6 w-px bg-brand-text/10" />
+    return <div className="h-6 w-px bg-brown/10" />
 }

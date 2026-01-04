@@ -1,15 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 body {
-  @apply bg-brand-bg text-brand-text w-[320px] h-[450px] overflow-hidden;
+  @apply bg-cream text-brown w-[320px] h-[450px] overflow-hidden;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  line-height: 1.5;
 }
 
-/* Custom Scrollbar to match Chocolate theme */
+/* Custom Scrollbar matching organic design */
 ::-webkit-scrollbar {
   width: 6px;
 }
+::-webkit-scrollbar-track {
+  @apply bg-cream-deep rounded-full;
+}
 ::-webkit-scrollbar-thumb {
-  @apply bg-brand-text/20 rounded-full;
+  @apply bg-brown/20 rounded-full;
+}
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-brown/30;
+}
+
+/* === KEYFRAME ANIMATIONS === */
+
+/* Badge float - subtle vertical motion */
+@keyframes badgeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+/* Badge glow - teal shadow pulse */
+@keyframes badgeGlow {
+  0%, 100% { box-shadow: 0 2px 8px rgba(91, 181, 162, 0.3); }
+  50% { box-shadow: 0 4px 16px rgba(91, 181, 162, 0.5); }
+}
+
+/* Check pop - selection feedback */
+@keyframes checkPop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Slide in - panel entrance */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mascot wobble - organic border radius morph */
+@keyframes mascotWobble {
+  0%, 100% { border-radius: 50%; }
+  25% { border-radius: 45% 55% 55% 45%; }
+  50% { border-radius: 55% 45% 45% 55%; }
+  75% { border-radius: 50% 50% 45% 55%; }
+}
+
+/* Eye blink animation */
+@keyframes blink {
+  0%, 45%, 55%, 100% { transform: scaleY(1); }
+  50% { transform: scaleY(0.1); }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

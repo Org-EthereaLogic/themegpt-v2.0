@@ -80,12 +80,20 @@ function ThemeItem({ theme, index }: ThemeItemProps) {
   const isLight = isLightTheme(theme.id);
   const isFeatured = index === 0;
 
+  const handleClick = () => {
+    const pricingSection = document.getElementById("pricing");
+    if (pricingSection) {
+      pricingSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
+      onClick={handleClick}
       className={`group relative rounded-[20px] overflow-hidden cursor-pointer transition-all duration-400 hover:scale-[1.03] hover:z-10 ${
         isFeatured ? "md:col-span-2 md:row-span-2" : "col-span-1"
       }`}

@@ -23,7 +23,7 @@ export function Navigation() {
       }`}
     >
       {/* Logo */}
-      <a href="#" className="flex items-center gap-3.5 no-underline">
+      <a href="/" className="flex items-center gap-3.5 no-underline">
         <AnimatedMascot size="md" />
         <span
           className="text-[1.6rem] font-semibold tracking-tight"

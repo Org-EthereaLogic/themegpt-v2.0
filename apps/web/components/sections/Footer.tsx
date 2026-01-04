@@ -6,7 +6,7 @@ const footerLinks = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "Support", href: "mailto:support@themegpt.app" },
-  { label: "Chrome Web Store", href: "https://chromewebstore.google.com", external: true },
+  { label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb", external: true },
 ];
 
 export function Footer() {

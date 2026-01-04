@@ -77,7 +77,7 @@ export function Hero() {
           style={{ animation: "slideInLeft 0.6s ease-out 0.3s both" }}
         >
           <a
-            href="https://chromewebstore.google.com"
+            href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02]"
@@ -118,24 +118,24 @@ export function Hero() {
         style={{ animation: "slideInRight 0.8s ease-out 0.2s both" }}
       >
         <FloatingCard
-          gradient="linear-gradient(135deg, #1a3c34 0%, #2d5a4a 100%)"
-          label="Forest Zen"
-          dotColors={["#ff6b6b", "#feca57", "#1dd1a1"]}
-          lineColor="#55efc4"
-          labelBgColor="rgba(85, 239, 196, 0.2)"
-          labelTextColor="#55efc4"
+          gradient="linear-gradient(135deg, #0A1628 0%, #164E63 100%)"
+          label="Aurora Borealis"
+          dotColors={["#00E5CC", "#80DEEA", "#164E63"]}
+          lineColor="#00E5CC"
+          labelBgColor="rgba(0, 229, 204, 0.2)"
+          labelTextColor="#00E5CC"
           rotation={-8}
           animationName="float1"
           position={{ top: "20px", left: "0" }}
           size={{ width: 260, height: 180 }}
         />
         <FloatingCard
-          gradient="linear-gradient(135deg, #fff5f5 0%, #ffe4d4 100%)"
-          label="Coral Sunset"
-          dotColors={["#ff6b6b", "#feca57", "#1dd1a1"]}
-          lineColor="#e17055"
-          labelBgColor="rgba(225, 112, 85, 0.2)"
-          labelTextColor="#c44e32"
+          gradient="linear-gradient(135deg, #282A36 0%, #44475A 100%)"
+          label="Dracula"
+          dotColors={["#FF79C6", "#BD93F9", "#50FA7B"]}
+          lineColor="#BD93F9"
+          labelBgColor="rgba(189, 147, 249, 0.2)"
+          labelTextColor="#BD93F9"
           rotation={6}
           animationName="float2"
           animationDelay="-2s"
@@ -143,12 +143,12 @@ export function Hero() {
           size={{ width: 240, height: 170 }}
         />
         <FloatingCard
-          gradient="linear-gradient(135deg, #f8f5ff 0%, #e8dff5 100%)"
-          label="Lavender"
-          dotColors={["#a29bfe", "#fd79a8", "#00cec9"]}
-          lineColor="#6c5ce7"
-          labelBgColor="rgba(108, 92, 231, 0.2)"
-          labelTextColor="#6c5ce7"
+          gradient="linear-gradient(135deg, #262335 0%, #4a2c7a 100%)"
+          label="Synth Wave"
+          dotColors={["#FF6AC1", "#FAD000", "#36F9F6"]}
+          lineColor="#FF6AC1"
+          labelBgColor="rgba(255, 106, 193, 0.2)"
+          labelTextColor="#FF6AC1"
           rotation={4}
           animationName="float3"
           animationDelay="-4s"

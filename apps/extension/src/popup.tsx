@@ -237,21 +237,40 @@ export default function Popup() {
   const premiumThemes = DEFAULT_THEMES.filter(t => t.isPremium)
 
   return (
-    <div className="flex flex-col h-full bg-brand-bg text-brand-text font-sans relative">
+    <div className="flex flex-col h-full bg-cream text-brown font-sans relative">
       {/* HEADER */}
-      <header className="flex items-center gap-3 p-4 border-b border-brand-text/10 bg-white/50 backdrop-blur-sm sticky top-0 z-10">
-        <img src={mascotUrl} alt="ThemeGPT" className="w-8 h-8" />
-        <h1 className="text-lg font-bold tracking-tight">ThemeGPT</h1>
+      <header className="flex items-center gap-3 p-4 border-b border-brown/10 bg-cream-warm sticky top-0 z-50">
+        {/* Animated mascot matching website */}
+        <div
+          className="w-8 h-8 relative animate-mascot-wobble"
+          style={{
+            background: 'conic-gradient(from 0deg, #E8A87C 0deg, #5BB5A2 120deg, #F4E4BA 240deg, #E8A87C 360deg)',
+          }}
+        >
+          <div className="absolute inset-[3px] rounded-full bg-cream flex flex-col items-center justify-center">
+            {/* Eyes - smaller to match website logo */}
+            <div className="flex gap-[5px] -mt-0.5">
+              <div className="w-1 h-1 rounded-full bg-brown animate-blink" />
+              <div className="w-1 h-1 rounded-full bg-brown animate-blink" />
+            </div>
+            {/* Smile */}
+            <div
+              className="w-2.5 h-1 mt-0.5 border-b-[1.5px] border-brown rounded-b-full"
+              style={{ borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}
+            />
+          </div>
+        </div>
+        <h1 className="text-lg font-display font-semibold tracking-tight text-brown">ThemeGPT</h1>
         <div className="ml-auto flex items-center gap-2">
            <button
              onClick={() => setShowAccountPanel(!showAccountPanel)}
-             className="text-xs font-medium text-brand-teal hover:text-brand-text transition-colors"
+             className="text-xs font-medium text-teal hover:text-brown transition-colors"
            >
              {accountStatus.connected ? (accountStatus.isLifetime ? "Lifetime" : "Premium") : "Connect"}
            </button>
           {accountStatus.connected && (
             <div
-              className={`w-2 h-2 rounded-full ${accountStatus.isActive ? 'bg-brand-teal shadow-[0_0_8px_rgba(126,206,197,0.8)]' : 'bg-brand-peach'}`}
+              className={`w-2 h-2 rounded-full ${accountStatus.isActive ? 'bg-teal shadow-[0_0_8px_rgba(91,181,162,0.8)]' : 'bg-coral'}`}
               title={accountStatus.isActive ? "Active" : "Connected"}
             />
           )}
@@ -260,32 +279,32 @@ export default function Popup() {
 
       {/* ACCOUNT PANEL */}
       {showAccountPanel && (
-        <div className="bg-white/90 p-4 border-b border-brand-text/10 animate-in slide-in-from-top-2">
+        <div className="bg-cream-warm/95 p-4 border-b border-brown/10 animate-slide-in">
           {accountStatus.connected ? (
             <>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-bold uppercase">Account</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-brown-soft">Account</h3>
                 <button
                   onClick={handleDisconnect}
-                  className="text-[10px] text-red-500 hover:text-red-600"
+                  className="text-[10px] text-coral-bright hover:text-coral font-medium transition-colors"
                 >
                   Disconnect
                 </button>
               </div>
-              <div className="text-xs opacity-70 mb-2">{accountStatus.email}</div>
+              <div className="text-xs text-brown-soft mb-2">{accountStatus.email}</div>
               {accountStatus.hasSubscription && (
                 <div className="flex items-center gap-2">
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full ${
+                  <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium ${
                     accountStatus.isLifetime
-                      ? 'bg-gradient-to-r from-teal-500 to-teal-600 text-white'
+                      ? 'bg-gradient-to-r from-teal to-teal-bright text-white'
                       : accountStatus.isActive
-                        ? 'bg-brand-teal/10 text-brand-teal'
-                        : 'bg-brand-peach/10 text-brand-peach'
+                        ? 'bg-teal/10 text-teal'
+                        : 'bg-coral/10 text-coral'
                   }`}>
                     {accountStatus.isLifetime ? 'Lifetime Access' : accountStatus.planType === 'yearly' ? 'Yearly' : 'Monthly'}
                   </span>
                   {accountStatus.isActive && !accountStatus.isLifetime && accountStatus.creditsRemaining !== undefined && (
-                    <span className="text-[10px] opacity-60">
+                    <span className="text-[10px] text-brown-soft">
                       {accountStatus.creditsRemaining} downloads left
                     </span>
                   )}
@@ -294,7 +313,7 @@ export default function Popup() {
               {!accountStatus.hasSubscription && (
                 <button
                   onClick={() => window.open(`${API_BASE_URL}/#pricing`, '_blank')}
-                  className="mt-2 text-xs bg-brand-teal text-white px-3 py-1.5 rounded-full font-medium hover:bg-brand-teal/90"
+                  className="mt-3 text-xs bg-teal text-white px-4 py-2 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300"
                 >
                   Subscribe
                 </button>
@@ -302,24 +321,24 @@ export default function Popup() {
             </>
           ) : (
             <>
-              <h3 className="text-xs font-bold uppercase mb-2">Connect Account</h3>
-              <p className="text-[10px] opacity-70 mb-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-brown-soft mb-2">Connect Account</h3>
+              <p className="text-[10px] text-brown-soft mb-3">
                 Sign in to access your premium themes and subscription.
               </p>
               <button
                 onClick={handleConnect}
                 disabled={isLoading}
-                className="w-full bg-brand-teal text-white text-xs py-2 rounded-lg font-bold hover:bg-brand-teal/90 disabled:opacity-50 mb-3"
+                className="w-full bg-teal text-white text-sm py-2.5 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300 disabled:opacity-50 mb-3"
               >
                 {isLoading ? "Connecting..." : "Connect with Google/GitHub"}
               </button>
 
               <div className="relative my-3">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-brand-text/10"></div>
+                  <div className="w-full border-t border-brown/10"></div>
                 </div>
                 <div className="relative flex justify-center text-[10px]">
-                  <span className="bg-white px-2 opacity-50">or paste token</span>
+                  <span className="bg-cream-warm px-2 text-brown-soft">or paste token</span>
                 </div>
               </div>
 
@@ -327,18 +346,18 @@ export default function Popup() {
                 <input
                   value={tokenInput}
                   onChange={(e) => setTokenInput(e.target.value)}
-                  className="flex-1 text-xs p-2 rounded border border-brand-text/20"
+                  className="flex-1 text-xs p-2.5 rounded-button border border-brown/15 bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 transition-all"
                   placeholder="Paste token..."
                 />
                 <button
                   onClick={handleTokenSubmit}
                   disabled={isLoading || !tokenInput.trim()}
-                  className="bg-brand-text text-white text-xs px-3 rounded font-bold disabled:opacity-50"
+                  className="bg-brown text-cream text-xs px-4 rounded-button font-semibold hover:bg-brown-soft disabled:opacity-50 transition-colors"
                 >
                   Go
                 </button>
               </div>
-              {statusMsg && <div className="text-[10px] mt-2 opacity-70">{statusMsg}</div>}
+              {statusMsg && <div className="text-[10px] mt-2 text-brown-soft">{statusMsg}</div>}
             </>
           )}
         </div>
@@ -348,9 +367,9 @@ export default function Popup() {
       <main className="flex-1 overflow-y-auto p-4 space-y-6">
         {/* FREE TIER */}
         <section>
-          <h2 className="text-xs font-bold uppercase tracking-wider opacity-60 mb-3 flex items-center gap-2">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-brown-soft mb-3 flex items-center gap-2">
             <span>Free Collection</span>
-            <span className="bg-brand-teal/10 text-brand-teal px-1.5 py-0.5 rounded text-[10px]">
+            <span className="bg-teal/10 text-teal px-2 py-0.5 rounded-full text-[10px] font-semibold">
               {freeThemes.length}
             </span>
           </h2>
@@ -369,9 +388,9 @@ export default function Popup() {
 
         {/* PREMIUM TIER */}
         <section>
-          <h2 className="text-xs font-bold uppercase tracking-wider opacity-60 mb-3 flex items-center gap-2">
+          <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-brown-soft mb-3 flex items-center gap-2">
             <span>Premium Collection</span>
-            <span className="bg-brand-peach/10 text-brand-peach px-1.5 py-0.5 rounded text-[10px]">
+            <span className="bg-coral/10 text-coral px-2 py-0.5 rounded-full text-[10px] font-semibold">
               {premiumThemes.length}
             </span>
           </h2>
@@ -393,20 +412,25 @@ export default function Popup() {
 
         {/* SLOT ERROR MESSAGE */}
         {slotError && (
-          <div className="mt-4 p-3 rounded-lg bg-brand-peach/10 border border-brand-peach/30 text-brand-text text-xs" role="alert">
+          <div className="mt-4 p-3 rounded-card bg-coral/10 border border-coral/30 text-brown text-xs" role="alert">
             {slotError}
           </div>
         )}
       </main>
 
       {/* TOKEN COUNTER & FOOTER */}
-      <div className="bg-white/50 border-t border-brand-text/10">
+      <div className="bg-cream-warm/60 border-t border-brown/10">
         <div className="px-4 pb-2">
             <TokenCounter />
         </div>
-        <footer className="p-3 text-center border-t border-brand-text/5">
-            <a href={`${API_BASE_URL}/account`} target="_blank" className="text-xs font-medium text-brand-text/60 hover:text-brand-text">
-            Manage Account &rarr;
+        <footer className="p-3 text-center border-t border-brown/5">
+            <a
+              href={`${API_BASE_URL}/account`}
+              target="_blank"
+              className="group inline-flex items-center gap-1 text-xs font-medium text-brown-soft hover:text-brown transition-colors"
+            >
+              Manage Account
+              <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
             </a>
         </footer>
       </div>
@@ -472,23 +496,23 @@ function ThemeCard({
       onClick={onSelect}
       aria-label={isLocked ? `${theme.name} - Premium, click to unlock` : `Apply ${theme.name} theme`}
       className={`
-        group relative flex flex-col items-start p-2.5 rounded-xl border transition-all duration-200 text-left w-full
+        group relative flex flex-col items-start p-2.5 rounded-card border transition-all duration-300 text-left w-full
         ${isActive
-          ? "border-brand-teal bg-white shadow-md ring-1 ring-brand-teal transform scale-[1.02]"
-          : "border-transparent bg-white/40 hover:bg-white hover:shadow-sm"
+          ? "border-teal bg-white shadow-card-hover ring-2 ring-teal/30 transform scale-[1.02]"
+          : "border-transparent bg-white/60 hover:bg-white hover:shadow-card hover:scale-[1.01]"
         }
       `}
     >
       {/* Animated effect badge */}
       {hasEffects && (
-        <div className="absolute top-1 right-1 z-20 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-[8px] uppercase font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-0.5">
-          <span className="animate-pulse">✨</span>
+        <div className="absolute top-1 right-1 z-20 bg-gradient-to-r from-coral to-coral-bright text-white text-[8px] uppercase font-bold px-1.5 py-0.5 rounded-full shadow-sm flex items-center gap-0.5 animate-badge-float">
+          <span>✨</span>
           <span>FX</span>
         </div>
       )}
 
       {/* Preview area - increased height */}
-      <div className="w-full h-24 rounded-lg mb-2 border border-brand-text/5 overflow-hidden relative">
+      <div className="w-full h-24 rounded-[16px] mb-2 border border-brown/5 overflow-hidden relative">
         {hasScreenshot ? (
           <img
             src={screenshotUrl}
@@ -579,10 +603,10 @@ function ThemeCard({
 
       {/* Theme name and badges */}
       <div className="flex items-center justify-between w-full gap-1">
-        <span className="text-xs font-medium truncate opacity-90">{theme.name}</span>
+        <span className="text-xs font-medium truncate text-brown">{theme.name}</span>
         <div className="flex items-center gap-1 flex-shrink-0">
           {effectType && (
-            <span className="text-[9px] opacity-60" title={`${effectType} effect`}>
+            <span className="text-[9px] text-brown-soft" title={`${effectType} effect`}>
               {effectType === "aurora" && "🌌"}
               {effectType === "snow" && "❄️"}
               {effectType === "stars" && "⭐"}
@@ -590,7 +614,7 @@ function ThemeCard({
             </span>
           )}
           {isLocked && (
-            <span className="text-[9px] font-bold text-brand-text/40 bg-brand-text/5 px-1 py-0.5 rounded uppercase">
+            <span className="text-[9px] font-semibold text-coral bg-coral/10 px-1.5 py-0.5 rounded-full uppercase">
               Pro
             </span>
           )}

@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThemeGPT — Concept 2: Organic Flow Experience</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* ThemeGPT Brand - Warm & Organic */
+            --cream: #FDF8F3;
+            --cream-warm: #FFF9F2;
+            --cream-deep: #F5EDE3;
+            --teal: #5BB5A2;
+            --teal-soft: #7BCBB9;
+            --teal-bright: #3AA08C;
+            --coral: #E8A87C;
+            --coral-soft: #F4C4A0;
+            --coral-bright: #E08A54;
+            --brown: #4A3728;
+            --brown-soft: #7A6555;
+            --yellow: #F4E4BA;
+            --yellow-bright: #FFDF82;
+            
+            /* Organic gradients */
+            --blob-gradient-1: radial-gradient(circle at 30% 40%, var(--teal-soft) 0%, transparent 50%);
+            --blob-gradient-2: radial-gradient(circle at 70% 60%, var(--coral-soft) 0%, transparent 50%);
+            --blob-gradient-3: radial-gradient(circle at 50% 80%, var(--yellow) 0%, transparent 40%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--cream);
+            color: var(--brown);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* ===== ORGANIC CURSOR ===== */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--teal);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, border-color 0.3s ease;
+            transform: translate(-50%, -50%);
+        }
+
+        .cursor.hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            border-color: var(--coral);
+            background: rgba(232, 168, 124, 0.1);
+        }
+
+        /* ===== NAVIGATION - ORGANIC ===== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1.25rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.4s ease;
+        }
+
+        .nav.scrolled {
+            background: rgba(253, 248, 243, 0.9);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(74, 55, 40, 0.06);
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+        }
+
+        .mascot {
+            width: 52px;
+            height: 52px;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .mascot:hover {
+            transform: scale(1.1);
+        }
+
+        .mascot-body {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                conic-gradient(
+                    from 0deg at 50% 50%,
+                    var(--coral) 0deg,
+                    var(--teal) 120deg,
+                    var(--yellow) 240deg,
+                    var(--coral) 360deg
+                );
+            position: relative;
+            animation: mascotWobble 4s ease-in-out infinite;
+        }
+
+        @keyframes mascotWobble {
+            0%, 100% { border-radius: 50% 50% 50% 50%; }
+            25% { border-radius: 45% 55% 55% 45%; }
+            50% { border-radius: 55% 45% 45% 55%; }
+            75% { border-radius: 50% 50% 45% 55%; }
+        }
+
+        .mascot-face {
+            position: absolute;
+            inset: 4px;
+            background: var(--cream);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .mascot-eyes {
+            display: flex;
+            gap: 10px;
+            margin-top: 4px;
+        }
+
+        .mascot-eye {
+            width: 6px;
+            height: 6px;
+            background: var(--brown);
+            border-radius: 50%;
+            animation: blink 4s ease-in-out infinite;
+        }
+
+        @keyframes blink {
+            0%, 45%, 55%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.1); }
+        }
+
+        .mascot-smile {
+            width: 14px;
+            height: 7px;
+            border: 2px solid var(--brown);
+            border-top: none;
+            border-radius: 0 0 14px 14px;
+        }
+
+        .logo-text {
+            font-family: 'Fraunces', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--brown);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--brown-soft);
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--coral);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover {
+            color: var(--brown);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .nav-cta {
+            background: var(--teal);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(91, 181, 162, 0.25);
+        }
+
+        .nav-cta:hover {
+            background: var(--teal-bright);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(91, 181, 162, 0.35);
+        }
+
+        /* ===== HERO - ORGANIC FLOW ===== */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            gap: 4rem;
+            padding: 8rem 6rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Organic blob backgrounds */
+        .hero-blobs {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.5;
+            animation: blobFloat 20s ease-in-out infinite;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--teal-soft);
+            top: -100px;
+            right: 10%;
+            animation-delay: 0s;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: var(--coral-soft);
+            bottom: 10%;
+            left: -100px;
+            animation-delay: -7s;
+        }
+
+        .blob-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--yellow);
+            top: 40%;
+            left: 30%;
+            animation-delay: -14s;
+        }
+
+        @keyframes blobFloat {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                border-radius: 40% 60% 60% 40% / 60% 40% 60% 40%;
+            }
+            33% {
+                transform: translate(30px, -30px) rotate(120deg) scale(1.05);
+                border-radius: 60% 40% 30% 70% / 50% 60% 40% 50%;
+            }
+            66% {
+                transform: translate(-20px, 20px) rotate(240deg) scale(0.95);
+                border-radius: 30% 60% 70% 40% / 50% 30% 50% 70%;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--cream-deep);
+            padding: 0.5rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--brown-soft);
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .hero-tag-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--teal);
+            border-radius: 50%;
+        }
+
+        .hero-title {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 600;
+            line-height: 1.15;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.25rem;
+            animation: slideInLeft 0.6s ease-out 0.1s both;
+        }
+
+        .hero-title .wave {
+            display: inline-block;
+            position: relative;
+        }
+
+        .hero-title .wave::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 5 Q25 0 50 5 T100 5' stroke='%23E8A87C' stroke-width='3' fill='none'/%3E%3C/svg%3E") repeat-x;
+            background-size: 50px 10px;
+            animation: waveFlow 2s linear infinite;
+        }
+
+        @keyframes waveFlow {
+            from { background-position-x: 0; }
+            to { background-position-x: 50px; }
+        }
+
+        .hero-desc {
+            font-size: 1.15rem;
+            color: var(--brown-soft);
+            max-width: 480px;
+            margin-bottom: 2rem;
+            animation: slideInLeft 0.6s ease-out 0.2s both;
+        }
+
+        .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            animation: slideInLeft 0.6s ease-out 0.3s both;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 1rem 1.75rem;
+            border-radius: 100px;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--coral);
+            color: white;
+            box-shadow: 0 8px 24px rgba(232, 168, 124, 0.35);
+        }
+
+        .btn-primary:hover {
+            background: var(--coral-bright);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(232, 168, 124, 0.45);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--brown);
+            border: 2px solid var(--brown);
+        }
+
+        .btn-outline:hover {
+            background: var(--brown);
+            color: var(--cream);
+            transform: translateY(-3px);
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Hero Visual - Floating Theme Cards */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            animation: slideInRight 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .floating-card {
+            position: absolute;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(74, 55, 40, 0.12);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .floating-card:hover {
+            transform: translateY(-10px) rotate(0deg) !important;
+            box-shadow: 0 30px 60px rgba(74, 55, 40, 0.18);
+        }
+
+        .floating-card-1 {
+            width: 260px;
+            height: 180px;
+            top: 20px;
+            left: 0;
+            background: linear-gradient(135deg, #1a3c34 0%, #2d5a4a 100%);
+            transform: rotate(-8deg);
+            animation: float1 6s ease-in-out infinite;
+        }
+
+        .floating-card-2 {
+            width: 240px;
+            height: 170px;
+            top: 80px;
+            right: 20px;
+            background: linear-gradient(135deg, #fff5f5 0%, #ffe4d4 100%);
+            transform: rotate(6deg);
+            animation: float2 6s ease-in-out infinite;
+            animation-delay: -2s;
+        }
+
+        .floating-card-3 {
+            width: 280px;
+            height: 190px;
+            bottom: 60px;
+            left: 40px;
+            background: linear-gradient(135deg, #f8f5ff 0%, #e8dff5 100%);
+            transform: rotate(4deg);
+            animation: float3 6s ease-in-out infinite;
+            animation-delay: -4s;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: rotate(-8deg) translateY(0); }
+            50% { transform: rotate(-6deg) translateY(-15px); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: rotate(6deg) translateY(0); }
+            50% { transform: rotate(4deg) translateY(-12px); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: rotate(4deg) translateY(0); }
+            50% { transform: rotate(6deg) translateY(-18px); }
+        }
+
+        .card-content {
+            padding: 1rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-dots {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .card-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .card-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .card-line {
+            height: 6px;
+            border-radius: 3px;
+            opacity: 0.6;
+        }
+
+        /* Card 1 styles */
+        .floating-card-1 .card-dot:nth-child(1) { background: #ff6b6b; }
+        .floating-card-1 .card-dot:nth-child(2) { background: #feca57; }
+        .floating-card-1 .card-dot:nth-child(3) { background: #1dd1a1; }
+        .floating-card-1 .card-line { background: #55efc4; }
+
+        /* Card 2 styles */
+        .floating-card-2 .card-dot:nth-child(1) { background: #ff6b6b; }
+        .floating-card-2 .card-dot:nth-child(2) { background: #feca57; }
+        .floating-card-2 .card-dot:nth-child(3) { background: #1dd1a1; }
+        .floating-card-2 .card-line { background: #e17055; }
+
+        /* Card 3 styles */
+        .floating-card-3 .card-dot:nth-child(1) { background: #a29bfe; }
+        .floating-card-3 .card-dot:nth-child(2) { background: #fd79a8; }
+        .floating-card-3 .card-dot:nth-child(3) { background: #00cec9; }
+        .floating-card-3 .card-line { background: #6c5ce7; }
+
+        .card-label {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            padding: 0.35rem 0.75rem;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .floating-card-1 .card-label {
+            background: rgba(85, 239, 196, 0.2);
+            color: #55efc4;
+        }
+
+        .floating-card-2 .card-label {
+            background: rgba(225, 112, 85, 0.2);
+            color: #c44e32;
+        }
+
+        .floating-card-3 .card-label {
+            background: rgba(108, 92, 231, 0.2);
+            color: #6c5ce7;
+        }
+
+        /* ===== THEMES SECTION - ORGANIC GRID ===== */
+        .themes {
+            padding: 6rem 4rem;
+            background: var(--cream-warm);
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--teal);
+            margin-bottom: 0.75rem;
+        }
+
+        .section-title {
+            font-family: 'Fraunces', serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        /* Masonry-style organic grid */
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 200px);
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .theme-item {
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .theme-item:hover {
+            transform: scale(1.03);
+            z-index: 10;
+        }
+
+        .theme-item-1 { grid-column: span 2; grid-row: span 2; }
+        .theme-item-2 { grid-column: span 1; }
+        .theme-item-3 { grid-column: span 1; }
+        .theme-item-4 { grid-column: span 1; }
+        .theme-item-5 { grid-column: span 1; }
+
+        .theme-item-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 1.25rem;
+        }
+
+        .theme-item-1 { background: linear-gradient(135deg, #0a1628 0%, #1a3a5c 100%); }
+        .theme-item-2 { background: linear-gradient(135deg, #fffaf0 0%, #ffeaa7 100%); }
+        .theme-item-3 { background: linear-gradient(135deg, #f8f5ff 0%, #e8dff5 100%); }
+        .theme-item-4 { background: linear-gradient(135deg, #1a3c34 0%, #2d5a4a 100%); }
+        .theme-item-5 { background: linear-gradient(135deg, #2d1b4e 0%, #4a2c7a 100%); }
+
+        .theme-item-header {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .theme-item-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .theme-item-lines {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .theme-item-line {
+            height: 8px;
+            border-radius: 4px;
+            opacity: 0.5;
+        }
+
+        .theme-item-1 .theme-item-dot:nth-child(1) { background: #ff6b6b; }
+        .theme-item-1 .theme-item-dot:nth-child(2) { background: #feca57; }
+        .theme-item-1 .theme-item-dot:nth-child(3) { background: #48dbfb; }
+        .theme-item-1 .theme-item-line { background: #48dbfb; }
+
+        .theme-item-2 .theme-item-dot:nth-child(1) { background: #e17055; }
+        .theme-item-2 .theme-item-dot:nth-child(2) { background: #00b894; }
+        .theme-item-2 .theme-item-dot:nth-child(3) { background: #0984e3; }
+        .theme-item-2 .theme-item-line { background: #fdcb6e; }
+
+        .theme-item-3 .theme-item-dot:nth-child(1) { background: #a29bfe; }
+        .theme-item-3 .theme-item-dot:nth-child(2) { background: #fd79a8; }
+        .theme-item-3 .theme-item-dot:nth-child(3) { background: #00cec9; }
+        .theme-item-3 .theme-item-line { background: #6c5ce7; }
+
+        .theme-item-4 .theme-item-dot:nth-child(1) { background: #ff6b6b; }
+        .theme-item-4 .theme-item-dot:nth-child(2) { background: #feca57; }
+        .theme-item-4 .theme-item-dot:nth-child(3) { background: #1dd1a1; }
+        .theme-item-4 .theme-item-line { background: #55efc4; }
+
+        .theme-item-5 .theme-item-dot:nth-child(1) { background: #ff6b6b; }
+        .theme-item-5 .theme-item-dot:nth-child(2) { background: #feca57; }
+        .theme-item-5 .theme-item-dot:nth-child(3) { background: #a29bfe; }
+        .theme-item-5 .theme-item-line { background: #a29bfe; }
+
+        .theme-item-meta {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            right: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+        }
+
+        .theme-item:hover .theme-item-meta {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: white;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .theme-item-2 .theme-name,
+        .theme-item-3 .theme-name {
+            color: var(--brown);
+            text-shadow: none;
+        }
+
+        .theme-badge {
+            padding: 0.3rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .theme-item-2 .theme-badge,
+        .theme-item-3 .theme-badge {
+            background: rgba(74, 55, 40, 0.1);
+            color: var(--brown);
+        }
+
+        /* ===== FEATURES - ORGANIC CARDS ===== */
+        .features {
+            padding: 6rem 4rem;
+            background: var(--cream);
+        }
+
+        .features-row {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 24px;
+            width: 320px;
+            box-shadow: 0 8px 32px rgba(74, 55, 40, 0.06);
+            transition: all 0.4s ease;
+            border: 1px solid rgba(74, 55, 40, 0.05);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 48px rgba(74, 55, 40, 0.1);
+        }
+
+        .feature-emoji {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-family: 'Fraunces', serif;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-desc {
+            color: var(--brown-soft);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* ===== PRICING - ORGANIC ===== */
+        .pricing {
+            padding: 6rem 4rem;
+            background: var(--cream-warm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-blobs {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+
+        .pricing-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+
+        .pricing-blob-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--teal);
+            top: -100px;
+            left: -100px;
+        }
+
+        .pricing-blob-2 {
+            width: 300px;
+            height: 300px;
+            background: var(--coral);
+            bottom: -50px;
+            right: -50px;
+        }
+
+        .pricing-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .pricing-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: white;
+            border-radius: 28px;
+            padding: 2.5rem;
+            width: 340px;
+            text-align: center;
+            box-shadow: 0 12px 40px rgba(74, 55, 40, 0.08);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .pricing-card.featured {
+            background: var(--brown);
+            color: var(--cream);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .pricing-popular {
+            position: absolute;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--coral);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .pricing-name {
+            font-family: 'Fraunces', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-amount {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .pricing-period {
+            opacity: 0.6;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .pricing-list {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-list li {
+            padding: 0.6rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.95rem;
+        }
+
+        .pricing-list li::before {
+            content: '✓';
+            width: 20px;
+            height: 20px;
+            background: var(--teal);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .pricing-card.featured .pricing-list li::before {
+            background: var(--coral);
+        }
+
+        .pricing-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 14px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:not(.featured) .pricing-btn {
+            background: var(--brown);
+            color: white;
+        }
+
+        .pricing-card.featured .pricing-btn {
+            background: var(--coral);
+            color: white;
+        }
+
+        .pricing-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        /* ===== FOOTER - ORGANIC ===== */
+        .footer {
+            background: var(--brown);
+            color: var(--cream);
+            padding: 4rem;
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .footer-mascot {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: conic-gradient(
+                from 0deg,
+                var(--coral) 0deg,
+                var(--teal) 120deg,
+                var(--yellow) 240deg,
+                var(--coral) 360deg
+            );
+        }
+
+        .footer-logo {
+            font-family: 'Fraunces', serif;
+            font-size: 1.35rem;
+            font-weight: 600;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-link {
+            color: rgba(253, 248, 243, 0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--cream);
+        }
+
+        .footer-copy {
+            opacity: 0.4;
+            font-size: 0.85rem;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .hero {
+                grid-template-columns: 1fr;
+                text-align: center;
+                padding: 7rem 3rem 4rem;
+            }
+
+            .hero-content {
+                order: 1;
+            }
+
+            .hero-visual {
+                order: 2;
+                height: 350px;
+            }
+
+            .hero-desc {
+                margin: 0 auto 2rem;
+            }
+
+            .hero-actions {
+                justify-content: center;
+            }
+
+            .themes-grid {
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-rows: repeat(3, 180px);
+            }
+
+            .theme-item-1 {
+                grid-column: span 2;
+                grid-row: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                padding: 1rem 1.5rem;
+            }
+
+            .nav-menu {
+                display: none;
+            }
+
+            .themes-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+
+            .theme-item-1 {
+                grid-column: span 1;
+                height: 250px;
+            }
+
+            .theme-item {
+                height: 180px;
+            }
+
+            .hero-visual {
+                display: none;
+            }
+
+            .features-row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        /* Hide custom cursor on mobile */
+        @media (pointer: coarse) {
+            .cursor {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Navigation -->
+    <nav class="nav" id="nav">
+        <a href="#" class="nav-logo">
+            <div class="mascot">
+                <div class="mascot-body">
+                    <div class="mascot-face">
+                        <div class="mascot-eyes">
+                            <div class="mascot-eye"></div>
+                            <div class="mascot-eye"></div>
+                        </div>
+                        <div class="mascot-smile"></div>
+                    </div>
+                </div>
+            </div>
+            <span class="logo-text">ThemeGPT</span>
+        </a>
+        <div class="nav-menu">
+            <a href="#themes" class="nav-link">Themes</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#pricing" class="nav-link">Pricing</a>
+            <a href="#" class="nav-cta">Get Started</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-blobs">
+            <div class="blob blob-1"></div>
+            <div class="blob blob-2"></div>
+            <div class="blob blob-3"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="hero-tag">
+                <span class="hero-tag-dot"></span>
+                Free on Chrome Web Store
+            </div>
+            <h1 class="hero-title">
+                Give ChatGPT<br>
+                <span class="wave">your vibe</span>
+            </h1>
+            <p class="hero-desc">
+                Beautiful themes that match your personality. 
+                Transform your ChatGPT interface with one click—no tech skills needed.
+            </p>
+            <div class="hero-actions">
+                <a href="#" class="btn btn-primary">
+                    Install Extension
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+                <a href="#themes" class="btn btn-outline">
+                    See Themes
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-visual">
+            <div class="floating-card floating-card-1">
+                <div class="card-content">
+                    <div class="card-dots">
+                        <div class="card-dot"></div>
+                        <div class="card-dot"></div>
+                        <div class="card-dot"></div>
+                    </div>
+                    <div class="card-lines">
+                        <div class="card-line" style="width: 90%"></div>
+                        <div class="card-line" style="width: 70%"></div>
+                        <div class="card-line" style="width: 85%"></div>
+                    </div>
+                </div>
+                <span class="card-label">Forest Zen</span>
+            </div>
+            <div class="floating-card floating-card-2">
+                <div class="card-content">
+                    <div class="card-dots">
+                        <div class="card-dot"></div>
+                        <div class="card-dot"></div>
+                        <div class="card-dot"></div>
+                    </div>
+                    <div class="card-lines">
+                        <div class="card-line" style="width: 80%"></div>
+                        <div class="card-line" style="width: 65%"></div>
+                    </div>
+                </div>
+                <span class="card-label">Coral Sunset</span>
+            </div>
+            <div class="floating-card floating-card-3">
+                <div class="card-content">
+                    <div class="card-dots">
+                        <div class="card-dot"></div>
+                        <div class="card-dot"></div>
+                        <div class="card-dot"></div>
+                    </div>
+                    <div class="card-lines">
+                        <div class="card-line" style="width: 75%"></div>
+                        <div class="card-line" style="width: 90%"></div>
+                        <div class="card-line" style="width: 60%"></div>
+                    </div>
+                </div>
+                <span class="card-label">Lavender</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Themes Section -->
+    <section class="themes" id="themes">
+        <div class="section-header">
+            <p class="section-label">Theme Gallery</p>
+            <h2 class="section-title">Pick your perfect look</h2>
+        </div>
+        <div class="themes-grid">
+            <div class="theme-item theme-item-1">
+                <div class="theme-item-content">
+                    <div class="theme-item-header">
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                    </div>
+                    <div class="theme-item-lines">
+                        <div class="theme-item-line" style="width: 80%"></div>
+                        <div class="theme-item-line" style="width: 60%"></div>
+                        <div class="theme-item-line" style="width: 90%"></div>
+                        <div class="theme-item-line" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="theme-item-meta">
+                    <span class="theme-name">Midnight Ocean</span>
+                    <span class="theme-badge">Premium</span>
+                </div>
+            </div>
+            <div class="theme-item theme-item-2">
+                <div class="theme-item-content">
+                    <div class="theme-item-header">
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                    </div>
+                    <div class="theme-item-lines">
+                        <div class="theme-item-line" style="width: 70%"></div>
+                        <div class="theme-item-line" style="width: 85%"></div>
+                    </div>
+                </div>
+                <div class="theme-item-meta">
+                    <span class="theme-name">Golden Hour</span>
+                    <span class="theme-badge">Free</span>
+                </div>
+            </div>
+            <div class="theme-item theme-item-3">
+                <div class="theme-item-content">
+                    <div class="theme-item-header">
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                    </div>
+                    <div class="theme-item-lines">
+                        <div class="theme-item-line" style="width: 75%"></div>
+                        <div class="theme-item-line" style="width: 60%"></div>
+                    </div>
+                </div>
+                <div class="theme-item-meta">
+                    <span class="theme-name">Lavender Dream</span>
+                    <span class="theme-badge">Premium</span>
+                </div>
+            </div>
+            <div class="theme-item theme-item-4">
+                <div class="theme-item-content">
+                    <div class="theme-item-header">
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                    </div>
+                    <div class="theme-item-lines">
+                        <div class="theme-item-line" style="width: 85%"></div>
+                        <div class="theme-item-line" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="theme-item-meta">
+                    <span class="theme-name">Forest Zen</span>
+                    <span class="theme-badge">Premium</span>
+                </div>
+            </div>
+            <div class="theme-item theme-item-5">
+                <div class="theme-item-content">
+                    <div class="theme-item-header">
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                        <div class="theme-item-dot"></div>
+                    </div>
+                    <div class="theme-item-lines">
+                        <div class="theme-item-line" style="width: 65%"></div>
+                        <div class="theme-item-line" style="width: 80%"></div>
+                    </div>
+                </div>
+                <div class="theme-item-meta">
+                    <span class="theme-name">Cosmic Purple</span>
+                    <span class="theme-badge">Premium</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="section-header">
+            <p class="section-label">Why ThemeGPT</p>
+            <h2 class="section-title">Simple. Beautiful. Yours.</h2>
+        </div>
+        <div class="features-row">
+            <div class="feature-card">
+                <span class="feature-emoji">🎨</span>
+                <h3 class="feature-title">One-Click Magic</h3>
+                <p class="feature-desc">No coding, no CSS editing. Just browse, click, and watch your ChatGPT transform instantly.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-emoji">🔒</span>
+                <h3 class="feature-title">Privacy First</h3>
+                <p class="feature-desc">We never read or store your conversations. Your chats stay completely private.</p>
+            </div>
+            <div class="feature-card">
+                <span class="feature-emoji">✨</span>
+                <h3 class="feature-title">Designer Quality</h3>
+                <p class="feature-desc">Each theme is crafted by real designers—not generated by AI. Quality you can feel.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing" id="pricing">
+        <div class="pricing-blobs">
+            <div class="pricing-blob pricing-blob-1"></div>
+            <div class="pricing-blob pricing-blob-2"></div>
+        </div>
+        <div class="pricing-content">
+            <div class="section-header">
+                <p class="section-label">Pricing</p>
+                <h2 class="section-title">Start free, upgrade anytime</h2>
+            </div>
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <h3 class="pricing-name">Single Theme</h3>
+                    <div class="pricing-amount">$0.99</div>
+                    <p class="pricing-period">one-time purchase</p>
+                    <ul class="pricing-list">
+                        <li>Choose any premium theme</li>
+                        <li>Keep it forever</li>
+                        <li>Free updates included</li>
+                    </ul>
+                    <button class="pricing-btn">Buy a Theme</button>
+                </div>
+                <div class="pricing-card featured">
+                    <span class="pricing-popular">Best Value</span>
+                    <h3 class="pricing-name">Infinite Style</h3>
+                    <div class="pricing-amount">$1.99</div>
+                    <p class="pricing-period">per month</p>
+                    <ul class="pricing-list">
+                        <li>Access all themes</li>
+                        <li>New themes every month</li>
+                        <li>Seasonal exclusives</li>
+                        <li>Priority support</li>
+                    </ul>
+                    <button class="pricing-btn">Get Started</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-brand">
+            <div class="footer-mascot"></div>
+            <span class="footer-logo">ThemeGPT</span>
+        </div>
+        <div class="footer-links">
+            <a href="#" class="footer-link">Privacy</a>
+            <a href="#" class="footer-link">Terms</a>
+            <a href="#" class="footer-link">Support</a>
+            <a href="#" class="footer-link">Chrome Web Store</a>
+        </div>
+        <p class="footer-copy">© 2025 ThemeGPT. Made with ☕ for ChatGPT fans everywhere.</p>
+    </footer>
+
+    <script>
+        // Custom cursor
+        const cursor = document.getElementById('cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add hover class to cursor on interactive elements
+        const interactives = document.querySelectorAll('a, button, .theme-item, .floating-card, .feature-card, .pricing-card');
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('nav');
+            nav.classList.toggle('scrolled', window.scrollY > 50);
+        });
+
+        // Intersection Observer for fade-in animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        // Animate theme items
+        document.querySelectorAll('.theme-item').forEach((item, i) => {
+            item.style.opacity = '0';
+            item.style.transform = 'translateY(30px)';
+            item.style.transition = `all 0.5s ease ${i * 0.1}s`;
+            observer.observe(item);
+        });
+
+        // Animate feature cards
+        document.querySelectorAll('.feature-card').forEach((card, i) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `all 0.4s ease ${i * 0.15}s`;
+            observer.observe(card);
+        });
+
+        // Animate pricing cards
+        document.querySelectorAll('.pricing-card').forEach((card, i) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `all 0.5s ease ${i * 0.2}s`;
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>

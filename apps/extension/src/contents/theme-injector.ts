@@ -38,6 +38,22 @@ function isContextValid(): boolean {
   }
 }
 
+/**
+ * Check if a hex color is "light" (high luminance)
+ * Used to determine if a theme needs light text on dark backgrounds
+ */
+function isLightColor(hex: string): boolean {
+  // Remove # if present
+  const color = hex.replace('#', '')
+  // Parse RGB values
+  const r = parseInt(color.substring(0, 2), 16)
+  const g = parseInt(color.substring(2, 4), 16)
+  const b = parseInt(color.substring(4, 6), 16)
+  // Calculate relative luminance (simple formula)
+  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255
+  return luminance > 0.5
+}
+
 // Local CSS generator implementations removed - using @themegpt/shared (R1-R3)
 // See packages/shared/src/css/generators.ts for implementations
 
@@ -279,6 +295,11 @@ function applyTheme(theme: Theme | null): void {
 
   // Toggle High Contrast class for special styling parity with the preview tool.
   document.documentElement.classList.toggle('themegpt-high-contrast', theme.id === 'high-contrast')
+
+  // Toggle Light Theme class for ensuring dark backgrounds get light text
+  const bgColor = theme.colors['--cgpt-bg']
+  const isLightTheme = bgColor ? isLightColor(bgColor) : false
+  document.documentElement.classList.toggle('themegpt-light', isLightTheme)
 
   // Look up current theme definition for latest properties (overlays, patterns)
   // This ensures stored themes get new features without re-selection
@@ -590,6 +611,60 @@ div:has(> pre) > div:first-child {
   color: var(--cgpt-text-muted) !important;
 }
 
+/* ============================================
+   LIGHT THEME: Ensure dark backgrounds get light text
+   For light themes like ThemeGPT Light, any element with
+   a dark background should have readable light text
+   ============================================ */
+
+/* Light theme: Any element with dark bg-* classes needs light text */
+html.themegpt-light [class*="bg-black"],
+html.themegpt-light [class*="bg-gray-950"],
+html.themegpt-light [class*="bg-gray-900"],
+html.themegpt-light [class*="bg-gray-800"],
+html.themegpt-light [class*="bg-zinc-950"],
+html.themegpt-light [class*="bg-zinc-900"],
+html.themegpt-light [class*="bg-zinc-800"],
+html.themegpt-light [class*="bg-slate-950"],
+html.themegpt-light [class*="bg-slate-900"],
+html.themegpt-light [class*="bg-slate-800"],
+html.themegpt-light [class*="bg-neutral-950"],
+html.themegpt-light [class*="bg-neutral-900"],
+html.themegpt-light [class*="bg-neutral-800"] {
+  color: #F5F5F5 !important;
+}
+
+/* Light theme: Code blocks with dark backgrounds */
+html.themegpt-light pre[class*="bg-black"],
+html.themegpt-light pre[class*="bg-gray-"],
+html.themegpt-light pre[class*="bg-zinc-"],
+html.themegpt-light code[class*="bg-black"],
+html.themegpt-light code[class*="bg-gray-"],
+html.themegpt-light code[class*="bg-zinc-"],
+html.themegpt-light div[class*="bg-black"] pre,
+html.themegpt-light div[class*="bg-black"] code,
+html.themegpt-light div[class*="bg-gray-950"] pre,
+html.themegpt-light div[class*="bg-gray-950"] code {
+  color: #F5F5F5 !important;
+}
+
+/* Light theme: Syntax highlighting tokens in dark code blocks */
+html.themegpt-light [class*="bg-black"] .hljs,
+html.themegpt-light [class*="bg-gray-950"] .hljs,
+html.themegpt-light [class*="bg-black"] [class*="token"],
+html.themegpt-light [class*="bg-gray-950"] [class*="token"],
+html.themegpt-light [class*="bg-black"] span,
+html.themegpt-light [class*="bg-gray-950"] span {
+  color: inherit !important;
+}
+
+/* Light theme: Canvas/artifact dark containers */
+html.themegpt-light [data-testid="canvas-preview"][class*="dark"],
+html.themegpt-light [data-testid="artifact"][class*="dark"],
+html.themegpt-light [class*="artifact"][class*="dark"] {
+  color: #F5F5F5 !important;
+}
+
 /* Composer (High Contrast only): transparent input + bordered container to match preview */
 html.themegpt-high-contrast form:has(#prompt-textarea),
 html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) {
@@ -714,6 +789,7 @@ function removeTheme(): void {
     styleElement = null
   }
   document.documentElement.classList.remove('themegpt-high-contrast')
+  document.documentElement.classList.remove('themegpt-light')
   // Remove effects layer
   const effectsLayer = document.getElementById('themegpt-effects')
   if (effectsLayer) effectsLayer.remove()

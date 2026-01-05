@@ -66,13 +66,13 @@ export function PricingSection({
             className="text-[clamp(2rem,4vw,3rem)] font-semibold tracking-tight"
             style={{ fontFamily: "var(--font-fraunces), serif" }}
           >
-            Start free, upgrade anytime
+            Choose Your Plan
           </h2>
         </div>
 
         {/* Pricing Cards */}
         <div className="flex flex-col lg:flex-row justify-center gap-6 flex-wrap max-w-[1100px] mx-auto">
-          {/* Single Theme Card */}
+          {/* Monthly Subscription Card */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -85,116 +85,17 @@ export function PricingSection({
               className="text-[1.25rem] font-semibold mb-2"
               style={{ fontFamily: "var(--font-fraunces), serif" }}
             >
-              Single Theme
+              Monthly
             </h3>
-            <div className="text-[2.5rem] font-bold mb-1">$0.99</div>
-            <p className="opacity-60 text-[0.85rem] mb-5">one-time purchase</p>
-
-            {/* Theme Selector */}
-            <label
-              htmlFor="theme-select"
-              className="block text-sm font-medium mb-2 text-left"
-              style={{ color: "#7A6555" }}
+            <div className="text-[2.5rem] font-bold mb-1">
+              $1.99<span className="text-base font-normal opacity-60">/mo</span>
+            </div>
+            <p
+              className="text-[0.85rem] font-medium mb-5"
+              style={{ color: "#5BB5A2" }}
             >
-              Select Theme
-            </label>
-            <select
-              id="theme-select"
-              value={selectedTheme}
-              onChange={(e) => onThemeChange(e.target.value)}
-              className="w-full mb-5 py-2.5 px-3 rounded-lg border focus:outline-none focus:ring-2"
-              style={{
-                borderColor: "rgba(74, 55, 40, 0.2)",
-                color: "#4A3728",
-              }}
-            >
-              {PREMIUM_THEMES.map((theme) => (
-                <option key={theme.id} value={theme.id}>
-                  {theme.name} {hasAnimatedEffects(theme) ? "✨" : ""}
-                </option>
-              ))}
-            </select>
-
-            <motion.ul
-              className="text-left mb-6 space-y-2"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                visible: { transition: { staggerChildren: 0.08 } },
-              }}
-            >
-              {["Choose any premium theme", "Keep it forever", "Free updates included"].map(
-                (item) => (
-                  <motion.li
-                    key={item}
-                    className="flex items-center gap-2.5 text-[0.9rem]"
-                    variants={{
-                      hidden: { opacity: 0, x: -10 },
-                      visible: { opacity: 1, x: 0 },
-                    }}
-                  >
-                    <motion.span
-                      className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
-                      style={{ background: "#5BB5A2" }}
-                      variants={{
-                        hidden: { scale: 0 },
-                        visible: { scale: 1 },
-                      }}
-                      transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                    >
-                      ✓
-                    </motion.span>
-                    {item}
-                  </motion.li>
-                )
-              )}
-            </motion.ul>
-
-            <button
-              onClick={() => onCheckout("single", selectedTheme)}
-              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                background: "#4A3728",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-              }}
-            >
-              Buy a Theme
-            </button>
-          </motion.div>
-
-          {/* Yearly Subscription Card (Featured - Best Value) */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="relative rounded-[28px] p-8 w-full lg:w-[320px] text-center transition-all duration-400 hover:-translate-y-2.5"
-            style={{
-              background: "#4A3728",
-              color: "#FDF8F3",
-              boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)",
-            }}
-          >
-            {/* Best Value Badge - Floating Animation */}
-            <span
-              className="absolute -top-3.5 left-1/2 px-4 py-1.5 rounded-full text-[0.75rem] font-semibold uppercase tracking-wider text-white"
-              style={{
-                background: "#E8A87C",
-                animation: "badgeFloat 3s ease-in-out infinite, badgeGlow 3s ease-in-out infinite",
-              }}
-            >
-              Best Value
-            </span>
-
-            <h3
-              className="text-[1.25rem] font-semibold mb-2"
-              style={{ fontFamily: "var(--font-fraunces), serif" }}
-            >
-              Yearly Pass
-            </h3>
-            <div className="text-[2.5rem] font-bold mb-1">$14.99</div>
-            <p className="opacity-60 text-[0.85rem] mb-5">per year</p>
+              First month free
+            </p>
 
             <motion.ul
               className="text-left mb-6 space-y-2"
@@ -207,77 +108,8 @@ export function PricingSection({
             >
               {[
                 "30-day free trial",
-                "Access to 3 premium themes",
+                "3 active premium themes",
                 "Swap themes anytime",
-                "All future updates included",
-              ].map((item) => (
-                <motion.li
-                  key={item}
-                  className="flex items-center gap-2.5 text-[0.9rem]"
-                  variants={{
-                    hidden: { opacity: 0, x: -10 },
-                    visible: { opacity: 1, x: 0 },
-                  }}
-                >
-                  <motion.span
-                    className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
-                    style={{ background: "#E8A87C" }}
-                    variants={{
-                      hidden: { scale: 0 },
-                      visible: { scale: 1 },
-                    }}
-                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
-                  >
-                    ✓
-                  </motion.span>
-                  {item}
-                </motion.li>
-              ))}
-            </motion.ul>
-
-            <button
-              onClick={() => onCheckout("yearly")}
-              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                background: "#E8A87C",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-              }}
-            >
-              Start Free Trial
-            </button>
-          </motion.div>
-
-          {/* Monthly Subscription Card */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="bg-white rounded-[28px] p-8 w-full lg:w-[320px] text-center transition-all duration-400 hover:-translate-y-2.5"
-            style={{ boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)" }}
-          >
-            <h3
-              className="text-[1.25rem] font-semibold mb-2"
-              style={{ fontFamily: "var(--font-fraunces), serif" }}
-            >
-              Monthly
-            </h3>
-            <div className="text-[2.5rem] font-bold mb-1">$1.99</div>
-            <p className="opacity-60 text-[0.85rem] mb-5">per month</p>
-
-            <motion.ul
-              className="text-left mb-6 space-y-2"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{
-                visible: { transition: { staggerChildren: 0.08 } },
-              }}
-            >
-              {[
-                "Access all themes",
-                "New themes every month",
-                "Seasonal exclusives",
                 "Cancel anytime",
               ].map((item) => (
                 <motion.li
@@ -312,7 +144,157 @@ export function PricingSection({
                 boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
               }}
             >
-              Subscribe Now
+              Start Free Month
+            </button>
+          </motion.div>
+
+          {/* Yearly Subscription Card (Featured - Best Value) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="relative rounded-[28px] p-8 w-full lg:w-[320px] text-center transition-all duration-400 hover:-translate-y-2.5"
+            style={{
+              background: "#4A3728",
+              color: "#FDF8F3",
+              boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)",
+            }}
+          >
+            {/* Best Value Badge - Floating Animation */}
+            <span
+              className="absolute -top-3.5 left-1/2 px-4 py-1.5 rounded-full text-[0.75rem] font-semibold uppercase tracking-wider text-white"
+              style={{
+                background: "#E8A87C",
+                animation: "badgeFloat 3s ease-in-out infinite, badgeGlow 3s ease-in-out infinite",
+              }}
+            >
+              Best Value
+            </span>
+
+            <h3
+              className="text-[1.25rem] font-semibold mb-2"
+              style={{ fontFamily: "var(--font-fraunces), serif" }}
+            >
+              Yearly
+            </h3>
+            <div className="text-[2.5rem] font-bold mb-1">
+              $14.99<span className="text-base font-normal opacity-60">/yr</span>
+            </div>
+            <p
+              className="text-[0.85rem] font-medium mb-5"
+              style={{ color: "#E8A87C" }}
+            >
+              Lifetime access for early adopters
+            </p>
+
+            <motion.ul
+              className="text-left mb-6 space-y-2"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{
+                visible: { transition: { staggerChildren: 0.08 } },
+              }}
+            >
+              {[
+                { text: "Lifetime access potential", icon: "★", color: "#E8A87C" },
+                { text: "3 active premium themes", icon: "✓", color: "#E8A87C" },
+                { text: "Swap themes anytime", icon: "✓", color: "#E8A87C" },
+                { text: "All future theme updates", icon: "✓", color: "#E8A87C" },
+              ].map((item) => (
+                <motion.li
+                  key={item.text}
+                  className="flex items-center gap-2.5 text-[0.9rem]"
+                  variants={{
+                    hidden: { opacity: 0, x: -10 },
+                    visible: { opacity: 1, x: 0 },
+                  }}
+                >
+                  <motion.span
+                    className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[0.7rem] font-bold flex-shrink-0"
+                    style={{ background: item.color }}
+                    variants={{
+                      hidden: { scale: 0 },
+                      visible: { scale: 1 },
+                    }}
+                    transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  >
+                    {item.icon}
+                  </motion.span>
+                  {item.text}
+                </motion.li>
+              ))}
+            </motion.ul>
+
+            <button
+              onClick={() => onCheckout("yearly")}
+              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                background: "#E8A87C",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+              }}
+            >
+              Get Lifetime Access
+            </button>
+          </motion.div>
+
+          {/* Single Theme Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="bg-white rounded-[28px] p-8 w-full lg:w-[320px] text-center transition-all duration-400 hover:-translate-y-2.5"
+            style={{ boxShadow: "0 12px 40px rgba(74, 55, 40, 0.08)" }}
+          >
+            <h3
+              className="text-[1.25rem] font-semibold mb-2"
+              style={{ fontFamily: "var(--font-fraunces), serif" }}
+            >
+              Single Theme
+            </h3>
+            <div className="text-[2.5rem] font-bold mb-1">
+              $0.99<span className="text-base font-normal opacity-60">/ea</span>
+            </div>
+            <p className="opacity-70 text-[0.85rem] mb-5">
+              Own a specific theme forever. One-time purchase, lifetime ownership.
+            </p>
+
+            {/* Theme Selector */}
+            <label
+              htmlFor="theme-select"
+              className="block text-sm font-medium mb-2 text-left"
+              style={{ color: "#7A6555" }}
+            >
+              Select Theme
+            </label>
+            <select
+              id="theme-select"
+              value={selectedTheme}
+              onChange={(e) => onThemeChange(e.target.value)}
+              className="w-full mb-5 py-2.5 px-3 rounded-lg border focus:outline-none focus:ring-2"
+              style={{
+                borderColor: "rgba(74, 55, 40, 0.2)",
+                color: "#4A3728",
+              }}
+            >
+              {PREMIUM_THEMES.map((theme) => (
+                <option key={theme.id} value={theme.id}>
+                  {theme.name} {hasAnimatedEffects(theme) ? "✨" : ""}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={() => onCheckout("single", selectedTheme)}
+              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                background: "#4A3728",
+                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+              }}
+            >
+              Buy Theme
             </button>
           </motion.div>
         </div>

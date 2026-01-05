@@ -665,6 +665,52 @@ html.themegpt-light [class*="artifact"][class*="dark"] {
   color: #F5F5F5 !important;
 }
 
+/* ============================================
+   LIGHT THEME COMPOSER: Semi-transparent cream
+   for visual harmony with the light theme
+   ============================================ */
+
+/* Light theme: Semi-transparent composer background */
+html.themegpt-light form:has(#prompt-textarea),
+html.themegpt-light form:has([data-testid="prompt-textarea"]) {
+  background: rgba(250, 246, 240, 0.85) !important;
+  border: 1px solid var(--cgpt-border) !important;
+  border-radius: 24px !important;
+}
+
+/* Override dark background classes on composer elements */
+html.themegpt-light form:has(#prompt-textarea) [class*="bg-black"],
+html.themegpt-light form:has(#prompt-textarea) [class*="bg-gray-"],
+html.themegpt-light form:has(#prompt-textarea) [class*="bg-zinc-"],
+html.themegpt-light form:has([data-testid="prompt-textarea"]) [class*="bg-black"],
+html.themegpt-light form:has([data-testid="prompt-textarea"]) [class*="bg-gray-"],
+html.themegpt-light form:has([data-testid="prompt-textarea"]) [class*="bg-zinc-"] {
+  background: transparent !important;
+}
+
+/* Ensure nested wrappers are also transparent */
+html.themegpt-light form:has(#prompt-textarea) > *,
+html.themegpt-light form:has([data-testid="prompt-textarea"]) > *,
+html.themegpt-light form:has(#prompt-textarea) > * > *,
+html.themegpt-light form:has([data-testid="prompt-textarea"]) > * > * {
+  background: transparent !important;
+}
+
+/* Ensure text area itself is transparent with proper text color */
+html.themegpt-light textarea#prompt-textarea,
+html.themegpt-light textarea[data-testid="prompt-textarea"],
+html.themegpt-light #prompt-textarea,
+html.themegpt-light [data-testid="prompt-textarea"] {
+  background: transparent !important;
+  color: var(--cgpt-text) !important;
+}
+
+/* Light theme: Placeholder text styling */
+html.themegpt-light textarea#prompt-textarea::placeholder,
+html.themegpt-light textarea[data-testid="prompt-textarea"]::placeholder {
+  color: var(--cgpt-text-muted) !important;
+}
+
 /* Composer (High Contrast only): transparent input + bordered container to match preview */
 html.themegpt-high-contrast form:has(#prompt-textarea),
 html.themegpt-high-contrast form:has([data-testid="prompt-textarea"]) {

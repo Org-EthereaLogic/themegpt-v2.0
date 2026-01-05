@@ -369,7 +369,7 @@ export function FeaturesSection() {
               boxShadow: "0 8px 24px rgba(91, 181, 162, 0.3)",
             }}
           >
-            Add to Chrome — Free
+            Add to Chrome — It's Free
           </a>
         </motion.div>
       </div>

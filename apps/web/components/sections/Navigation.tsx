@@ -59,7 +59,7 @@ export function Navigation() {
             boxShadow: "0 4px 16px rgba(91, 181, 162, 0.25)",
           }}
         >
-          Add to Chrome — Free
+          Get ThemeGPT Free
         </a>
       </div>
     </nav>

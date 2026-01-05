@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { OrganicBlob } from "@/components/ui/OrganicBlob";
+import { Button } from "@/components/ui/Button";
 import { DEFAULT_THEMES, type Theme } from "@themegpt/shared";
 
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
@@ -29,6 +31,17 @@ export function PricingSection({
   onCheckout,
   checkoutError,
 }: PricingSectionProps) {
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+
+  const handleCheckout = async (type: "yearly" | "monthly" | "single", themeId?: string) => {
+    setLoadingPlan(type);
+    try {
+      await onCheckout(type, themeId);
+    } finally {
+      setLoadingPlan(null);
+    }
+  };
+
   return (
     <section
       id="pricing"
@@ -136,16 +149,14 @@ export function PricingSection({
               ))}
             </motion.ul>
 
-            <button
-              onClick={() => onCheckout("monthly")}
-              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                background: "#4A3728",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-              }}
+            <Button
+              variant="brown"
+              onClick={() => handleCheckout("monthly")}
+              isLoading={loadingPlan === "monthly"}
+              loadingText="Processing..."
             >
               Start Free Month
-            </button>
+            </Button>
           </motion.div>
 
           {/* Yearly Subscription Card (Featured - Best Value) */}
@@ -227,16 +238,15 @@ export function PricingSection({
               ))}
             </motion.ul>
 
-            <button
-              onClick={() => onCheckout("yearly")}
-              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                background: "#E8A87C",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-              }}
+            <Button
+              variant="primary"
+              onClick={() => handleCheckout("yearly")}
+              isLoading={loadingPlan === "yearly"}
+              loadingText="Processing..."
+              className="w-full rounded-[14px]"
             >
               Get Lifetime Access
-            </button>
+            </Button>
           </motion.div>
 
           {/* Single Theme Card */}
@@ -286,16 +296,14 @@ export function PricingSection({
               ))}
             </select>
 
-            <button
-              onClick={() => onCheckout("single", selectedTheme)}
-              className="w-full py-3.5 rounded-[14px] font-semibold text-white transition-all duration-300 hover:scale-[1.02]"
-              style={{
-                background: "#4A3728",
-                boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-              }}
+            <Button
+              variant="brown"
+              onClick={() => handleCheckout("single", selectedTheme)}
+              isLoading={loadingPlan === "single"}
+              loadingText="Processing..."
             >
               Buy Theme
-            </button>
+            </Button>
           </motion.div>
         </div>
 

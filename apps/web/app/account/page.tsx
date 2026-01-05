@@ -6,6 +6,32 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { SubscriptionResponse, DownloadHistoryItem } from "@themegpt/shared";
 
+function Spinner({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      className={`animate-spin h-4 w-4 ${className}`}
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        strokeWidth="4"
+      />
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      />
+    </svg>
+  );
+}
+
 export default function AccountPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -13,6 +39,8 @@ export default function AccountPage() {
   const [history, setHistory] = useState<DownloadHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [redownloadingTheme, setRedownloadingTheme] = useState<string | null>(null);
+  const [generatingLinkCode, setGeneratingLinkCode] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -75,7 +103,7 @@ export default function AccountPage() {
           </div>
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="px-4 py-2 text-[#7D5A4A] hover:text-[#4B2E1E] transition-colors"
+            className="px-4 py-2 text-[#7D5A4A] hover:text-[#4B2E1E] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] rounded-lg"
           >
             Sign Out
           </button>
@@ -216,7 +244,7 @@ export default function AccountPage() {
               </p>
               <Link
                 href="/#pricing"
-                className="inline-block px-6 py-3 bg-[#7ECEC5] text-white font-medium rounded-lg hover:bg-[#6ABEB5] transition-colors"
+                className="inline-block px-6 py-3 bg-[#7ECEC5] text-white font-medium rounded-lg hover:bg-[#6ABEB5] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2]"
               >
                 Subscribe Now
               </Link>
@@ -251,9 +279,12 @@ export default function AccountPage() {
                       subscription.status === "canceled") && (
                       <button
                         onClick={() => handleRedownload(item.themeId)}
-                        className="px-4 py-2 text-sm text-[#7ECEC5] border border-[#7ECEC5] rounded-lg hover:bg-[#7ECEC5] hover:text-white transition-colors"
+                        disabled={redownloadingTheme !== null}
+                        aria-busy={redownloadingTheme === item.themeId}
+                        className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#7ECEC5] border border-[#7ECEC5] rounded-lg hover:bg-[#7ECEC5] hover:text-white transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#7ECEC5]"
                       >
-                        Re-download
+                        {redownloadingTheme === item.themeId && <Spinner />}
+                        {redownloadingTheme === item.themeId ? "Downloading..." : "Re-download"}
                       </button>
                     )}
                 </div>
@@ -277,9 +308,12 @@ export default function AccountPage() {
           </p>
           <button
             onClick={handleGenerateLinkCode}
-            className="px-4 py-2 bg-[#4B2E1E] text-white rounded-lg hover:bg-[#3A2317] transition-colors"
+            disabled={generatingLinkCode}
+            aria-busy={generatingLinkCode}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#4B2E1E] text-white rounded-lg hover:bg-[#3A2317] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Generate Link Code
+            {generatingLinkCode && <Spinner />}
+            {generatingLinkCode ? "Generating..." : "Generate Link Code"}
           </button>
         </div>
       </div>
@@ -287,6 +321,7 @@ export default function AccountPage() {
   );
 
   async function handleRedownload(themeId: string) {
+    setRedownloadingTheme(themeId);
     try {
       const response = await fetch("/api/download/redownload", {
         method: "POST",
@@ -305,10 +340,13 @@ export default function AccountPage() {
     } catch (err) {
       console.error(err);
       alert("An error occurred");
+    } finally {
+      setRedownloadingTheme(null);
     }
   }
 
   async function handleGenerateLinkCode() {
+    setGeneratingLinkCode(true);
     try {
       const response = await fetch("/api/link/generate", {
         method: "POST",
@@ -325,6 +363,8 @@ export default function AccountPage() {
     } catch (err) {
       console.error(err);
       alert("An error occurred");
+    } finally {
+      setGeneratingLinkCode(false);
     }
   }
 }

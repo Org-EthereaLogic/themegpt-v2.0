@@ -108,9 +108,12 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
       onClick={handleClick}
       className="group relative rounded-[20px] overflow-hidden cursor-pointer transition-all duration-400 hover:scale-[1.03] hover:z-10 aspect-[16/10]"
       style={{
+        border: isHovered
+          ? "2px solid rgba(255, 255, 255, 0.8)"
+          : "2px solid rgba(255, 255, 255, 0.4)",
         boxShadow: isHovered
-          ? `0 4px 8px rgba(74, 55, 40, 0.08), 0 16px 32px rgba(74, 55, 40, 0.12), 0 32px 48px rgba(74, 55, 40, 0.08), 0 0 0 2px ${accentColor}40`
-          : "0 8px 24px rgba(74, 55, 40, 0.08)",
+          ? "0 4px 8px rgba(74, 55, 40, 0.1), 0 16px 32px rgba(74, 55, 40, 0.15), 0 32px 48px rgba(74, 55, 40, 0.1)"
+          : "0 4px 12px rgba(74, 55, 40, 0.08), 0 8px 24px rgba(74, 55, 40, 0.1)",
       }}
     >
       {/* Image Container with Crossfade */}

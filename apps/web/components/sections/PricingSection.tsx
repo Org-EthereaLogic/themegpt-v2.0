@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { OrganicBlob } from "@/components/ui/OrganicBlob";
 import { Button } from "@/components/ui/Button";
 import { DEFAULT_THEMES, type Theme } from "@themegpt/shared";
 
@@ -45,27 +44,8 @@ export function PricingSection({
   return (
     <section
       id="pricing"
-      className="relative py-24 px-8 lg:px-16 overflow-hidden"
-      style={{ background: "#FFF9F2" }}
+      className="relative py-24 px-8 lg:px-16 overflow-hidden pricing-gradient animate-gradient-shift"
     >
-      {/* Background blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <OrganicBlob
-          color="teal"
-          size={400}
-          position={{ top: "-100px", left: "-100px" }}
-          blur={80}
-          opacity={0.3}
-        />
-        <OrganicBlob
-          color="coral"
-          size={300}
-          position={{ bottom: "-50px", right: "-50px" }}
-          blur={80}
-          opacity={0.3}
-        />
-      </div>
-
       <div className="relative z-10">
         {/* Section Header */}
         <div className="text-center mb-16">

@@ -17,9 +17,11 @@
   --color-teal: #5BB5A2;
   --color-teal-soft: #7BCBB9;
   --color-teal-bright: #3AA08C;
+  --color-teal-rgb: 91, 181, 162;
   --color-coral: #E8A87C;
   --color-coral-soft: #F4C4A0;
   --color-coral-bright: #E08A54;
+  --color-coral-rgb: 232, 168, 124;
   --color-brown: #4A3728;
   --color-brown-soft: #7A6555;
   --color-yellow: #F4E4BA;
@@ -248,11 +250,79 @@ body {
   }
 }
 
+/* Ambient glow pulse for Features section */
+@keyframes glowPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.ambient-glow {
+  background: radial-gradient(
+    circle,
+    rgba(var(--color-teal-rgb), 0.15) 0%,
+    transparent 70%
+  );
+}
+
+.ambient-glow-soft {
+  background: radial-gradient(
+    circle,
+    rgba(var(--color-teal-rgb), 0.12) 0%,
+    transparent 70%
+  );
+}
+
+.pricing-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-cream-warm) 0%,
+    rgba(var(--color-coral-rgb), 0.15) 25%,
+    rgba(var(--color-teal-rgb), 0.12) 50%,
+    rgba(var(--color-coral-rgb), 0.15) 75%,
+    var(--color-cream-warm) 100%
+  );
+  background-size: 400% 400%;
+}
+
+.animate-glow-pulse {
+  animation: glowPulse 8s ease-in-out infinite;
+}
+
+.animate-glow-pulse-delayed {
+  animation: glowPulse 8s ease-in-out infinite 4s;
+}
+
+.animate-gradient-shift {
+  animation: gradientShift 25s ease-in-out infinite;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .animate-ripple,
   [class*="animate-"] {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+
+  .animate-glow-pulse-delayed {
+    animation-delay: 0ms !important;
   }
 }

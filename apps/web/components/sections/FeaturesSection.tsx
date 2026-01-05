@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { OrganicBlob } from "@/components/ui/OrganicBlob";
 
 interface Feature {
   id: string;
@@ -265,22 +264,12 @@ export function FeaturesSection() {
       className="relative py-24 px-8 lg:px-16 overflow-hidden"
       style={{ background: "#FDF8F3" }}
     >
-      {/* Background decorative blobs */}
-      <div className="absolute inset-0 pointer-events-none">
-        <OrganicBlob
-          color="teal"
-          size={500}
-          position={{ top: "-150px", left: "-100px" }}
-          blur={80}
-          opacity={0.15}
-        />
-        <OrganicBlob
-          color="coral"
-          size={400}
-          position={{ bottom: "-100px", right: "-80px" }}
-          blur={80}
-          opacity={0.12}
-        />
+      {/* Ambient Glow Pulse Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Top-left teal glow */}
+        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] rounded-full ambient-glow animate-glow-pulse" />
+        {/* Bottom-right teal glow */}
+        <div className="absolute -bottom-[15%] -right-[10%] w-[45%] h-[45%] rounded-full ambient-glow-soft animate-glow-pulse-delayed" />
       </div>
 
       <div className="relative z-10">

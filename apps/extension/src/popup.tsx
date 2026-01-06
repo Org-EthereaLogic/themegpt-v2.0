@@ -242,22 +242,19 @@ export default function Popup() {
       <header className="flex items-center gap-3 p-4 border-b border-brown/10 bg-cream-warm sticky top-0 z-50">
         {/* Animated mascot matching website */}
         <div
-          className="w-8 h-8 relative animate-mascot-wobble"
+          className="w-8 h-8 rounded-full relative animate-mascot-wobble"
           style={{
             background: 'conic-gradient(from 0deg, #E8A87C 0deg, #5BB5A2 120deg, #F4E4BA 240deg, #E8A87C 360deg)',
           }}
         >
           <div className="absolute inset-[3px] rounded-full bg-cream flex flex-col items-center justify-center">
             {/* Eyes - smaller to match website logo */}
-            <div className="flex gap-[5px] -mt-0.5">
+            <div className="flex gap-[6px] mt-[2.5px]">
               <div className="w-1 h-1 rounded-full bg-brown animate-blink" />
               <div className="w-1 h-1 rounded-full bg-brown animate-blink" />
             </div>
             {/* Smile */}
-            <div
-              className="w-2.5 h-1 mt-0.5 border-b-[1.5px] border-brown rounded-b-full"
-              style={{ borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}
-            />
+            <div className="w-2.5 h-1 mt-[2.5px] border-b-[1.5px] border-brown rounded-b-full" />
           </div>
         </div>
         <h1 className="text-lg font-display font-semibold tracking-tight text-brown">ThemeGPT</h1>

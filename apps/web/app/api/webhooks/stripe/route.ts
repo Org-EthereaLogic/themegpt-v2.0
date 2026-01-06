@@ -2,6 +2,11 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { getStripe, TRIAL_DAYS } from "@/lib/stripe";
 import { db } from "@/lib/db";
+import {
+  sendSubscriptionConfirmationEmail,
+  sendThemePurchaseConfirmationEmail,
+  sendTrialEndingEmail,
+} from "@/lib/email";
 import { LicenseEntitlement, PlanType } from "@themegpt/shared";
 import { v4 as uuidv4 } from "uuid";
 import Stripe from "stripe";
@@ -152,6 +157,26 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   }
 
   console.log(`License created: ${licenseKey} for ${type}`);
+
+  // Send confirmation email
+  const customerEmail = session.customer_email || session.customer_details?.email;
+  if (customerEmail) {
+    if (isSubscription) {
+      // Determine the plan type for email
+      const emailPlanType = planType === "yearly"
+        ? (await db.getSubscriptionByUserId(userId || ""))?.isLifetime
+          ? "lifetime"
+          : "yearly"
+        : "monthly";
+      await sendSubscriptionConfirmationEmail(customerEmail, emailPlanType as "monthly" | "yearly" | "lifetime");
+    } else if (themeId) {
+      // Single theme purchase
+      const themeName = db.getThemeName(themeId);
+      await sendThemePurchaseConfirmationEmail(customerEmail, themeName);
+    }
+  } else {
+    console.warn("No customer email found for confirmation email");
+  }
 }
 
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
@@ -267,6 +292,13 @@ async function handleTrialWillEnd(subscription: Stripe.Subscription) {
 
   console.log(`Trial ending soon for subscription: ${dbSubscription.id}, user: ${dbSubscription.userId}`);
 
-  // Future: Send email reminder about trial ending
-  // Future: Can trigger early adopter conversion check here if needed
+  // Get customer email from Stripe
+  try {
+    const customer = await getStripe().customers.retrieve(subscription.customer as string);
+    if (!customer.deleted && customer.email) {
+      await sendTrialEndingEmail(customer.email, 3);
+    }
+  } catch (error) {
+    console.error("Error sending trial ending email:", error);
+  }
 }

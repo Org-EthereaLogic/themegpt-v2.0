@@ -96,7 +96,7 @@ export async function sendSubscriptionConfirmationEmail(
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
-                    <a href="https://themegpt.app/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.peach}; color: ${BRAND_COLORS.chocolate}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                    <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.peach}; color: ${BRAND_COLORS.chocolate}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
                       View Your Account
                     </a>
                   </td>
@@ -112,7 +112,7 @@ export async function sendSubscriptionConfirmationEmail(
                 You're receiving this email because you subscribed to ThemeGPT Premium.
               </p>
               <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
-                <a href="https://themegpt.app" style="color: ${BRAND_COLORS.chocolate}; text-decoration: none;">themegpt.app</a>
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.chocolate}; text-decoration: none;">themegpt.ai</a>
               </p>
             </td>
           </tr>
@@ -203,7 +203,7 @@ export async function sendThemePurchaseConfirmationEmail(
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
-                    <a href="https://themegpt.app/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.peach}; color: ${BRAND_COLORS.chocolate}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                    <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.peach}; color: ${BRAND_COLORS.chocolate}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
                       View Your Account
                     </a>
                   </td>
@@ -219,7 +219,7 @@ export async function sendThemePurchaseConfirmationEmail(
                 You're receiving this email because you purchased a ThemeGPT theme.
               </p>
               <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
-                <a href="https://themegpt.app" style="color: ${BRAND_COLORS.chocolate}; text-decoration: none;">themegpt.app</a>
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.chocolate}; text-decoration: none;">themegpt.ai</a>
               </p>
             </td>
           </tr>
@@ -307,7 +307,7 @@ export async function sendTrialEndingEmail(
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
-                    <a href="https://themegpt.app/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.peach}; color: ${BRAND_COLORS.chocolate}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                    <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.peach}; color: ${BRAND_COLORS.chocolate}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
                       Manage Subscription
                     </a>
                   </td>
@@ -323,7 +323,7 @@ export async function sendTrialEndingEmail(
                 You're receiving this email because you have an active ThemeGPT trial.
               </p>
               <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
-                <a href="https://themegpt.app" style="color: ${BRAND_COLORS.chocolate}; text-decoration: none;">themegpt.app</a>
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.chocolate}; text-decoration: none;">themegpt.ai</a>
               </p>
             </td>
           </tr>

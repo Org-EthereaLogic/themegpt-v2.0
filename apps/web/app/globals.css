@@ -314,6 +314,13 @@ body {
   animation: gradientShift 25s ease-in-out infinite;
 }
 
+/* ===== THEME PREVIEW IMAGE OPTIMIZATION ===== */
+/* Improves text clarity in theme screenshot previews */
+#themes img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .animate-ripple,

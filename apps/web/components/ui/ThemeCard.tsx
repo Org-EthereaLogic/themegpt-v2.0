@@ -1,29 +1,30 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { Theme } from "@themegpt/shared";
 
-// Screenshot mapping for theme previews
+// Screenshot mapping for theme previews (WebP for optimal compression)
 const THEME_SCREENSHOTS: Record<string, { home: string; content: string }> = {
   // Premium themes
-  "aurora-borealis": { home: "/themes/aurora_borealis_1.png", content: "/themes/aurora_borealis_2.png" },
-  "sunset-blaze": { home: "/themes/sunset_blaze_1.png", content: "/themes/sunset_blaze_2.png" },
-  "electric-dreams": { home: "/themes/electric_dreams_1.png", content: "/themes/electric_dreams_2.png" },
-  "woodland-retreat": { home: "/themes/woodland_retreat_1.png", content: "/themes/woodland_retreat_2.png" },
-  "frosted-windowpane": { home: "/themes/frosted_windowpane_1.png", content: "/themes/frosted_windowpane_2.png" },
-  "silent-night-starfield": { home: "/themes/silent_night_1.png", content: "/themes/silent_night_2.png" },
-  "synth-wave": { home: "/themes/synth_wave_1.png", content: "/themes/synth_wave_2.png" },
-  "shades-of-purple": { home: "/themes/shades_of_purple_1.png", content: "/themes/shades_of_purple_2.png" },
+  "aurora-borealis": { home: "/themes/aurora_borealis_1-lg.webp", content: "/themes/aurora_borealis_2-lg.webp" },
+  "sunset-blaze": { home: "/themes/sunset_blaze_1-lg.webp", content: "/themes/sunset_blaze_2-lg.webp" },
+  "electric-dreams": { home: "/themes/electric_dreams_1-lg.webp", content: "/themes/electric_dreams_2-lg.webp" },
+  "woodland-retreat": { home: "/themes/woodland_retreat_1-lg.webp", content: "/themes/woodland_retreat_2-lg.webp" },
+  "frosted-windowpane": { home: "/themes/frosted_windowpane_1-lg.webp", content: "/themes/frosted_windowpane_2-lg.webp" },
+  "silent-night-starfield": { home: "/themes/silent_night_1-lg.webp", content: "/themes/silent_night_2-lg.webp" },
+  "synth-wave": { home: "/themes/synth_wave_1-lg.webp", content: "/themes/synth_wave_2-lg.webp" },
+  "shades-of-purple": { home: "/themes/shades_of_purple_1-lg.webp", content: "/themes/shades_of_purple_2-lg.webp" },
   // Free themes
-  "themegpt-dark": { home: "/themes/themegpt_dark_1.png", content: "/themes/themegpt_dark_2.png" },
-  "themegpt-light": { home: "/themes/themegpt_light_1.png", content: "/themes/themegpt_light_2.png" },
-  "solarized-dark": { home: "/themes/solarized_dark_1.png", content: "/themes/solarized_dark_2.png" },
-  dracula: { home: "/themes/dracula_1.png", content: "/themes/dracula_2.png" },
-  "monokai-pro": { home: "/themes/monokai_pro_1.png", content: "/themes/monokai_pro_2.png" },
-  "high-contrast": { home: "/themes/high_contrast_1.png", content: "/themes/high_contrast_2.png" },
-  "one-dark": { home: "/themes/one_dark_1.png", content: "/themes/one_dark_2.png" },
+  "themegpt-dark": { home: "/themes/themegpt_dark_1-lg.webp", content: "/themes/themegpt_dark_2-lg.webp" },
+  "themegpt-light": { home: "/themes/themegpt_light_1-lg.webp", content: "/themes/themegpt_light_2-lg.webp" },
+  "solarized-dark": { home: "/themes/solarized_dark_1-lg.webp", content: "/themes/solarized_dark_2-lg.webp" },
+  dracula: { home: "/themes/dracula_1-lg.webp", content: "/themes/dracula_2-lg.webp" },
+  "monokai-pro": { home: "/themes/monokai_pro_1-lg.webp", content: "/themes/monokai_pro_2-lg.webp" },
+  "high-contrast": { home: "/themes/high_contrast_1-lg.webp", content: "/themes/high_contrast_2-lg.webp" },
+  "one-dark": { home: "/themes/one_dark_1-lg.webp", content: "/themes/one_dark_2-lg.webp" },
 };
 
 const LIGHT_THEMES = new Set(["frosted-windowpane", "themegpt-light"]);
@@ -69,6 +70,10 @@ function getThemeDescription(theme: Theme): { category: string; description: str
   };
 }
 
+// Responsive image sizes for optimal loading
+const IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw";
+const MODAL_IMAGE_SIZES = "(max-width: 768px) 95vw, 65vw";
+
 export interface ThemeCardProps {
   theme: Theme;
   index?: number;
@@ -76,8 +81,354 @@ export interface ThemeCardProps {
   onClick?: () => void;
 }
 
+// Expanded Modal Component
+interface ThemeModalProps {
+  theme: Theme;
+  isPremium: boolean;
+  screenshots: { home: string; content: string };
+  category: string;
+  description: string;
+  isLight: boolean;
+  onClose: () => void;
+}
+
+function ThemeModal({ theme, isPremium, screenshots, category, description, isLight, onClose }: ThemeModalProps) {
+  const [activeView, setActiveView] = useState<"home" | "content">("home");
+  const modalRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  const accentColor = isPremium ? "#E8A87C" : "#5BB5A2";
+  const textColor = isLight ? "#4A3728" : "white";
+  const subtleText = isLight ? "#7A6555" : "rgba(255,255,255,0.7)";
+
+  // Focus trap and ESC key handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+      // Focus trap - query inside handler to catch dynamically rendered elements
+      if (e.key === "Tab" && modalRef.current) {
+        const focusableElements = modalRef.current.querySelectorAll(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        );
+        const firstElement = focusableElements[0] as HTMLElement;
+        const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+        if (e.shiftKey && document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement?.focus();
+        } else if (!e.shiftKey && document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement?.focus();
+        }
+      }
+    };
+
+    // Lock body scroll - store original value for proper restoration
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus();
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  const handleCTAClick = () => {
+    onClose();
+    const pricingSection = document.getElementById("pricing");
+    if (pricingSection) {
+      setTimeout(() => {
+        pricingSection.scrollIntoView({ behavior: "smooth" });
+      }, 300);
+    }
+  };
+
+  // SSR guard - createPortal requires document.body
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-8"
+    >
+        {/* Backdrop - keyboard accessible */}
+        <motion.div
+          role="button"
+          tabIndex={0}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="absolute inset-0 cursor-pointer"
+          style={{
+            background: "radial-gradient(ellipse at center, rgba(74, 55, 40, 0.6) 0%, rgba(74, 55, 40, 0.85) 100%)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+          }}
+          onClick={onClose}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              onClose();
+            }
+          }}
+          aria-label="Close modal"
+        />
+
+        {/* Modal Container */}
+        <motion.div
+          ref={modalRef}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="modal-title"
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.95, y: 10 }}
+          transition={{
+            type: "spring",
+            stiffness: 400,
+            damping: 30,
+          }}
+          className="relative w-full max-w-[65vw] max-h-[90vh] overflow-hidden rounded-3xl"
+          style={{
+            background: isLight
+              ? "linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(253,248,243,0.98) 100%)"
+              : "linear-gradient(145deg, rgba(30,28,26,0.98) 0%, rgba(20,18,16,0.98) 100%)",
+            boxShadow: `
+              0 0 0 1px ${isLight ? "rgba(74, 55, 40, 0.1)" : "rgba(255,255,255,0.1)"},
+              0 25px 50px -12px rgba(0, 0, 0, 0.4),
+              0 0 80px ${accentColor}25
+            `,
+          }}
+        >
+          {/* Close Button */}
+          <motion.button
+            ref={closeButtonRef}
+            onClick={onClose}
+            className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200"
+            style={{
+              background: isLight ? "rgba(74, 55, 40, 0.1)" : "rgba(255,255,255,0.1)",
+              color: textColor,
+            }}
+            whileHover={{
+              scale: 1.1,
+              background: isLight ? "rgba(74, 55, 40, 0.2)" : "rgba(255,255,255,0.2)",
+            }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Close modal"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </motion.button>
+
+          {/* Content Layout */}
+          <div className="flex flex-col lg:flex-row">
+            {/* Image Section */}
+            <div className="relative lg:w-[65%] aspect-[16/10]">
+              {/* Home Image */}
+              <Image
+                src={screenshots.home}
+                alt={`${theme.name} home screen`}
+                fill
+                sizes={MODAL_IMAGE_SIZES}
+                quality={90}
+                priority
+                className={`object-cover transition-opacity duration-500 ${activeView === "home" ? "opacity-100" : "opacity-0"}`}
+              />
+              {/* Content Image */}
+              <Image
+                src={screenshots.content}
+                alt={`${theme.name} content view`}
+                fill
+                sizes={MODAL_IMAGE_SIZES}
+                quality={90}
+                className={`object-cover transition-opacity duration-500 ${activeView === "content" ? "opacity-100" : "opacity-0"}`}
+              />
+
+              {/* View Toggle Pills */}
+              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 p-1.5 rounded-full backdrop-blur-md"
+                style={{ background: isLight ? "rgba(255,255,255,0.85)" : "rgba(0,0,0,0.6)" }}
+              >
+                <button
+                  onClick={() => setActiveView("home")}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 ${
+                    activeView === "home" ? "text-white" : ""
+                  }`}
+                  style={{
+                    background: activeView === "home" ? accentColor : "transparent",
+                    color: activeView === "home" ? "white" : subtleText,
+                  }}
+                >
+                  Home View
+                </button>
+                <button
+                  onClick={() => setActiveView("content")}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 ${
+                    activeView === "content" ? "text-white" : ""
+                  }`}
+                  style={{
+                    background: activeView === "content" ? accentColor : "transparent",
+                    color: activeView === "content" ? "white" : subtleText,
+                  }}
+                >
+                  Content View
+                </button>
+              </div>
+            </div>
+
+            {/* Info Section */}
+            <div className="lg:w-[35%] p-6 lg:p-8 flex flex-col justify-between">
+              {/* Top: Theme Info */}
+              <div>
+                {/* Category Badge */}
+                <motion.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 }}
+                  className="inline-flex items-center gap-2 mb-4"
+                >
+                  <span
+                    className="px-3 py-1 rounded-full text-[0.7rem] font-bold uppercase tracking-wider"
+                    style={{ background: `${accentColor}20`, color: accentColor }}
+                  >
+                    {isPremium ? "Premium" : "Free"}
+                  </span>
+                  <span
+                    className="px-3 py-1 rounded-full text-[0.7rem] font-semibold uppercase tracking-wider"
+                    style={{
+                      background: isLight ? "rgba(74, 55, 40, 0.08)" : "rgba(255,255,255,0.1)",
+                      color: subtleText,
+                    }}
+                  >
+                    {category}
+                  </span>
+                </motion.div>
+
+                {/* Theme Name */}
+                <motion.h2
+                  id="modal-title"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                  className="text-2xl lg:text-3xl font-bold mb-3"
+                  style={{
+                    fontFamily: "var(--font-fraunces), serif",
+                    color: textColor,
+                  }}
+                >
+                  {theme.name}
+                </motion.h2>
+
+                {/* Description */}
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-base leading-relaxed mb-6"
+                  style={{ color: subtleText }}
+                >
+                  {description}
+                </motion.p>
+
+                {/* Features List */}
+                <motion.ul
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.25 }}
+                  className="space-y-2 mb-6"
+                >
+                  {[
+                    "Carefully crafted color palette",
+                    "Optimized for readability",
+                    isPremium ? "Exclusive animated effects" : "Instant activation",
+                  ].map((feature, i) => (
+                    <li key={i} className="flex items-center gap-2 text-sm" style={{ color: subtleText }}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ color: accentColor }}>
+                        <path d="M20 6L9 17l-5-5" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      {feature}
+                    </li>
+                  ))}
+                </motion.ul>
+              </div>
+
+              {/* Bottom: CTA Buttons */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="space-y-3"
+              >
+                {/* Primary CTA */}
+                <motion.button
+                  onClick={handleCTAClick}
+                  className="w-full py-4 px-6 rounded-2xl font-semibold text-base transition-all duration-300 flex items-center justify-center gap-2"
+                  style={{
+                    background: `linear-gradient(135deg, ${accentColor} 0%, ${isPremium ? "#d4956c" : "#4aa393"} 100%)`,
+                    color: "white",
+                    boxShadow: `0 4px 20px ${accentColor}40`,
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    boxShadow: `0 6px 30px ${accentColor}50`,
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  {isPremium ? (
+                    <>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M12 2L15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2z" />
+                      </svg>
+                      Subscribe to Unlock
+                    </>
+                  ) : (
+                    <>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" />
+                      </svg>
+                      Install Free Theme
+                    </>
+                  )}
+                </motion.button>
+
+                {/* Secondary CTA */}
+                <motion.button
+                  onClick={onClose}
+                  className="w-full py-3 px-6 rounded-xl font-medium text-sm transition-all duration-300"
+                  style={{
+                    background: isLight ? "rgba(74, 55, 40, 0.06)" : "rgba(255,255,255,0.08)",
+                    color: subtleText,
+                  }}
+                  whileHover={{
+                    background: isLight ? "rgba(74, 55, 40, 0.1)" : "rgba(255,255,255,0.12)",
+                  }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  Continue Browsing
+                </motion.button>
+              </motion.div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>,
+    document.body
+  );
+}
+
 export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: ThemeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const screenshots = getThemeScreenshots(theme.id);
   const { category, description } = getThemeDescription(theme);
   const isLight = isLightTheme(theme.id);
@@ -86,133 +437,186 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
   const textColor = isLight ? "#4A3728" : "white";
   const badgeBg = isLight ? "rgba(74, 55, 40, 0.15)" : "rgba(255,255,255,0.2)";
 
-  const handleClick = () => {
+  // Ensure client-side only rendering for portal
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const handleClick = useCallback(() => {
     if (onClick) {
       onClick();
     } else {
-      const pricingSection = document.getElementById("pricing");
-      if (pricingSection) {
-        pricingSection.scrollIntoView({ behavior: "smooth" });
-      }
+      setIsExpanded(true);
     }
-  };
+  }, [onClick]);
+
+  const handleClose = useCallback(() => {
+    setIsExpanded(false);
+  }, []);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.08 }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      onClick={handleClick}
-      className="group relative rounded-[20px] overflow-hidden cursor-pointer transition-all duration-400 hover:scale-[1.03] hover:z-10 aspect-[16/10]"
-      style={{
-        border: isHovered
-          ? "2px solid rgba(255, 255, 255, 0.8)"
-          : "2px solid rgba(255, 255, 255, 0.4)",
-        boxShadow: isHovered
-          ? "0 4px 8px rgba(74, 55, 40, 0.1), 0 16px 32px rgba(74, 55, 40, 0.15), 0 32px 48px rgba(74, 55, 40, 0.1)"
-          : "0 4px 12px rgba(74, 55, 40, 0.08), 0 8px 24px rgba(74, 55, 40, 0.1)",
-      }}
-    >
-      {/* Image Container with Crossfade */}
-      <div className="absolute inset-0">
-        {/* Home Image (default) */}
-        <Image
-          src={screenshots.home}
-          alt={`${theme.name} home screen`}
-          fill
-          className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-0" : "opacity-100"}`}
-        />
-        {/* Content Image (on hover) */}
-        <Image
-          src={screenshots.content}
-          alt={`${theme.name} content view`}
-          fill
-          className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
-        />
-      </div>
-
-      {/* Category Badge - Top Right */}
-      <div
-        className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-[0.7rem] font-semibold uppercase tracking-wider backdrop-blur-sm transition-all duration-300 ${
-          isHovered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
-        }`}
+    <>
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: index * 0.08 }}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onClick={handleClick}
+        className="group relative rounded-[20px] overflow-hidden cursor-pointer transition-all duration-400 hover:scale-[1.03] hover:z-10 aspect-[16/10]"
         style={{
-          background: badgeBg,
-          color: textColor,
+          border: isHovered
+            ? "2px solid rgba(255, 255, 255, 0.8)"
+            : "2px solid rgba(255, 255, 255, 0.4)",
+          boxShadow: isHovered
+            ? "0 4px 8px rgba(74, 55, 40, 0.1), 0 16px 32px rgba(74, 55, 40, 0.15), 0 32px 48px rgba(74, 55, 40, 0.1)"
+            : "0 4px 12px rgba(74, 55, 40, 0.08), 0 8px 24px rgba(74, 55, 40, 0.1)",
         }}
       >
-        {category}
-      </div>
+        {/* Image Container with Crossfade */}
+        <div className="absolute inset-0">
+          {/* Home Image (default) */}
+          <Image
+            src={screenshots.home}
+            alt={`${theme.name} home screen`}
+            fill
+            sizes={IMAGE_SIZES}
+            quality={90}
+            priority={index < 3}
+            className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-0" : "opacity-100"}`}
+          />
+          {/* Content Image (on hover) */}
+          <Image
+            src={screenshots.content}
+            alt={`${theme.name} content view`}
+            fill
+            sizes={IMAGE_SIZES}
+            quality={90}
+            className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
+          />
+        </div>
 
-      {/* Bottom Overlay - Hidden by default, expands on hover */}
-      <div
-        className={`absolute bottom-0 left-0 right-0 transition-all duration-400 ${
-          isHovered ? "h-[50%] opacity-100" : "h-0 opacity-0"
-        }`}
-        style={{
-          background: `linear-gradient(to top, ${isLight ? "rgba(255,255,255,0.95)" : "rgba(0,0,0,0.85)"} 0%, transparent 100%)`,
-        }}
-      >
-        <div className="absolute bottom-4 left-4 right-4">
-          {/* Theme Name */}
-          <motion.h3
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-            transition={{ duration: 0.3 }}
-            className="text-[1.1rem] font-semibold mb-1"
+        {/* Category Badge - Top Right */}
+        <div
+          className={`absolute top-3 right-3 px-3 py-1.5 rounded-full text-[0.7rem] font-semibold uppercase tracking-wider backdrop-blur-sm transition-all duration-300 ${
+            isHovered ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2"
+          }`}
+          style={{
+            background: badgeBg,
+            color: textColor,
+          }}
+        >
+          {category}
+        </div>
+
+        {/* "Click to Preview" indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isHovered ? 1 : 0 }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        >
+          <div
+            className="px-4 py-2 rounded-full backdrop-blur-md flex items-center gap-2"
             style={{
-              fontFamily: "var(--font-fraunces), serif",
-              color: textColor,
-              textShadow: isLight ? "none" : "0 2px 8px rgba(0,0,0,0.3)",
+              background: isLight ? "rgba(255,255,255,0.9)" : "rgba(0,0,0,0.7)",
             }}
           >
-            {theme.name}
-          </motion.h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={accentColor} strokeWidth="2">
+              <circle cx="11" cy="11" r="8" />
+              <path d="m21 21-4.35-4.35" />
+              <path d="M11 8v6M8 11h6" />
+            </svg>
+            <span className="text-xs font-semibold" style={{ color: textColor }}>
+              Click to Preview
+            </span>
+          </div>
+        </motion.div>
 
-          {/* Description - Only on Hover */}
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-            transition={{ duration: 0.3 }}
-            className="text-[0.85rem] mb-3 line-clamp-2"
-            style={{ color: isLight ? "#7A6555" : "rgba(255,255,255,0.8)" }}
-          >
-            {description}
-          </motion.p>
-
-          {/* Badge Row */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="flex items-center gap-2"
-          >
-            <span
-              className="px-2.5 py-1 rounded-md text-[0.65rem] font-semibold uppercase tracking-wider"
+        {/* Bottom Overlay - Hidden by default, expands on hover */}
+        <div
+          className={`absolute bottom-0 left-0 right-0 transition-all duration-400 ${
+            isHovered ? "h-[50%] opacity-100" : "h-0 opacity-0"
+          }`}
+          style={{
+            background: `linear-gradient(to top, ${isLight ? "rgba(255,255,255,0.95)" : "rgba(0,0,0,0.85)"} 0%, transparent 100%)`,
+          }}
+        >
+          <div className="absolute bottom-4 left-4 right-4">
+            {/* Theme Name */}
+            <motion.h3
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
+              transition={{ duration: 0.3 }}
+              className="text-[1.1rem] font-semibold mb-1"
               style={{
-                background: `${accentColor}30`,
-                color: accentColor,
+                fontFamily: "var(--font-fraunces), serif",
+                color: textColor,
+                textShadow: isLight ? "none" : "0 2px 8px rgba(0,0,0,0.3)",
               }}
             >
-              {isPremium ? "Premium" : "Free"}
-            </span>
+              {theme.name}
+            </motion.h3>
 
-            {/* View indicator on hover */}
-            <motion.span
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: isHovered ? 0.7 : 0, x: isHovered ? 0 : -10 }}
-              className="text-[0.7rem]"
-              style={{ color: textColor }}
+            {/* Description - Only on Hover */}
+            <motion.p
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
+              transition={{ duration: 0.3 }}
+              className="text-[0.85rem] mb-3 line-clamp-2"
+              style={{ color: isLight ? "#7A6555" : "rgba(255,255,255,0.8)" }}
             >
-              Content View
-            </motion.span>
-          </motion.div>
+              {description}
+            </motion.p>
+
+            {/* Badge Row */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: isHovered ? 1 : 0, y: isHovered ? 0 : 10 }}
+              transition={{ duration: 0.3, delay: 0.1 }}
+              className="flex items-center gap-2"
+            >
+              <span
+                className="px-2.5 py-1 rounded-md text-[0.65rem] font-semibold uppercase tracking-wider"
+                style={{
+                  background: `${accentColor}30`,
+                  color: accentColor,
+                }}
+              >
+                {isPremium ? "Premium" : "Free"}
+              </span>
+
+              {/* View indicator on hover */}
+              <motion.span
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: isHovered ? 0.7 : 0, x: isHovered ? 0 : -10 }}
+                className="text-[0.7rem]"
+                style={{ color: textColor }}
+              >
+                Content View
+              </motion.span>
+            </motion.div>
+          </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+
+      {/* Expanded Modal - AnimatePresence in parent for proper exit animations */}
+      {isMounted && (
+        <AnimatePresence>
+          {isExpanded && (
+            <ThemeModal
+              theme={theme}
+              isPremium={isPremium}
+              screenshots={screenshots}
+              category={category}
+              description={description}
+              isLight={isLight}
+              onClose={handleClose}
+            />
+          )}
+        </AnimatePresence>
+      )}
+    </>
   );
 }
 

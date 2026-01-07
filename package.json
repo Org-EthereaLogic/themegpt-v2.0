@@ -20,7 +20,8 @@
       "content-security-policy-parser": "^0.6.0",
       "svelte": "^4.2.20",
       "esbuild": "^0.25.0",
-      "tsup": "^8.0.1"
+      "tsup": "^8.0.1",
+      "preact": "^10.28.2"
     },
     "auditConfig": {
       "ignoreCves": [

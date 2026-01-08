@@ -1,7 +1,17 @@
 import { Resend } from "resend";
 
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy-initialized Resend client (avoids build-time errors)
+let resendClient: Resend | null = null;
+
+function getResend(): Resend {
+  if (!resendClient) {
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error("RESEND_API_KEY environment variable is not set");
+    }
+    resendClient = new Resend(process.env.RESEND_API_KEY);
+  }
+  return resendClient;
+}
 
 // Email sender configuration
 const EMAIL_FROM = process.env.EMAIL_FROM || "ThemeGPT <hello@themegpt.app>";
@@ -40,7 +50,7 @@ export async function sendSubscriptionConfirmationEmail(
   };
 
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: EMAIL_FROM,
       to,
       subject: `Welcome to ThemeGPT Premium! Your ${planNames[planType]} subscription is active`,
@@ -147,7 +157,7 @@ export async function sendThemePurchaseConfirmationEmail(
   themeName: string
 ): Promise<EmailResult> {
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: EMAIL_FROM,
       to,
       subject: `Your ThemeGPT purchase: ${themeName}`,
@@ -254,7 +264,7 @@ export async function sendTrialEndingEmail(
   daysRemaining: number = 3
 ): Promise<EmailResult> {
   try {
-    const { data, error } = await resend.emails.send({
+    const { data, error } = await getResend().emails.send({
       from: EMAIL_FROM,
       to,
       subject: `Your ThemeGPT trial ends in ${daysRemaining} days`,

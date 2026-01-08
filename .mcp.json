@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "cloud-run": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/cloud-run-mcp"],
+      "env": {
+        "GOOGLE_CLOUD_REGION": "us-central1",
+        "DEFAULT_SERVICE_NAME": "themegpt-web"
+      }
+    }
+  }
+}

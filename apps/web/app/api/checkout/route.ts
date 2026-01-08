@@ -17,8 +17,13 @@ function sanitizeForLog(input: unknown, maxLength = 100): string {
     .substring(0, maxLength);
 }
 
+const getAllowedOrigin = () => {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
+  return appUrl;
+};
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": getAllowedOrigin(),
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };

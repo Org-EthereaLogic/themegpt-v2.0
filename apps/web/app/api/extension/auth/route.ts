@@ -5,8 +5,13 @@ import { SignJWT } from "jose";
 import { getStripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 
+const getAllowedOrigin = () => {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
+  return appUrl;
+};
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": getAllowedOrigin(),
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
@@ -105,7 +110,6 @@ async function linkStripeSubscription(userId: string, email: string) {
       // Already linked, update with this user if different
       if (existingDbSub.userId !== userId) {
         await db.updateSubscription(existingDbSub.id, { userId });
-        console.log(`Subscription ${existingDbSub.id} linked to user ${userId}`);
       }
       return;
     }
@@ -145,8 +149,6 @@ async function linkStripeSubscription(userId: string, email: string) {
         : null,
       isLifetime,
     });
-
-    console.log(`Created subscription record for user ${userId} from Stripe`);
   } catch (error) {
     console.error("Error linking Stripe subscription:", error);
   }

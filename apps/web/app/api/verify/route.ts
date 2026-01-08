@@ -2,8 +2,13 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { VerifyResponse } from "@themegpt/shared";
 
+const getAllowedOrigin = () => {
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
+  return appUrl;
+};
+
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Origin": getAllowedOrigin(),
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };

@@ -9,12 +9,9 @@ import { Storage } from "@plasmohq/storage"
 
 const storage = new Storage({ area: "local" })
 
-console.log("[ThemeGPT] Background service worker initialized")
-
 // Handle external messages from themegpt.app
 chrome.runtime.onMessageExternal.addListener(
   (message, sender, sendResponse) => {
-    console.log("[ThemeGPT] External message received:", message.type, "from:", sender.url)
 
     // Verify sender is from our trusted domains
     const allowedOrigins = [
@@ -23,7 +20,6 @@ chrome.runtime.onMessageExternal.addListener(
     ]
     const senderOrigin = sender.url ? new URL(sender.url).origin : ""
     if (!allowedOrigins.includes(senderOrigin)) {
-      console.warn("[ThemeGPT] Rejected message from untrusted origin:", senderOrigin)
       sendResponse({ success: false, error: "Untrusted origin" })
       return true
     }
@@ -43,7 +39,6 @@ chrome.runtime.onMessageExternal.addListener(
         if (message.token) {
           storage.set("authToken", message.token)
             .then(() => {
-              console.log("[ThemeGPT] Auth token saved successfully")
               // Notify any open popup about the new token
               chrome.runtime.sendMessage({
                 type: "auth-token-updated",

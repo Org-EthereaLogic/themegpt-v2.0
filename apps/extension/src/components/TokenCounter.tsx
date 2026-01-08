@@ -2,6 +2,11 @@ import { useState, useEffect } from "react"
 import { Storage } from "@plasmohq/storage"
 import { MSG_GET_TOKENS, MSG_TOKEN_UPDATE, STORAGE_TOKEN_ENABLED, type TokenStats } from "@themegpt/shared"
 
+interface ChromeMessage {
+    type: string;
+    payload?: TokenStats;
+}
+
 const storage = new Storage({ area: "local" })
 
 /**
@@ -52,7 +57,7 @@ export function TokenCounter() {
         // Initial fetch
         fetchStats()
 
-        const listener = (message: any) => {
+        const listener = (message: ChromeMessage) => {
             if (message.type === MSG_TOKEN_UPDATE && message.payload) {
                 setStats(message.payload)
             }

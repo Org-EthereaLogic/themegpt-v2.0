@@ -15,10 +15,18 @@ export function getStripe(): Stripe {
   return _stripe;
 }
 
+const getRequiredEnv = (name: string): string => {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+};
+
 export const STRIPE_PRICES = {
-  monthly: process.env.STRIPE_SUBSCRIPTION_PRICE_ID || "", // $6.99/mo - Full premium access
-  yearly: process.env.STRIPE_YEARLY_PRICE_ID || "", // $69.99/yr - Full premium access (17% savings)
-  singleTheme: process.env.STRIPE_SINGLE_THEME_PRICE_ID || "", // $3.99/ea - Permanent single theme unlock
+  monthly: getRequiredEnv("STRIPE_SUBSCRIPTION_PRICE_ID"), // $6.99/mo - Full premium access
+  yearly: getRequiredEnv("STRIPE_YEARLY_PRICE_ID"), // $69.99/yr - Full premium access (17% savings)
+  singleTheme: getRequiredEnv("STRIPE_SINGLE_THEME_PRICE_ID"), // $3.99/ea - Permanent single theme unlock
 };
 
 // Early Adopter Program Configuration

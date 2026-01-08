@@ -140,7 +140,7 @@ export async function sendSubscriptionConfirmationEmail(
       return { success: false, error: error.message };
     }
 
-    console.log(`Subscription confirmation email sent to ${to}, messageId: ${data?.id}`);
+    console.log(`Subscription confirmation email sent, messageId: ${data?.id}`);
     return { success: true, messageId: data?.id };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -248,7 +248,7 @@ export async function sendThemePurchaseConfirmationEmail(
       return { success: false, error: error.message };
     }
 
-    console.log(`Theme purchase confirmation email sent to ${to}, messageId: ${data?.id}`);
+    console.log(`Theme purchase confirmation email sent, messageId: ${data?.id}`);
     return { success: true, messageId: data?.id };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
@@ -353,7 +353,7 @@ export async function sendTrialEndingEmail(
       return { success: false, error: error.message };
     }
 
-    console.log(`Trial ending email sent to ${to}, messageId: ${data?.id}`);
+    console.log(`Trial ending email sent, messageId: ${data?.id}`);
     return { success: true, messageId: data?.id };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";

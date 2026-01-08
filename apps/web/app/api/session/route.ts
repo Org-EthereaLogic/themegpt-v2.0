@@ -22,22 +22,58 @@ export async function GET(request: Request) {
       );
     }
 
-    // Get the license key from customer metadata (set by webhook)
+    // For subscriptions, check if subscription exists and is active
+    if (session.mode === "subscription" && session.subscription) {
+      const subscription = await getStripe().subscriptions.retrieve(
+        session.subscription as string
+      );
+
+      if (subscription.status === "active" || subscription.status === "trialing") {
+        // Determine plan type from metadata or subscription interval
+        const planType = session.metadata?.planType ||
+          (subscription.items.data[0]?.plan?.interval === "year" ? "yearly" : "monthly");
+
+        // Check for early adopter lifetime status
+        const isLifetime = session.metadata?.isEarlyAdopterEligible === "true" &&
+          planType === "yearly";
+
+        return NextResponse.json({
+          success: true,
+          planType,
+          isLifetime,
+          userEmail: session.customer_details?.email,
+        });
+      }
+    }
+
+    // For single theme purchases, check license key in customer metadata
     if (session.customer) {
       const customer = await getStripe().customers.retrieve(session.customer as string);
       if (!customer.deleted && customer.metadata?.licenseKey) {
         return NextResponse.json({
           success: true,
           licenseKey: customer.metadata.licenseKey,
+          planType: "single",
+          themeId: session.metadata?.themeId,
+          themeName: session.metadata?.themeName,
         });
       }
     }
 
-    // If webhook hasn't processed yet, return pending
+    // If webhook hasn't processed yet for single purchase, return pending
+    if (session.mode === "payment") {
+      return NextResponse.json({
+        success: true,
+        pending: true,
+        message: "License key is being generated. Please refresh in a moment.",
+      });
+    }
+
+    // Subscription exists but status is unexpected - still return success
     return NextResponse.json({
       success: true,
-      pending: true,
-      message: "License key is being generated. Please refresh in a moment.",
+      planType: session.metadata?.planType || "monthly",
+      userEmail: session.customer_details?.email,
     });
   } catch (error) {
     console.error("Session retrieval error:", error);

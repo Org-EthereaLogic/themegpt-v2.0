@@ -139,7 +139,7 @@ function SuccessContent() {
               unoptimized
             />
           </div>
-          <h1 className="text-2xl font-bold mb-4 text-teal-600">Processing Payment...</h1>
+          <h1 className="text-2xl font-bold mb-4 text-teal">Processing Payment...</h1>
           <p className="opacity-80">Please wait while we activate your subscription.</p>
         </div>
       </div>
@@ -166,13 +166,13 @@ function SuccessContent() {
       <div className="min-h-screen bg-cream font-sans text-brown-900 flex flex-col items-center justify-center p-8 text-center">
         <div className="bg-white p-8 rounded-[30px] shadow-[0_8px_32px_rgba(75,46,30,0.1)] max-w-md w-full">
           <div className="mb-6 flex justify-center">
-            <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center">
+            <div className="w-16 h-16 bg-teal rounded-full flex items-center justify-center">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
           </div>
-          <h1 className="text-2xl font-bold mb-4 text-teal-600">Theme Purchased!</h1>
+          <h1 className="text-2xl font-bold mb-4 text-teal">Theme Purchased!</h1>
           <p className="mb-6 opacity-80">
             You now own <strong>{sessionData.themeName || 'your theme'}</strong> forever.
           </p>
@@ -195,14 +195,14 @@ function SuccessContent() {
           )}
 
           {extensionInstalled === true && !extensionConnected && (
-            <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-              <h3 className="font-semibold text-teal-700 mb-2">Connect Your Extension</h3>
-              <p className="text-sm text-teal-600 mb-3">
+            <div className="bg-teal/10 p-4 rounded-xl border border-teal/30 mb-6">
+              <h3 className="font-semibold text-brown mb-2">Connect Your Extension</h3>
+              <p className="text-sm text-brown/70 mb-3">
                 Sign in to access your purchased theme.
               </p>
               <Link
                 href="/auth/extension"
-                className="inline-block bg-teal-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-teal-600 transition-colors"
+                className="inline-block bg-coral text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
               >
                 Connect Now
               </Link>
@@ -210,9 +210,9 @@ function SuccessContent() {
           )}
 
           {extensionInstalled === true && extensionConnected && (
-            <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-              <p className="text-sm text-teal-700 flex items-center justify-center gap-2">
-                <span className="w-2 h-2 bg-teal-500 rounded-full"></span>
+            <div className="bg-teal/10 p-4 rounded-xl border border-teal/30 mb-6">
+              <p className="text-sm text-brown flex items-center justify-center gap-2">
+                <span className="w-2 h-2 bg-teal rounded-full"></span>
                 Extension connected! Open the extension to use your theme.
               </p>
             </div>
@@ -231,19 +231,19 @@ function SuccessContent() {
     <div className="min-h-screen bg-cream font-sans text-brown-900 flex flex-col items-center justify-center p-8 text-center">
       <div className="bg-white p-8 rounded-[30px] shadow-[0_8px_32px_rgba(75,46,30,0.1)] max-w-md w-full">
         <div className="mb-6 flex justify-center">
-          <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center">
+          <div className="w-16 h-16 bg-teal rounded-full flex items-center justify-center">
             <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>
           </div>
         </div>
 
-        <h1 className="text-2xl font-bold mb-2 text-teal-600">
+        <h1 className="text-2xl font-bold mb-2 text-teal">
           {sessionData?.isLifetime ? 'Lifetime Access Activated!' : 'Subscription Active!'}
         </h1>
 
         {sessionData?.isLifetime && (
-          <div className="inline-block bg-gradient-to-r from-teal-500 to-teal-600 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
+          <div className="inline-block bg-gradient-to-r from-teal to-teal/80 text-white text-xs font-bold px-3 py-1 rounded-full mb-4">
             Early Adopter - Lifetime Member
           </div>
         )}
@@ -258,20 +258,20 @@ function SuccessContent() {
 
         {/* Extension not installed - prominent download CTA */}
         {extensionInstalled === false && (
-          <div className="bg-gradient-to-br from-teal-50 to-amber-50 p-5 rounded-xl border-2 border-teal-200 mb-6">
+          <div className="bg-gradient-to-br from-teal/10 to-coral/10 p-5 rounded-xl border-2 border-teal/30 mb-6">
             <div className="flex items-center justify-center gap-3 mb-3">
-              <svg className="w-8 h-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-8 h-8 text-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
               </svg>
-              <h3 className="font-bold text-teal-700 text-lg">Install the Extension</h3>
+              <h3 className="font-bold text-brown text-lg">Install the Extension</h3>
             </div>
-            <p className="text-sm text-teal-600 mb-4">
+            <p className="text-sm text-brown/70 mb-4">
               Get the ThemeGPT Chrome extension to start using your premium themes.
             </p>
             <Link
               href={CHROME_STORE_URL}
               target="_blank"
-              className="inline-flex items-center gap-2 bg-teal-500 text-white px-5 py-2.5 rounded-full font-semibold hover:bg-teal-600 transition-colors shadow-md"
+              className="inline-flex items-center gap-2 bg-coral text-white px-5 py-2.5 rounded-full font-semibold hover:opacity-90 transition-opacity shadow-md"
             >
               <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.454 5.454 0 0 1-6.865-2.78L1.931 5.47zm13.281 2.166A5.454 5.454 0 0 1 12 17.455c-1.019 0-1.975-.28-2.791-.766L5.256 23.536A11.943 11.943 0 0 0 12 24c6.627 0 12-5.373 12-12 0-1.924-.453-3.741-1.258-5.352l-7.53-.012z"/>
@@ -283,14 +283,14 @@ function SuccessContent() {
 
         {/* Extension installed but not connected */}
         {extensionInstalled === true && !extensionConnected && (
-          <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-            <h3 className="font-semibold text-teal-700 mb-2">Connect Your Extension</h3>
-            <p className="text-sm text-teal-600 mb-3">
+          <div className="bg-teal/10 p-4 rounded-xl border border-teal/30 mb-6">
+            <h3 className="font-semibold text-brown mb-2">Connect Your Extension</h3>
+            <p className="text-sm text-brown/70 mb-3">
               Sign in to sync your subscription with the extension.
             </p>
             <Link
               href="/auth/extension"
-              className="inline-block bg-teal-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-teal-600 transition-colors"
+              className="inline-block bg-coral text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity"
             >
               Connect Now
             </Link>
@@ -299,9 +299,9 @@ function SuccessContent() {
 
         {/* Extension installed and connected */}
         {extensionInstalled === true && extensionConnected && (
-          <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-            <p className="text-sm text-teal-700 flex items-center justify-center gap-2">
-              <span className="w-2 h-2 bg-teal-500 rounded-full animate-pulse"></span>
+          <div className="bg-teal/10 p-4 rounded-xl border border-teal/30 mb-6">
+            <p className="text-sm text-brown flex items-center justify-center gap-2">
+              <span className="w-2 h-2 bg-teal rounded-full animate-pulse"></span>
               Extension connected! Open the extension to browse premium themes.
             </p>
           </div>
@@ -313,15 +313,15 @@ function SuccessContent() {
             <h3 className="font-semibold text-brown-900 mb-2">Next Steps</h3>
             <ol className="text-sm text-left space-y-2 text-brown-900/80">
               <li className="flex items-start gap-2">
-                <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
-                <span>Install the <Link href={CHROME_STORE_URL} target="_blank" className="text-teal-600 underline">ThemeGPT extension</Link></span>
+                <span className="bg-coral text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
+                <span>Install the <Link href={CHROME_STORE_URL} target="_blank" className="text-teal underline">ThemeGPT extension</Link></span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
+                <span className="bg-coral text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
                 <span>Click &quot;Connect&quot; in the extension header</span>
               </li>
               <li className="flex items-start gap-2">
-                <span className="bg-teal-500 text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
+                <span className="bg-coral text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>
                 <span>Sign in with the same account you used here</span>
               </li>
             </ol>
@@ -329,10 +329,10 @@ function SuccessContent() {
         )}
 
         <div className="flex flex-col gap-3">
-          <Link href="/account" className="inline-block bg-teal-500 text-white px-6 py-3 rounded-full font-semibold hover:bg-teal-600 transition-colors">
+          <Link href="/account" className="inline-block bg-coral text-white px-6 py-3 rounded-full font-semibold hover:opacity-90 transition-opacity">
             View Account
           </Link>
-          <Link href="/" className="inline-block text-brown-900 hover:text-teal-600 font-medium transition-colors">
+          <Link href="/" className="inline-block text-brown-900 hover:text-teal font-medium transition-colors">
             Back to Home
           </Link>
         </div>

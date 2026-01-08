@@ -7,10 +7,13 @@ import type { PlanType } from "@themegpt/shared";
 import Stripe from "stripe";
 
 /** Sanitize user input for safe logging (prevents log injection attacks) */
-function sanitizeForLog(input: string, maxLength = 50): string {
+function sanitizeForLog(input: unknown, maxLength = 100): string {
+  if (typeof input !== 'string') {
+    return '[Non-string value]';
+  }
   return input
     .replace(/[\r\n\t]/g, ' ')     // Replace control chars with space
-    .replace(/[^\x20-\x7E]/g, '')  // Remove non-printable chars
+    .replace(/[^\x20-\x7E]/g, '')  // Remove non-printable chars (prevent CRLF injection)
     .substring(0, maxLength);
 }
 
@@ -45,6 +48,11 @@ export async function POST(request: Request) {
     let mode: "subscription" | "payment";
     let planType: PlanType | null = null;
 
+    // Use a whitelist for logging to prevent any potential log injection
+    const logSafeType = (["yearly", "monthly", "single"].includes(normalizedType))
+      ? normalizedType
+      : "unknown";
+
     switch (normalizedType) {
       case "yearly":
         priceId = STRIPE_PRICES.yearly;
@@ -68,18 +76,14 @@ export async function POST(request: Request) {
     }
 
     if (!priceId) {
-      console.error("Missing price ID for checkout type:", normalizedType, "STRIPE_PRICES:", {
-        monthly: STRIPE_PRICES.monthly ? "set" : "empty",
-        yearly: STRIPE_PRICES.yearly ? "set" : "empty",
-        singleTheme: STRIPE_PRICES.singleTheme ? "set" : "empty",
-      });
+      console.error(`Missing price ID for checkout type: ${logSafeType}`);
       return NextResponse.json(
         { success: false, message: `Price not configured for ${normalizedType}` },
         { status: 500, headers: corsHeaders }
       );
     }
 
-    console.log(`Checkout request: type=${sanitizeForLog(normalizedType)}, priceId=${priceId.substring(0, 20)}...`);
+    console.log(`Checkout request: type=${logSafeType}, priceId=${priceId.substring(0, 20)}...`);
 
     // Check early adopter eligibility for yearly subscriptions
     let isEarlyAdopterEligible = false;
@@ -137,30 +141,32 @@ export async function POST(request: Request) {
       { headers: corsHeaders }
     );
   } catch (error) {
-    console.error("Checkout API error:", error);
+    // Sanitize error info for logging to prevent injection attacks
+    const sanitizedErrorMsg = error instanceof Error ? sanitizeForLog(error.message) : "Unknown error";
+    console.error(`Checkout API error: ${sanitizedErrorMsg}`);
 
     // Extract detailed error information
-    let errorMessage = "Unknown error";
+    let displayErrorMessage = "Unknown error";
     let errorType = "unknown";
 
     if (error instanceof Stripe.errors.StripeError) {
-      errorMessage = error.message;
+      displayErrorMessage = error.message;
       errorType = error.type;
       console.error("Stripe error details:", {
-        type: error.type,
-        code: error.code,
-        param: error.param,
-        message: error.message,
+        type: sanitizeForLog(error.type),
+        code: sanitizeForLog(error.code),
+        param: sanitizeForLog(error.param),
+        message: sanitizedErrorMsg,
       });
     } else if (error instanceof Error) {
-      errorMessage = error.message;
+      displayErrorMessage = error.message;
       errorType = error.name;
     }
 
     return NextResponse.json(
       {
         success: false,
-        message: `Failed to create checkout session: ${errorMessage}`,
+        message: `Failed to create checkout session: ${displayErrorMessage}`,
         errorType,
       },
       { status: 500, headers: corsHeaders }

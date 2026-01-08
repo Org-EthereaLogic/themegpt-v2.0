@@ -31,7 +31,14 @@ export default function Home() {
       });
       const data = await res.json();
       if (data.success && data.checkoutUrl) {
-        window.location.href = data.checkoutUrl;
+        // Validate checkout URL to prevent open redirect attacks
+        const url = String(data.checkoutUrl);
+        if (url.startsWith("https://checkout.stripe.com/") || url.startsWith("https://billing.stripe.com/")) {
+          window.location.href = url;
+        } else {
+          console.error("Untrusted checkout URL:", url);
+          setCheckoutError("Security error: Untrusted redirection target");
+        }
       } else {
         setCheckoutError(
           "Checkout failed: " + (data.message || "Unknown error")

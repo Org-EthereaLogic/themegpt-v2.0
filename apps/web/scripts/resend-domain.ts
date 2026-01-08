@@ -89,13 +89,15 @@ async function getDomainStatus() {
     console.log("─".repeat(80));
 
     for (const record of data.records) {
-      const statusIcon = record.status === "verified" ? "✅" : "❌";
-      console.log(`${statusIcon} ${record.record_type} Record`);
-      console.log(`   Name: ${record.name}`);
-      console.log(`   Value: ${record.value}`);
-      console.log(`   Priority: ${record.priority || "N/A"}`);
-      console.log(`   TTL: ${record.ttl || "Auto"}`);
-      console.log(`   Status: ${record.status}`);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const rec = record as any;
+      const statusIcon = rec.status === "verified" ? "✅" : "❌";
+      console.log(`${statusIcon} ${rec.record_type || rec.type || "Unknown"} Record`);
+      console.log(`   Name: ${rec.name}`);
+      console.log(`   Value: ${rec.value}`);
+      console.log(`   Priority: ${rec.priority || "N/A"}`);
+      console.log(`   TTL: ${rec.ttl || "Auto"}`);
+      console.log(`   Status: ${rec.status}`);
       console.log("");
     }
   }
@@ -125,9 +127,11 @@ async function verifyDomain() {
     return;
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const verifyData = data as any;
   console.log("✅ Verification triggered!");
-  console.log(`   Domain: ${data?.name || themegptDomain.name}`);
-  console.log(`   Status: ${data?.status || "checking..."}`);
+  console.log(`   Domain: ${verifyData?.name || themegptDomain.name}`);
+  console.log(`   Status: ${verifyData?.status || "checking..."}`);
   console.log("");
   console.log("Run 'npx tsx scripts/resend-domain.ts status' to check verification progress.");
 }

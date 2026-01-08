@@ -2,8 +2,13 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getCreditStatus } from "@/lib/credits";
+import { hasFullAccess } from "@/lib/credits";
 
+/**
+ * @deprecated Credit system has been replaced with full premium access.
+ * Use GET /api/subscription for subscription status.
+ * This endpoint is kept for backwards compatibility.
+ */
 export async function GET() {
   try {
     const session = await getServerSession(authOptions);
@@ -24,9 +29,13 @@ export async function GET() {
       );
     }
 
-    const credits = getCreditStatus(subscription);
-
-    return NextResponse.json(credits);
+    // Return simplified response for backwards compatibility
+    // All active subscriptions now have unlimited access
+    return NextResponse.json({
+      hasFullAccess: hasFullAccess(subscription),
+      unlimited: true,
+      message: "Credit system deprecated. All subscribers have full premium access.",
+    });
   } catch (error) {
     console.error("Error fetching credits:", error);
     return NextResponse.json(

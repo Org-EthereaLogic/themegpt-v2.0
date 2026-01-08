@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { db } from "@/lib/db";
 import { DEFAULT_THEMES } from "@themegpt/shared";
+import { hasFullAccess } from "@/lib/credits";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -59,15 +60,8 @@ export async function GET(request: Request) {
       );
     }
 
-    // Check if subscription is active
-    const isActive =
-      subscription.status === "active" ||
-      subscription.status === "trialing" ||
-      subscription.isLifetime;
-
-    // Get list of premium themes user has downloaded
-    const downloads = await db.getDownloadHistory(payload.userId, 100);
-    const downloadedThemeIds = [...new Set(downloads.map((d) => d.themeId))];
+    // Check if user has full access
+    const isActive = hasFullAccess(subscription);
 
     // Get all premium theme IDs
     const premiumThemeIds = DEFAULT_THEMES.filter((t) => t.isPremium).map(
@@ -75,17 +69,8 @@ export async function GET(request: Request) {
     );
 
     // Determine which themes the user can access
-    let accessibleThemes: string[] = [];
-
-    if (isActive) {
-      // Active subscription = all premium themes
-      accessibleThemes = premiumThemeIds;
-    } else {
-      // Only themes they've downloaded while subscribed
-      accessibleThemes = downloadedThemeIds.filter((id) =>
-        premiumThemeIds.includes(id)
-      );
-    }
+    // Active subscribers get all premium themes
+    const accessibleThemes = isActive ? premiumThemeIds : [];
 
     return NextResponse.json(
       {
@@ -96,9 +81,9 @@ export async function GET(request: Request) {
           planType: subscription.planType,
           isLifetime: subscription.isLifetime,
           isActive,
+          hasFullAccess: isActive,
           currentPeriodEnd: subscription.currentPeriodEnd,
           trialEndsAt: subscription.trialEndsAt,
-          creditsRemaining: isActive ? 3 - subscription.creditsUsed : 0,
         },
         accessibleThemes,
         user: { email: payload.email },

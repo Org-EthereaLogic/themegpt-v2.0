@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { consumeCredit, getCreditStatus } from "@/lib/credits";
+import { canDownloadTheme, hasFullAccess } from "@/lib/credits";
 import { DEFAULT_THEMES } from "@themegpt/shared";
 
 export async function POST(request: NextRequest) {
@@ -36,11 +36,11 @@ export async function POST(request: NextRequest) {
     }
 
     if (!theme.isPremium) {
-      // Free themes don't require credits
+      // Free themes don't require a subscription
       return NextResponse.json({
         success: true,
         theme,
-        creditsUsed: false,
+        hasFullAccess: true,
       });
     }
 
@@ -53,23 +53,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await consumeCredit(session.user.id, themeId, subscription);
+    // Check if user can download (has active subscription)
+    const result = await canDownloadTheme(subscription);
 
-    if (!result.success) {
+    if (!result.allowed) {
       return NextResponse.json(
-        { error: result.error },
+        { error: result.reason },
         { status: 403 }
       );
     }
 
-    // Refresh subscription to get updated credits
-    const updatedSubscription = await db.getSubscriptionByUserId(session.user.id);
-    const credits = updatedSubscription ? getCreditStatus(updatedSubscription) : null;
+    // Record the download for audit purposes
+    await db.recordDownload({
+      userId: session.user.id,
+      subscriptionId: subscription.id,
+      themeId,
+    });
 
     return NextResponse.json({
       success: true,
       theme,
-      credits,
+      hasFullAccess: hasFullAccess(subscription),
     });
   } catch (error) {
     console.error("Error processing download:", error);

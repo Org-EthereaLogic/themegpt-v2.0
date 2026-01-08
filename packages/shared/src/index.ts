@@ -477,10 +477,9 @@ export interface Subscription {
   planType: PlanType;
   currentPeriodStart: Date;
   currentPeriodEnd: Date;
-  creditsUsed: number; // 0-3 (unlimited for lifetime)
   canceledAt: Date | null;
   createdAt: Date;
-  // New fields for yearly/lifetime support
+  // Fields for yearly/lifetime support
   trialEndsAt: Date | null;
   commitmentEndsAt: Date | null; // 12 months from subscription start for yearly
   isLifetime: boolean;
@@ -500,25 +499,10 @@ export interface LicenseLink {
   linkedAt: Date | null;
 }
 
-export interface CreditStatus {
-  remaining: number;
-  used: number;
-  total: number;
-  resetsAt: Date;
-  isGracePeriod: boolean;
-}
-
-export interface DownloadHistoryItem {
-  themeId: string;
-  themeName: string;
-  downloadedAt: Date;
-  billingPeriod: string;
-}
-
 export interface SubscriptionResponse {
   status: SubscriptionStatus;
   planType: PlanType;
-  credits: CreditStatus;
+  hasFullAccess: boolean; // true for active/trialing subscriptions
   gracePeriodEnds?: Date;
   isLifetime: boolean;
   trialEndsAt?: Date;

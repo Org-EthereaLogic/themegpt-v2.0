@@ -18,12 +18,6 @@ const DOWNLOADS_COLLECTION = 'downloads';
 const LICENSE_LINKS_COLLECTION = 'license_links';
 const EARLY_ADOPTER_COLLECTION = 'early_adopter_program';
 
-// Helper to get current billing period string (YYYY-MM)
-function getCurrentBillingPeriod(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-}
-
 // Database Interface
 export const db = {
   // === Legacy License Methods ===
@@ -90,10 +84,9 @@ export const db = {
         stripeSubscriptionId: data.stripeSubscriptionId,
         stripeCustomerId: data.stripeCustomerId,
         status: data.status as SubscriptionStatus,
-        planType: (data.planType as PlanType) || 'monthly', // Default for legacy subscriptions
+        planType: (data.planType as PlanType) || 'monthly',
         currentPeriodStart: data.currentPeriodStart.toDate(),
         currentPeriodEnd: data.currentPeriodEnd.toDate(),
-        creditsUsed: data.creditsUsed || 0,
         canceledAt: data.canceledAt?.toDate() || null,
         createdAt: data.createdAt.toDate(),
         trialEndsAt: data.trialEndsAt?.toDate() || null,
@@ -130,7 +123,6 @@ export const db = {
         planType: (data.planType as PlanType) || 'monthly',
         currentPeriodStart: data.currentPeriodStart.toDate(),
         currentPeriodEnd: data.currentPeriodEnd.toDate(),
-        creditsUsed: data.creditsUsed || 0,
         canceledAt: data.canceledAt?.toDate() || null,
         createdAt: data.createdAt.toDate(),
         trialEndsAt: data.trialEndsAt?.toDate() || null,
@@ -144,11 +136,10 @@ export const db = {
     }
   },
 
-  async createSubscription(subscription: Omit<Subscription, 'creditsUsed' | 'canceledAt' | 'createdAt' | 'isLifetime' | 'earlyAdopterConvertedAt'> & { isLifetime?: boolean }): Promise<string> {
+  async createSubscription(subscription: Omit<Subscription, 'canceledAt' | 'createdAt' | 'isLifetime' | 'earlyAdopterConvertedAt'> & { isLifetime?: boolean }): Promise<string> {
     try {
       const docRef = await firestore.collection(SUBSCRIPTIONS_COLLECTION).add({
         ...subscription,
-        creditsUsed: 0,
         canceledAt: null,
         createdAt: new Date(),
         isLifetime: subscription.isLifetime || false,
@@ -174,57 +165,30 @@ export const db = {
     }
   },
 
-  async resetCredits(subscriptionId: string, newPeriodStart: Date, newPeriodEnd: Date): Promise<boolean> {
+  async updateBillingPeriod(subscriptionId: string, newPeriodStart: Date, newPeriodEnd: Date): Promise<boolean> {
     try {
       await firestore
         .collection(SUBSCRIPTIONS_COLLECTION)
         .doc(subscriptionId)
         .update({
-          creditsUsed: 0,
           currentPeriodStart: newPeriodStart,
           currentPeriodEnd: newPeriodEnd,
           status: 'active',
         });
       return true;
     } catch (error) {
-      console.error("Error resetting credits:", error);
+      console.error("Error updating billing period:", error);
       return false;
     }
   },
 
-  async incrementCreditsUsed(subscriptionId: string): Promise<boolean> {
-    try {
-      const docRef = firestore.collection(SUBSCRIPTIONS_COLLECTION).doc(subscriptionId);
-      const doc = await docRef.get();
-
-      if (!doc.exists) {
-        return false;
-      }
-
-      const data = doc.data();
-      const currentCredits = data?.creditsUsed || 0;
-
-      if (currentCredits >= 3) {
-        return false; // No credits remaining
-      }
-
-      await docRef.update({
-        creditsUsed: currentCredits + 1,
-      });
-      return true;
-    } catch (error) {
-      console.error("Error incrementing credits:", error);
-      return false;
-    }
-  },
-
-  // === Download Methods ===
+  // === Download Methods (for audit/history purposes) ===
   async recordDownload(download: Omit<Download, 'downloadedAt' | 'billingPeriod'>): Promise<string> {
     try {
       const docRef = await firestore.collection(DOWNLOADS_COLLECTION).add({
         ...download,
         downloadedAt: new Date(),
-        billingPeriod: getCurrentBillingPeriod(),
+        billingPeriod: '', // Deprecated: kept for schema compatibility
       });
       return docRef.id;
     } catch (error) {
@@ -249,7 +213,7 @@ export const db = {
           subscriptionId: data.subscriptionId,
           themeId: data.themeId,
           downloadedAt: data.downloadedAt.toDate(),
-          billingPeriod: data.billingPeriod,
+          billingPeriod: data.billingPeriod || '',
         };
       });
     } catch (error) {
@@ -270,23 +234,6 @@ export const db = {
       return !snapshot.empty;
     } catch (error) {
       console.error("Error checking download:", error);
-      return false;
-    }
-  },
-
-  async hasDownloadedThemeInPeriod(userId: string, themeId: string, billingPeriod: string): Promise<boolean> {
-    try {
-      const snapshot = await firestore
-        .collection(DOWNLOADS_COLLECTION)
-        .where('userId', '==', userId)
-        .where('themeId', '==', themeId)
-        .where('billingPeriod', '==', billingPeriod)
-        .limit(1)
-        .get();
-
-      return !snapshot.empty;
-    } catch (error) {
-      console.error("Error checking download in period:", error);
       return false;
     }
   },

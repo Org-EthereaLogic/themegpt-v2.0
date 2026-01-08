@@ -81,7 +81,7 @@ export function PricingSection({
               Monthly
             </h3>
             <div className="text-[2.5rem] font-bold mb-1">
-              $1.99<span className="text-base font-normal opacity-60">/mo</span>
+              $6.99<span className="text-base font-normal opacity-60">/mo</span>
             </div>
             <p
               className="text-[0.85rem] font-medium mb-5"
@@ -101,8 +101,8 @@ export function PricingSection({
             >
               {[
                 "30-day free trial",
-                "3 active premium themes",
-                "Swap themes anytime",
+                "All 8 premium themes",
+                "Animated effects included",
                 "Cancel anytime",
               ].map((item) => (
                 <motion.li
@@ -170,13 +170,13 @@ export function PricingSection({
               Yearly
             </h3>
             <div className="text-[2.5rem] font-bold mb-1">
-              $14.99<span className="text-base font-normal opacity-60">/yr</span>
+              $69.99<span className="text-base font-normal opacity-60">/yr</span>
             </div>
             <p
               className="text-[0.85rem] font-medium mb-5"
               style={{ color: "#E8A87C" }}
             >
-              Lifetime access for early adopters
+              Save 17% • Early adopters get lifetime
             </p>
 
             <motion.ul
@@ -190,8 +190,8 @@ export function PricingSection({
             >
               {[
                 { text: "Lifetime access potential", icon: "★", color: "#E8A87C" },
-                { text: "3 active premium themes", icon: "✓", color: "#E8A87C" },
-                { text: "Swap themes anytime", icon: "✓", color: "#E8A87C" },
+                { text: "All 8 premium themes", icon: "✓", color: "#E8A87C" },
+                { text: "Animated effects included", icon: "✓", color: "#E8A87C" },
                 { text: "All future theme updates", icon: "✓", color: "#E8A87C" },
               ].map((item) => (
                 <motion.li
@@ -245,7 +245,7 @@ export function PricingSection({
               Single Theme
             </h3>
             <div className="text-[2.5rem] font-bold mb-1">
-              $0.99<span className="text-base font-normal opacity-60">/ea</span>
+              $3.99<span className="text-base font-normal opacity-60">/ea</span>
             </div>
             <p className="opacity-70 text-[0.85rem] mb-5">
               Own a specific theme forever. One-time purchase, lifetime ownership.

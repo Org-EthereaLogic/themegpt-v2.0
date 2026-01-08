@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { db } from "@/lib/db";
 import { DEFAULT_THEMES } from "@themegpt/shared";
+import { hasFullAccess } from "@/lib/credits";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -83,45 +84,15 @@ export async function POST(request: Request) {
       );
     }
 
-    // Check subscription status
-    const isActive =
-      subscription.status === "active" ||
-      subscription.status === "trialing" ||
-      subscription.isLifetime;
-
-    if (!isActive) {
+    // Check if user has full access (active subscription or in grace period)
+    if (!hasFullAccess(subscription)) {
       return NextResponse.json(
         { success: false, message: "Subscription not active" },
         { status: 403, headers: corsHeaders }
       );
     }
 
-    // Check if already downloaded this theme (ever)
-    const alreadyDownloaded = await db.hasDownloadedTheme(payload.userId, themeId);
-    if (alreadyDownloaded) {
-      return NextResponse.json(
-        { success: true, message: "Theme already owned" },
-        { headers: corsHeaders }
-      );
-    }
-
-    // Check credits (lifetime users have unlimited)
-    if (!subscription.isLifetime) {
-      if (subscription.creditsUsed >= 3) {
-        return NextResponse.json(
-          {
-            success: false,
-            message: "No downloads remaining this billing period",
-          },
-          { status: 403, headers: corsHeaders }
-        );
-      }
-
-      // Increment credits used
-      await db.incrementCreditsUsed(subscription.id);
-    }
-
-    // Record the download
+    // Record the download for audit purposes
     await db.recordDownload({
       userId: payload.userId,
       subscriptionId: subscription.id,

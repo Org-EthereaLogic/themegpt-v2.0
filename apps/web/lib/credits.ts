@@ -1,87 +1,47 @@
-import { db } from "./db";
-import { CreditStatus, Subscription } from "@themegpt/shared";
+import { Subscription } from "@themegpt/shared";
 
-const MAX_CREDITS = 3;
-
-export function getCreditStatus(subscription: Subscription): CreditStatus {
+/**
+ * Check if subscription has full premium access.
+ * With the simplified model, active/trialing subscriptions have full access
+ * to all premium themes (no credit limits).
+ */
+export function hasFullAccess(subscription: Subscription): boolean {
   const now = new Date();
-  const isGracePeriod = subscription.status === 'canceled' && now < subscription.currentPeriodEnd;
 
-  return {
-    remaining: MAX_CREDITS - subscription.creditsUsed,
-    used: subscription.creditsUsed,
-    total: MAX_CREDITS,
-    resetsAt: subscription.currentPeriodEnd,
-    isGracePeriod,
-  };
+  // Lifetime users always have full access
+  if (subscription.isLifetime) {
+    return true;
+  }
+
+  // Active or trialing subscriptions have full access
+  if (subscription.status === 'active' || subscription.status === 'trialing') {
+    return true;
+  }
+
+  // Canceled subscriptions retain access until period end (grace period)
+  if (subscription.status === 'canceled' && now < subscription.currentPeriodEnd) {
+    return true;
+  }
+
+  return false;
 }
 
+/**
+ * Check if a user can download a premium theme.
+ * With full access model, any active subscriber can download any premium theme.
+ */
 export async function canDownloadTheme(
-  userId: string,
-  themeId: string,
   subscription: Subscription & { id: string }
-): Promise<{ allowed: boolean; reason?: string; isRedownload?: boolean }> {
-  const now = new Date();
-
+): Promise<{ allowed: boolean; reason?: string }> {
   // Check if subscription is expired
   if (subscription.status === 'expired') {
     return { allowed: false, reason: 'Subscription expired' };
   }
 
-  // Check if past billing period end
-  if (now > subscription.currentPeriodEnd && subscription.status !== 'active') {
-    return { allowed: false, reason: 'Billing period ended' };
+  // Check full access
+  if (!hasFullAccess(subscription)) {
+    return { allowed: false, reason: 'No active subscription' };
   }
 
-  // Check if user has already downloaded this theme (ever)
-  const hasDownloaded = await db.hasDownloadedTheme(userId, themeId);
-  if (hasDownloaded) {
-    // Allow re-download even in grace period
-    return { allowed: true, isRedownload: true };
-  }
-
-  // In grace period, only re-downloads are allowed
-  if (subscription.status === 'canceled') {
-    return { allowed: false, reason: 'New downloads blocked during grace period' };
-  }
-
-  // Check credits
-  if (subscription.creditsUsed >= MAX_CREDITS) {
-    return { allowed: false, reason: 'No credits remaining this period' };
-  }
-
-  return { allowed: true, isRedownload: false };
-}
-
-export async function consumeCredit(
-  userId: string,
-  themeId: string,
-  subscription: Subscription & { id: string }
-): Promise<{ success: boolean; error?: string }> {
-  // Verify can download
-  const check = await canDownloadTheme(userId, themeId, subscription);
-
-  if (!check.allowed) {
-    return { success: false, error: check.reason };
-  }
-
-  // If it's a re-download, no credit consumption needed
-  if (check.isRedownload) {
-    return { success: true };
-  }
-
-  // Increment credit usage
-  const creditIncremented = await db.incrementCreditsUsed(subscription.id);
-  if (!creditIncremented) {
-    return { success: false, error: 'Failed to consume credit' };
-  }
-
-  // Record the download
-  await db.recordDownload({
-    userId,
-    subscriptionId: subscription.id,
-    themeId,
-  });
-
-  return { success: true };
+  return { allowed: true };
 }

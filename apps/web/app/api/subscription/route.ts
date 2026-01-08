@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { getCreditStatus } from "@/lib/credits";
+import { hasFullAccess } from "@/lib/credits";
 import { SubscriptionResponse } from "@themegpt/shared";
 
 export async function GET() {
@@ -25,12 +25,10 @@ export async function GET() {
       );
     }
 
-    const credits = getCreditStatus(subscription);
-
     const response: SubscriptionResponse = {
       status: subscription.status,
       planType: subscription.planType,
-      credits,
+      hasFullAccess: hasFullAccess(subscription),
       gracePeriodEnds: subscription.status === 'canceled' ? subscription.currentPeriodEnd : undefined,
       isLifetime: subscription.isLifetime,
       trialEndsAt: subscription.trialEndsAt || undefined,

@@ -74,15 +74,16 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   const isSubscription = type === "monthly" || type === "yearly" || type === "subscription";
 
   if (isSubscription) {
+    // Full premium access model - no slot limits
     entitlement = {
       active: true,
       type: "subscription",
-      maxSlots: 3,
+      maxSlots: 0, // Deprecated: full access model
       permanentlyUnlocked: [],
       activeSlotThemes: [],
     };
 
-    // If user is logged in, create subscription record for credit tracking
+    // If user is logged in, create subscription record
     if (userId && session.subscription) {
       const stripeSubscription = await getStripe().subscriptions.retrieve(
         session.subscription as string,
@@ -213,10 +214,10 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     ? new Date(firstItem.current_period_end * 1000)
     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-  // Reset credits for the new billing period
-  await db.resetCredits(subscription.id, currentPeriodStart, currentPeriodEnd);
+  // Update billing period for the subscription
+  await db.updateBillingPeriod(subscription.id, currentPeriodStart, currentPeriodEnd);
 
-  console.log(`Credits reset for subscription: ${subscription.id}`);
+  console.log(`Billing period updated for subscription: ${subscription.id}`);
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {

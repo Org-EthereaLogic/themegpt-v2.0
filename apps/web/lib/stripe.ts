@@ -16,9 +16,9 @@ export function getStripe(): Stripe {
 }
 
 export const STRIPE_PRICES = {
-  monthly: process.env.STRIPE_SUBSCRIPTION_PRICE_ID || "", // $1.99/mo (legacy, now monthly)
-  yearly: process.env.STRIPE_YEARLY_PRICE_ID || "", // $14.99/yr with 30-day trial
-  singleTheme: process.env.STRIPE_SINGLE_THEME_PRICE_ID || "", // $0.99/ea
+  monthly: process.env.STRIPE_SUBSCRIPTION_PRICE_ID || "", // $6.99/mo - Full premium access
+  yearly: process.env.STRIPE_YEARLY_PRICE_ID || "", // $69.99/yr - Full premium access (17% savings)
+  singleTheme: process.env.STRIPE_SINGLE_THEME_PRICE_ID || "", // $3.99/ea - Permanent single theme unlock
 };
 
 // Early Adopter Program Configuration

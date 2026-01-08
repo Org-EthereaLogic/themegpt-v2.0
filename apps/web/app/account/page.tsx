@@ -4,7 +4,14 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SubscriptionResponse, DownloadHistoryItem } from "@themegpt/shared";
+import { SubscriptionResponse } from "@themegpt/shared";
+
+// Local type for download history (API response)
+interface DownloadHistoryItem {
+  themeId: string;
+  themeName: string;
+  downloadedAt: string;
+}
 
 function Spinner({ className = "" }: { className?: string }) {
   return (
@@ -92,6 +99,9 @@ export default function AccountPage() {
     return null;
   }
 
+  // Determine if user is in grace period (canceled but still has access)
+  const isGracePeriod = subscription?.status === "canceled" && subscription?.gracePeriodEnds;
+
   return (
     <div className="min-h-screen bg-[#FAF6F0] p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
@@ -156,7 +166,7 @@ export default function AccountPage() {
                   </span>
                 )}
 
-                {subscription.credits.isGracePeriod && (
+                {isGracePeriod && (
                   <span className="text-sm text-[#7D5A4A]">
                     Access until{" "}
                     {new Date(subscription.gracePeriodEnds!).toLocaleDateString()}
@@ -183,56 +193,36 @@ export default function AccountPage() {
                 </div>
               )}
 
-              {/* Credits Display - Hidden for Lifetime */}
-              {subscription.isLifetime ? (
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[#4B2E1E] font-medium">
-                      Theme Access
-                    </span>
-                    <span className="text-purple-600 font-bold text-lg">
-                      Unlimited
-                    </span>
-                  </div>
-                  <p className="text-sm text-[#7D5A4A] mt-2">
-                    As a lifetime member, you have unlimited access to all current and future premium themes.
-                  </p>
+              {/* Access Display */}
+              <div className={`rounded-lg p-4 ${
+                subscription.isLifetime
+                  ? "bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200"
+                  : "bg-[#FAF6F0]"
+              }`}>
+                <div className="flex items-center justify-between">
+                  <span className="text-[#4B2E1E] font-medium">
+                    Premium Theme Access
+                  </span>
+                  <span className={`font-bold text-lg ${
+                    subscription.isLifetime ? "text-purple-600" : "text-[#7ECEC5]"
+                  }`}>
+                    {subscription.hasFullAccess ? "Full Access" : "Restricted"}
+                  </span>
                 </div>
-              ) : (
-                <div className="bg-[#FAF6F0] rounded-lg p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[#4B2E1E] font-medium">
-                      Monthly Credits
-                    </span>
-                    <span className="text-[#7ECEC5] font-bold text-lg">
-                      {subscription.credits.remaining} / {subscription.credits.total}
-                    </span>
-                  </div>
-                  <div className="w-full bg-[#E5DDD5] rounded-full h-2">
-                    <div
-                      className="bg-[#7ECEC5] h-2 rounded-full transition-all"
-                      style={{
-                        width: `${
-                          (subscription.credits.remaining /
-                            subscription.credits.total) *
-                          100
-                        }%`,
-                      }}
-                    />
-                  </div>
-                  <p className="text-sm text-[#7D5A4A] mt-2">
-                    Resets on{" "}
-                    {new Date(subscription.credits.resetsAt).toLocaleDateString()}
-                  </p>
-                </div>
-              )}
+                <p className="text-sm text-[#7D5A4A] mt-2">
+                  {subscription.isLifetime
+                    ? "As a lifetime member, you have unlimited access to all current and future premium themes."
+                    : subscription.hasFullAccess
+                    ? "You have full access to all 8 premium themes and animated effects."
+                    : "Your subscription is not currently active."}
+                </p>
+              </div>
 
-              {subscription.credits.isGracePeriod && (
+              {isGracePeriod && (
                 <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
                   <p className="text-sm text-yellow-800">
-                    Your subscription is canceled. You can still re-download
-                    previously downloaded themes until your current period ends.
-                    New downloads are not available.
+                    Your subscription is canceled. You still have access to all premium
+                    themes until your current period ends.
                   </p>
                 </div>
               )}
@@ -274,19 +264,17 @@ export default function AccountPage() {
                       {new Date(item.downloadedAt).toLocaleDateString()}
                     </p>
                   </div>
-                  {subscription &&
-                    (subscription.status === "active" ||
-                      subscription.status === "canceled") && (
-                      <button
-                        onClick={() => handleRedownload(item.themeId)}
-                        disabled={redownloadingTheme !== null}
-                        aria-busy={redownloadingTheme === item.themeId}
-                        className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#7ECEC5] border border-[#7ECEC5] rounded-lg hover:bg-[#7ECEC5] hover:text-white transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#7ECEC5]"
-                      >
-                        {redownloadingTheme === item.themeId && <Spinner />}
-                        {redownloadingTheme === item.themeId ? "Downloading..." : "Re-download"}
-                      </button>
-                    )}
+                  {subscription?.hasFullAccess && (
+                    <button
+                      onClick={() => handleRedownload(item.themeId)}
+                      disabled={redownloadingTheme !== null}
+                      aria-busy={redownloadingTheme === item.themeId}
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#7ECEC5] border border-[#7ECEC5] rounded-lg hover:bg-[#7ECEC5] hover:text-white transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#7ECEC5]"
+                    >
+                      {redownloadingTheme === item.themeId && <Spinner />}
+                      {redownloadingTheme === item.themeId ? "Downloading..." : "Re-download"}
+                    </button>
+                  )}
                 </div>
               ))}
             </div>

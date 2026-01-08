@@ -2,7 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { DownloadHistoryItem } from "@themegpt/shared";
+
+// Local type for download history response
+interface DownloadHistoryItem {
+  themeId: string;
+  themeName: string;
+  downloadedAt: string;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -23,8 +29,9 @@ export async function GET(request: NextRequest) {
     const history: DownloadHistoryItem[] = downloads.map(download => ({
       themeId: download.themeId,
       themeName: db.getThemeName(download.themeId),
-      downloadedAt: download.downloadedAt,
-      billingPeriod: download.billingPeriod,
+      downloadedAt: download.downloadedAt instanceof Date
+        ? download.downloadedAt.toISOString()
+        : download.downloadedAt,
     }));
 
     return NextResponse.json({ history });

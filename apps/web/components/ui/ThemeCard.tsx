@@ -428,7 +428,6 @@ function ThemeModal({ theme, isPremium, screenshots, category, description, isLi
 export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: ThemeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
   const screenshots = getThemeScreenshots(theme.id);
   const { category, description } = getThemeDescription(theme);
   const isLight = isLightTheme(theme.id);
@@ -436,11 +435,6 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
   const accentColor = isPremium ? "#E8A87C" : "#5BB5A2";
   const textColor = isLight ? "#4A3728" : "white";
   const badgeBg = isLight ? "rgba(74, 55, 40, 0.15)" : "rgba(255,255,255,0.2)";
-
-  // Ensure client-side only rendering for portal
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   const handleClick = useCallback(() => {
     if (onClick) {
@@ -601,21 +595,19 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
       </motion.div>
 
       {/* Expanded Modal - AnimatePresence in parent for proper exit animations */}
-      {isMounted && (
-        <AnimatePresence>
-          {isExpanded && (
-            <ThemeModal
-              theme={theme}
-              isPremium={isPremium}
-              screenshots={screenshots}
-              category={category}
-              description={description}
-              isLight={isLight}
-              onClose={handleClose}
-            />
-          )}
-        </AnimatePresence>
-      )}
+      <AnimatePresence>
+        {isExpanded && (
+          <ThemeModal
+            theme={theme}
+            isPremium={isPremium}
+            screenshots={screenshots}
+            category={category}
+            description={description}
+            isLight={isLight}
+            onClose={handleClose}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

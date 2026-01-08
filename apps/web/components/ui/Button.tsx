@@ -94,7 +94,16 @@ const variantStyles: Record<ButtonVariant, { base: string; style: React.CSSPrope
 
 export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps>(
   function Button(props, ref) {
-    const { variant = "primary", withRipple = false, isLoading = false, loadingText, children, className = "", ...rest } = props;
+    const {
+      as,
+      variant = "primary",
+      withRipple = false,
+      isLoading = false,
+      loadingText,
+      children,
+      className = "",
+      ...rest
+    } = props;
     const { ripples, createRipple } = useRipple();
 
     const { base, style } = variantStyles[variant];
@@ -110,8 +119,8 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       children
     );
 
-    if (props.as === "a") {
-      const { as: _, ...anchorProps } = rest as ButtonAsLink;
+    if (as === "a") {
+      const anchorProps = rest as Omit<ButtonAsLink, "as">;
       return (
         <a
           ref={ref as React.Ref<HTMLAnchorElement>}
@@ -127,7 +136,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       );
     }
 
-    const { as: _, disabled, ...buttonProps } = rest as ButtonAsButton;
+    const { disabled, ...buttonProps } = rest as Omit<ButtonAsButton, "as">;
     const isDisabled = disabled || isLoading;
 
     return (

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { AnimatedMascot } from "@/components/ui/AnimatedMascot";
 
@@ -23,7 +24,7 @@ export function Navigation() {
       }`}
     >
       {/* Logo */}
-      <a href="/" className="flex items-center gap-3.5 no-underline">
+      <Link href="/" className="flex items-center gap-3.5 no-underline">
         <AnimatedMascot size="md" />
         <span
           className="text-[1.6rem] font-semibold tracking-tight"
@@ -31,7 +32,7 @@ export function Navigation() {
         >
           ThemeGPT
         </span>
-      </a>
+      </Link>
 
       {/* Nav Links - Hidden on mobile */}
       <div className="hidden items-center gap-10 md:flex">

@@ -293,7 +293,7 @@ export function FeaturesSection() {
             className="text-[clamp(2rem,4vw,3rem)] font-semibold tracking-tight mb-4"
             style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
           >
-            Everything you need, nothing you don't
+            Everything you need, nothing you don&apos;t
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -358,7 +358,7 @@ export function FeaturesSection() {
               boxShadow: "0 8px 24px rgba(91, 181, 162, 0.3)",
             }}
           >
-            Add to Chrome — It's Free
+            Add to Chrome — It&apos;s Free
           </a>
         </motion.div>
       </div>

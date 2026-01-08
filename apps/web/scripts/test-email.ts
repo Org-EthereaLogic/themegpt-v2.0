@@ -100,7 +100,11 @@ async function testAllEmails(email: string) {
   // Test subscription email
   console.log("\n1. Subscription Confirmation Email");
   const sub = await testSubscriptionEmail(email);
-  sub.success ? passed++ : failed++;
+  if (sub.success) {
+    passed++;
+  } else {
+    failed++;
+  }
 
   // Wait a bit to avoid rate limiting
   await new Promise((r) => setTimeout(r, 1000));
@@ -108,7 +112,11 @@ async function testAllEmails(email: string) {
   // Test purchase email
   console.log("\n2. Theme Purchase Confirmation Email");
   const purchase = await testPurchaseEmail(email);
-  purchase.success ? passed++ : failed++;
+  if (purchase.success) {
+    passed++;
+  } else {
+    failed++;
+  }
 
   // Wait a bit
   await new Promise((r) => setTimeout(r, 1000));
@@ -116,7 +124,11 @@ async function testAllEmails(email: string) {
   // Test trial email
   console.log("\n3. Trial Ending Reminder Email");
   const trial = await testTrialEmail(email);
-  trial.success ? passed++ : failed++;
+  if (trial.success) {
+    passed++;
+  } else {
+    failed++;
+  }
 
   // Summary
   console.log("\n" + "─".repeat(50));

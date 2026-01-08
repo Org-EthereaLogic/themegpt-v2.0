@@ -1,26 +1,42 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 
 export function CustomCursor() {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const cursorRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
     // Check if device supports hover (not touch)
     const mediaQuery = window.matchMedia("(pointer: fine)");
     if (!mediaQuery.matches) return;
 
-    setIsVisible(true);
+    let isHovering = false;
 
-    const handleMouseMove = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    const updateHoverStyles = () => {
+      cursor.style.transform = `translate(-50%, -50%) ${isHovering ? "scale(1.5)" : "scale(1)"}`;
+      cursor.style.borderColor = isHovering ? "#E8A87C" : "#5BB5A2";
+      cursor.style.background = isHovering ? "rgba(232, 168, 124, 0.1)" : "transparent";
     };
 
-    const handleMouseEnter = () => setIsHovering(true);
-    const handleMouseLeave = () => setIsHovering(false);
+    const handleMouseMove = (e: MouseEvent) => {
+      cursor.style.left = `${e.clientX}px`;
+      cursor.style.top = `${e.clientY}px`;
+    };
 
+    const handleMouseEnter = () => {
+      isHovering = true;
+      updateHoverStyles();
+    };
+
+    const handleMouseLeave = () => {
+      isHovering = false;
+      updateHoverStyles();
+    };
+
+    updateHoverStyles();
     document.addEventListener("mousemove", handleMouseMove);
 
     // Add hover listeners to interactive elements
@@ -41,17 +57,16 @@ export function CustomCursor() {
     };
   }, []);
 
-  if (!isVisible) return null;
-
   return (
     <div
+      ref={cursorRef}
       className="custom-cursor fixed w-5 h-5 rounded-full border-2 pointer-events-none z-[9999] transition-transform duration-150 ease-out"
       style={{
-        left: position.x,
-        top: position.y,
-        transform: `translate(-50%, -50%) ${isHovering ? "scale(1.5)" : "scale(1)"}`,
-        borderColor: isHovering ? "#E8A87C" : "#5BB5A2",
-        background: isHovering ? "rgba(232, 168, 124, 0.1)" : "transparent",
+        left: 0,
+        top: 0,
+        transform: "translate(-50%, -50%) scale(1)",
+        borderColor: "#5BB5A2",
+        background: "transparent",
       }}
     />
   );

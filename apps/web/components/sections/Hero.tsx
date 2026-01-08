@@ -95,7 +95,7 @@ export function Hero() {
             onClick={createRipple}
           >
             <RippleContainer ripples={ripples} />
-            Add to Chrome — It's Free
+            Add to Chrome — It&apos;s Free
             <svg
               width="16"
               height="16"

@@ -44,8 +44,8 @@ export async function sendSubscriptionConfirmationEmail(
   };
 
   const planPrices: Record<string, string> = {
-    monthly: "$1.99/month",
-    yearly: "$14.99/year",
+    monthly: "$6.99/month",
+    yearly: "$69.99/year",
     lifetime: "One-time payment",
   };
 
@@ -96,8 +96,7 @@ export async function sendSubscriptionConfirmationEmail(
               <!-- Features -->
               <h3 style="margin: 0 0 16px; color: ${BRAND_COLORS.chocolate}; font-size: 18px;">What's included:</h3>
               <ul style="margin: 0 0 24px; padding-left: 20px; color: #666; font-size: 14px; line-height: 1.8;">
-                <li>Access to all premium themes</li>
-                <li>3 theme downloads per month</li>
+                <li>Unlimited access to all premium themes</li>
                 <li>Animated effects and seasonal themes</li>
                 <li>Priority support</li>
               </ul>

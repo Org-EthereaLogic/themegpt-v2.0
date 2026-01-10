@@ -19,7 +19,7 @@ function sanitizeForLog(input: unknown, maxLength = 100): string {
 }
 
 const getAllowedOrigin = () => {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
   return appUrl;
 };
 

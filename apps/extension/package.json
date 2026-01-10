@@ -1,7 +1,7 @@
 {
   "name": "extension",
   "displayName": "ThemeGPT",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Custom themes for ChatGPT",
   "scripts": {
     "dev": "plasmo dev",

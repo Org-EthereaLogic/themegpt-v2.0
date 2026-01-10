@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 const getAllowedOrigin = () => {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
   return appUrl;
 };
 

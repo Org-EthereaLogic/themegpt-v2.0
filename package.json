@@ -11,6 +11,7 @@
     "lint:extension": "pnpm --filter extension lint",
     "lint:web": "pnpm --filter web lint",
     "test": "pnpm -r test",
+    "test:coverage": "vitest run --coverage",
     "clean": "pnpm -r clean",
     "preview:sync": "node apps/extension/tools/theme-preview/sync-themes.js"
   },

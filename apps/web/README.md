@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ThemeGPT Web App
+
+Marketing website and API backend for ThemeGPT - the Chrome extension for customizing ChatGPT's appearance.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (App Router)
+- **Styling:** Tailwind CSS 4
+- **Authentication:** NextAuth.js (Google, GitHub OAuth)
+- **Database:** Firebase Firestore
+- **Payments:** Stripe (subscriptions + one-time purchases)
+- **Email:** Resend
+- **Deployment:** Google Cloud Run
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20+
+- pnpm 9+
+- Firebase project with Firestore enabled
+- Stripe account with products configured
+- Resend account for transactional emails
+
+### Environment Setup
+
+Copy the example environment file and fill in your values:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cp .env.example .env.local
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+See `.env.example` for all required environment variables.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Development
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+# From monorepo root
+pnpm dev:web
 
-## Learn More
+# Or from this directory
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+apps/web/
+├── app/                    # Next.js App Router pages
+│   ├── api/               # API routes
+│   │   ├── checkout/      # Stripe checkout
+│   │   ├── extension/     # Extension API endpoints
+│   │   ├── webhooks/      # Stripe webhooks
+│   │   └── ...
+│   ├── account/           # User account page
+│   ├── auth/              # Auth pages
+│   └── ...
+├── components/            # React components
+│   ├── sections/          # Page sections (Hero, Features, etc.)
+│   └── ui/                # UI components (ThemeCard, etc.)
+├── lib/                   # Utilities
+│   ├── auth.ts           # NextAuth configuration
+│   ├── db.ts             # Firestore operations
+│   ├── stripe.ts         # Stripe configuration
+│   └── email.ts          # Email templates
+└── public/               # Static assets
+    └── themes/           # Theme preview images
+```
 
-## Deploy on Vercel
+## API Endpoints
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Extension API
+- `GET /api/extension/status` - Check subscription status
+- `POST /api/extension/auth` - Authenticate extension
+- `POST /api/extension/download` - Download premium theme
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Payment API
+- `POST /api/checkout` - Create Stripe checkout session
+- `POST /api/webhooks/stripe` - Handle Stripe webhooks
+
+### User API
+- `GET /api/subscription` - Get subscription details
+- `POST /api/verify` - Verify license key
+
+## Deployment
+
+### Build
+
+```bash
+pnpm build
+```
+
+### Docker
+
+```bash
+docker build -t themegpt-web .
+docker run -p 3000:3000 themegpt-web
+```
+
+### Cloud Run
+
+Deployed automatically via Cloud Build on push to main. See `cloudbuild.yaml` in the repository root.
+
+## Scripts
+
+```bash
+# Test email templates
+pnpm tsx scripts/test-email.ts all your@email.com
+
+# Manage Resend domain
+pnpm tsx scripts/resend-domain.ts status
+
+# Verify Cloud Run deployment
+pnpm tsx scripts/verify-cloud-run.ts https://themegpt.app
+```

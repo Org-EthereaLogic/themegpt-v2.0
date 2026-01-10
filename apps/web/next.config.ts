@@ -34,6 +34,16 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Long-term caching for static theme images
+        source: "/themes/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
         source: "/:path*",
         headers: securityHeaders,
       },

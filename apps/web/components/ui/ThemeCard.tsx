@@ -5,26 +5,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { Theme } from "@themegpt/shared";
+import { getThemeBlurData } from "@/lib/theme-blur-data";
 
-// Screenshot mapping for theme previews (WebP for optimal compression)
+// Screenshot mapping for theme previews (base WebP - Next.js handles responsive sizing)
 const THEME_SCREENSHOTS: Record<string, { home: string; content: string }> = {
   // Premium themes
-  "aurora-borealis": { home: "/themes/aurora_borealis_1-lg.webp", content: "/themes/aurora_borealis_2-lg.webp" },
-  "sunset-blaze": { home: "/themes/sunset_blaze_1-lg.webp", content: "/themes/sunset_blaze_2-lg.webp" },
-  "electric-dreams": { home: "/themes/electric_dreams_1-lg.webp", content: "/themes/electric_dreams_2-lg.webp" },
-  "woodland-retreat": { home: "/themes/woodland_retreat_1-lg.webp", content: "/themes/woodland_retreat_2-lg.webp" },
-  "frosted-windowpane": { home: "/themes/frosted_windowpane_1-lg.webp", content: "/themes/frosted_windowpane_2-lg.webp" },
-  "silent-night-starfield": { home: "/themes/silent_night_1-lg.webp", content: "/themes/silent_night_2-lg.webp" },
-  "synth-wave": { home: "/themes/synth_wave_1-lg.webp", content: "/themes/synth_wave_2-lg.webp" },
-  "shades-of-purple": { home: "/themes/shades_of_purple_1-lg.webp", content: "/themes/shades_of_purple_2-lg.webp" },
+  "aurora-borealis": { home: "/themes/aurora_borealis_1.webp", content: "/themes/aurora_borealis_2.webp" },
+  "sunset-blaze": { home: "/themes/sunset_blaze_1.webp", content: "/themes/sunset_blaze_2.webp" },
+  "electric-dreams": { home: "/themes/electric_dreams_1.webp", content: "/themes/electric_dreams_2.webp" },
+  "woodland-retreat": { home: "/themes/woodland_retreat_1.webp", content: "/themes/woodland_retreat_2.webp" },
+  "frosted-windowpane": { home: "/themes/frosted_windowpane_1.webp", content: "/themes/frosted_windowpane_2.webp" },
+  "silent-night-starfield": { home: "/themes/silent_night_1.webp", content: "/themes/silent_night_2.webp" },
+  "synth-wave": { home: "/themes/synth_wave_1.webp", content: "/themes/synth_wave_2.webp" },
+  "shades-of-purple": { home: "/themes/shades_of_purple_1.webp", content: "/themes/shades_of_purple_2.webp" },
   // Free themes
-  "themegpt-dark": { home: "/themes/themegpt_dark_1-lg.webp", content: "/themes/themegpt_dark_2-lg.webp" },
-  "themegpt-light": { home: "/themes/themegpt_light_1-lg.webp", content: "/themes/themegpt_light_2-lg.webp" },
-  "solarized-dark": { home: "/themes/solarized_dark_1-lg.webp", content: "/themes/solarized_dark_2-lg.webp" },
-  dracula: { home: "/themes/dracula_1-lg.webp", content: "/themes/dracula_2-lg.webp" },
-  "monokai-pro": { home: "/themes/monokai_pro_1-lg.webp", content: "/themes/monokai_pro_2-lg.webp" },
-  "high-contrast": { home: "/themes/high_contrast_1-lg.webp", content: "/themes/high_contrast_2-lg.webp" },
-  "one-dark": { home: "/themes/one_dark_1-lg.webp", content: "/themes/one_dark_2-lg.webp" },
+  "themegpt-dark": { home: "/themes/themegpt_dark_1.webp", content: "/themes/themegpt_dark_2.webp" },
+  "themegpt-light": { home: "/themes/themegpt_light_1.webp", content: "/themes/themegpt_light_2.webp" },
+  "solarized-dark": { home: "/themes/solarized_dark_1.webp", content: "/themes/solarized_dark_2.webp" },
+  dracula: { home: "/themes/dracula_1.webp", content: "/themes/dracula_2.webp" },
+  "monokai-pro": { home: "/themes/monokai_pro_1.webp", content: "/themes/monokai_pro_2.webp" },
+  "high-contrast": { home: "/themes/high_contrast_1.webp", content: "/themes/high_contrast_2.webp" },
+  "one-dark": { home: "/themes/one_dark_1.webp", content: "/themes/one_dark_2.webp" },
 };
 
 const LIGHT_THEMES = new Set(["frosted-windowpane", "themegpt-light"]);
@@ -243,6 +244,8 @@ function ThemeModal({ theme, isPremium, screenshots, category, description, isLi
                 sizes={MODAL_IMAGE_SIZES}
                 quality={90}
                 priority
+                placeholder="blur"
+                blurDataURL={getThemeBlurData(theme.id)}
                 className={`object-cover transition-opacity duration-500 ${activeView === "home" ? "opacity-100" : "opacity-0"}`}
               />
               {/* Content Image */}
@@ -252,6 +255,8 @@ function ThemeModal({ theme, isPremium, screenshots, category, description, isLi
                 fill
                 sizes={MODAL_IMAGE_SIZES}
                 quality={90}
+                placeholder="blur"
+                blurDataURL={getThemeBlurData(theme.id)}
                 className={`object-cover transition-opacity duration-500 ${activeView === "content" ? "opacity-100" : "opacity-0"}`}
               />
 
@@ -428,6 +433,8 @@ function ThemeModal({ theme, isPremium, screenshots, category, description, isLi
 export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: ThemeCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [shouldLoadContent, setShouldLoadContent] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
   const screenshots = getThemeScreenshots(theme.id);
   const { category, description } = getThemeDescription(theme);
   const isLight = isLightTheme(theme.id);
@@ -435,6 +442,25 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
   const accentColor = isPremium ? "#E8A87C" : "#5BB5A2";
   const textColor = isLight ? "#4A3728" : "white";
   const badgeBg = isLight ? "rgba(74, 55, 40, 0.15)" : "rgba(255,255,255,0.2)";
+
+  // Defer content image loading until card is near viewport
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card || shouldLoadContent) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadContent(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "100px" } // Start loading 100px before entering viewport
+    );
+
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, [shouldLoadContent]);
 
   const handleClick = useCallback(() => {
     if (onClick) {
@@ -451,11 +477,15 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
   return (
     <>
       <motion.div
+        ref={cardRef}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: index * 0.08 }}
-        onMouseEnter={() => setIsHovered(true)}
+        onMouseEnter={() => {
+          setShouldLoadContent(true);
+          setIsHovered(true);
+        }}
         onMouseLeave={() => setIsHovered(false)}
         onClick={handleClick}
         className="group relative rounded-[20px] overflow-hidden cursor-pointer transition-all duration-400 hover:scale-[1.03] hover:z-10 aspect-[16/10]"
@@ -478,17 +508,23 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
             sizes={IMAGE_SIZES}
             quality={90}
             priority={index < 3}
+            placeholder="blur"
+            blurDataURL={getThemeBlurData(theme.id)}
             className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-0" : "opacity-100"}`}
           />
-          {/* Content Image (on hover) */}
-          <Image
-            src={screenshots.content}
-            alt={`${theme.name} content view`}
-            fill
-            sizes={IMAGE_SIZES}
-            quality={90}
-            className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
-          />
+          {/* Content Image (on hover) - deferred loading */}
+          {shouldLoadContent && (
+            <Image
+              src={screenshots.content}
+              alt={`${theme.name} content view`}
+              fill
+              sizes={IMAGE_SIZES}
+              quality={90}
+              placeholder="blur"
+              blurDataURL={getThemeBlurData(theme.id)}
+              className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
+            />
+          )}
         </div>
 
         {/* Category Badge - Top Right */}

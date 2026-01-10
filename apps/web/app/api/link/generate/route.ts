@@ -1,14 +1,19 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { SignJWT } from "jose";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 if (!process.env.NEXTAUTH_SECRET) {
   throw new Error("NEXTAUTH_SECRET environment variable is required");
 }
 const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
-export async function POST() {
+export async function POST(request: NextRequest) {
+  // Apply rate limiting for auth endpoints
+  const rateLimitResponse = checkRateLimit(request, RATE_LIMITS.auth);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const session = await getServerSession(authOptions);
 

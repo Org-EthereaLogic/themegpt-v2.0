@@ -1,16 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { db } from "@/lib/db";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
-// Use a secure secret from environment variables.
-// Do not use a hardcoded fallback in production as it allows security bypass.
-const secret = process.env.NEXTAUTH_SECRET;
-if (!secret && process.env.NODE_ENV === 'production') {
-  console.error("FATAL: NEXTAUTH_SECRET environment variable is missing in production!");
+// Require NEXTAUTH_SECRET - fail fast if missing
+if (!process.env.NEXTAUTH_SECRET) {
+  throw new Error("NEXTAUTH_SECRET environment variable is required");
 }
-const JWT_SECRET = new TextEncoder().encode(secret || 'development-only-fallback-secret');
+const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
 export async function POST(request: NextRequest) {
+  // Apply rate limiting for auth endpoints
+  const rateLimitResponse = checkRateLimit(request, RATE_LIMITS.auth);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
 

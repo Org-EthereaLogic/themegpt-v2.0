@@ -1,9 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { SignJWT } from "jose";
 import { getStripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 const getAllowedOrigin = () => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
@@ -21,7 +22,11 @@ export async function OPTIONS() {
 }
 
 // Generate a token for an authenticated user
-export async function POST() {
+export async function POST(request: NextRequest) {
+  // Apply rate limiting for auth endpoints
+  const rateLimitResponse = checkRateLimit(request, RATE_LIMITS.auth);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const session = await getServerSession(authOptions);
 

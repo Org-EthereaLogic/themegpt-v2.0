@@ -1,17 +1,9 @@
-import { initializeApp, getApps, cert, getApp, ServiceAccount } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
+import { initializeApp, getApps, cert, getApp, ServiceAccount, App } from 'firebase-admin/app';
+import { getFirestore, Firestore } from 'firebase-admin/firestore';
 
 const projectId = process.env.FIREBASE_PROJECT_ID;
 const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
 const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n');
-
-if (!projectId || !clientEmail || !privateKey) {
-  // Only throw in production or if we try to use it.
-  // We can let it fail gracefully during build time if environment variables aren't there.
-  if (process.env.NODE_ENV === 'production') {
-     console.error("Missing Firebase Admin credentials");
-  }
-}
 
 const serviceAccount: ServiceAccount = {
   projectId,
@@ -22,24 +14,47 @@ const serviceAccount: ServiceAccount = {
 // Check if we have credentials
 const hasCredentials = projectId && clientEmail && privateKey;
 
-function createFirebaseApp() {
+let _firebaseApp: App | null = null;
+let _db: Firestore | null = null;
+
+function getFirebaseApp(): App {
+  if (_firebaseApp) {
+    return _firebaseApp;
+  }
+
   if (getApps().length > 0) {
-    return getApp();
+    _firebaseApp = getApp();
+    return _firebaseApp;
   }
-  
-  if (hasCredentials) {
-    return initializeApp({
-      credential: cert(serviceAccount),
-      projectId,
-    });
+
+  if (!hasCredentials) {
+    throw new Error(
+      "Firebase Admin credentials missing. Required: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY"
+    );
   }
-  
-  // During build time or if creds missing, return null or throw later
-  console.warn("Firebase credentials missing. Skipping initialization (okay during build).");
-  return null;
+
+  _firebaseApp = initializeApp({
+    credential: cert(serviceAccount),
+    projectId,
+  });
+  return _firebaseApp;
 }
 
-const firebaseApp = createFirebaseApp();
-// Cast to Firestore to avoid type errors in consumers, but it will be null at build time
-export const db = (firebaseApp ? getFirestore(firebaseApp) : null) as unknown as FirebaseFirestore.Firestore;
-export { firebaseApp };
+// Lazy getter for Firestore - throws if credentials missing at access time
+export function getDb(): Firestore {
+  if (_db) {
+    return _db;
+  }
+  const app = getFirebaseApp();
+  _db = getFirestore(app);
+  return _db;
+}
+
+// Legacy export for backwards compatibility - will throw on access if not initialized
+export const db = new Proxy({} as Firestore, {
+  get(_, prop) {
+    return Reflect.get(getDb(), prop);
+  },
+});
+
+export { getFirebaseApp as firebaseApp };

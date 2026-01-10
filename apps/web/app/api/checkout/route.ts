@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getStripe, STRIPE_PRICES, TRIAL_DAYS } from "@/lib/stripe";
 import { db } from "@/lib/db";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import type { PlanType } from "@themegpt/shared";
 import Stripe from "stripe";
 
@@ -34,7 +35,11 @@ export async function OPTIONS() {
 
 type CheckoutType = "yearly" | "monthly" | "single" | "subscription"; // subscription is legacy alias for monthly
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  // Apply rate limiting for payment endpoints
+  const rateLimitResponse = checkRateLimit(request, RATE_LIMITS.payment);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const { type, themeId } = body as { type: CheckoutType; themeId?: string };

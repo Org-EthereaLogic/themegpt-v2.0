@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { VerifyResponse } from "@themegpt/shared";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 const getAllowedOrigin = () => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
@@ -17,7 +18,11 @@ export async function OPTIONS() {
   return new Response(null, { headers: corsHeaders });
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  // Apply rate limiting for API endpoints
+  const rateLimitResponse = checkRateLimit(request, RATE_LIMITS.api);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const body = await request.json();
     const { licenseKey } = body;

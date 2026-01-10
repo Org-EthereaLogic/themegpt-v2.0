@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
 import { SessionProvider } from "@/components/SessionProvider";
+import { Toaster } from "sonner";
 import "./globals.css";
 
 const dmSans = DM_Sans({
@@ -49,6 +50,7 @@ export default function RootLayout({
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
       >
         <SessionProvider>{children}</SessionProvider>
+        <Toaster richColors position="top-center" />
       </body>
     </html>
   );

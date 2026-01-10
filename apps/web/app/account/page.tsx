@@ -4,6 +4,7 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { SubscriptionResponse } from "@themegpt/shared";
 
 // Local type for download history (API response)
@@ -320,14 +321,14 @@ export default function AccountPage() {
       if (response.ok) {
         const data = await response.json();
         // Theme data is returned - extension can use this
-        alert(`Theme "${data.theme.name}" ready for download!`);
+        toast.success(`Theme "${data.theme.name}" ready for download!`);
       } else {
         const error = await response.json();
-        alert(error.error || "Failed to re-download theme");
+        toast.error(error.error || "Failed to re-download theme");
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred");
+      toast.error("An error occurred");
     } finally {
       setRedownloadingTheme(null);
     }
@@ -342,15 +343,19 @@ export default function AccountPage() {
 
       if (response.ok) {
         const data = await response.json();
-        alert(
-          `Your link code is: ${data.shortCode}\n\nEnter this code in your ThemeGPT extension to link your account.\n\nThis code expires in 10 minutes.`
+        toast.success(
+          `Your link code is: ${data.shortCode}`,
+          {
+            description: "Enter this code in your ThemeGPT extension to link your account. This code expires in 10 minutes.",
+            duration: 15000,
+          }
         );
       } else {
-        alert("Failed to generate link code");
+        toast.error("Failed to generate link code");
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred");
+      toast.error("An error occurred");
     } finally {
       setGeneratingLinkCode(false);
     }

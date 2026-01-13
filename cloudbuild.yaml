@@ -1,6 +1,7 @@
 substitutions:
   _STRIPE_SUBSCRIPTION_PRICE_ID: ''
-  _STRIPE_LIFETIME_PRICE_ID: ''
+  _STRIPE_YEARLY_PRICE_ID: ''
+  _STRIPE_SINGLE_THEME_PRICE_ID: ''
 
 steps:
   # Build the Docker image
@@ -10,7 +11,9 @@ steps:
       - '--build-arg'
       - 'STRIPE_SUBSCRIPTION_PRICE_ID=${_STRIPE_SUBSCRIPTION_PRICE_ID}'
       - '--build-arg'
-      - 'STRIPE_LIFETIME_PRICE_ID=${_STRIPE_LIFETIME_PRICE_ID}'
+      - 'STRIPE_YEARLY_PRICE_ID=${_STRIPE_YEARLY_PRICE_ID}'
+      - '--build-arg'
+      - 'STRIPE_SINGLE_THEME_PRICE_ID=${_STRIPE_SINGLE_THEME_PRICE_ID}'
       - '-t'
       - 'us-central1-docker.pkg.dev/gen-lang-client-0312336987/theme-gpt-repo/theme-gpt-web:$COMMIT_SHA'
       - '-t'

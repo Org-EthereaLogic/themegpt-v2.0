@@ -41,3 +41,6 @@ images:
   - 'us-central1-docker.pkg.dev/gen-lang-client-0312336987/theme-gpt-repo/theme-gpt-web:$COMMIT_SHA'
   - 'us-central1-docker.pkg.dev/gen-lang-client-0312336987/theme-gpt-repo/theme-gpt-web:latest'
 
+options:
+  logging: CLOUD_LOGGING_ONLY
+

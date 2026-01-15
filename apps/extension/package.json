@@ -2,7 +2,7 @@
   "name": "extension",
   "displayName": "ThemeGPT",
   "version": "2.0.0",
-  "description": "Custom themes for ChatGPT",
+  "description": "The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally.",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",

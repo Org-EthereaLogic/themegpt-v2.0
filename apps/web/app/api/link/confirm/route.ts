@@ -9,36 +9,52 @@ if (!process.env.NEXTAUTH_SECRET) {
 }
 const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
+// Type guard for plain objects (not arrays, null, or other types)
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value) && Object.getPrototypeOf(value) === Object.prototype;
+}
+
+// Strict string validator - ensures value is a non-empty string within length limits
+function isValidString(value: unknown, maxLength: number): value is string {
+  return typeof value === 'string' && value.length > 0 && value.length <= maxLength;
+}
+
 export async function POST(request: NextRequest) {
   // Apply rate limiting for auth endpoints
   const rateLimitResponse = checkRateLimit(request, RATE_LIMITS.auth);
   if (rateLimitResponse) return rateLimitResponse;
 
   try {
-    const body = await request.json();
+    const body: unknown = await request.json();
 
-    // Validate that body is an object and contains required fields
-    if (!body || typeof body !== 'object') {
+    // Validate body is a plain object (not array, null, or prototype-polluted)
+    if (!isPlainObject(body)) {
       return NextResponse.json({ error: "Invalid request body" }, { status: 400 });
     }
 
-    const { token, licenseKey } = body;
+    // Extract and validate fields with strict type checking BEFORE any use
+    // This prevents type confusion and security bypass attacks
+    const rawToken = body.token;
+    const rawLicenseKey = body.licenseKey;
 
-    // Strict type and existence validation to prevent security bypasses
-    if (typeof token !== 'string' || !token || typeof licenseKey !== 'string' || !licenseKey) {
+    // Strict validation: must be non-empty strings within length limits
+    if (!isValidString(rawToken, 2000)) {
       return NextResponse.json(
-        { error: "Valid token and license key are required" },
+        { error: "Valid token is required" },
         { status: 400 }
       );
     }
 
-    // Length validation - prevent DoS via oversized payloads
-    if (token.length > 2000 || licenseKey.length > 100) {
+    if (!isValidString(rawLicenseKey, 100)) {
       return NextResponse.json(
-        { error: "Input exceeds maximum length" },
+        { error: "Valid license key is required" },
         { status: 400 }
       );
     }
+
+    // At this point, TypeScript knows these are valid strings
+    const token: string = rawToken;
+    const licenseKey: string = rawLicenseKey;
 
     // Verify the token
     let payload;

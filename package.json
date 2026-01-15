@@ -40,7 +40,7 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.15",
     "google-auth-library": "^10.5.0",
-    "puppeteer": "^24.34.0",
+    "puppeteer": "^24.35.0",
     "sharp": "^0.34.5",
     "vitest": "^4.0.15"
   }

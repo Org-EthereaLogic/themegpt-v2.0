@@ -36,17 +36,16 @@ ENV NEXT_TELEMETRY_DISABLED=1
 # Build-time environment variables (NEXT_PUBLIC_ vars are baked into the bundle)
 ARG NEXT_PUBLIC_APP_URL=https://themegpt.app
 ARG NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-ARG STRIPE_SUBSCRIPTION_PRICE_ID
-ARG STRIPE_YEARLY_PRICE_ID
-ARG STRIPE_SINGLE_THEME_PRICE_ID
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
-ENV STRIPE_SUBSCRIPTION_PRICE_ID=$STRIPE_SUBSCRIPTION_PRICE_ID
-ENV STRIPE_YEARLY_PRICE_ID=$STRIPE_YEARLY_PRICE_ID
-ENV STRIPE_SINGLE_THEME_PRICE_ID=$STRIPE_SINGLE_THEME_PRICE_ID
 
-# Build-time only (real values set at runtime via Cloud Run env vars)
-ENV NEXTAUTH_URL=$NEXT_PUBLIC_APP_URL
+# Runtime environment variables required at deploy time (e.g., via Cloud Run):
+# - NEXTAUTH_SECRET: Secret for signing JWT tokens and session cookies
+# - NEXTAUTH_URL: NextAuth.js callback URL (e.g., https://themegpt.app)
+# - STRIPE_SECRET_KEY: Stripe API secret key
+# - STRIPE_SUBSCRIPTION_PRICE_ID: Stripe monthly subscription price ID
+# - STRIPE_YEARLY_PRICE_ID: Stripe yearly subscription price ID
+# - STRIPE_SINGLE_THEME_PRICE_ID: Stripe single theme purchase price ID
 
 RUN pnpm build
 

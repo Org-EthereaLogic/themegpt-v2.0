@@ -45,8 +45,7 @@ ENV STRIPE_SUBSCRIPTION_PRICE_ID=$STRIPE_SUBSCRIPTION_PRICE_ID
 ENV STRIPE_YEARLY_PRICE_ID=$STRIPE_YEARLY_PRICE_ID
 ENV STRIPE_SINGLE_THEME_PRICE_ID=$STRIPE_SINGLE_THEME_PRICE_ID
 
-# Placeholder values for build-time only (real values set at runtime via Cloud Run env vars)
-ENV NEXTAUTH_SECRET=build-time-placeholder-secret-do-not-use-in-production
+# Build-time only (real values set at runtime via Cloud Run env vars)
 ENV NEXTAUTH_URL=$NEXT_PUBLIC_APP_URL
 
 RUN pnpm build

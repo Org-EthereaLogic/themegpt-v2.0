@@ -761,7 +761,7 @@
       20 +
       21 +# NextAuth.js Configuration
       22 +NEXTAUTH_URL=http://localhost:3000
-      23 +NEXTAUTH_SECRET=dev-secret-change-in-production-abc123
+      23 +NEXTAUTH_SECRET=<your-nextauth-secret-here>
       24 +
       25 +# Google OAuth (placeholder - configure at console.cloud.google.com)
       26 +GOOGLE_CLIENT_ID=your-google-client-id
@@ -1035,7 +1035,7 @@ Client ID
 ⏺ Update(apps/web/.env.local)
   ⎿  Added 2 lines, removed 2 lines
       22  NEXTAUTH_URL=http://localhost:3000
-      23  NEXTAUTH_SECRET=dev-secret-change-in-production-abc123
+      23  NEXTAUTH_SECRET=<your-nextauth-secret-here>
       24
       25 -# Google OAuth (placeholder - configure at console.cloud.google.com)
       26 -GOOGLE_CLIENT_ID=your-google-client-id

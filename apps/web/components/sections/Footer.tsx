@@ -5,7 +5,7 @@ import { AnimatedMascot } from "@/components/ui/AnimatedMascot";
 const footerLinks = [
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
-  { label: "Support", href: "mailto:support@themegpt.app" },
+  { label: "Support", href: "/support" },
   { label: "Chrome Web Store", href: "https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb", external: true },
 ];
 

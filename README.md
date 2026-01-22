@@ -144,3 +144,4 @@ ThemeGPT uses the **"Cream & Chocolate"** design system:
 MIT License - see [LICENSE](./LICENSE) for details.
 
 Copyright (c) 2025 Etherealogic.ai
+

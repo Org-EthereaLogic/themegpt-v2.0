@@ -4,10 +4,17 @@ import { authOptions } from "@/lib/auth";
 import { SignJWT } from "jose";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
-if (!process.env.NEXTAUTH_SECRET) {
-  throw new Error("NEXTAUTH_SECRET environment variable is required");
+// Lazy initialization to avoid build-time errors
+let _jwtSecret: Uint8Array | null = null;
+function getJwtSecret(): Uint8Array {
+  if (!_jwtSecret) {
+    if (!process.env.NEXTAUTH_SECRET) {
+      throw new Error("NEXTAUTH_SECRET environment variable is required");
+    }
+    _jwtSecret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+  }
+  return _jwtSecret;
 }
-const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
 export async function POST(request: NextRequest) {
   // Apply rate limiting for auth endpoints
@@ -33,7 +40,7 @@ export async function POST(request: NextRequest) {
       .setProtectedHeader({ alg: 'HS256' })
       .setIssuedAt()
       .setExpirationTime('10m')
-      .sign(JWT_SECRET);
+      .sign(getJwtSecret());
 
     // Generate a short code for manual entry (last 8 chars of token hash)
     const shortCode = Buffer.from(token.slice(-12)).toString('base64').slice(0, 8).toUpperCase();

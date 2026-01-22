@@ -3,11 +3,17 @@ import { jwtVerify } from "jose";
 import { db } from "@/lib/db";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
-// Require NEXTAUTH_SECRET - fail fast if missing
-if (!process.env.NEXTAUTH_SECRET) {
-  throw new Error("NEXTAUTH_SECRET environment variable is required");
+// Lazy initialization to avoid build-time errors
+let _jwtSecret: Uint8Array | null = null;
+function getJwtSecret(): Uint8Array {
+  if (!_jwtSecret) {
+    if (!process.env.NEXTAUTH_SECRET) {
+      throw new Error("NEXTAUTH_SECRET environment variable is required");
+    }
+    _jwtSecret = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
+  }
+  return _jwtSecret;
 }
-const JWT_SECRET = new TextEncoder().encode(process.env.NEXTAUTH_SECRET);
 
 // Type guard for plain objects (not arrays, null, or other types)
 function isPlainObject(value: unknown): value is Record<string, unknown> {
@@ -59,7 +65,7 @@ export async function POST(request: NextRequest) {
     // Verify the token
     let payload;
     try {
-      const verified = await jwtVerify(token, JWT_SECRET);
+      const verified = await jwtVerify(token, getJwtSecret());
       payload = verified.payload as { userId: string; email: string; purpose: string };
     } catch (error) {
       console.error("JWT Verification failed:", error instanceof Error ? error.message : "Unknown error");

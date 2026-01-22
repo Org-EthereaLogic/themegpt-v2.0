@@ -23,10 +23,17 @@ const getRequiredEnv = (name: string): string => {
   return value;
 };
 
+// Use getters for lazy evaluation - avoids errors during Next.js build
 export const STRIPE_PRICES = {
-  monthly: getRequiredEnv("STRIPE_SUBSCRIPTION_PRICE_ID"), // $6.99/mo - Full premium access
-  yearly: getRequiredEnv("STRIPE_YEARLY_PRICE_ID"), // $69.99/yr - Full premium access (17% savings)
-  singleTheme: getRequiredEnv("STRIPE_SINGLE_THEME_PRICE_ID"), // $3.99/ea - Permanent single theme unlock
+  get monthly() {
+    return getRequiredEnv("STRIPE_SUBSCRIPTION_PRICE_ID"); // $6.99/mo - Full premium access
+  },
+  get yearly() {
+    return getRequiredEnv("STRIPE_YEARLY_PRICE_ID"); // $69.99/yr - Full premium access (17% savings)
+  },
+  get singleTheme() {
+    return getRequiredEnv("STRIPE_SINGLE_THEME_PRICE_ID"); // $3.99/ea - Permanent single theme unlock
+  },
 };
 
 // Early Adopter Program Configuration

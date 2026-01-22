@@ -1,8 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 import { db } from "@/lib/db";
 import { DEFAULT_THEMES } from "@themegpt/shared";
 import { hasFullAccess } from "@/lib/credits";
+import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 const getAllowedOrigin = () => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
@@ -24,7 +25,11 @@ interface TokenPayload {
   email: string;
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
+  // Rate limit check
+  const rateLimitResponse = checkRateLimit(request, RATE_LIMITS.sync);
+  if (rateLimitResponse) return rateLimitResponse;
+
   try {
     const authHeader = request.headers.get("Authorization");
 

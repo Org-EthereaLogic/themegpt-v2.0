@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { Storage } from "@plasmohq/storage"
 import { API_BASE_URL, DEFAULT_THEMES, type Theme } from "@themegpt/shared"
 import { TokenCounter } from "./components/TokenCounter"
@@ -233,8 +233,8 @@ export default function Popup() {
     window.open(`${API_BASE_URL}/#pricing`, '_blank')
   }
 
-  const freeThemes = DEFAULT_THEMES.filter(t => !t.isPremium)
-  const premiumThemes = DEFAULT_THEMES.filter(t => t.isPremium)
+  const freeThemes = useMemo(() => DEFAULT_THEMES.filter(t => !t.isPremium), [])
+  const premiumThemes = useMemo(() => DEFAULT_THEMES.filter(t => t.isPremium), [])
 
   return (
     <div className="flex flex-col h-full bg-cream text-brown font-sans relative">

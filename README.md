@@ -13,9 +13,9 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 ## Get ThemeGPT
 
-**[Install Version 1.0.2 from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb)**
+**[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb)**
 
-> **Note:** Version 1.0.2 is the current stable release available to the public. This repository contains the ongoing development of Version 2.0 with enhanced features and improvements.
+> **Version 2.0** is currently pending Chrome Web Store review. This repository contains the v2.0 source code with premium themes, animated effects, and subscription features.
 
 ---
 
@@ -119,7 +119,7 @@ cd apps/extension && pnpm dev
 
 | Component | Technologies |
 |-----------|-------------|
-| **Extension** | Plasmo, React 18, TypeScript, gpt-tokenizer |
+| **Extension** | Plasmo, React 19, TypeScript, gpt-tokenizer |
 | **Web App** | Next.js 16, React 19, Tailwind CSS 4, TypeScript |
 | **Shared** | TypeScript |
 | **Tooling** | pnpm workspaces, Prettier, ESLint |
@@ -143,5 +143,5 @@ ThemeGPT uses the **"Cream & Chocolate"** design system:
 
 MIT License - see [LICENSE](./LICENSE) for details.
 
-Copyright (c) 2025 Etherealogic.ai
+Copyright (c) 2025-2026 Etherealogic.ai
 

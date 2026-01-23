@@ -4,86 +4,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ---
 
-## ⚠️ CRITICAL: Development-Only Policy
-
-> **STATUS: DEVELOPMENT PHASE — DO NOT DEPLOY TO PRODUCTION**
-
-All code changes, builds, and updates MUST target the **development build only** until formal production approval is granted.
-
-### Mandatory Requirements
-
-| Requirement | Details |
-|-------------|---------|
-| **Build Target** | Always use `pnpm dev` for development builds |
-| **Extension Loading** | Load from `apps/extension/build/chrome-mv3-dev` only |
-| **Production Builds** | `pnpm build` creates `chrome-mv3-prod` — DO NOT load or distribute |
-| **Git Pushes** | Allowed to `main` branch for code storage, but NOT for production release |
-
-### Prohibited Actions
-
-- Loading `chrome-mv3-prod` build into Chrome for testing
-- Publishing to Chrome Web Store
-- Distributing production builds to users
-- Running production deployments of the web app
-
-### When Production Is Approved
-
-Production deployment will only occur when:
-1. User explicitly states "ready for production" or "deploy to production"
-2. All features are tested and verified in development
-3. User provides formal approval for the transition
-
-**Historical Context:** Multiple instances have occurred where changes intended for development were incorrectly applied to production. This policy prevents that pattern.
-
----
-
-## 🎨 Theme Freeze Policy (Launch Themes)
-
-> **STATUS: THEME ROSTER FROZEN UNTIL JANUARY 1, 2026**
-
-The following themes have been finalized for the product launch and **must not be modified or added to** until after the release date.
-
-### Free Themes (7)
-
-| Theme | Category |
-|-------|----------|
-| ThemeGPT Dark | Core |
-| ThemeGPT Light | Core |
-| Solarized Dark | Core |
-| Dracula | Core |
-| Monokai Pro | Core |
-| High Contrast | Core |
-| One Dark | Core |
-
-### Premium Themes (8)
-
-| Theme | Category | Highlight |
-|-------|----------|-----------|
-| Aurora Borealis | Animated Effects | Northern lights aurora |
-| Sunset Blaze | Animated Effects | Warm sunset gradient |
-| Electric Dreams | Animated Effects | Cosmic neon aurora |
-| Woodland Retreat | Christmas | Forest with snowfall |
-| Frosted Windowpane | Christmas | Frosted glass effect |
-| Silent Night (Starfield) | Christmas | Twinkling stars |
-| Synth Wave | Core | Retro neon grid |
-| Shades of Purple | Core | Rich purple tones |
-
-### Prohibited Theme Actions (Until Jan 1, 2026)
-
-- Adding new themes to `DEFAULT_THEMES` array
-- Modifying existing theme colors, effects, or properties
-- Changing theme categories or premium status
-- Renaming or removing any launch themes
-
-### When Theme Changes Are Allowed
-
-Theme modifications will only occur when:
-1. The date is **after January 1, 2026**
-2. User explicitly requests theme additions or modifications
-3. Critical bug fixes that don't alter visual appearance
-
----
-
 ## Project Overview
 
 **ThemeGPT v2.0** is a privacy-first Chrome extension that lets users customize ChatGPT's appearance and track token usage — all without data leaving the browser.
@@ -92,8 +12,8 @@ This project follows a **simplicity-first development philosophy** informed by h
 
 ## Technology Stack
 
-- **Extension**: Plasmo, React 18, TypeScript, gpt-tokenizer
-- **Web**: Next.js, React 19, Tailwind CSS 4, TypeScript
+- **Extension**: Plasmo, React 19, TypeScript, gpt-tokenizer
+- **Web**: Next.js 16, React 19, Tailwind CSS 4, TypeScript
 - **Tooling**: pnpm workspaces, Prettier, ESLint
 
 ## Repository Structure
@@ -163,8 +83,8 @@ The SynthAI project archaeology (`doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`) doc
 
 ```bash
 pnpm install    # Install dependencies
-pnpm dev        # Development mode (USE THIS for all testing)
-pnpm build      # Production build (DO NOT USE until production approved)
+pnpm dev        # Development mode with hot-reload
+pnpm build      # Production build
 pnpm test       # Run tests
 pnpm lint       # Lint code
 ```
@@ -174,7 +94,12 @@ pnpm lint       # Lint code
 1. Run `pnpm dev` to start the development server
 2. Load extension from `apps/extension/build/chrome-mv3-dev`
 3. Changes hot-reload automatically
-4. **Never** load `chrome-mv3-prod` during development phase
+
+### Production Build
+
+1. Run `pnpm build` to create production bundle
+2. Production build outputs to `apps/extension/build/chrome-mv3-prod`
+3. Submit to Chrome Web Store for review
 
 ## Key Resources
 

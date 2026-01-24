@@ -48,6 +48,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
+        suppressHydrationWarning
       >
         <SessionProvider>{children}</SessionProvider>
         <Toaster richColors position="top-center" />

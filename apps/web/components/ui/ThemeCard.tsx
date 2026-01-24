@@ -3,11 +3,17 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
-import Image from "next/image";
 import type { Theme } from "@themegpt/shared";
-import { getThemeBlurData } from "@/lib/theme-blur-data";
+import { getThemeBlurColor } from "@/lib/theme-blur-data";
 
-// Screenshot mapping for theme previews (base WebP - Next.js handles responsive sizing)
+// Generate responsive srcset from pre-optimized variants
+// Variants: base (640w), -md (1280w), -lg (2560w) are pre-built WebP files
+function getResponsiveSrcSet(basePath: string): string {
+  const withoutExt = basePath.replace(".webp", "");
+  return `${withoutExt}.webp 640w, ${withoutExt}-md.webp 1280w, ${withoutExt}-lg.webp 2560w`;
+}
+
+// Screenshot mapping for theme previews (base WebP - srcset provides responsive variants)
 const THEME_SCREENSHOTS: Record<string, { home: string; content: string }> = {
   // Premium themes
   "aurora-borealis": { home: "/themes/aurora_borealis_1.webp", content: "/themes/aurora_borealis_2.webp" },
@@ -71,9 +77,9 @@ function getThemeDescription(theme: Theme): { category: string; description: str
   };
 }
 
-// Responsive image sizes for optimal loading
-const IMAGE_SIZES = "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw";
-const MODAL_IMAGE_SIZES = "(max-width: 768px) 95vw, 65vw";
+// Responsive image sizes for srcset selection
+const CARD_SIZES = "(max-width: 768px) 95vw, 350px";
+const MODAL_SIZES = "(max-width: 768px) 90vw, 60vw";
 
 export interface ThemeCardProps {
   theme: Theme;
@@ -237,27 +243,26 @@ function ThemeModal({ theme, isPremium, screenshots, category, description, isLi
             {/* Image Section */}
             <div className="relative lg:w-[65%] aspect-[16/10]">
               {/* Home Image */}
-              <Image
+              <img
                 src={screenshots.home}
+                srcSet={getResponsiveSrcSet(screenshots.home)}
+                sizes={MODAL_SIZES}
                 alt={`${theme.name} home screen`}
-                fill
-                sizes={MODAL_IMAGE_SIZES}
-                quality={90}
-                priority
-                placeholder="blur"
-                blurDataURL={getThemeBlurData(theme.id)}
-                className={`object-cover transition-opacity duration-500 ${activeView === "home" ? "opacity-100" : "opacity-0"}`}
+                loading="eager"
+                decoding="async"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${activeView === "home" ? "opacity-100" : "opacity-0"}`}
+                style={{ backgroundColor: getThemeBlurColor(theme.id) }}
               />
               {/* Content Image */}
-              <Image
+              <img
                 src={screenshots.content}
+                srcSet={getResponsiveSrcSet(screenshots.content)}
+                sizes={MODAL_SIZES}
                 alt={`${theme.name} content view`}
-                fill
-                sizes={MODAL_IMAGE_SIZES}
-                quality={90}
-                placeholder="blur"
-                blurDataURL={getThemeBlurData(theme.id)}
-                className={`object-cover transition-opacity duration-500 ${activeView === "content" ? "opacity-100" : "opacity-0"}`}
+                loading="eager"
+                decoding="async"
+                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${activeView === "content" ? "opacity-100" : "opacity-0"}`}
+                style={{ backgroundColor: getThemeBlurColor(theme.id) }}
               />
 
               {/* View Toggle Pills */}
@@ -501,28 +506,27 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
         {/* Image Container with Crossfade */}
         <div className="absolute inset-0">
           {/* Home Image (default) */}
-          <Image
+          <img
             src={screenshots.home}
+            srcSet={getResponsiveSrcSet(screenshots.home)}
+            sizes={CARD_SIZES}
             alt={`${theme.name} home screen`}
-            fill
-            sizes={IMAGE_SIZES}
-            quality={90}
-            priority={index < 3}
-            placeholder="blur"
-            blurDataURL={getThemeBlurData(theme.id)}
-            className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-0" : "opacity-100"}`}
+            loading={index < 6 ? "eager" : "lazy"}
+            decoding="async"
+            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isHovered ? "opacity-0" : "opacity-100"}`}
+            style={{ backgroundColor: getThemeBlurColor(theme.id) }}
           />
           {/* Content Image (on hover) - deferred loading */}
           {shouldLoadContent && (
-            <Image
+            <img
               src={screenshots.content}
+              srcSet={getResponsiveSrcSet(screenshots.content)}
+              sizes={CARD_SIZES}
               alt={`${theme.name} content view`}
-              fill
-              sizes={IMAGE_SIZES}
-              quality={90}
-              placeholder="blur"
-              blurDataURL={getThemeBlurData(theme.id)}
-              className={`object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
+              loading="lazy"
+              decoding="async"
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isHovered ? "opacity-100" : "opacity-0"}`}
+              style={{ backgroundColor: getThemeBlurColor(theme.id) }}
             />
           )}
         </div>

@@ -42,3 +42,27 @@ export const THEME_BLUR_DATA: Record<string, string> = {
 export function getThemeBlurData(themeId: string): string {
   return THEME_BLUR_DATA[themeId] || THEME_BLUR_DATA["themegpt-dark"];
 }
+
+// Simple background colors for native img placeholders
+// These match the dominant colors of each theme for visual continuity during load
+export const THEME_PLACEHOLDER_COLORS: Record<string, string> = {
+  "aurora-borealis": "#1a1a2e",
+  "sunset-blaze": "#2c1810",
+  "electric-dreams": "#0f0f23",
+  "woodland-retreat": "#1a2a1a",
+  "frosted-windowpane": "#e8f4f8",
+  "silent-night-starfield": "#0a0a1a",
+  "synth-wave": "#1a0a2e",
+  "shades-of-purple": "#1e1e3f",
+  "themegpt-dark": "#1a1a1a",
+  "themegpt-light": "#faf6f0",
+  "solarized-dark": "#002b36",
+  dracula: "#282a36",
+  "monokai-pro": "#2d2a2e",
+  "high-contrast": "#000000",
+  "one-dark": "#282c34",
+};
+
+export function getThemeBlurColor(themeId: string): string {
+  return THEME_PLACEHOLDER_COLORS[themeId] || "#1a1a1a";
+}

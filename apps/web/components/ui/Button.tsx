@@ -123,7 +123,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       const anchorProps = rest as Omit<ButtonAsLink, "as">;
       return (
         <a
-          ref={ref as React.Ref<HTMLAnchorElement>}
+          ref={ref as React.RefObject<HTMLAnchorElement> | null}
           className={combinedClassName}
           style={style}
           onClick={withRipple ? createRipple : undefined}
@@ -141,7 +141,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
 
     return (
       <button
-        ref={ref as React.Ref<HTMLButtonElement>}
+        ref={ref as React.RefObject<HTMLButtonElement> | null}
         className={combinedClassName}
         style={style}
         disabled={isDisabled}

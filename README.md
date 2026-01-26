@@ -15,7 +15,7 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb)**
 
-> **Version 2.0** is currently pending Chrome Web Store review. This repository contains the v2.0 source code with premium themes, animated effects, and subscription features.
+> **Version 2.0.1** has been submitted for Chrome Web Store review (January 2026). This repository contains the v2.0 source code with premium themes, animated effects, and subscription features.
 
 ---
 
@@ -144,4 +144,3 @@ ThemeGPT uses the **"Cream & Chocolate"** design system:
 MIT License - see [LICENSE](./LICENSE) for details.
 
 Copyright (c) 2025-2026 Etherealogic.ai
-

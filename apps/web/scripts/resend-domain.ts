@@ -36,7 +36,7 @@ async function listDomains() {
   }
 
   if (!data?.data?.length) {
-    console.log("No domains found. Add one with: npx tsx scripts/resend-domain.ts add themegpt.app");
+    console.log("No domains found. Add one with: npx tsx scripts/resend-domain.ts add themegpt.ai");
     return;
   }
 
@@ -64,11 +64,11 @@ async function getDomainStatus() {
     return;
   }
 
-  const themegptDomain = listData?.data?.find((d) => d.name === "themegpt.app");
+  const themegptDomain = listData?.data?.find((d) => d.name === "themegpt.ai");
 
   if (!themegptDomain) {
-    console.log("❌ Domain 'themegpt.app' not found.");
-    console.log("Add it with: npx tsx scripts/resend-domain.ts add themegpt.app");
+    console.log("❌ Domain 'themegpt.ai' not found.");
+    console.log("Add it with: npx tsx scripts/resend-domain.ts add themegpt.ai");
     return;
   }
 
@@ -113,10 +113,10 @@ async function verifyDomain() {
     return;
   }
 
-  const themegptDomain = listData?.data?.find((d) => d.name === "themegpt.app");
+  const themegptDomain = listData?.data?.find((d) => d.name === "themegpt.ai");
 
   if (!themegptDomain) {
-    console.log("❌ Domain 'themegpt.app' not found.");
+    console.log("❌ Domain 'themegpt.ai' not found.");
     return;
   }
 

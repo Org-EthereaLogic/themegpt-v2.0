@@ -17,7 +17,7 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://themegpt.app"),
+  metadataBase: new URL("https://themegpt.ai"),
   title: "ThemeGPT - Custom Themes for ChatGPT",
   description: "Personalize your ChatGPT experience with beautiful, one-click themes. No coding required.",
   manifest: "/site.webmanifest",

@@ -1,7 +1,7 @@
 /**
  * ThemeGPT Background Service Worker
  *
- * Handles external messaging from themegpt.app for seamless OAuth authentication.
+ * Handles external messaging from themegpt.ai for seamless OAuth authentication.
  * Listens for auth tokens sent from the web app and stores them for the popup.
  */
 
@@ -9,14 +9,14 @@ import { Storage } from "@plasmohq/storage"
 
 const storage = new Storage({ area: "local" })
 
-// Handle external messages from themegpt.app
+// Handle external messages from themegpt.ai
 chrome.runtime.onMessageExternal.addListener(
   (message, sender, sendResponse) => {
 
     // Verify sender is from our trusted domains
     const allowedOrigins = [
-      "https://themegpt.app",
-      "https://www.themegpt.app"
+      "https://themegpt.ai",
+      "https://www.themegpt.ai"
     ]
     const senderOrigin = sender.url ? new URL(sender.url).origin : ""
     if (!allowedOrigins.includes(senderOrigin)) {

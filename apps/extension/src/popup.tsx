@@ -185,7 +185,7 @@ export default function Popup() {
     if (accountStatus.isActive) {
       // Check credits
       if (accountStatus.creditsRemaining !== undefined && accountStatus.creditsRemaining <= 0) {
-        setSlotError("No downloads remaining this period. Manage your account at themegpt.app")
+        setSlotError("No downloads remaining this period. Manage your account at themegpt.ai")
         return
       }
 

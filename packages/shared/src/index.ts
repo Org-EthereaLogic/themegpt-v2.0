@@ -524,7 +524,7 @@ const globalLocation =
     : undefined;
 
 const isLocalHost = !!globalLocation && globalLocation.hostname === 'localhost';
-export const API_BASE_URL = isLocalHost ? 'http://localhost:3000' : 'https://theme-gpt-web-dufb63uofq-uc.a.run.app';
+export const API_BASE_URL = isLocalHost ? 'http://localhost:3000' : 'https://themegpt.ai';
 
 // CSS Generators (R1-R3: Consolidated module)
 export {

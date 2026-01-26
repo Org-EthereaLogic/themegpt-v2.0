@@ -19,7 +19,7 @@ function sanitizeForLog(input: unknown, maxLength = 100): string {
 }
 
 const getAllowedOrigin = () => {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
   return appUrl;
 };
 
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id;
 
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
 
     // Normalize type (subscription is legacy alias for monthly)
     const normalizedType: CheckoutType = type === "subscription" ? "monthly" : type;

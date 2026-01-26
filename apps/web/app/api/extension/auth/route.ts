@@ -7,7 +7,7 @@ import { db } from "@/lib/db";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 const getAllowedOrigin = () => {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
   return appUrl;
 };
 
@@ -161,7 +161,7 @@ async function linkStripeSubscription(userId: string, email: string) {
 
 // Get auth page URL
 export async function GET() {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
 
   return NextResponse.json(
     {

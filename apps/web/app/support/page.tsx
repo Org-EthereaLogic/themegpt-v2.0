@@ -26,7 +26,7 @@ const faqs = [
   },
   {
     question: "How do I cancel my subscription?",
-    answer: "Visit your Account page on themegpt.app and click 'Manage Subscription'. You can cancel anytime, and you'll retain access until the end of your billing period."
+    answer: "Visit your Account page on themegpt.ai and click 'Manage Subscription'. You can cancel anytime, and you'll retain access until the end of your billing period."
   },
   {
     question: "Is my ChatGPT data safe?",
@@ -38,7 +38,7 @@ const faqs = [
   },
   {
     question: "How do I request a refund?",
-    answer: "If you're not satisfied with your purchase, contact us within 7 days at support@themegpt.app with your order details. We offer full refunds for first-time purchases."
+    answer: "If you're not satisfied with your purchase, contact us within 7 days at support@themegpt.ai with your order details. We offer full refunds for first-time purchases."
   }
 ];
 
@@ -167,7 +167,7 @@ export default function SupportPage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
-              href="mailto:support@themegpt.app"
+              href="mailto:support@themegpt.ai"
               className="inline-flex items-center gap-2 rounded-full px-8 py-4 font-semibold text-white no-underline transition-all duration-300 hover:-translate-y-0.5"
               style={{
                 background: "#5BB5A2",
@@ -185,11 +185,11 @@ export default function SupportPage() {
           <p className="mt-6 text-sm" style={{ color: "#7A6555" }}>
             Or email us directly at{" "}
             <a
-              href="mailto:support@themegpt.app"
+              href="mailto:support@themegpt.ai"
               className="font-medium transition-colors hover:underline"
               style={{ color: "#5BB5A2" }}
             >
-              support@themegpt.app
+              support@themegpt.ai
             </a>
           </p>
         </section>

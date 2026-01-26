@@ -14,7 +14,7 @@ function getResend(): Resend {
 }
 
 // Email sender configuration
-const EMAIL_FROM = process.env.EMAIL_FROM || "ThemeGPT <hello@themegpt.app>";
+const EMAIL_FROM = process.env.EMAIL_FROM || "ThemeGPT <hello@themegpt.ai>";
 
 // Brand colors for email templates (matching website globals.css)
 export const BRAND_COLORS = {
@@ -69,7 +69,7 @@ export async function sendSubscriptionConfirmationEmail(
           <!-- Header -->
           <tr>
             <td style="padding: 40px 40px 20px; text-align: center; background-color: ${BRAND_COLORS.brown}; border-radius: 12px 12px 0 0;">
-              <img src="https://themegpt.app/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
+              <img src="https://themegpt.ai/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
               <h1 style="margin: 0; color: ${BRAND_COLORS.cream}; font-size: 28px; font-weight: 700;">ThemeGPT</h1>
               <p style="margin: 8px 0 0; color: ${BRAND_COLORS.coral}; font-size: 14px;">Premium Themes for ChatGPT</p>
             </td>
@@ -106,7 +106,7 @@ export async function sendSubscriptionConfirmationEmail(
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
-                    <a href="https://themegpt.app/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                    <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
                       View Your Account
                     </a>
                   </td>
@@ -122,7 +122,7 @@ export async function sendSubscriptionConfirmationEmail(
                 You're receiving this email because you subscribed to ThemeGPT Premium.
               </p>
               <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
-                <a href="https://themegpt.app" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.app</a>
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.ai</a>
               </p>
             </td>
           </tr>
@@ -176,7 +176,7 @@ export async function sendThemePurchaseConfirmationEmail(
           <!-- Header -->
           <tr>
             <td style="padding: 40px 40px 20px; text-align: center; background-color: ${BRAND_COLORS.brown}; border-radius: 12px 12px 0 0;">
-              <img src="https://themegpt.app/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
+              <img src="https://themegpt.ai/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
               <h1 style="margin: 0; color: ${BRAND_COLORS.cream}; font-size: 28px; font-weight: 700;">ThemeGPT</h1>
               <p style="margin: 8px 0 0; color: ${BRAND_COLORS.coral}; font-size: 14px;">Premium Themes for ChatGPT</p>
             </td>
@@ -214,7 +214,7 @@ export async function sendThemePurchaseConfirmationEmail(
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
-                    <a href="https://themegpt.app/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                    <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
                       View Your Account
                     </a>
                   </td>
@@ -230,7 +230,7 @@ export async function sendThemePurchaseConfirmationEmail(
                 You're receiving this email because you purchased a ThemeGPT theme.
               </p>
               <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
-                <a href="https://themegpt.app" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.app</a>
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.ai</a>
               </p>
             </td>
           </tr>
@@ -284,7 +284,7 @@ export async function sendTrialEndingEmail(
           <!-- Header -->
           <tr>
             <td style="padding: 40px 40px 20px; text-align: center; background-color: ${BRAND_COLORS.brown}; border-radius: 12px 12px 0 0;">
-              <img src="https://themegpt.app/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
+              <img src="https://themegpt.ai/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
               <h1 style="margin: 0; color: ${BRAND_COLORS.cream}; font-size: 28px; font-weight: 700;">ThemeGPT</h1>
               <p style="margin: 8px 0 0; color: ${BRAND_COLORS.coral}; font-size: 14px;">Premium Themes for ChatGPT</p>
             </td>
@@ -319,7 +319,7 @@ export async function sendTrialEndingEmail(
               <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
                 <tr>
                   <td align="center">
-                    <a href="https://themegpt.app/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                    <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
                       Manage Subscription
                     </a>
                   </td>
@@ -335,7 +335,7 @@ export async function sendTrialEndingEmail(
                 You're receiving this email because you have an active ThemeGPT trial.
               </p>
               <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
-                <a href="https://themegpt.app" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.app</a>
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.ai</a>
               </p>
             </td>
           </tr>

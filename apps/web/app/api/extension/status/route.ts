@@ -6,7 +6,7 @@ import { hasFullAccess } from "@/lib/credits";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 
 const getAllowedOrigin = () => {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
   return appUrl;
 };
 

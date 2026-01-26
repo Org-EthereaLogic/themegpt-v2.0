@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 
 const getAllowedOrigin = () => {
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.app";
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
   return appUrl;
 };
 

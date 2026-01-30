@@ -43,7 +43,8 @@
     "externally_connectable": {
       "matches": [
         "https://themegpt.ai/*",
-        "https://*.themegpt.ai/*"
+        "https://*.themegpt.ai/*",
+        "https://*.a.run.app/*"
       ]
     }
   }

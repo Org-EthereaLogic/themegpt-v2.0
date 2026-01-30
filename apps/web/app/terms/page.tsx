@@ -94,15 +94,15 @@ export default function TermsOfService() {
             </p>
             <ul className="list-disc pl-6 space-y-2 mt-4" style={{ color: "#7A6555" }}>
               <li>
-                <strong style={{ color: "#4A3728" }}>Monthly Subscription ($1.99/month):</strong> Access to 3 active premium themes
-                at a time. You may swap themes freely. Cancel anytime with no commitment.
+                <strong style={{ color: "#4A3728" }}>Monthly Subscription ($6.99/month):</strong> Access to all 8 premium themes
+                with animated effects included. First month free (30-day trial). Cancel anytime with no commitment.
               </li>
               <li>
-                <strong style={{ color: "#4A3728" }}>Yearly Subscription ($14.99/year):</strong> Access to 3 active premium themes
-                at a time with a 30-day free trial. Includes a 12-month commitment period.
+                <strong style={{ color: "#4A3728" }}>Yearly Subscription ($69.99/year):</strong> Access to all 8 premium themes
+                with animated effects and all future theme updates. Save 17% compared to monthly.
               </li>
               <li>
-                <strong style={{ color: "#4A3728" }}>Single Theme ($0.99):</strong> Permanent access to one specific theme.
+                <strong style={{ color: "#4A3728" }}>Single Theme ($3.99):</strong> Permanent access to one specific theme.
                 This license does not expire.
               </li>
             </ul>

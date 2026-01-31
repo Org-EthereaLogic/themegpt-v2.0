@@ -242,7 +242,8 @@ function ThemeModal({ theme, isPremium, screenshots, category, description, isLi
           <div className="flex flex-col lg:flex-row">
             {/* Image Section */}
             <div className="relative lg:w-[65%] aspect-[16/10]">
-              {/* Home Image */}
+              {/* Home Image - uses native img for custom srcSet with pre-optimized variants */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={screenshots.home}
                 srcSet={getResponsiveSrcSet(screenshots.home)}
@@ -253,7 +254,8 @@ function ThemeModal({ theme, isPremium, screenshots, category, description, isLi
                 className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${activeView === "home" ? "opacity-100" : "opacity-0"}`}
                 style={{ backgroundColor: getThemeBlurColor(theme.id) }}
               />
-              {/* Content Image */}
+              {/* Content Image - uses native img for custom srcSet with pre-optimized variants */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={screenshots.content}
                 srcSet={getResponsiveSrcSet(screenshots.content)}
@@ -505,7 +507,8 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
       >
         {/* Image Container with Crossfade */}
         <div className="absolute inset-0">
-          {/* Home Image (default) */}
+          {/* Home Image (default) - uses native img for custom srcSet with pre-optimized variants and crossfade animations */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={screenshots.home}
             srcSet={getResponsiveSrcSet(screenshots.home)}
@@ -516,8 +519,9 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
             className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${isHovered ? "opacity-0" : "opacity-100"}`}
             style={{ backgroundColor: getThemeBlurColor(theme.id) }}
           />
-          {/* Content Image (on hover) - deferred loading */}
+          {/* Content Image (on hover) - uses native img for custom srcSet with pre-optimized variants and crossfade animations */}
           {shouldLoadContent && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={screenshots.content}
               srcSet={getResponsiveSrcSet(screenshots.content)}

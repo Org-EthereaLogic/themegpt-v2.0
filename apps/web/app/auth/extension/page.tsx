@@ -6,7 +6,13 @@ import Image from "next/image"
 import Link from "next/link"
 
 // Chrome Web Store extension ID
-const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
+const PRODUCTION_EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
+const LOCAL_EXTENSION_ID = process.env.NEXT_PUBLIC_EXTENSION_ID
+
+const EXTENSION_IDS = [PRODUCTION_EXTENSION_ID]
+if (LOCAL_EXTENSION_ID && LOCAL_EXTENSION_ID !== PRODUCTION_EXTENSION_ID) {
+  EXTENSION_IDS.push(LOCAL_EXTENSION_ID)
+}
 
 // Check if we can communicate with the extension
 async function pingExtension(): Promise<boolean> {
@@ -17,24 +23,39 @@ async function pingExtension(): Promise<boolean> {
       return
     }
 
-    try {
-      chrome.runtime.sendMessage(
-        EXTENSION_ID,
-        { type: "themegpt-ping" },
-        (response) => {
-          if (chrome.runtime.lastError) {
-            // Extension not installed or not responding
-            resolve(false)
-            return
+    // Try all configured extension IDs
+    let checkedCount = 0
+    let detected = false
+
+    EXTENSION_IDS.forEach((id) => {
+      try {
+        chrome.runtime.sendMessage(
+          id,
+          { type: "themegpt-ping" },
+          (response) => {
+            checkedCount++
+            if (!chrome.runtime.lastError && response?.success && response?.installed) {
+              detected = true
+              // Store the working ID for subsequent calls
+              sessionStorage.setItem("connected_extension_id", id)
+              resolve(true)
+            } else if (checkedCount === EXTENSION_IDS.length && !detected) {
+              resolve(false)
+            }
           }
-          resolve(!!(response?.success && response?.installed))
+        )
+      } catch {
+        checkedCount++
+        if (checkedCount === EXTENSION_IDS.length && !detected) {
+          resolve(false)
         }
-      )
-      // Timeout after 2 seconds
-      setTimeout(() => resolve(false), 2000)
-    } catch {
-      resolve(false)
-    }
+      }
+    })
+      
+    // Global timeout
+    setTimeout(() => {
+      if (!detected) resolve(false)
+    }, 2000)
   })
 }
 
@@ -46,9 +67,11 @@ async function sendTokenToExtension(token: string): Promise<boolean> {
       return
     }
 
+    const targetId = sessionStorage.getItem("connected_extension_id") || EXTENSION_IDS[0]
+
     try {
       chrome.runtime.sendMessage(
-        EXTENSION_ID,
+        targetId,
         { type: "themegpt-auth", token },
         (response) => {
           if (chrome.runtime.lastError) {

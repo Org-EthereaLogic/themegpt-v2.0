@@ -75,10 +75,10 @@ importers:
         specifier: 0.1.33
         version: 0.1.33
       '@types/node':
-        specifier: 25.2.0
+        specifier: ^25
         version: 25.2.0
       '@types/react':
-        specifier: 19.2.10
+        specifier: ^19
         version: 19.2.10
       '@types/react-dom':
         specifier: 19.2.3
@@ -9680,7 +9680,7 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 25.0.3
+      '@types/node': 25.2.0
 
   '@types/caseless@0.12.5':
     optional: true
@@ -9705,7 +9705,7 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.7':
     dependencies:
-      '@types/node': 25.0.3
+      '@types/node': 25.2.0
       '@types/qs': 6.14.0
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
@@ -9736,7 +9736,7 @@ snapshots:
   '@types/jsonwebtoken@9.0.10':
     dependencies:
       '@types/ms': 2.1.0
-      '@types/node': 25.0.3
+      '@types/node': 25.2.0
 
   '@types/long@4.0.2':
     optional: true
@@ -9784,7 +9784,7 @@ snapshots:
   '@types/request@2.48.13':
     dependencies:
       '@types/caseless': 0.12.5
-      '@types/node': 25.0.3
+      '@types/node': 25.2.0
       '@types/tough-cookie': 4.0.5
       form-data: 2.5.5
     optional: true
@@ -9801,7 +9801,7 @@ snapshots:
   '@types/serve-static@1.15.10':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 25.0.3
+      '@types/node': 25.2.0
       '@types/send': 0.17.6
 
   '@types/tough-cookie@4.0.5':
@@ -12982,7 +12982,7 @@ snapshots:
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
-      '@types/node': 25.0.3
+      '@types/node': 25.2.0
       long: 5.3.2
 
   proxy-agent@6.5.0:

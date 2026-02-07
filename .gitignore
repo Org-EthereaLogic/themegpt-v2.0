@@ -32,6 +32,8 @@ asset/istock/
 *.pyc
 __pycache__/
 .env.local
+.env.development.local
+.env.production.local
 .turbo
 dist
 coverage

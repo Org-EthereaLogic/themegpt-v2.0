@@ -25,6 +25,7 @@ declare module "next-auth/jwt" {
 }
 
 export const authOptions: NextAuthOptions = {
+  debug: process.env.NEXTAUTH_DEBUG === 'true',
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -80,15 +81,18 @@ export const authOptions: NextAuthOptions = {
     },
     async jwt({ token, user, account }) {
       if (user && account) {
-        // First sign in - get or create userId
-        const usersRef = firestore.collection(USERS_COLLECTION);
-        const existingUser = await usersRef
-          .where('email', '==', user.email)
-          .limit(1)
-          .get();
+        try {
+          const usersRef = firestore.collection(USERS_COLLECTION);
+          const existingUser = await usersRef
+            .where('email', '==', user.email)
+            .limit(1)
+            .get();
 
-        if (!existingUser.empty) {
-          token.userId = existingUser.docs[0].id;
+          if (!existingUser.empty) {
+            token.userId = existingUser.docs[0].id;
+          }
+        } catch (error) {
+          console.error("Error in jwt callback:", error);
         }
       }
       return token;

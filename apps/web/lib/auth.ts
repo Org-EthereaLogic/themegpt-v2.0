@@ -3,6 +3,41 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import { db as firestore } from "./firebase-admin";
 
+// In-memory log ring buffer for diagnostics (readable via /api/health)
+const MAX_LOG_ENTRIES = 50;
+const _authLogs: { ts: string; level: string; msg: string }[] = [];
+
+function authLog(level: string, msg: string) {
+  _authLogs.push({ ts: new Date().toISOString(), level, msg });
+  if (_authLogs.length > MAX_LOG_ENTRIES) _authLogs.shift();
+  console.log(`[auth:${level}] ${msg}`);
+}
+
+export function getAuthLogs() {
+  return _authLogs;
+}
+
+function serializeMeta(metadata: unknown): string {
+  if (!metadata) return 'undefined';
+  if (metadata instanceof Error) {
+    return JSON.stringify({ message: metadata.message, name: metadata.name, stack: metadata.stack?.split('\n').slice(0, 3).join(' | ') });
+  }
+  if (typeof metadata === 'object') {
+    const obj = metadata as Record<string, unknown>;
+    const result: Record<string, unknown> = {};
+    for (const key of Object.keys(obj)) {
+      const val = obj[key];
+      if (val instanceof Error) {
+        result[key] = { message: val.message, name: val.name, stack: val.stack?.split('\n').slice(0, 3).join(' | ') };
+      } else {
+        result[key] = val;
+      }
+    }
+    return JSON.stringify(result);
+  }
+  return String(metadata);
+}
+
 // Collection names
 const USERS_COLLECTION = 'users';
 
@@ -26,6 +61,17 @@ declare module "next-auth/jwt" {
 
 export const authOptions: NextAuthOptions = {
   debug: process.env.NEXTAUTH_DEBUG === 'true',
+  logger: {
+    error(code, metadata) {
+      authLog('ERROR', `${code} ${serializeMeta(metadata)}`);
+    },
+    warn(code) {
+      authLog('WARN', code);
+    },
+    debug(code, metadata) {
+      authLog('DEBUG', `${code} ${serializeMeta(metadata)}`);
+    },
+  },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
@@ -41,6 +87,7 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account }) {
+      authLog('INFO', `signIn callback: email=${user.email} provider=${account?.provider}`);
       if (!user.email || !account) return false;
 
       try {

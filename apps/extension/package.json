@@ -1,7 +1,7 @@
 {
   "name": "extension",
   "displayName": "ThemeGPT",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally.",
   "scripts": {
     "dev": "plasmo dev",
@@ -38,7 +38,8 @@
   "manifest": {
     "host_permissions": [
       "https://chat.openai.com/*",
-      "https://chatgpt.com/*"
+      "https://chatgpt.com/*",
+      "https://themegpt.ai/*"
     ],
     "externally_connectable": {
       "matches": [

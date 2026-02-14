@@ -6,6 +6,7 @@
  *   npx tsx scripts/test-email.ts subscription <email>  # Test subscription confirmation
  *   npx tsx scripts/test-email.ts purchase <email>      # Test theme purchase confirmation
  *   npx tsx scripts/test-email.ts trial <email>         # Test trial ending reminder
+ *   npx tsx scripts/test-email.ts structured <email> <en|es> # Test multilingual structured content email
  *   npx tsx scripts/test-email.ts all <email>           # Test all email templates
  */
 
@@ -90,6 +91,31 @@ async function testTrialEmail(email: string) {
   return result;
 }
 
+async function testStructuredContentEmail(
+  email: string,
+  locale: "en" | "es" = "en"
+) {
+  console.log(
+    `📧 Sending multilingual structured content test email (${locale.toUpperCase()}) to ${email}...`
+  );
+
+  const { sendStructuredContentTestEmail } = await loadEmailModule();
+  const result = await sendStructuredContentTestEmail(email, locale);
+
+  if (result.success) {
+    console.log(`✅ Success! Message ID: ${result.messageId}`);
+    console.log(`   Locale: ${locale}`);
+  } else {
+    console.error(`❌ Failed: ${result.error}`);
+  }
+
+  return result;
+}
+
+function parseLocale(value?: string): "en" | "es" {
+  return value === "es" ? "es" : "en";
+}
+
 async function testAllEmails(email: string) {
   console.log("🚀 Testing all email templates...\n");
   console.log("─".repeat(50));
@@ -152,6 +178,7 @@ async function main() {
     console.log("  npx tsx scripts/test-email.ts subscription <email>");
     console.log("  npx tsx scripts/test-email.ts purchase <email>");
     console.log("  npx tsx scripts/test-email.ts trial <email>");
+    console.log("  npx tsx scripts/test-email.ts structured <email> <en|es>");
     console.log("  npx tsx scripts/test-email.ts all <email>");
     process.exit(1);
   }
@@ -172,6 +199,9 @@ async function main() {
     case "trial":
       await testTrialEmail(email);
       break;
+    case "structured":
+      await testStructuredContentEmail(email, parseLocale(process.argv[4]));
+      break;
     case "all":
       await testAllEmails(email);
       break;
@@ -182,6 +212,7 @@ async function main() {
       console.log("  npx tsx scripts/test-email.ts subscription <email>  # Test subscription confirmation");
       console.log("  npx tsx scripts/test-email.ts purchase <email>      # Test theme purchase confirmation");
       console.log("  npx tsx scripts/test-email.ts trial <email>         # Test trial ending reminder");
+      console.log("  npx tsx scripts/test-email.ts structured <email> <en|es>  # Test multilingual structured content email");
       console.log("  npx tsx scripts/test-email.ts all <email>           # Test all email templates");
       console.log("");
       console.log("Example:");

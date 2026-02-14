@@ -1,4 +1,9 @@
 import { Resend } from "resend";
+import {
+  getStructuredContentLocaleLabel,
+  renderStructuredContentSectionsHtml,
+  type StructuredContentLocale,
+} from "./structured-content-library";
 
 // Lazy-initialized Resend client (avoids build-time errors)
 let resendClient: Resend | null = null;
@@ -358,6 +363,86 @@ export async function sendTrialEndingEmail(
   } catch (error) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error("Error sending trial ending email:", message);
+    return { success: false, error: message };
+  }
+}
+
+/**
+ * Send a multilingual structured content test email
+ */
+export async function sendStructuredContentTestEmail(
+  to: string,
+  locale: StructuredContentLocale = "en"
+): Promise<EmailResult> {
+  const localeLabel = getStructuredContentLocaleLabel(locale);
+  const contentBlocks = renderStructuredContentSectionsHtml(locale);
+
+  try {
+    const { data, error } = await getResend().emails.send({
+      from: EMAIL_FROM,
+      to,
+      subject: `Testing structured content blocks by language`,
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: ${BRAND_COLORS.cream};">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: ${BRAND_COLORS.cream};">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <tr>
+            <td style="padding: 40px 40px 20px; text-align: center; background-color: ${BRAND_COLORS.brown}; border-radius: 12px 12px 0 0;">
+              <img src="https://themegpt.ai/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
+              <h1 style="margin: 0; color: ${BRAND_COLORS.cream}; font-size: 28px; font-weight: 700;">ThemeGPT</h1>
+              <p style="margin: 8px 0 0; color: ${BRAND_COLORS.coral}; font-size: 14px;">Structured Content Demo</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="margin: 0 0 16px; color: ${BRAND_COLORS.brown}; font-size: 24px;">Multilingual Structured Content Test</h2>
+              <p style="margin: 0 0 24px; color: #666; font-size: 16px; line-height: 1.6;">
+                Below are some blocks that will change depending on the contact's language.
+                Current language: <strong>${localeLabel}</strong>
+              </p>
+              ${contentBlocks}
+              <p style="margin: 0; color: #666; font-size: 14px; line-height: 1.6;">
+                This email demonstrates reusable structured content blocks that can be reused across templates.
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 24px 40px; background-color: #f9f9f9; border-radius: 0 0 12px 12px; text-align: center;">
+              <p style="margin: 0; color: #999; font-size: 12px;">
+                You're receiving this email because you are testing multilingual structured content.
+              </p>
+              <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.ai</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+      `.trim(),
+    });
+
+    if (error) {
+      console.error("Failed to send structured content test email:", error);
+      return { success: false, error: error.message };
+    }
+
+    console.log(`Structured content test email sent, messageId: ${data?.id}`);
+    return { success: true, messageId: data?.id };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("Error sending structured content test email:", message);
     return { success: false, error: message };
   }
 }

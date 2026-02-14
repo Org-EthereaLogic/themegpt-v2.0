@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSession, signIn } from "next-auth/react";
 import { DEFAULT_THEMES } from "@themegpt/shared";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Navigation } from "@/components/sections/Navigation";
@@ -13,6 +14,7 @@ import { Footer } from "@/components/sections/Footer";
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
 
 export default function Home() {
+  const { data: session } = useSession();
   const [selectedTheme, setSelectedTheme] = useState<string>(
     PREMIUM_THEMES[0]?.id || ""
   );
@@ -22,6 +24,12 @@ export default function Home() {
     type: "yearly" | "monthly" | "single",
     themeId?: string
   ) => {
+    // Enforce login before checkout
+    if (!session) {
+      signIn(undefined, { callbackUrl: window.location.href });
+      return;
+    }
+
     setCheckoutError(null);
     try {
       const res = await fetch("/api/checkout", {

@@ -59,8 +59,9 @@ export async function GET(request: NextRequest) {
 
     // Get user subscription
     const subscription = await db.getSubscriptionByUserId(payload.userId);
+    const isInternalUser = payload.email.endsWith("@etherealogic.ai");
 
-    if (!subscription) {
+    if (!subscription && !isInternalUser) {
       return NextResponse.json(
         {
           success: true,
@@ -72,7 +73,28 @@ export async function GET(request: NextRequest) {
     }
 
     // Check if user has full access
-    const isActive = hasFullAccess(subscription);
+    let isActive = false;
+    if (subscription) {
+      isActive = hasFullAccess(subscription);
+    }
+
+    let mockSubscription = null;
+
+    // INTERNAL OVERRIDE: Grant full access to etherealogic.ai emails
+    if (isInternalUser) {
+      isActive = true;
+      if (!subscription) {
+        mockSubscription = {
+          status: 'active',
+          planType: 'lifetime',
+          isLifetime: true,
+          isActive: true,
+          hasFullAccess: true,
+          currentPeriodEnd: new Date('2099-12-31'),
+          trialEndsAt: null,
+        };
+      }
+    }
 
     // Get all premium theme IDs
     const premiumThemeIds = DEFAULT_THEMES.filter((t) => t.isPremium).map(
@@ -83,19 +105,21 @@ export async function GET(request: NextRequest) {
     // Active subscribers get all premium themes
     const accessibleThemes = isActive ? premiumThemeIds : [];
 
+    const subscriptionData = subscription ? {
+      status: subscription.status,
+      planType: subscription.planType,
+      isLifetime: subscription.isLifetime,
+      isActive,
+      hasFullAccess: isActive,
+      currentPeriodEnd: subscription.currentPeriodEnd,
+      trialEndsAt: subscription.trialEndsAt,
+    } : mockSubscription;
+
     return NextResponse.json(
       {
         success: true,
-        hasSubscription: true,
-        subscription: {
-          status: subscription.status,
-          planType: subscription.planType,
-          isLifetime: subscription.isLifetime,
-          isActive,
-          hasFullAccess: isActive,
-          currentPeriodEnd: subscription.currentPeriodEnd,
-          trialEndsAt: subscription.trialEndsAt,
-        },
+        hasSubscription: isActive || !!subscription,
+        subscription: subscriptionData,
         accessibleThemes,
         user: { email: payload.email },
       },

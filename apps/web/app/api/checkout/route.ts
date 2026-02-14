@@ -44,9 +44,15 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { type, themeId } = body as { type: CheckoutType; themeId?: string };
 
-    // Get user session if logged in
+    // Require authenticated user for checkout
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id;
+    if (!userId) {
+      return NextResponse.json(
+        { success: false, message: "Authentication required" },
+        { status: 401, headers: corsHeaders }
+      );
+    }
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
 

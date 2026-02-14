@@ -2,6 +2,14 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
+## [2.0.2] - 2026-02-14
+
+### Fixed
+
+- Resolved critical connection issue between Chrome Extension and Web App
+- Fixed authentication flow for seamless login
+- Verified secure token exchange for premium theme downloads
+
 ## [2.0.1] - 2026-01-26
 
 ### Changed

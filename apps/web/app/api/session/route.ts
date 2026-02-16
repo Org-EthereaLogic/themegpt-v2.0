@@ -33,9 +33,8 @@ export async function GET(request: Request) {
         const planType = session.metadata?.planType ||
           (subscription.items.data[0]?.plan?.interval === "year" ? "yearly" : "monthly");
 
-        // Check for early adopter lifetime status
-        const isLifetime = session.metadata?.isEarlyAdopterEligible === "true" &&
-          planType === "yearly";
+        // Lifetime must be explicitly marked; checkout-time eligibility is not sufficient.
+        const isLifetime = subscription.metadata?.isLifetime === "true";
 
         return NextResponse.json({
           success: true,

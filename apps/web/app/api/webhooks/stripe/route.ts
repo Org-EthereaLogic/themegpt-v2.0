@@ -298,6 +298,17 @@ async function handleFirstYearlyPayment(subscriptionId: string) {
     return;
   }
 
+  // Sync lifetime status back to Stripe subscription metadata so that routes
+  // reading from Stripe (e.g. /api/session, /api/extension/auth) see the correct state.
+  try {
+    await getStripe().subscriptions.update(subscriptionId, {
+      metadata: { isLifetime: "true", planType: "lifetime" },
+    });
+  } catch (stripeError) {
+    // Non-fatal: Firestore is the source of truth. Log and continue.
+    console.error(`Failed to sync isLifetime metadata to Stripe for ${subscriptionId}:`, stripeError);
+  }
+
   console.log(`Early adopter lifetime access granted after payment for subscription: ${dbSubscription.id}`);
 
   // Send upgraded confirmation email

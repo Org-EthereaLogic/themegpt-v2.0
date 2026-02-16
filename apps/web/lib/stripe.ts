@@ -44,4 +44,5 @@ export const EARLY_ADOPTER_CONFIG = {
 };
 
 // Trial configuration
-export const TRIAL_DAYS = 30; // 1 month free trial for yearly
+// Applied to: monthly (always), yearly (only after 60 founding lifetime slots are filled)
+export const TRIAL_DAYS = 30;

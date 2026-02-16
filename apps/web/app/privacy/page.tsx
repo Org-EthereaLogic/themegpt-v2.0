@@ -63,7 +63,7 @@ export default function PrivacyPolicy() {
           Privacy Policy
         </h1>
         <p className="mb-6 text-sm" style={{ color: "#7A6555" }}>
-          Last updated: January 2025
+          Last updated: February 2026
         </p>
 
         <div className="space-y-8">
@@ -236,6 +236,29 @@ export default function PrivacyPolicy() {
                 </a>
               </li>
             </ul>
+          </section>
+
+          <section>
+            <h2
+              className="text-2xl font-semibold mb-4"
+              style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
+            >
+              Case Studies &amp; Testimonials
+            </h2>
+            <p className="leading-relaxed" style={{ color: "#7A6555" }}>
+              We do not collect data for marketing purposes without your knowledge. If we
+              wish to feature your experience in a case study, testimonial, or promotional
+              material, we will request your explicit, written consent beforehand.
+              Participation is entirely voluntary and you may withdraw consent at any time
+              by contacting{" "}
+              <a
+                href="mailto:privacy@themegpt.ai"
+                className="transition-colors hover:underline"
+                style={{ color: "#5BB5A2" }}
+              >
+                privacy@themegpt.ai
+              </a>.
+            </p>
           </section>
 
           <section>

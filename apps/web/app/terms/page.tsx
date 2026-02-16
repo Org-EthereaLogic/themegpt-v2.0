@@ -63,7 +63,7 @@ export default function TermsOfService() {
           Terms of Service
         </h1>
         <p className="mb-6 text-sm" style={{ color: "#7A6555" }}>
-          Last updated: January 2025
+          Last updated: February 2026
         </p>
 
         <div className="space-y-8">
@@ -95,11 +95,14 @@ export default function TermsOfService() {
             <ul className="list-disc pl-6 space-y-2 mt-4" style={{ color: "#7A6555" }}>
               <li>
                 <strong style={{ color: "#4A3728" }}>Monthly Subscription ($6.99/month):</strong> Access to all 8 premium themes
-                with animated effects included. First month free (30-day trial). Cancel anytime with no commitment.
+                with animated effects included. Includes a 30-day free trial. Cancel anytime with no commitment.
               </li>
               <li>
                 <strong style={{ color: "#4A3728" }}>Yearly Subscription ($69.99/year):</strong> Access to all 8 premium themes
                 with animated effects and all future theme updates. Save 17% compared to monthly.
+                Founding Lifetime Access is limited to the first 60 customers who complete a paid yearly
+                subscription charge. After 60 slots are filled, yearly plans include a 30-day free trial,
+                then bill annually.
               </li>
               <li>
                 <strong style={{ color: "#4A3728" }}>Single Theme ($3.99):</strong> Permanent access to one specific theme.
@@ -117,11 +120,11 @@ export default function TermsOfService() {
             </h2>
             <ul className="list-disc pl-6 space-y-2" style={{ color: "#7A6555" }}>
               <li>All payments are processed securely through Stripe</li>
-              <li>Monthly subscription fees are billed monthly on your purchase anniversary date</li>
-              <li>Yearly subscription fees are billed annually after the 30-day free trial</li>
+              <li>Monthly subscription fees are billed monthly on your purchase anniversary date after a 30-day free trial</li>
+              <li>Yearly subscription fees are billed annually; the first 60 yearly customers pay immediately with no trial to qualify for Founding Lifetime Access</li>
+              <li>After 60 Founding Lifetime slots are filled, yearly plans include a 30-day free trial, then bill annually</li>
+              <li>You may cancel anytime; cancel during a free trial to avoid being charged</li>
               <li>Prices are in USD and subject to applicable taxes</li>
-              <li>Monthly subscriptions may be canceled at any time through Stripe</li>
-              <li>Yearly subscriptions include a 12-month commitment period</li>
             </ul>
           </section>
 
@@ -133,24 +136,26 @@ export default function TermsOfService() {
               4. Refund Policy
             </h2>
             <p className="leading-relaxed" style={{ color: "#7A6555" }}>
-              Due to the digital nature of our product:
+              Due to the digital nature of our product, once billing begins access continues
+              through the paid term. No prorated refunds are provided by default, except where
+              required by applicable law.
             </p>
             <ul className="list-disc pl-6 space-y-2 mt-4" style={{ color: "#7A6555" }}>
               <li>
-                <strong style={{ color: "#4A3728" }}>Monthly subscriptions:</strong> Refunds available within 7 days of initial
-                purchase if you have not activated any premium themes
+                <strong style={{ color: "#4A3728" }}>Monthly subscriptions:</strong> Cancel anytime; access continues through
+                the current billing period. Cancel during your 30-day free trial to avoid any charge.
               </li>
               <li>
-                <strong style={{ color: "#4A3728" }}>Yearly subscriptions:</strong> Full refund available within 7 days of purchase
-                or during the 30-day free trial if you have not activated any premium themes
+                <strong style={{ color: "#4A3728" }}>Yearly subscriptions:</strong> Cancel anytime; access continues through the
+                paid annual term. If your plan included a trial, cancel during the trial to avoid charge.
               </li>
               <li>
                 <strong style={{ color: "#4A3728" }}>Single themes:</strong> No refunds once the license key has been
-                activated
+                activated.
               </li>
             </ul>
             <p className="leading-relaxed mt-4" style={{ color: "#7A6555" }}>
-              For refund requests, contact{" "}
+              For questions or refund requests where required by law, contact{" "}
               <a
                 href="mailto:support@themegpt.ai"
                 className="transition-colors hover:underline"
@@ -239,9 +244,8 @@ export default function TermsOfService() {
                 the end of the current billing period.
               </li>
               <li>
-                <strong style={{ color: "#4A3728" }}>Yearly subscriptions:</strong> You may cancel within the first 7 days for
-                a full refund with no penalty. After the first week, yearly subscriptions include
-                a 12-month commitment period.
+                <strong style={{ color: "#4A3728" }}>Yearly subscriptions:</strong> You may cancel at any time. Access continues
+                through the paid annual term. No prorated refunds except where required by applicable law.
               </li>
             </ul>
           </section>
@@ -251,7 +255,29 @@ export default function TermsOfService() {
               className="text-2xl font-semibold mb-4"
               style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
             >
-              10. Changes to Terms
+              10. Data Collection &amp; Case Studies
+            </h2>
+            <p className="leading-relaxed" style={{ color: "#7A6555" }}>
+              ThemeGPT does not collect analytics, telemetry, or usage data. If we wish
+              to feature your experience in a case study, testimonial, or marketing material,
+              we will request your explicit, written consent beforehand. Participation is
+              entirely voluntary and may be withdrawn at any time by contacting{" "}
+              <a
+                href="mailto:privacy@themegpt.ai"
+                className="transition-colors hover:underline"
+                style={{ color: "#5BB5A2" }}
+              >
+                privacy@themegpt.ai
+              </a>.
+            </p>
+          </section>
+
+          <section>
+            <h2
+              className="text-2xl font-semibold mb-4"
+              style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
+            >
+              11. Changes to Terms
             </h2>
             <p className="leading-relaxed" style={{ color: "#7A6555" }}>
               We may update these terms to reflect changes in our service or legal
@@ -265,7 +291,7 @@ export default function TermsOfService() {
               className="text-2xl font-semibold mb-4"
               style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
             >
-              11. Contact
+              12. Contact
             </h2>
             <p className="leading-relaxed" style={{ color: "#7A6555" }}>
               For questions about these terms, contact us at{" "}

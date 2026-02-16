@@ -176,7 +176,7 @@ export function PricingSection({
               className="text-[0.85rem] font-medium mb-5"
               style={{ color: "#E8A87C" }}
             >
-              Save 17% • Early adopters get lifetime
+              Save 17% • First 60 paid yearly get lifetime
             </p>
 
             <motion.ul
@@ -189,10 +189,10 @@ export function PricingSection({
               }}
             >
               {[
-                { text: "Lifetime access potential", icon: "★", color: "#E8A87C" },
+                { text: "First 60 paid get lifetime access", icon: "★", color: "#E8A87C" },
                 { text: "All 8 premium themes", icon: "✓", color: "#E8A87C" },
                 { text: "Animated effects included", icon: "✓", color: "#E8A87C" },
-                { text: "All future theme updates", icon: "✓", color: "#E8A87C" },
+                { text: "Cancel anytime; no prorated refunds", icon: "✓", color: "#E8A87C" },
               ].map((item) => (
                 <motion.li
                   key={item.text}
@@ -225,7 +225,7 @@ export function PricingSection({
               loadingText="Processing..."
               className="w-full rounded-[14px]"
             >
-              Get Lifetime Access
+              Subscribe Yearly
             </Button>
           </motion.div>
 

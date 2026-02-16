@@ -113,28 +113,22 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
         ? new Date(currentPeriodStart.getTime() + 365 * 24 * 60 * 60 * 1000)
         : null;
 
-      // Check if this yearly subscriber should get lifetime access
-      let shouldBeLifetime = false;
-      if (normalizedPlanType === "yearly" && isEarlyAdopterEligible === "true") {
-        shouldBeLifetime = await db.claimEarlyAdopterSlot();
-      }
-
+      // NOTE: Early adopter lifetime access is NOT claimed here.
+      // Lifetime slots are claimed in handleInvoicePaid after the first
+      // paid yearly charge completes, preventing claims before payment.
       await db.createSubscription({
         userId,
         stripeSubscriptionId: stripeSubscription.id,
         stripeCustomerId: session.customer as string,
         status: stripeSubscription.status === 'trialing' ? 'trialing' : 'active',
-        planType: shouldBeLifetime ? 'lifetime' : normalizedPlanType,
+        planType: normalizedPlanType,
         currentPeriodStart,
         currentPeriodEnd,
         trialEndsAt,
         commitmentEndsAt,
-        isLifetime: shouldBeLifetime,
+        isLifetime: false,
       });
 
-      if (shouldBeLifetime) {
-        console.log(`Early adopter lifetime access granted for user: ${userId}`);
-      }
       console.log(`Subscription record created for user: ${userId} (plan: ${normalizedPlanType})`);
     }
   } else {
@@ -163,12 +157,9 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   const customerEmail = session.customer_email || session.customer_details?.email;
   if (customerEmail) {
     if (isSubscription) {
-      // Determine the plan type for email
-      const emailPlanType = planType === "yearly"
-        ? (await db.getSubscriptionByUserId(userId || ""))?.isLifetime
-          ? "lifetime"
-          : "yearly"
-        : "monthly";
+      // At checkout completion, plan is always yearly/monthly (not lifetime yet).
+      // Lifetime confirmation email is sent from handleInvoicePaid after slot is claimed.
+      const emailPlanType = planType === "yearly" ? "yearly" : "monthly";
       await sendSubscriptionConfirmationEmail(customerEmail, emailPlanType as "monthly" | "yearly" | "lifetime");
     } else if (themeId) {
       // Single theme purchase
@@ -181,17 +172,27 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 }
 
 async function handleInvoicePaid(invoice: Stripe.Invoice) {
-  // Only process subscription renewals (not initial payment)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const invoiceAny = invoice as any;
   const subscriptionId = typeof invoiceAny.subscription === 'string'
     ? invoiceAny.subscription
     : invoiceAny.subscription?.id;
 
-  if (!subscriptionId || invoice.billing_reason === 'subscription_create') {
+  if (!subscriptionId) {
     return;
   }
 
+  // Handle first paid invoice for yearly subscriptions — claim early adopter lifetime slot.
+  // This ensures lifetime is only granted after a completed payment, not at checkout start.
+  if (invoice.billing_reason === 'subscription_create') {
+    // Only process if actual payment occurred (not a $0 trial-start invoice)
+    if ((invoice.amount_paid ?? 0) > 0) {
+      await handleFirstYearlyPayment(subscriptionId);
+    }
+    return;
+  }
+
+  // Process subscription renewals
   const subscription = await db.getSubscriptionByStripeId(subscriptionId);
 
   if (!subscription) {
@@ -218,6 +219,53 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
   await db.updateBillingPeriod(subscription.id, currentPeriodStart, currentPeriodEnd);
 
   console.log(`Billing period updated for subscription: ${subscription.id}`);
+}
+
+/**
+ * Handle the first paid invoice for a yearly subscription.
+ * Claims an early adopter lifetime slot if eligible, converting the subscription to lifetime.
+ * This runs ONLY after Stripe confirms payment — never during a trial.
+ */
+async function handleFirstYearlyPayment(subscriptionId: string) {
+  const stripeSubscription = await getStripe().subscriptions.retrieve(
+    subscriptionId,
+    { expand: ['items.data'] }
+  ) as Stripe.Subscription;
+
+  const isEarlyAdopterEligible = stripeSubscription.metadata?.isEarlyAdopterEligible === "true";
+  const planType = stripeSubscription.metadata?.planType;
+
+  if (planType !== "yearly" || !isEarlyAdopterEligible) {
+    return;
+  }
+
+  const dbSubscription = await db.getSubscriptionByStripeId(subscriptionId);
+  if (!dbSubscription) {
+    console.log(`No subscription record found for first yearly payment: ${subscriptionId}`);
+    return;
+  }
+
+  // Already lifetime — skip
+  if (dbSubscription.isLifetime) {
+    return;
+  }
+
+  // Attempt to claim an early adopter slot (atomic transaction in Firestore)
+  const claimed = await db.claimEarlyAdopterSlot();
+  if (!claimed) {
+    console.log(`Early adopter slots exhausted; yearly subscription remains standard: ${subscriptionId}`);
+    return;
+  }
+
+  // Convert subscription to lifetime
+  await db.convertToLifetime(dbSubscription.id);
+  console.log(`Early adopter lifetime access granted after payment for subscription: ${dbSubscription.id}`);
+
+  // Send upgraded confirmation email
+  const customer = await getStripe().customers.retrieve(stripeSubscription.customer as string);
+  if (!customer.deleted && customer.email) {
+    await sendSubscriptionConfirmationEmail(customer.email, "lifetime");
+  }
 }
 
 async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {

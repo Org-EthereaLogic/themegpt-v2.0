@@ -129,8 +129,10 @@ export async function POST(request: NextRequest) {
 
     // Add subscription metadata
     if (normalizedType === "yearly") {
-      // Yearly: No trial, but early adopters get lifetime access
+      // Yearly early adopters (slots available): No trial — pay immediately to qualify for lifetime.
+      // Yearly post-early-adopter (slots exhausted): 30-day free trial, then annual billing.
       checkoutParams.subscription_data = {
+        ...(isEarlyAdopterEligible ? {} : { trial_period_days: TRIAL_DAYS }),
         metadata: {
           planType: "yearly",
           isEarlyAdopterEligible: isEarlyAdopterEligible ? "true" : "false",

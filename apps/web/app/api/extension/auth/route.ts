@@ -135,8 +135,8 @@ async function linkStripeSubscription(userId: string, email: string) {
       planType = "yearly";
     }
 
-    // Check for lifetime status
-    const isLifetime = metadata.isLifetime === "true" || metadata.isEarlyAdopterEligible === "true";
+    // Lifetime must be explicitly marked; eligibility at checkout is not lifetime.
+    const isLifetime = metadata.isLifetime === "true";
 
     await db.createSubscription({
       userId,

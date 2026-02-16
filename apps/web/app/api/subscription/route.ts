@@ -18,6 +18,20 @@ export async function GET() {
 
     const subscription = await db.getSubscriptionByUserId(session.user.id);
 
+    // INTERNAL OVERRIDE: Grant full access to etherealogic.ai emails
+    const isInternalUser = session.user.email?.endsWith("@etherealogic.ai");
+
+    // If internal user and no subscription, create a mock one
+    if (isInternalUser && !subscription) {
+      const response: SubscriptionResponse = {
+        status: 'active',
+        planType: 'lifetime',
+        hasFullAccess: true,
+        isLifetime: true,
+      };
+      return NextResponse.json(response);
+    }
+
     if (!subscription) {
       return NextResponse.json(
         { error: "No subscription found" },
@@ -25,12 +39,15 @@ export async function GET() {
       );
     }
 
+    // For internal users with existing subscriptions, ensure they have full access
+    const isActive = isInternalUser ? true : hasFullAccess(subscription);
+
     const response: SubscriptionResponse = {
       status: subscription.status,
-      planType: subscription.planType,
-      hasFullAccess: hasFullAccess(subscription),
+      planType: isInternalUser ? 'lifetime' : subscription.planType,
+      hasFullAccess: isActive,
       gracePeriodEnds: subscription.status === 'canceled' ? subscription.currentPeriodEnd : undefined,
-      isLifetime: subscription.isLifetime,
+      isLifetime: isInternalUser || subscription.isLifetime,
       trialEndsAt: subscription.trialEndsAt || undefined,
       commitmentEndsAt: subscription.commitmentEndsAt || undefined,
     };

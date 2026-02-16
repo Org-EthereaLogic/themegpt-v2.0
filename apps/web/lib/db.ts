@@ -424,6 +424,41 @@ export const db = {
     }
   },
 
+  /**
+   * Release an early adopter slot (decrement usedSlots).
+   * Used to roll back a claimed slot when convertToLifetime() fails.
+   */
+  async releaseEarlyAdopterSlot(): Promise<boolean> {
+    try {
+      const configRef = firestore.collection(EARLY_ADOPTER_COLLECTION).doc('config');
+
+      const result = await firestore.runTransaction(async (transaction) => {
+        const doc = await transaction.get(configRef);
+        if (!doc.exists) {
+          return false;
+        }
+
+        const data = doc.data();
+        const currentSlots = data?.usedSlots || 0;
+        if (currentSlots <= 0) {
+          return false;
+        }
+
+        transaction.update(configRef, {
+          usedSlots: currentSlots - 1,
+          isActive: true, // Re-activate since a slot freed up
+        });
+
+        return true;
+      });
+
+      return result;
+    } catch (error) {
+      console.error("Error releasing early adopter slot:", error);
+      return false;
+    }
+  },
+
   async getEarlyAdopterCount(): Promise<number> {
     try {
       const program = await this.getEarlyAdopterProgram();

@@ -65,7 +65,7 @@ export async function POST(request: Request) {
 }
 
 async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
-  const { type, themeId, userId, planType, isEarlyAdopterEligible } = session.metadata || {};
+  const { type, themeId, userId, planType } = session.metadata || {};
   const licenseKey = `KEY-${uuidv4().substring(0, 8).toUpperCase()}`;
 
   let entitlement: LicenseEntitlement;
@@ -225,6 +225,14 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
  * Handle the first paid invoice for a yearly subscription.
  * Claims an early adopter lifetime slot if eligible, converting the subscription to lifetime.
  * This runs ONLY after Stripe confirms payment — never during a trial.
+ *
+ * Handles three edge cases:
+ * - Stale metadata: Re-checks slot eligibility live via db.isEarlyAdopterEligible()
+ *   instead of trusting the checkout-time flag.
+ * - Event ordering: invoice.paid can arrive before checkout.session.completed;
+ *   retries with delay if the DB subscription record doesn't exist yet.
+ * - Failed conversion: If convertToLifetime() fails after slot is claimed,
+ *   releases the slot to prevent leaking.
  */
 async function handleFirstYearlyPayment(subscriptionId: string) {
   const stripeSubscription = await getStripe().subscriptions.retrieve(
@@ -232,20 +240,45 @@ async function handleFirstYearlyPayment(subscriptionId: string) {
     { expand: ['items.data'] }
   ) as Stripe.Subscription;
 
-  const isEarlyAdopterEligible = stripeSubscription.metadata?.isEarlyAdopterEligible === "true";
   const planType = stripeSubscription.metadata?.planType;
 
-  if (planType !== "yearly" || !isEarlyAdopterEligible) {
+  // Only yearly plans qualify for early adopter lifetime
+  if (planType !== "yearly") {
     return;
   }
 
-  const dbSubscription = await db.getSubscriptionByStripeId(subscriptionId);
+  // P1-1 FIX: Re-check eligibility live instead of trusting stale checkout-time metadata.
+  // claimEarlyAdopterSlot() does its own atomic check, but we skip the DB lookup
+  // and Stripe calls entirely if the program is already closed.
+  const eligible = await db.isEarlyAdopterEligible();
+  if (!eligible) {
+    return;
+  }
+
+  // P1-2 FIX: Retry if subscription record hasn't been created yet.
+  // invoice.paid can arrive before checkout.session.completed — Stripe does not
+  // guarantee event ordering.
+  const MAX_RETRIES = 3;
+  const RETRY_DELAY_MS = 2000;
+  let dbSubscription = await db.getSubscriptionByStripeId(subscriptionId);
+
+  for (let attempt = 1; !dbSubscription && attempt <= MAX_RETRIES; attempt++) {
+    console.log(
+      `Subscription record not found for ${subscriptionId}, retry ${attempt}/${MAX_RETRIES} in ${RETRY_DELAY_MS}ms`
+    );
+    await new Promise(resolve => setTimeout(resolve, RETRY_DELAY_MS));
+    dbSubscription = await db.getSubscriptionByStripeId(subscriptionId);
+  }
+
   if (!dbSubscription) {
-    console.log(`No subscription record found for first yearly payment: ${subscriptionId}`);
+    console.error(
+      `Subscription record not found after ${MAX_RETRIES} retries for first yearly payment: ${subscriptionId}. ` +
+      `Lifetime conversion skipped — manual review required.`
+    );
     return;
   }
 
-  // Already lifetime — skip
+  // Already lifetime — skip (idempotent)
   if (dbSubscription.isLifetime) {
     return;
   }
@@ -257,8 +290,14 @@ async function handleFirstYearlyPayment(subscriptionId: string) {
     return;
   }
 
-  // Convert subscription to lifetime
-  await db.convertToLifetime(dbSubscription.id);
+  // P1-3 FIX: Check convertToLifetime result. If it fails, release the slot to prevent leaking.
+  const converted = await db.convertToLifetime(dbSubscription.id);
+  if (!converted) {
+    console.error(`convertToLifetime failed for ${dbSubscription.id} — releasing claimed slot`);
+    await db.releaseEarlyAdopterSlot();
+    return;
+  }
+
   console.log(`Early adopter lifetime access granted after payment for subscription: ${dbSubscription.id}`);
 
   // Send upgraded confirmation email

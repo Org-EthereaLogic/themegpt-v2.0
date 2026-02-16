@@ -4,10 +4,16 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "@parcel/reporter-dev-server"
+        # CVE-2025-56648: Mitigated via local patch; upgrade blocked by Plasmo pinning Parcel@2.9.3
   - package-ecosystem: "npm"
     directory: "/apps/extension"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "@parcel/reporter-dev-server"
+        # CVE-2025-56648: Mitigated via local patch; upgrade blocked by Plasmo pinning Parcel@2.9.3
   - package-ecosystem: "npm"
     directory: "/apps/web"
     schedule:

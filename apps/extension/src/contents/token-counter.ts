@@ -47,6 +47,69 @@ export function calculateTokenStats(messages: Array<{ role: string | null, text:
     }
 }
 
+function getStatsFromSelector(selector: string): TokenStats {
+    const elements = document.querySelectorAll(selector)
+    if (elements.length === 0) return { user: 0, assistant: 0, total: 0, lastUpdated: 0 }
+
+    const messageData = Array.from(elements).map(el => {
+        let role = el.getAttribute("data-message-author-role")
+        // If attribute missing, try validation from testid or class
+        if (!role) {
+            const testId = el.getAttribute("data-testid") || ""
+            if (testId.includes("user")) role = "user"
+            else if (testId.includes("assistant")) role = "assistant"
+            else if (el.classList.contains("markdown")) role = "assistant"
+        }
+        return {
+            role: role,
+            text: el.textContent
+        }
+    })
+
+    return calculateTokenStats(messageData)
+}
+
+function extractMessageStats(): TokenStats {
+    // Strategy 1: Standard attribute (most reliable)
+    const stats1 = getStatsFromSelector("[data-message-author-role]")
+    if (stats1.total > 0) return stats1
+
+    // Strategy 2: Fallback to test ids (often stable) AND markdown class
+    // We combine them to ensure we catch mixed cases (e.g. user has testid, assistant has markdown class)
+    const stats2 = getStatsFromSelector("[data-testid*='message'], .markdown")
+    if (stats2.total > 0) return stats2
+
+    // Strategy 3: Loose conversation turns (last resort)
+    const turnElements = document.querySelectorAll("[data-testid^='conversation-turn-']")
+    if (turnElements.length > 0) {
+        const messages: Array<{ role: string | null, text: string | null }> = []
+        turnElements.forEach(turn => {
+            // Try to find user/assistant specific elements inside
+            const userMsg = turn.querySelector("[data-message-author-role='user']") ||
+                turn.querySelector("[data-testid*='user']")
+
+            // Check for assistant message
+            const assistantMsg = turn.querySelector("[data-message-author-role='assistant']") ||
+                turn.querySelector("[data-testid*='assistant']") ||
+                turn.querySelector(".markdown") // Common for assistant
+
+            if (userMsg) messages.push({ role: "user", text: userMsg.textContent })
+            if (assistantMsg) messages.push({ role: "assistant", text: assistantMsg.textContent })
+
+            // If neither strict role found, but we have text content
+            if (!userMsg && !assistantMsg && turn.textContent) {
+                messages.push({ role: "assistant", text: turn.textContent })
+            }
+        })
+
+        if (messages.length > 0) {
+            return calculateTokenStats(messages)
+        }
+    }
+
+    return { user: 0, assistant: 0, total: 0, lastUpdated: 0 }
+}
+
 function updateCounts(): void {
     // Stop if extension context is invalidated
     if (!isContextValid()) {
@@ -54,13 +117,7 @@ function updateCounts(): void {
         return
     }
 
-    const elements = document.querySelectorAll("[data-message-author-role]")
-    const messageData = Array.from(elements).map(el => ({
-        role: el.getAttribute("data-message-author-role"),
-        text: el.textContent
-    }))
-
-    const newStats = calculateTokenStats(messageData)
+    const newStats = extractMessageStats()
 
     // valid change check to avoid spamming events
     if (newStats.total !== latestStats.total) {
@@ -101,18 +158,20 @@ const observer = new MutationObserver(() => {
 })
 
 function initObserver(): void {
-    const main = document.querySelector("main")
-    if (main) {
+    if (document.body) {
         updateCounts()
-        observer.observe(main, { childList: true, subtree: true, characterData: true })
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+            characterData: true,
+            attributes: true,
+            attributeFilter: ["data-message-author-role", "class"]
+        })
     } else {
-        setTimeout(initObserver, 1000)
+        setTimeout(initObserver, 100)
     }
 }
 
-/**
- * Named message listener that can remove itself on context invalidation
- */
 function messageListener(
     req: { type: string },
     _sender: chrome.runtime.MessageSender,

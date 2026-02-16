@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2)</title>
+<style>
+  :root {
+    --cream: #faf6f0;
+    --brown: #4b2e1e;
+    --teal: #7ecec5;
+    --peach: #f4a988;
+    --coral: #e87d5c;
+    --phase1: #7ecec5;
+    --phase2: #f4a988;
+    --phase3: #fad000;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: linear-gradient(160deg, #fffaf5 0%, #fdf7ee 45%, #fff 100%);
+    color: var(--brown);
+    font-family: "Inter", "Segoe UI", sans-serif;
+    line-height: 1.6;
+    padding: 1.5rem;
+  }
+
+  .header {
+    max-width: 1100px;
+    margin: 0 auto 1.2rem;
+    background: white;
+    border: 1px solid rgba(75, 46, 30, 0.1);
+    border-radius: 18px;
+    padding: 1.2rem 1.4rem;
+    box-shadow: 0 10px 30px rgba(75, 46, 30, 0.08);
+  }
+
+  .header h1 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    line-height: 1.2;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle {
+    color: rgba(75, 46, 30, 0.8);
+    margin-bottom: 0.8rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 0.8rem;
+    color: rgba(75, 46, 30, 0.75);
+  }
+
+  .meta span {
+    background: #fff8f0;
+    border: 1px solid rgba(75, 46, 30, 0.12);
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .snapshot {
+    max-width: 1100px;
+    margin: 0 auto 1.2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.7rem;
+  }
+
+  .snap-card {
+    background: white;
+    border: 1px solid rgba(75, 46, 30, 0.1);
+    border-radius: 14px;
+    padding: 0.9rem;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: rgba(75, 46, 30, 0.6);
+    margin-bottom: 0.25rem;
+  }
+
+  .value {
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 1.2;
+  }
+
+  .detail {
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    color: rgba(75, 46, 30, 0.75);
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .section {
+    background: white;
+    border: 1px solid rgba(75, 46, 30, 0.1);
+    border-radius: 16px;
+    padding: 1rem;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+    margin-bottom: 0.55rem;
+  }
+
+  h3 {
+    font-size: 1rem;
+    margin-bottom: 0.35rem;
+  }
+
+  h4 {
+    font-size: 0.92rem;
+    margin-bottom: 0.35rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+
+  .timeline-bar {
+    display: grid;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    gap: 0.22rem;
+    margin-top: 0.6rem;
+  }
+
+  .week-cell {
+    text-align: center;
+    padding: 0.35rem 0;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.68rem;
+  }
+
+  .p1 { background: var(--phase1); }
+  .p2 { background: var(--phase2); }
+  .p3 { background: #d8b500; }
+
+  .timeline-labels {
+    display: grid;
+    grid-template-columns: repeat(13, minmax(0, 1fr));
+    gap: 0.22rem;
+    margin-top: 0.4rem;
+    font-size: 0.64rem;
+    color: rgba(75, 46, 30, 0.72);
+    text-align: center;
+  }
+
+  .phase-tabs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .phase-tab {
+    border: 1px solid rgba(75, 46, 30, 0.16);
+    background: #fff9f3;
+    border-radius: 10px;
+    padding: 0.65rem;
+    text-align: left;
+    font-weight: 700;
+    color: var(--brown);
+    cursor: pointer;
+  }
+
+  .phase-tab .tab-label {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.74rem;
+    font-weight: 500;
+    color: rgba(75, 46, 30, 0.7);
+  }
+
+  .phase-tab.active {
+    border-color: var(--teal);
+    background: rgba(126, 206, 197, 0.12);
+  }
+
+  .phase-content {
+    display: none;
+    margin-top: 0.9rem;
+  }
+
+  .phase-content.active {
+    display: block;
+  }
+
+  .callout {
+    border-left: 4px solid var(--teal);
+    background: rgba(126, 206, 197, 0.1);
+    border-radius: 8px;
+    padding: 0.7rem 0.8rem;
+    margin: 0.6rem 0;
+    font-size: 0.86rem;
+  }
+
+  .callout.warn {
+    border-left-color: var(--peach);
+    background: rgba(244, 169, 136, 0.14);
+  }
+
+  .week-block {
+    border: 1px solid rgba(75, 46, 30, 0.12);
+    border-radius: 10px;
+    padding: 0.7rem;
+    margin-top: 0.65rem;
+    background: #fffdfa;
+  }
+
+  .task-list {
+    list-style: none;
+    display: grid;
+    gap: 0.38rem;
+    margin-top: 0.3rem;
+  }
+
+  .task-list li {
+    font-size: 0.85rem;
+    padding-left: 0.8rem;
+    position: relative;
+  }
+
+  .task-list li::before {
+    content: "-";
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: rgba(75, 46, 30, 0.55);
+  }
+
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+  }
+
+  .kpi-card {
+    border: 1px solid rgba(75, 46, 30, 0.12);
+    border-radius: 10px;
+    padding: 0.55rem;
+    background: #fff;
+  }
+
+  .kpi-value {
+    font-weight: 700;
+    font-size: 1rem;
+  }
+
+  .kpi-label {
+    font-size: 0.78rem;
+    color: rgba(75, 46, 30, 0.72);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.4rem;
+    font-size: 0.84rem;
+  }
+
+  th, td {
+    border: 1px solid rgba(75, 46, 30, 0.12);
+    padding: 0.5rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  th {
+    background: #fff7ee;
+    font-weight: 700;
+  }
+
+  .footer {
+    max-width: 1100px;
+    margin: 1rem auto 0;
+    text-align: center;
+    color: rgba(75, 46, 30, 0.65);
+    font-size: 0.76rem;
+  }
+
+  @media (max-width: 760px) {
+    body { padding: 0.8rem; }
+    .timeline-labels { font-size: 0.58rem; }
+    .phase-tabs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2)</h1>
+  <div class="subtitle">Execution plan focused on offer clarity, policy consistency, and one-channel growth.</div>
+  <div class="meta">
+    <span>Prepared: February 16, 2026</span>
+    <span>Model: Freemium + Subscription</span>
+    <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
+  </div>
+</div>
+
+<div class="snapshot">
+  <div class="snap-card">
+    <div class="label">Starting Downloads</div>
+    <div class="value">167</div>
+    <div class="detail">Since November 2, 2025</div>
+  </div>
+  <div class="snap-card">
+    <div class="label">Active Installs</div>
+    <div class="value">131</div>
+    <div class="detail">Approx. 78% retained</div>
+  </div>
+  <div class="snap-card">
+    <div class="label">Revenue Status</div>
+    <div class="value">$0</div>
+    <div class="detail">Needs confirmed live Stripe flow</div>
+  </div>
+  <div class="snap-card">
+    <div class="label">Current Offer in Code</div>
+    <div class="value" style="font-size:1.02rem;">$6.99/mo + 30d trial</div>
+    <div class="detail">$69.99/yr (no trial), $3.99 single</div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <h2>Operating Rules</h2>
+    <div class="callout">
+      Keep the roadmap skeleton, but run lean. Ship only what changes revenue, reduces funnel friction, or protects trust.
+    </div>
+    <ul class="task-list">
+      <li>One source of truth for offers: checkout behavior, pricing page, extension copy, and legal text must match.</li>
+      <li>Privacy consistency is mandatory: either stay no-tracking end-to-end or add explicit consent + updated policy.</li>
+      <li>Use one launch channel at a time to keep signal clean and execution realistic for a solo builder.</li>
+      <li>No paid acquisition until an organic conversion baseline is proven.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>Timeline (Absolute Dates)</h2>
+    <div class="timeline-bar">
+      <div class="week-cell p1">W1</div>
+      <div class="week-cell p1">W2</div>
+      <div class="week-cell p2">W3</div>
+      <div class="week-cell p2">W4</div>
+      <div class="week-cell p2">W5</div>
+      <div class="week-cell p2">W6</div>
+      <div class="week-cell p3">W7</div>
+      <div class="week-cell p3">W8</div>
+      <div class="week-cell p3">W9</div>
+      <div class="week-cell p3">W10</div>
+      <div class="week-cell p3">W11</div>
+      <div class="week-cell p3">W12</div>
+      <div class="week-cell p3">W13</div>
+    </div>
+    <div class="timeline-labels">
+      <div>Feb 16</div><div>Feb 23</div><div>Mar 2</div><div>Mar 9</div><div>Mar 16</div><div>Mar 23</div><div>Mar 30</div><div>Apr 6</div><div>Apr 13</div><div>Apr 20</div><div>Apr 27</div><div>May 4</div><div>May 11</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="phase-tabs">
+      <button class="phase-tab active" data-phase="1" onclick="showPhase(1)">
+        Phase 1
+        <span class="tab-label">Weeks 1-2 (Feb 16-Mar 1) - Align offer, policy, and money flow</span>
+      </button>
+      <button class="phase-tab" data-phase="2" onclick="showPhase(2)">
+        Phase 2
+        <span class="tab-label">Weeks 3-6 (Mar 2-Mar 29) - In-product conversion + one launch channel</span>
+      </button>
+      <button class="phase-tab" data-phase="3" onclick="showPhase(3)">
+        Phase 3
+        <span class="tab-label">Weeks 7-12 (Mar 30-May 10) - Scale only proven channels, then test paid</span>
+      </button>
+    </div>
+
+    <div class="phase-content active" id="phase-1">
+      <h3>Phase 1 Goal</h3>
+      <p>Remove contradictions before launch so every customer sees the same offer and the same trust story.</p>
+      <div class="callout warn">
+        Current mismatch to resolve first: code applies a 30-day trial to monthly, while roadmap copy previously positioned trial on yearly.
+      </div>
+
+      <div class="week-block">
+        <h4>Week 1 - Canonical Offer Decision</h4>
+        <ul class="task-list">
+          <li>Choose one final trial design and keep it everywhere (code, web copy, extension, support docs, legal pages).</li>
+          <li>Confirm lifetime and early-adopter rules in plain language and in Stripe metadata handling.</li>
+          <li>Create one pricing source file/document and link all customer-facing copy to it.</li>
+        </ul>
+      </div>
+
+      <div class="week-block">
+        <h4>Week 2 - Live Payment QA + Trust Consistency</h4>
+        <ul class="task-list">
+          <li>Run live purchase matrix: monthly, yearly, single theme, cancel, refund, and re-login entitlement recovery.</li>
+          <li>Verify webhooks and DB writes for checkout completion, renewal, cancellation, and trial-end notifications.</li>
+          <li>Align privacy wording with actual measurement plan before launch messaging.</li>
+          <li>Publish final Terms and Privacy updates if wording changed.</li>
+        </ul>
+      </div>
+
+      <div class="week-block" style="background: rgba(126,206,197,0.08);">
+        <h4>Phase 1 Exit Criteria</h4>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-value">100%</div><div class="kpi-label">Offer-copy consistency across product, web, legal</div></div>
+          <div class="kpi-card"><div class="kpi-value">3/3</div><div class="kpi-label">Live purchase flows verified (monthly/yearly/single)</div></div>
+          <div class="kpi-card"><div class="kpi-value">1/1</div><div class="kpi-label">Refund and cancellation tested successfully</div></div>
+          <div class="kpi-card"><div class="kpi-value">0</div><div class="kpi-label">Known critical payment bugs</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-content" id="phase-2">
+      <h3>Phase 2 Goal</h3>
+      <p>Convert existing demand first, run one launch channel, and collect high-signal feedback.</p>
+
+      <div class="week-block">
+        <h4>Weeks 3-4 - In-Extension Monetization Messaging</h4>
+        <ul class="task-list">
+          <li>Tighten locked-theme upgrade messaging and CTA wording in popup and pricing destination.</li>
+          <li>Add one lifecycle nudge after repeated premium-theme attempts (helpful, not spammy).</li>
+          <li>Ensure account and purchase state messaging is clear for trialing, active, canceled, and lifetime users.</li>
+          <li>Launch non-incentivized review ask after a positive usage moment (for example after 3+ successful theme applies).</li>
+        </ul>
+      </div>
+
+      <div class="week-block">
+        <h4>Weeks 5-6 - One Launch Channel (Recommended: Product Hunt)</h4>
+        <ul class="task-list">
+          <li>Prepare one launch asset pack: before/after GIFs, 30-second demo, short founder story, clear CTA.</li>
+          <li>Run only one external launch channel for a full 2-week window to keep attribution clean.</li>
+          <li>Use weekly scorecard to identify the biggest funnel drop and fix only that one bottleneck each week.</li>
+        </ul>
+      </div>
+
+      <div class="week-block" style="background: rgba(244,169,136,0.08);">
+        <h4>Phase 2 Exit Criteria (End of March 29, 2026)</h4>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-value">220-320</div><div class="kpi-label">Total installs</div></div>
+          <div class="kpi-card"><div class="kpi-value">8-15</div><div class="kpi-label">Paying customers</div></div>
+          <div class="kpi-card"><div class="kpi-value">$60-$120</div><div class="kpi-label">MRR</div></div>
+          <div class="kpi-card"><div class="kpi-value">10+</div><div class="kpi-label">Store reviews, no incentive offered</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="phase-content" id="phase-3">
+      <h3>Phase 3 Goal</h3>
+      <p>Scale what already converts, then run limited paid tests with strict kill rules.</p>
+
+      <div class="week-block">
+        <h4>Weeks 7-9 - Scale Proven Organic Motion</h4>
+        <ul class="task-list">
+          <li>Double down only on the best-performing channel from Phase 2.</li>
+          <li>Release 1-2 new premium themes to re-engage users and create fresh launch moments.</li>
+          <li>Run a focused win-back campaign to trial drop-offs with a clear single CTA.</li>
+        </ul>
+      </div>
+
+      <div class="week-block">
+        <h4>Weeks 10-12 - Paid Test (Only if Gate Passed)</h4>
+        <ul class="task-list">
+          <li>Start paid only if organic conversion from install to paid is at least 3% for 2 consecutive weeks.</li>
+          <li>Run one paid channel at low spend first ($150-300 total test budget).</li>
+          <li>Kill paid test if CAC is greater than $12 or payback exceeds 2 months.</li>
+          <li>If paid test passes, scale gradually and keep weekly holdout comparison.</li>
+        </ul>
+      </div>
+
+      <div class="week-block" style="background: rgba(250,208,0,0.1);">
+        <h4>Phase 3 Exit Criteria (End of May 10, 2026)</h4>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="kpi-value">20-35</div><div class="kpi-label">Paying customers</div></div>
+          <div class="kpi-card"><div class="kpi-value">$140-$280</div><div class="kpi-label">MRR</div></div>
+          <div class="kpi-card"><div class="kpi-value">&lt;= $12</div><div class="kpi-label">CAC on paid test (if run)</div></div>
+          <div class="kpi-card"><div class="kpi-value">Weekly</div><div class="kpi-label">Decision cadence and scorecard reviews</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Metric Stack (Privacy-Aligned)</h2>
+    <p>Use aggregate metrics from systems already required for operation. Do not introduce hidden telemetry.</p>
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Source</th><th>Decision Use</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Store listing visits, installs, uninstalls</td><td>Chrome Web Store dashboard</td><td>Top-of-funnel and retention health</td></tr>
+        <tr><td>Checkout starts, purchases, MRR, churn, refunds</td><td>Stripe dashboard</td><td>Revenue and pricing/funnel quality</td></tr>
+        <tr><td>Entitlement success/failure rate</td><td>Web API logs + DB records</td><td>Operational reliability after purchase</td></tr>
+        <tr><td>Review count and rating trend</td><td>Chrome Web Store listing</td><td>Social proof and listing conversion support</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>Decision Gates</h2>
+    <table>
+      <thead>
+        <tr><th>Date Gate</th><th>Condition</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>March 1, 2026</td>
+          <td>Offer and policy are fully consistent across code + copy</td>
+          <td>Proceed to launch messaging</td>
+        </tr>
+        <tr>
+          <td>March 29, 2026</td>
+          <td>At least 8 paying customers and stable purchase flow</td>
+          <td>Scale proven channel and keep improving funnel</td>
+        </tr>
+        <tr>
+          <td>April 20, 2026</td>
+          <td>Organic install-to-paid conversion &gt;= 3% for 2 weeks</td>
+          <td>Start small paid test; otherwise continue organic optimization</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>This Week (February 16-22, 2026): Top 5 Actions</h2>
+    <div class="week-block" style="border: 2px solid var(--teal);">
+      <ul class="task-list">
+        <li>Decide final trial/lifetime policy and document it in one canonical pricing source.</li>
+        <li>Patch checkout behavior and all customer-facing copy to exactly match that policy.</li>
+        <li>Run one real low-value production purchase per plan, then verify entitlement, cancel, and refund flow.</li>
+        <li>Select one launch channel for Weeks 5-6 and prepare one asset pack for that channel.</li>
+        <li>Create Monday scorecard template using Chrome Web Store + Stripe + API reliability metrics.</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  ThemeGPT Lean Monetization Roadmap v2 - Prepared February 16, 2026
+</div>
+
+<script>
+function showPhase(n) {
+  document.querySelectorAll('.phase-tab').forEach((t) => t.classList.remove('active'));
+  document.querySelectorAll('.phase-content').forEach((c) => c.classList.remove('active'));
+  document.querySelector(`.phase-tab[data-phase="${n}"]`).classList.add('active');
+  document.getElementById(`phase-${n}`).classList.add('active');
+}
+</script>
+
+</body>
+</html>

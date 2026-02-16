@@ -2,12 +2,15 @@
 import { initializeApp, cert } from "firebase-admin/app";
 import { getFirestore } from "firebase-admin/firestore";
 import * as dotenv from "dotenv";
+import { readFileSync } from "node:fs";
 
 dotenv.config();
 
 const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT_KEY
     ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY)
-    : require("../service-account.json");
+    : JSON.parse(
+          readFileSync(new URL("../service-account.json", import.meta.url), "utf8")
+      );
 
 initializeApp({
     credential: cert(serviceAccount),

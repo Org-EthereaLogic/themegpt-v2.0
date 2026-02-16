@@ -25,7 +25,7 @@ running the Parcel dev server. It does NOT affect:
 1. **Local patch:** Backported origin validation from parcel-bundler/parcel#10138 via `pnpm patchedDependencies` (`@parcel/reporter-dev-server@2.9.3`, hash `xt2unzxfr53j7rty5vp4fmgzpe`)
 2. **Behavioral:** Do not browse untrusted websites while `pnpm dev` is running
 3. **Technical:** Use a separate browser profile for development
-4. **Dependabot:** Ignore rule added in `.github/dependabot.yml` to prevent recurring alerts
+4. **Dependabot:** Ignore rule in `.github/dependabot.yml` suppresses **version-update PRs** only. Security alerts are a separate Dependabot system and must be dismissed manually via the GitHub API (see Re-Dismissal section below)
 
 #### Upgrade Path
 
@@ -41,6 +41,21 @@ Parcel dependency to ≥2.16.4.
 - Upstream Fix: <https://github.com/parcel-bundler/parcel/pull/10138> (merged, released in v2.16.4)
 
 **Last reviewed:** 2026-02-16
+
+#### Re-Dismissal
+
+Dependabot will reopen this alert whenever it re-evaluates the lockfile because
+`first_patched_version` is `null` and it does not understand pnpm patches. To
+re-dismiss, run:
+
+```bash
+gh api \
+  --method PATCH \
+  /repos/Org-EthereaLogic/themegpt-v2.0/dependabot/alerts/7 \
+  -f state=dismissed \
+  -f dismissed_reason=tolerable_risk \
+  -f dismissed_comment="Mitigated via pnpm patchedDependencies. Patch backports origin/host validation from parcel-bundler/parcel#10138. Upstream upgrade blocked by Plasmo pinning @parcel/core@2.9.3. Dev-only; no production impact. See doc/dev/SECURITY_ADVISORIES.md."
+```
 
 ---
 

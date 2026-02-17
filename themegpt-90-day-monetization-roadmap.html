@@ -332,7 +332,7 @@
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 16, 2026 (post QA test hardening)</span>
+      <span>Updated: February 16, 2026 (v2.1.0 release package prepared)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -352,7 +352,7 @@
     <div class="snap-card">
       <div class="label">Revenue Status</div>
       <div class="value">$0</div>
-      <div class="detail">Web/backend payment fixes deployed; extension release pending</div>
+      <div class="detail">Web/backend deployed; v2.1.0 packaged, awaiting CWS submission</div>
     </div>
     <div class="snap-card">
       <div class="label">Current Offer in Code</div>
@@ -400,14 +400,20 @@
             total, all passing.</li>
           <li>Extension auth/session verification: Added <code>status</code> and <code>auth</code> route unit tests
             confirming lifetime status is correctly synced from Stripe metadata and served to the extension.</li>
+          <li>Release scope frozen: all critical fixes confirmed complete, no non-critical churn included.</li>
+          <li>Extension v2.1.0 built, packaged (1.21 MB), and tagged. Fixed Tailwind CSS build by pinning to v3 for
+            Plasmo/Parcel compatibility.</li>
+          <li>CHANGELOG, README, and <code>package.json</code> version updated to 2.1.0.</li>
+          <li>Commit pushed to <code>origin/main</code> with tag <code>v2.1.0</code>.</li>
         </ul>
       </div>
       <div class="week-block">
         <h4>Pending (Release Gate)</h4>
         <ul class="task-list">
-          <li>Manual Chrome extension submission remains intentionally pending.</li>
-          <li>Goal: one consolidated Chrome Web Store submission after all critical fixes are done and smoke-tested.
-          </li>
+          <li>Chrome Web Store submission blocked: GitHub Actions <code>submit-extension.yml</code> workflow requires
+            <code>SUBMIT_KEYS</code> repository secret to be configured with Chrome Web Store API credentials.</li>
+          <li>Alternative: upload <code>apps/extension/build/chrome-mv3-prod.zip</code> manually via Chrome Developer
+            Dashboard.</li>
         </ul>
       </div>
     </div>
@@ -467,8 +473,8 @@
         <p>Lock and deploy critical monetization fixes so every customer sees one consistent offer and entitlement
           model.</p>
         <div class="callout">
-          Status: Web/backend critical fixes are complete and deployed. QA test suites hardened with full monetization
-          path coverage. Remaining work is controlled manual extension release.
+          Status: All critical fixes complete. Extension v2.1.0 built, packaged, and tagged. Awaiting Chrome Web
+          Store submission (requires <code>SUBMIT_KEYS</code> secret or manual upload).
         </div>
 
         <div class="week-block">
@@ -498,8 +504,12 @@
           <ul class="task-list">
             <li><s>Run final extension regression pass for auth, purchase, trial, yearly, and lifetime entitlement
                 states.</s> Covered by automated QA suites.</li>
-            <li>Confirm no additional critical fixes are pending in extension/web API integration.</li>
-            <li>Submit one consolidated Chrome Web Store update manually (single batch).</li>
+            <li><s>Confirm no additional critical fixes are pending in extension/web API integration.</s> Done: zero
+              open issues/PRs, all critical fixes merged, scope frozen for v2.1.0.</li>
+            <li><s>Prepare one consolidated Chrome Web Store submission package.</s> Done: v2.1.0 built, packaged,
+              tagged, and pushed.</li>
+            <li>Submit Chrome Web Store update: configure <code>SUBMIT_KEYS</code> secret and re-run workflow, or
+              upload zip manually.</li>
           </ul>
         </div>
 
@@ -523,8 +533,12 @@
               <div class="kpi-label">QA test suites hardened (15 tests, all passing)</div>
             </div>
             <div class="kpi-card">
-              <div class="kpi-value">Pending</div>
-              <div class="kpi-label">Manual single-batch Chrome extension submission</div>
+              <div class="kpi-value">Done</div>
+              <div class="kpi-label">v2.1.0 built, packaged, tagged, and pushed</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">Blocked</div>
+              <div class="kpi-label">CWS submission: needs SUBMIT_KEYS secret or manual upload</div>
             </div>
           </div>
         </div>
@@ -679,9 +693,9 @@
             <td>Status: Completed</td>
           </tr>
           <tr>
-            <td>Next Release Gate</td>
-            <td>No remaining critical fixes + extension regression pass complete</td>
-            <td>Submit one manual Chrome Web Store update (single batch)</td>
+            <td>February 16, 2026</td>
+            <td>All critical fixes merged, scope frozen, v2.1.0 built and tagged</td>
+            <td>Status: Completed. CWS submission pending <code>SUBMIT_KEYS</code> config</td>
           </tr>
           <tr>
             <td>Post-Approval Gate</td>
@@ -696,15 +710,18 @@
       <h2>This Week (February 16-22, 2026): Top 5 Actions (Rebased)</h2>
       <div class="week-block" style="border: 2px solid var(--teal);">
         <ul class="task-list">
-          <li>Freeze extension release scope: include all critical fixes, exclude non-critical churn.</li>
+          <li><s>Freeze extension release scope: include all critical fixes, exclude non-critical churn.</s> Done:
+            zero open issues/PRs, all critical fixes merged, no non-critical churn included in v2.1.0.</li>
           <li><s>Run manual end-to-end extension QA across monthly, yearly, post-60 yearly trial, and lifetime
               conversions.</s> Done: automated QA suites now cover all monetization paths (8 backend + 7 frontend
             tests).</li>
           <li><s>Verify extension auth/session correctly reflects lifetime using Stripe metadata + DB-backed status
               routes.</s> Done: Verified via new unit test suites (<code>extension/status/route.test.ts</code> and
             <code>extension/auth/route.test.ts</code>).</li>
-          <li>Prepare one consolidated Chrome Web Store submission package and release notes.</li>
-          <li>Submit one manual Chrome Web Store update only when all critical checks are green.</li>
+          <li><s>Prepare one consolidated Chrome Web Store submission package and release notes.</s> Done: v2.1.0
+            built, packaged (1.21 MB), CHANGELOG and README updated, tagged and pushed to origin.</li>
+          <li>Submit Chrome Web Store update: <code>SUBMIT_KEYS</code> repository secret must be configured before
+            automated submission can proceed. Manual upload via Developer Dashboard is the alternative.</li>
         </ul>
       </div>
     </div>
@@ -712,7 +729,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.1 - Updated February 16, 2026
+    ThemeGPT Lean Monetization Roadmap v2.1 - Updated February 16, 2026 (v2.1.0 release prepared)
   </div>
 
   <script>

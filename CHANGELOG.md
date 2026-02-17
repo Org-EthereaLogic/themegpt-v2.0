@@ -2,6 +2,18 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
+## [2.1.0] - 2026-02-16
+
+### Improved
+
+- Enhanced reliability of premium theme access and subscription management
+- Strengthened authentication flow for seamless login and theme downloading
+- Improved extension stability across Chrome updates
+
+### Security
+
+- Applied latest security patches and dependency updates
+
 ## [2.0.2] - 2026-02-14
 
 ### Fixed

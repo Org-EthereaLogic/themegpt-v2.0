@@ -1,7 +1,7 @@
 {
   "name": "extension",
   "displayName": "ThemeGPT",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally.",
   "scripts": {
     "dev": "plasmo dev",
@@ -31,7 +31,7 @@
     "jsdom": "^28.1.0",
     "postcss": "^8.5.6",
     "prettier": "3.8.1",
-    "tailwindcss": "^4.1.18",
+    "tailwindcss": "^3.4.19",
     "typescript": "5.9.3",
     "vitest": "^4.0.18"
   },

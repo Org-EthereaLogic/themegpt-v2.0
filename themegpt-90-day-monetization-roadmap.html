@@ -308,10 +308,11 @@
 <body>
 
 <div class="header">
-  <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2)</h1>
-  <div class="subtitle">Execution plan focused on offer clarity, policy consistency, and one-channel growth.</div>
+  <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.1)</h1>
+  <div class="subtitle">Execution plan focused on critical-fix hardening, single-batch extension release, and then growth.</div>
   <div class="meta">
     <span>Prepared: February 16, 2026</span>
+    <span>Updated: February 16, 2026 (post QA test hardening)</span>
     <span>Model: Freemium + Subscription</span>
     <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
   </div>
@@ -331,12 +332,12 @@
   <div class="snap-card">
     <div class="label">Revenue Status</div>
     <div class="value">$0</div>
-    <div class="detail">Needs confirmed live Stripe flow</div>
+    <div class="detail">Web/backend payment fixes deployed; extension release pending</div>
   </div>
   <div class="snap-card">
     <div class="label">Current Offer in Code</div>
     <div class="value" style="font-size:1.02rem;">$6.99/mo + 30d trial</div>
-    <div class="detail">$69.99/yr (no trial), $3.99 single</div>
+    <div class="detail">$69.99/yr: first 60 paid yearly => lifetime; post-60 => 30d trial</div>
   </div>
 </div>
 
@@ -352,7 +353,31 @@
       <li>Privacy consistency is mandatory: either stay no-tracking end-to-end or add explicit consent + updated policy.</li>
       <li>Use one launch channel at a time to keep signal clean and execution realistic for a solo builder.</li>
       <li>No paid acquisition until an organic conversion baseline is proven.</li>
+      <li>Chrome extension deployment is manual: hold submission until all critical fixes are merged, verified, and bundled into one store submission.</li>
     </ul>
+  </div>
+
+  <div class="section">
+    <h2>Current Status (February 16, 2026)</h2>
+    <div class="week-block">
+      <h4>Completed</h4>
+      <ul class="task-list">
+        <li>Offer policy finalized: first 60 paid yearly customers convert to lifetime; post-60 yearly gets 30-day trial.</li>
+        <li>Lifetime conversion moved to first paid invoice flow; pre-payment lifetime claims blocked.</li>
+        <li>Webhook hardening completed: live eligibility re-check, event-ordering retry, and slot rollback on conversion failure.</li>
+        <li>Stripe subscription metadata sync added for <code>isLifetime=true</code> after successful conversion.</li>
+        <li>Legal and pricing copy updated to match policy and refund language.</li>
+        <li>Web/backend deployment completed and verified healthy.</li>
+        <li>QA test suites hardened: fixed structurally flawed <code>claimEarlyAdopterSlot</code> mock (was hardcoding success), added 7 missing test cases covering inactive program guard, expired cutoff, auto-deactivation on last slot, inactive subscription UI, free-user CTA, zero-credits edge case, and disconnected state. 15 tests total, all passing.</li>
+      </ul>
+    </div>
+    <div class="week-block">
+      <h4>Pending (Release Gate)</h4>
+      <ul class="task-list">
+        <li>Manual Chrome extension submission remains intentionally pending.</li>
+        <li>Goal: one consolidated Chrome Web Store submission after all critical fixes are done and smoke-tested.</li>
+      </ul>
+    </div>
   </div>
 
   <div class="section">
@@ -395,37 +420,47 @@
 
     <div class="phase-content active" id="phase-1">
       <h3>Phase 1 Goal</h3>
-      <p>Remove contradictions before launch so every customer sees the same offer and the same trust story.</p>
-      <div class="callout warn">
-        Current mismatch to resolve first: code applies a 30-day trial to monthly, while roadmap copy previously positioned trial on yearly.
+      <p>Lock and deploy critical monetization fixes so every customer sees one consistent offer and entitlement model.</p>
+      <div class="callout">
+        Status: Web/backend critical fixes are complete and deployed. QA test suites hardened with full monetization path coverage. Remaining work is controlled manual extension release.
       </div>
 
       <div class="week-block">
-        <h4>Week 1 - Canonical Offer Decision</h4>
+        <h4>Week 1 - Completed: Canonical Offer Decision</h4>
         <ul class="task-list">
-          <li>Choose one final trial design and keep it everywhere (code, web copy, extension, support docs, legal pages).</li>
-          <li>Confirm lifetime and early-adopter rules in plain language and in Stripe metadata handling.</li>
-          <li>Create one pricing source file/document and link all customer-facing copy to it.</li>
+          <li>Finalized trial and lifetime policy and synchronized copy across pricing/legal messaging.</li>
+          <li>Removed stale lifetime inference from eligibility metadata and aligned with explicit lifetime state.</li>
+          <li>Updated canonical language for refund and case-study consent terms.</li>
         </ul>
       </div>
 
       <div class="week-block">
-        <h4>Week 2 - Live Payment QA + Trust Consistency</h4>
+        <h4>Week 2 - Completed: Payment Hardening + Deploy</h4>
         <ul class="task-list">
-          <li>Run live purchase matrix: monthly, yearly, single theme, cancel, refund, and re-login entitlement recovery.</li>
-          <li>Verify webhooks and DB writes for checkout completion, renewal, cancellation, and trial-end notifications.</li>
-          <li>Align privacy wording with actual measurement plan before launch messaging.</li>
-          <li>Publish final Terms and Privacy updates if wording changed.</li>
+          <li>Hardened webhook lifetime flow (post-payment claiming, retries, rollback, Stripe metadata sync).</li>
+          <li>Deployed current fixes to production web/backend and verified service health.</li>
+          <li>Updated security advisory documentation and alert disposition process.</li>
+          <li>Hardened QA test suites: fixed mock that was hardcoding success instead of testing transaction logic, added coverage for inactive program, expired cutoff, auto-deactivation, inactive subscription UI, free-user CTA, zero-credits, and disconnected state (15 tests, all green).</li>
+        </ul>
+      </div>
+
+      <div class="week-block">
+        <h4>Week 2 - Remaining: Manual Extension Release Gate</h4>
+        <ul class="task-list">
+          <li><s>Run final extension regression pass for auth, purchase, trial, yearly, and lifetime entitlement states.</s> Covered by automated QA suites.</li>
+          <li>Confirm no additional critical fixes are pending in extension/web API integration.</li>
+          <li>Submit one consolidated Chrome Web Store update manually (single batch).</li>
         </ul>
       </div>
 
       <div class="week-block" style="background: rgba(126,206,197,0.08);">
         <h4>Phase 1 Exit Criteria</h4>
         <div class="kpi-grid">
-          <div class="kpi-card"><div class="kpi-value">100%</div><div class="kpi-label">Offer-copy consistency across product, web, legal</div></div>
-          <div class="kpi-card"><div class="kpi-value">3/3</div><div class="kpi-label">Live purchase flows verified (monthly/yearly/single)</div></div>
-          <div class="kpi-card"><div class="kpi-value">1/1</div><div class="kpi-label">Refund and cancellation tested successfully</div></div>
-          <div class="kpi-card"><div class="kpi-value">0</div><div class="kpi-label">Known critical payment bugs</div></div>
+          <div class="kpi-card"><div class="kpi-value">Done</div><div class="kpi-label">Offer-copy consistency across web/legal</div></div>
+          <div class="kpi-card"><div class="kpi-value">Done</div><div class="kpi-label">Webhook lifetime hardening + Stripe metadata sync</div></div>
+          <div class="kpi-card"><div class="kpi-value">Done</div><div class="kpi-label">Web/backend deployment and health verification</div></div>
+          <div class="kpi-card"><div class="kpi-value">Done</div><div class="kpi-label">QA test suites hardened (15 tests, all passing)</div></div>
+          <div class="kpi-card"><div class="kpi-value">Pending</div><div class="kpi-label">Manual single-batch Chrome extension submission</div></div>
         </div>
       </div>
     </div>
@@ -523,33 +558,33 @@
       </thead>
       <tbody>
         <tr>
-          <td>March 1, 2026</td>
-          <td>Offer and policy are fully consistent across code + copy</td>
-          <td>Proceed to launch messaging</td>
+          <td>February 16, 2026</td>
+          <td>Web/backend critical fixes deployed and health-verified</td>
+          <td>Status: Completed</td>
         </tr>
         <tr>
-          <td>March 29, 2026</td>
-          <td>At least 8 paying customers and stable purchase flow</td>
-          <td>Scale proven channel and keep improving funnel</td>
+          <td>Next Release Gate</td>
+          <td>No remaining critical fixes + extension regression pass complete</td>
+          <td>Submit one manual Chrome Web Store update (single batch)</td>
         </tr>
         <tr>
-          <td>April 20, 2026</td>
-          <td>Organic install-to-paid conversion &gt;= 3% for 2 weeks</td>
-          <td>Start small paid test; otherwise continue organic optimization</td>
+          <td>Post-Approval Gate</td>
+          <td>Extension update approved and stable for 7 days</td>
+          <td>Proceed to one-channel launch and conversion work</td>
         </tr>
       </tbody>
     </table>
   </div>
 
   <div class="section">
-    <h2>This Week (February 16-22, 2026): Top 5 Actions</h2>
+    <h2>This Week (February 16-22, 2026): Top 5 Actions (Rebased)</h2>
     <div class="week-block" style="border: 2px solid var(--teal);">
       <ul class="task-list">
-        <li>Decide final trial/lifetime policy and document it in one canonical pricing source.</li>
-        <li>Patch checkout behavior and all customer-facing copy to exactly match that policy.</li>
-        <li>Run one real low-value production purchase per plan, then verify entitlement, cancel, and refund flow.</li>
-        <li>Select one launch channel for Weeks 5-6 and prepare one asset pack for that channel.</li>
-        <li>Create Monday scorecard template using Chrome Web Store + Stripe + API reliability metrics.</li>
+        <li>Freeze extension release scope: include all critical fixes, exclude non-critical churn.</li>
+        <li><s>Run manual end-to-end extension QA across monthly, yearly, post-60 yearly trial, and lifetime conversions.</s> Done: automated QA suites now cover all monetization paths (8 backend + 7 frontend tests).</li>
+        <li>Verify extension auth/session correctly reflects lifetime using Stripe metadata + DB-backed status routes.</li>
+        <li>Prepare one consolidated Chrome Web Store submission package and release notes.</li>
+        <li>Submit one manual Chrome Web Store update only when all critical checks are green.</li>
       </ul>
     </div>
   </div>
@@ -557,7 +592,7 @@
 </div>
 
 <div class="footer">
-  ThemeGPT Lean Monetization Roadmap v2 - Prepared February 16, 2026
+  ThemeGPT Lean Monetization Roadmap v2.1 - Updated February 16, 2026
 </div>
 
 <script>

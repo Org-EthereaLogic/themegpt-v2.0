@@ -12,7 +12,7 @@ This project follows a **simplicity-first development philosophy** informed by h
 
 ## Technology Stack
 
-- **Extension**: Plasmo, React 19, TypeScript, gpt-tokenizer
+- **Extension**: Plasmo, React 19, TypeScript, Tailwind CSS 3, gpt-tokenizer
 - **Web**: Next.js 16, React 19, Tailwind CSS 4, TypeScript
 - **Tooling**: pnpm workspaces, Prettier, ESLint
 
@@ -99,7 +99,13 @@ pnpm lint       # Lint code
 
 1. Run `pnpm build` to create production bundle
 2. Production build outputs to `apps/extension/build/chrome-mv3-prod`
-3. Submit to Chrome Web Store for review
+3. CWS submission is automated via `submit-extension.yml` GitHub Actions workflow (requires `SUBMIT_KEYS` secret)
+
+### Deployment
+
+- **Web**: GCP Cloud Run, manual deploy via `gcloud builds submit --config=cloudbuild.yaml`
+- **Extension**: Chrome Web Store, automated via GitHub Actions `submit-extension.yml` workflow
+- **Note**: `SUBMIT_KEYS` repository secret is required for automated CWS submission
 
 ## Key Resources
 

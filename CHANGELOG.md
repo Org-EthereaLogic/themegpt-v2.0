@@ -35,7 +35,7 @@ All notable changes to ThemeGPT will be documented in this file.
 
 - Version increment required for new submission (2.0.0 was already published)
 
-## [2.0.0] - 2026-01-XX
+## [2.0.0] - 2026-01-13
 
 ### Added
 

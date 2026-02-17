@@ -6,7 +6,7 @@ This constitution defines the philosophical foundation for all development work 
 
 Governs all development for ThemeGPT v2.0, including:
 
-- Chrome extension development (Plasmo, React 18)
+- Chrome extension development (Plasmo, React 19)
 - TypeScript implementation
 - UI/UX with the Cream & Chocolate design system
 - Token counting and analytics features

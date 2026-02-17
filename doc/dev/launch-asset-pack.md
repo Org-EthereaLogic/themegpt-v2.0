@@ -82,15 +82,18 @@ Alternatives:
 
 ## 4. Product Hunt Specific Assets
 
-| # | Asset | Spec | Status |
+| # | Asset | File | Status |
 |---|-------|------|--------|
-| 1 | Thumbnail | 240x240 PNG, mascot on cream background | [ ] Exists: `mascot-transparent.png` — needs crop |
-| 2 | Gallery image 1 | 1270x760, hero before/after (Aurora Borealis) | [ ] |
-| 3 | Gallery image 2 | 1270x760, theme grid showing free + premium themes | [ ] |
-| 4 | Gallery image 3 | 1270x760, privacy callout ("Zero tracking, zero analytics") | [ ] |
-| 5 | Gallery image 4 | 1270x760, pricing card ($6.99/mo, 30-day trial, 7 free themes) | [ ] |
-| 6 | Maker comment | First comment draft (founder story + offer) | [ ] |
-| 7 | Tagline | Max 60 chars for PH listing | [ ] |
+| 1 | Thumbnail (240x240) | `ph-thumbnail.png` | [x] Done |
+| 2 | Gallery: hero before/after | `ph-gallery-1-hero.png` | [x] Done |
+| 3 | Gallery: theme grid | `ph-gallery-2-themes.png` | [x] Done |
+| 4 | Gallery: privacy callout | `ph-gallery-3-privacy.png` | [x] Done |
+| 5 | Gallery: pricing card | `ph-gallery-4-pricing.png` | [x] Done |
+| 6 | Maker comment | See draft below | [x] Finalized |
+| 7 | Tagline | "Make ChatGPT yours." (20 chars) | [x] Finalized |
+
+**Location**: `asset/launch/`
+**Generator script**: `asset/launch/create_ph_gallery.py`
 
 ### Maker Comment Draft (First Comment)
 
@@ -108,7 +111,7 @@ Alternatives:
 >
 > I'd love your feedback — what themes would you want to see next?
 
-**Status**: [ ] Draft  [ ] Reviewed  [ ] Finalized
+**Status**: [x] Finalized
 
 ---
 

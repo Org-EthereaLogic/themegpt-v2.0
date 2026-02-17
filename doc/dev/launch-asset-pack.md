@@ -53,19 +53,19 @@ Alternatives:
 - "One-click themes for ChatGPT. No data leaves your browser."
 - "Beautiful themes for ChatGPT — privacy-first, one click to apply."
 
-**Status**: [ ] Finalized
+**Status**: [x] Finalized
 
 ### 3b. Short Description (1-2 sentences)
 
 > ThemeGPT is a privacy-first Chrome extension that transforms ChatGPT's appearance with handcrafted themes — from Dracula to Aurora Borealis. One click to apply, zero data leaves your browser.
 
-**Status**: [ ] Finalized
+**Status**: [x] Finalized
 
 ### 3c. Founder Story (3-5 sentences)
 
 > I built ThemeGPT because I spend hours in ChatGPT every day and the default interface felt sterile. I wanted it to feel like mine — like my code editor, where I pick the theme that matches my mood. ThemeGPT started as a personal tool: swap ChatGPT's look with one click, no data ever leaving the browser. Now it has 15 handcrafted themes, animated effects, and a growing community of 130+ users who feel the same way. Privacy isn't a feature — it's the foundation.
 
-**Status**: [ ] Draft  [ ] Reviewed  [ ] Finalized
+**Status**: [x] Finalized
 
 ### 3d. Call-to-Action Variants
 
@@ -76,7 +76,7 @@ Alternatives:
 | Landing page | "Get ThemeGPT Free" |
 | Upgrade prompt | "Start your 30-day free trial" |
 
-**Status**: [ ] Finalized
+**Status**: [x] Finalized
 
 ---
 

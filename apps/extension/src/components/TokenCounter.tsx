@@ -115,7 +115,7 @@ export function TokenCounter() {
             </div>
 
             <p className="text-[10px] text-center mt-2 text-brown-soft">
-                Estimated count. No data leaves your browser.
+                Estimated · No data leaves your browser
             </p>
         </div>
     )

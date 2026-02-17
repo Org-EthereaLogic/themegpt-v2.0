@@ -327,12 +327,12 @@
 <body>
 
   <div class="header">
-    <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.1)</h1>
+    <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2)</h1>
     <div class="subtitle">Execution plan focused on critical-fix hardening, single-batch extension release, and then
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 17, 2026 (launch asset pack complete + web deployed)</span>
+      <span>Updated: February 17, 2026 (v2.2.0 in-extension messaging complete)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -412,9 +412,25 @@
         </ul>
       </div>
       <div class="week-block">
+        <h4>Completed — v2.2.0 In-Extension Messaging</h4>
+        <ul class="task-list">
+          <li>Escalating lifecycle nudge for locked premium theme clicks: 1st click shows soft trial CTA (no redirect); 2nd click shows stronger copy + opens pricing; 3rd+ shows "keep coming back" copy + opens pricing. Click count persisted to <code>chrome.storage.local</code>.</li>
+          <li>Non-incentivized review ask: triggers on the 3rd successful theme apply, shown once, permanently dismissed via <code>reviewAskDismissed</code> storage flag.</li>
+          <li>Trialing state fully surfaced: "Trial" header button label, "Trial Active" subscription badge, and days-remaining countdown when <code>trialEndsAt</code> is available from the API.</li>
+          <li>Canceled state handled: contextual "Your subscription has ended. Reactivate to restore access." message with link to account page.</li>
+          <li>Past-due state handled: "Payment failed. Update your billing details to restore access." with coral-colored billing link.</li>
+          <li>Header "Connect" button relabeled to "Sign In"; unauthenticated panel description updated to "Sign in to unlock 8 animated premium themes."</li>
+          <li>"Subscribe" CTA relabeled to "Start free 30-day trial" to match offer copy consistently.</li>
+          <li>TokenCounter footer copy updated: "Estimated · No data leaves your browser".</li>
+          <li><code>AccountStatus</code> interface extended with <code>subscriptionStatus</code> and <code>trialEndsAt</code>; both mapped from <code>data.subscription</code> in <code>checkAccountStatus</code>.</li>
+          <li>Build verified clean: zero TypeScript errors, Plasmo and Next.js both compile successfully.</li>
+        </ul>
+      </div>
+      <div class="week-block">
         <h4>Pending (Release Gate)</h4>
         <ul class="task-list">
           <li>Awaiting Chrome Web Store review approval for v2.1.0 submission.</li>
+          <li>v2.2.0 messaging changes ready to bundle into next CWS submission once v2.1.0 is approved.</li>
         </ul>
       </div>
     </div>
@@ -547,15 +563,14 @@
         <h3>Phase 2 Goal</h3>
         <p>Convert existing demand first, run one launch channel, and collect high-signal feedback.</p>
 
-        <div class="week-block">
-          <h4>Weeks 3-4 - In-Extension Monetization Messaging</h4>
+        <div class="week-block" style="background: rgba(126,206,197,0.08);">
+          <h4>Weeks 3-4 - Completed: In-Extension Monetization Messaging (v2.2.0)</h4>
+          <div class="callout">Implemented February 17, 2026. Ready for next CWS submission after v2.1.0 approval.</div>
           <ul class="task-list">
-            <li>Tighten locked-theme upgrade messaging and CTA wording in popup and pricing destination.</li>
-            <li>Add one lifecycle nudge after repeated premium-theme attempts (helpful, not spammy).</li>
-            <li>Ensure account and purchase state messaging is clear for trialing, active, canceled, and lifetime users.
-            </li>
-            <li>Launch non-incentivized review ask after a positive usage moment (for example after 3+ successful theme
-              applies).</li>
+            <li><s>Tighten locked-theme upgrade messaging and CTA wording in popup and pricing destination.</s> Done: escalating 3-step nudge; "Start free 30-day trial" CTA; "Sign In" button; panel description copy updated.</li>
+            <li><s>Add one lifecycle nudge after repeated premium-theme attempts (helpful, not spammy).</s> Done: soft message on 1st click, redirect added on 2nd, "keep coming back" variant on 3rd+. Stored in <code>premiumClickCount</code>.</li>
+            <li><s>Ensure account and purchase state messaging is clear for trialing, active, canceled, and lifetime users.</s> Done: trialing shows "Trial Active" badge + days remaining; canceled and past_due render contextual recovery messages.</li>
+            <li><s>Launch non-incentivized review ask after a positive usage moment (for example after 3+ successful theme applies).</s> Done: banner fires on 3rd apply, one-time only, links to CWS reviews page, "Maybe later" dismisses permanently.</li>
           </ul>
         </div>
 
@@ -712,9 +727,19 @@
             <td>Status: Completed. themegpt.ai live, HTTP 200</td>
           </tr>
           <tr>
-            <td>Post-Approval Gate</td>
+            <td>February 17, 2026</td>
+            <td>v2.2.0 in-extension messaging implemented: lifecycle nudge, review ask, trialing/canceled/past_due states, copy updates. Build clean.</td>
+            <td>Status: Completed. Awaiting v2.1.0 CWS approval to bundle and submit v2.2.0.</td>
+          </tr>
+          <tr>
+            <td>Post v2.1.0 Approval</td>
+            <td>v2.1.0 approved and stable; submit v2.2.0 messaging bundle as next CWS update</td>
+            <td>Proceed to Weeks 5-6: Product Hunt launch preparation</td>
+          </tr>
+          <tr>
+            <td>Post v2.2.0 Approval</td>
             <td>Extension update approved and stable for 7 days</td>
-            <td>Proceed to one-channel launch and conversion work</td>
+            <td>Run one-channel launch (Product Hunt); monitor conversion scorecard weekly</td>
           </tr>
         </tbody>
       </table>
@@ -735,6 +760,16 @@
           <li><s>Prepare one consolidated Chrome Web Store submission package and release notes.</s> Done: v2.1.0
             built, packaged (1.21 MB), CHANGELOG and README updated, tagged and pushed to origin.</li>
           <li><s>Submit Chrome Web Store update.</s> Done: v2.1.0 submitted via automated <code>submit-extension.yml</code> workflow.</li>
+          <li><s>Implement v2.2.0 in-extension messaging: lifecycle nudge, review ask, trial/canceled/past_due states, copy improvements.</s> Done: all 10 changes implemented in <code>popup.tsx</code> and <code>TokenCounter.tsx</code>, build clean.</li>
+        </ul>
+      </div>
+      <div class="week-block" style="border: 2px solid var(--peach); margin-top: 0.65rem;">
+        <h4>Next Actions (Pending CWS Approval)</h4>
+        <ul class="task-list">
+          <li>Monitor CWS review queue for v2.1.0 approval.</li>
+          <li>Once v2.1.0 approved: update CHANGELOG and <code>package.json</code> to v2.2.0, tag, and submit v2.2.0 messaging bundle to Chrome Web Store.</li>
+          <li>Begin Product Hunt launch preparation: write hunt description, assign a hunter, schedule for a Tuesday/Wednesday slot.</li>
+          <li>Set up weekly scorecard to track install-to-trial and trial-to-paid conversion rates once extension is live with messaging changes.</li>
         </ul>
       </div>
     </div>
@@ -742,7 +777,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.1 - Updated February 17, 2026 (launch asset pack complete + web deployed)
+    ThemeGPT Lean Monetization Roadmap v2.2 - Updated February 17, 2026 (v2.2.0 in-extension messaging complete)
   </div>
 
   <script>

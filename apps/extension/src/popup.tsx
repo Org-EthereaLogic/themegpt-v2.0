@@ -20,6 +20,8 @@ interface AccountStatus {
   isActive: boolean
   planType?: string
   isLifetime?: boolean
+  subscriptionStatus?: string
+  trialEndsAt?: string
   accessibleThemes: string[]
   creditsRemaining?: number
 }
@@ -43,6 +45,7 @@ export default function Popup() {
   const [statusMsg, setStatusMsg] = useState("")
   const [slotError, setSlotError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [showReviewAsk, setShowReviewAsk] = useState(false)
 
   useEffect(() => {
     storage.get<Theme>("activeTheme").then((t) => {
@@ -95,6 +98,8 @@ export default function Popup() {
           isActive: data.subscription?.isActive || false,
           planType: data.subscription?.planType,
           isLifetime: data.subscription?.isLifetime,
+          subscriptionStatus: data.subscription?.status,
+          trialEndsAt: data.subscription?.trialEndsAt,
           accessibleThemes: data.accessibleThemes || [],
           creditsRemaining: data.subscription?.creditsRemaining
         }
@@ -216,6 +221,14 @@ export default function Popup() {
           setActiveThemeId(theme.id)
           storage.set("activeTheme", theme)
 
+          // Track apply count; trigger one-time review ask on 3rd apply
+          const applyCount = ((await storage.get<number>("themeApplyCount")) ?? 0) + 1
+          await storage.set("themeApplyCount", applyCount)
+          const reviewDismissed = await storage.get<boolean>("reviewAskDismissed")
+          if (applyCount === 3 && !reviewDismissed) {
+            setShowReviewAsk(true)
+          }
+
           // Refresh status to update credits
           checkAccountStatus(token)
         } else {
@@ -228,9 +241,18 @@ export default function Popup() {
       return
     }
 
-    // Not subscribed - prompt to subscribe
-    setSlotError("Subscribe to unlock premium themes!")
-    window.open(`${API_BASE_URL}/#pricing`, '_blank')
+    // Not subscribed - escalating lifecycle nudge
+    const clickCount = ((await storage.get<number>("premiumClickCount")) ?? 0) + 1
+    await storage.set("premiumClickCount", clickCount)
+    if (clickCount === 1) {
+      setSlotError("This is a premium theme — start your free 30-day trial.")
+    } else if (clickCount === 2) {
+      setSlotError("Unlock all 8 premium themes with a free 30-day trial.")
+      window.open(`${API_BASE_URL}/#pricing`, '_blank')
+    } else {
+      setSlotError("You keep coming back to premium themes. Unlock them all free for 30 days.")
+      window.open(`${API_BASE_URL}/#pricing`, '_blank')
+    }
   }
 
   const freeThemes = useMemo(() => DEFAULT_THEMES.filter(t => !t.isPremium), [])
@@ -263,7 +285,13 @@ export default function Popup() {
              onClick={() => setShowAccountPanel(!showAccountPanel)}
              className="text-xs font-medium text-teal hover:text-brown transition-colors"
            >
-             {accountStatus.connected ? (accountStatus.isLifetime ? "Lifetime" : "Premium") : "Connect"}
+             {accountStatus.connected
+               ? (accountStatus.isLifetime
+                   ? "Lifetime"
+                   : accountStatus.subscriptionStatus === 'trialing'
+                     ? "Trial"
+                     : "Premium")
+               : "Sign In"}
            </button>
           {accountStatus.connected && (
             <div
@@ -298,7 +326,13 @@ export default function Popup() {
                         ? 'bg-teal/10 text-teal'
                         : 'bg-coral/10 text-coral'
                   }`}>
-                    {accountStatus.isLifetime ? 'Lifetime Access' : accountStatus.planType === 'yearly' ? 'Yearly' : 'Monthly'}
+                    {accountStatus.isLifetime
+                      ? 'Lifetime Access'
+                      : accountStatus.subscriptionStatus === 'trialing'
+                        ? 'Trial Active'
+                        : accountStatus.planType === 'yearly'
+                          ? 'Yearly'
+                          : 'Monthly'}
                   </span>
                   {accountStatus.isActive && !accountStatus.isLifetime && accountStatus.creditsRemaining !== undefined && (
                     <span className="text-[10px] text-brown-soft">
@@ -307,20 +341,45 @@ export default function Popup() {
                   )}
                 </div>
               )}
+              {accountStatus.subscriptionStatus === 'trialing' && accountStatus.trialEndsAt && (
+                <p className="text-[10px] text-brown-soft mt-1">
+                  {Math.max(0, Math.ceil(
+                    (new Date(accountStatus.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
+                  ))} days left in trial
+                </p>
+              )}
               {!accountStatus.hasSubscription && (
                 <button
                   onClick={() => window.open(`${API_BASE_URL}/#pricing`, '_blank')}
                   className="mt-3 text-xs bg-teal text-white px-4 py-2 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300"
                 >
-                  Subscribe
+                  Start free 30-day trial
                 </button>
+              )}
+              {accountStatus.hasSubscription && !accountStatus.isActive &&
+                accountStatus.subscriptionStatus === 'canceled' && (
+                <div className="mt-3 text-[10px] text-brown-soft">
+                  Your subscription has ended.{" "}
+                  <a href={`${API_BASE_URL}/account`} target="_blank" className="text-teal underline">
+                    Reactivate to restore access.
+                  </a>
+                </div>
+              )}
+              {accountStatus.hasSubscription && !accountStatus.isActive &&
+                accountStatus.subscriptionStatus === 'past_due' && (
+                <div className="mt-3 text-[10px] text-brown-soft">
+                  Payment failed.{" "}
+                  <a href={`${API_BASE_URL}/account`} target="_blank" className="text-coral underline">
+                    Update your billing details to restore access.
+                  </a>
+                </div>
               )}
             </>
           ) : (
             <>
               <h3 className="text-xs font-semibold uppercase tracking-wider text-brown-soft mb-2">Connect Account</h3>
               <p className="text-[10px] text-brown-soft mb-3">
-                Sign in to access your premium themes and subscription.
+                Sign in to unlock 8 animated premium themes.
               </p>
               <button
                 onClick={handleConnect}
@@ -406,6 +465,35 @@ export default function Popup() {
             })}
           </div>
         </section>
+
+        {/* REVIEW ASK BANNER */}
+        {showReviewAsk && (
+          <div className="mt-4 p-3 rounded-card bg-teal/10 border border-teal/30 text-brown text-xs" role="status">
+            <p className="font-medium mb-2">Loving ThemeGPT? A quick review helps others find it. ⭐</p>
+            <div className="flex gap-2">
+              <a
+                href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba/reviews"
+                target="_blank"
+                onClick={async () => {
+                  await storage.set("reviewAskDismissed", true)
+                  setShowReviewAsk(false)
+                }}
+                className="text-[10px] bg-teal text-white px-3 py-1.5 rounded-button font-semibold hover:translate-y-[-1px] transition-all"
+              >
+                Leave a review
+              </a>
+              <button
+                onClick={async () => {
+                  await storage.set("reviewAskDismissed", true)
+                  setShowReviewAsk(false)
+                }}
+                className="text-[10px] text-brown-soft hover:text-brown transition-colors px-2"
+              >
+                Maybe later
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* SLOT ERROR MESSAGE */}
         {slotError && (

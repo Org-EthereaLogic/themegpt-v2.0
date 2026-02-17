@@ -8,38 +8,39 @@
 
 ## 1. Before/After GIFs
 
-Show ChatGPT's default look vs ThemeGPT themes applied. Each GIF: 1280x800, <5 MB, 3-5 second loop.
+Show ChatGPT's default look vs ThemeGPT themes applied. Each GIF: 1280x880, <5 MB, crossfade loop.
 
-| # | GIF | Content | Status |
-|---|-----|---------|--------|
-| 1 | `default-to-aurora.gif` | Default ChatGPT → Aurora Borealis (animated gradient, hero theme) | [ ] |
-| 2 | `default-to-synthwave.gif` | Default ChatGPT → Synth Wave (neon palette, strong contrast) | [ ] |
-| 3 | `default-to-woodland.gif` | Default ChatGPT → Woodland Retreat (earthy tones, calm feel) | [ ] |
-| 4 | `default-to-dracula.gif` | Default ChatGPT → Dracula (popular dev theme, free tier) | [ ] |
+| # | GIF | Size | Status |
+|---|-----|------|--------|
+| 1 | `default-to-aurora-borealis.gif` | 2.7 MB | [x] Done |
+| 2 | `default-to-synth-wave.gif` | 2.3 MB | [x] Done |
+| 3 | `default-to-woodland-retreat.gif` | 5.0 MB | [x] Done |
+| 4 | `default-to-themegpt-dark.gif` | 4.8 MB | [x] Done |
 
-**How to capture**: Open ChatGPT with a sample conversation visible. Screen-record clicking a theme in the extension popup. Trim to the transition moment. Export as optimized GIF.
+**Location**: `asset/launch/`
+**Source screenshots**: `asset/images/chrome-store/Before_screenshot.png` + `After_*.png`
+**Generator script**: `asset/launch/create_before_after_gifs.py`
 
-**Lead GIF**: `default-to-aurora.gif` — Aurora Borealis is the most visually striking premium theme and should be the hero image across all channels.
+**Lead GIF**: `default-to-aurora-borealis.gif` — Aurora Borealis is the most visually striking premium theme and should be the hero image across all channels.
+
+**Note**: Dracula was replaced with ThemeGPT Dark for stronger visual contrast in the before/after.
 
 ---
 
 ## 2. Demo Recording (30 seconds)
 
-One continuous screen recording showing the full value loop. Format: MP4 (for social) + GIF (for Product Hunt gallery).
+One continuous screen recording showing the full value loop.
 
-**Script / Shot List:**
+**Deliverables:**
 
-| Time | Action | What viewer sees |
-|------|--------|------------------|
-| 0-5s | Open ChatGPT (default look) | Plain, boring ChatGPT interface |
-| 5-8s | Click ThemeGPT extension icon | Popup opens showing theme grid |
-| 8-12s | Click "Dracula" (free theme) | ChatGPT instantly transforms to Dracula |
-| 12-16s | Click "Aurora Borealis" (premium) | Lock icon visible, upgrade prompt appears |
-| 16-20s | Quick flash of pricing page | Shows $6.99/mo, 30-day free trial |
-| 20-25s | Apply Aurora Borealis (unlocked) | ChatGPT transforms with animated gradient |
-| 25-30s | Scroll the themed conversation | Polished, beautiful ChatGPT experience |
+| # | File | Size | Status |
+|---|------|------|--------|
+| 1 | `demo-30s-source.mp4` | 38 MB | [x] Source recording (1080p, 30fps) |
+| 2 | `demo-30s.mp4` | 1.1 MB | [x] Web-optimized MP4 (1280w, h264, fast-start) |
+| 3 | `demo-highlight.gif` | 2.8 MB | [x] 10s highlight GIF (12-22s, popup → theme switch) |
 
-**Status**: [ ] Recorded  [ ] Trimmed  [ ] Exported MP4  [ ] Exported GIF
+**Location**: `asset/launch/`
+**Content**: Default ChatGPT → scroll → open extension popup → browse themes → apply Aurora Borealis → scroll themed conversation
 
 ---
 

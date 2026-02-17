@@ -119,10 +119,45 @@ Alternatives:
 
 | # | Asset | Platform | Spec | Status |
 |---|-------|----------|------|--------|
-| 1 | Announcement post | Twitter/X | 280 chars + 1 GIF (lead before/after) | [ ] |
-| 2 | Announcement post | LinkedIn | Short post + lead GIF | [ ] |
+| 1 | Announcement post | Twitter/X | 280 chars + 1 GIF (lead before/after) | [x] Finalized |
+| 2 | Announcement post | LinkedIn | Short post + lead GIF | [x] Finalized |
 | 3 | OG image | All | 1200x630 — already exists at `apps/web/public/og-image.png` | [x] |
 | 4 | Twitter card | Twitter/X | 1200x600 — already exists in `asset/archive/` | [x] |
+
+### Twitter/X Post (278 chars)
+
+> I built ThemeGPT because ChatGPT's default look felt sterile.
+>
+> 15 handcrafted themes. One click to apply. Zero data leaves your browser.
+>
+> 7 free themes — no sign-up needed.
+> 8 premium with animated effects — 30-day free trial.
+>
+> Try it free: themegpt.ai
+
+**Attach**: `default-to-aurora-borealis.gif`
+
+### LinkedIn Post
+
+> I just launched ThemeGPT — a privacy-first Chrome extension that transforms ChatGPT's appearance with handcrafted themes.
+>
+> The problem: I spend hours in ChatGPT every day and the default interface felt sterile. I wanted it to feel like mine — like my code editor, where I pick the theme that matches my mood.
+>
+> The solution: One-click themes that make ChatGPT personal. 15 handcrafted designs ranging from Dracula to Aurora Borealis with animated gradient effects.
+>
+> What makes it different:
+> - 7 free themes — no account needed, works instantly
+> - 8 premium themes with animated effects
+> - Privacy-first — all processing happens locally, zero data leaves your browser
+> - 30-day free trial for premium
+>
+> The first 60 yearly subscribers get converted to lifetime access as a thank-you to early supporters.
+>
+> Try it free at themegpt.ai — I'd love to hear what themes you'd want to see next.
+>
+> #ChromeExtension #ChatGPT #Privacy #IndieHacker
+
+**Attach**: `default-to-aurora-borealis.gif`
 
 ---
 

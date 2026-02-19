@@ -1,20 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2)</title>
+  <title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;800&display=swap"
+    rel="stylesheet" />
   <style>
     :root {
-      --cream: #faf6f0;
-      --brown: #4b2e1e;
+      --paper: #faf6f0;
+      --card: #ffffff;
+      --ink: #4b2e1e;
+      --muted: #7a6558;
+      --border: rgba(75, 46, 30, 0.12);
       --teal: #7ecec5;
       --peach: #f4a988;
       --coral: #e87d5c;
+      --gold: #d8b500;
       --phase1: #7ecec5;
       --phase2: #f4a988;
-      --phase3: #fad000;
+      --phase3: #e2c440;
+      --shadow: 0 10px 30px rgba(75, 46, 30, 0.08);
+      --meta-bg: #fff8f0;
+      --tab-bg: #fff9f3;
+      --week-bg: #fffdfa;
+      --kpi-bg: #fff;
+      --th-bg: #fff7ee;
+      --callout-teal-bg: rgba(126, 206, 197, 0.1);
+      --callout-peach-bg: rgba(244, 169, 136, 0.14);
+      --callout-gold-bg: rgba(250, 208, 0, 0.1);
+      --task-bullet: rgba(75, 46, 30, 0.48);
+      --tab-active-bg: rgba(126, 206, 197, 0.12);
+      --tab-hover-border: rgba(75, 46, 30, 0.34);
+      --code-bg: rgba(75, 46, 30, 0.06);
+      --body-grad1: rgba(126, 206, 197, 0.10);
+      --body-grad2: rgba(244, 169, 136, 0.12);
+      --body-grad-start: #fffaf5;
+      --body-grad-end: #faf6f0;
+      --done-color: #4a9e8e;
+      --pending-color: rgba(75, 46, 30, 0.18);
+      --gauge-track: rgba(75, 46, 30, 0.08);
+      --strikethrough: rgba(75, 46, 30, 0.45);
+    }
+
+    [data-theme="dark"] {
+      --paper: #151119;
+      --card: #1e1924;
+      --ink: #e4ddd6;
+      --muted: #9a8e84;
+      --border: rgba(255, 255, 255, 0.09);
+      --teal: #8fd8cf;
+      --peach: #f4a988;
+      --coral: #e87d5c;
+      --gold: #e8d44d;
+      --phase1: #7ecec5;
+      --phase2: #d4882e;
+      --phase3: #c4a824;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+      --meta-bg: #261f2c;
+      --tab-bg: #231d28;
+      --week-bg: #211b26;
+      --kpi-bg: #261f2c;
+      --th-bg: #261f2c;
+      --callout-teal-bg: rgba(126, 206, 197, 0.09);
+      --callout-peach-bg: rgba(244, 169, 136, 0.09);
+      --callout-gold-bg: rgba(250, 208, 0, 0.08);
+      --task-bullet: rgba(255, 255, 255, 0.34);
+      --tab-active-bg: rgba(126, 206, 197, 0.13);
+      --tab-hover-border: rgba(255, 255, 255, 0.22);
+      --code-bg: rgba(255, 255, 255, 0.07);
+      --body-grad1: rgba(126, 206, 197, 0.06);
+      --body-grad2: rgba(244, 169, 136, 0.04);
+      --body-grad-start: #151119;
+      --body-grad-end: #151119;
+      --done-color: #8fd8cf;
+      --pending-color: rgba(255, 255, 255, 0.12);
+      --gauge-track: rgba(255, 255, 255, 0.06);
+      --strikethrough: rgba(255, 255, 255, 0.45);
     }
 
     * {
@@ -24,105 +90,476 @@
     }
 
     body {
-      background: linear-gradient(160deg, #fffaf5 0%, #fdf7ee 45%, #fff 100%);
-      color: var(--brown);
       font-family: "Inter", "Segoe UI", sans-serif;
+      color: var(--ink);
       line-height: 1.6;
       padding: 1.5rem;
+      background:
+        radial-gradient(circle at 10% 0%, var(--body-grad1), transparent 35%),
+        radial-gradient(circle at 95% 10%, var(--body-grad2), transparent 28%),
+        linear-gradient(160deg, var(--body-grad-start) 0%, var(--paper) 54%, var(--body-grad-end) 100%);
+      transition: background 320ms ease, color 320ms ease;
+    }
+
+    .header,
+    .section,
+    .snap-card,
+    .progress-section {
+      animation: rise 520ms ease both;
     }
 
     .header {
       max-width: 1100px;
-      margin: 0 auto 1.2rem;
-      background: white;
-      border: 1px solid rgba(75, 46, 30, 0.1);
-      border-radius: 18px;
+      margin: 0 auto 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
       padding: 1.2rem 1.4rem;
-      box-shadow: 0 10px 30px rgba(75, 46, 30, 0.08);
+      box-shadow: var(--shadow);
+      transition: background 320ms ease, border-color 320ms ease;
     }
 
     .header h1 {
-      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-family: "Space Grotesk", "Inter", sans-serif;
+      font-size: clamp(1.35rem, 3vw, 2rem);
+      letter-spacing: -0.01em;
       line-height: 1.2;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.35rem;
     }
 
     .subtitle {
-      color: rgba(75, 46, 30, 0.8);
+      font-size: 0.95rem;
+      color: var(--muted);
       margin-bottom: 0.8rem;
+      max-width: 72ch;
     }
 
     .meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.6rem;
-      font-size: 0.8rem;
-      color: rgba(75, 46, 30, 0.75);
+      gap: 0.5rem;
+      font-size: 0.79rem;
+      color: var(--muted);
     }
 
     .meta span {
-      background: #fff8f0;
-      border: 1px solid rgba(75, 46, 30, 0.12);
-      padding: 0.2rem 0.5rem;
+      background: var(--meta-bg);
+      border: 1px solid var(--border);
+      padding: 0.22rem 0.56rem;
       border-radius: 999px;
+      transition: background 320ms ease, border-color 320ms ease;
     }
 
-    .snapshot {
+    /* ─── Theme Toggle ─── */
+    .theme-toggle {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 100;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--teal);
+      transform: scale(1.08);
+    }
+
+    .theme-toggle .icon-sun,
+    .theme-toggle .icon-moon {
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .theme-toggle .icon-sun {
+      display: none;
+    }
+
+    .theme-toggle .icon-moon {
+      display: block;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-sun {
+      display: block;
+    }
+
+    [data-theme="dark"] .theme-toggle .icon-moon {
+      display: none;
+    }
+
+    /* ─── Progress Gauge ─── */
+    .progress-section {
       max-width: 1100px;
-      margin: 0 auto 1.2rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 0.7rem;
+      margin: 0 auto 1rem;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1rem 1.3rem;
+      box-shadow: var(--shadow);
+      transition: background 320ms ease, border-color 320ms ease;
     }
 
-    .snap-card {
-      background: white;
-      border: 1px solid rgba(75, 46, 30, 0.1);
-      border-radius: 14px;
-      padding: 0.9rem;
+    .progress-head {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.85rem;
     }
 
-    .label {
-      font-size: 0.75rem;
+    .progress-head h2 {
+      margin-bottom: 0;
+      font-family: "Space Grotesk", "Inter", sans-serif;
+    }
+
+    .progress-scope {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .gauge-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    .donut-wrap {
+      flex-shrink: 0;
+      position: relative;
+      width: 100px;
+      height: 100px;
+    }
+
+    .donut-wrap svg {
+      width: 100px;
+      height: 100px;
+      transform: rotate(-90deg);
+    }
+
+    .donut-track {
+      fill: none;
+      stroke: var(--gauge-track);
+      stroke-width: 8;
+    }
+
+    .donut-fill {
+      fill: none;
+      stroke: var(--done-color);
+      stroke-width: 8;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 800ms ease;
+    }
+
+    .donut-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+    }
+
+    .donut-num {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--ink);
+    }
+
+    .donut-frac {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .donut-label {
+      font-size: 0.58rem;
+      color: var(--muted);
+      margin-top: 0.12rem;
       text-transform: uppercase;
       letter-spacing: 0.06em;
-      color: rgba(75, 46, 30, 0.6);
-      margin-bottom: 0.25rem;
     }
 
-    .value {
+    .step-wrap {
+      flex: 1;
+      min-width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+    }
+
+    .step-track {
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .ms-step {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      min-width: 0;
+    }
+
+    .ms-step::after {
+      content: "";
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      width: 100%;
+      height: 2px;
+      background: var(--border);
+      z-index: 0;
+    }
+
+    .ms-step:last-child::after {
+      display: none;
+    }
+
+    .ms-step.step-done::after {
+      background: var(--done-color);
+    }
+
+    .ms-step.step-done.step-next-open::after {
+      background: var(--border);
+      opacity: 0.55;
+    }
+
+    .ms-node {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.78rem;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+      border: 2px solid transparent;
+      transition: transform 180ms ease;
+    }
+
+    .ms-node:hover {
+      transform: scale(1.12);
+    }
+
+    .ms-node.node-done {
+      background: var(--done-color);
+      color: #fff;
+    }
+
+    [data-theme="dark"] .ms-node.node-done {
+      color: #151119;
+    }
+
+    .ms-node.node-active {
+      background: var(--peach);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(244, 169, 136, 0.2);
+    }
+
+    .ms-node.node-pending {
+      background: var(--card);
+      border-color: var(--border);
+      color: var(--muted);
+      font-size: 0.62rem;
+    }
+
+    .ms-step-id {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.62rem;
       font-weight: 700;
-      font-size: 1.3rem;
+      color: var(--ink);
+      margin-top: 0.3rem;
+      text-align: center;
       line-height: 1.2;
     }
 
-    .detail {
-      margin-top: 0.2rem;
-      font-size: 0.8rem;
-      color: rgba(75, 46, 30, 0.75);
+    .ms-step-name {
+      font-size: 0.54rem;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.2;
+      max-width: 72px;
     }
 
+    .step-legend {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      font-size: 0.71rem;
+      color: var(--muted);
+    }
+
+    .step-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.28rem;
+    }
+
+    .legend-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.done {
+      background: var(--done-color);
+    }
+
+    .legend-dot.active {
+      background: var(--peach);
+    }
+
+    .legend-dot.pending {
+      background: var(--card);
+      border: 1.5px solid var(--muted);
+    }
+
+    /* ─── Phase Progress Bars ─── */
+    .phase-bars {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+      margin-top: 0.85rem;
+    }
+
+    .phase-bar-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.6rem;
+      background: var(--week-bg);
+      transition: background 320ms ease;
+    }
+
+    .phase-bar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 0.35rem;
+    }
+
+    .phase-bar-label {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+
+    .phase-bar-count {
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .bar-track {
+      height: 6px;
+      border-radius: 3px;
+      background: var(--gauge-track);
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 800ms ease;
+    }
+
+    .bar-fill.fill-p1 {
+      background: var(--phase1);
+    }
+
+    .bar-fill.fill-p2 {
+      background: var(--phase2);
+    }
+
+    .bar-fill.fill-p3 {
+      background: var(--phase3);
+    }
+
+    /* ─── Snapshot Cards ─── */
+    .snapshot {
+      max-width: 1100px;
+      margin: 0 auto 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 0.66rem;
+    }
+
+    .snap-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0.85rem;
+      box-shadow: var(--shadow);
+      transition: background 320ms ease, border-color 320ms ease, transform 180ms ease;
+    }
+
+    .snap-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+      margin-bottom: 0.18rem;
+    }
+
+    .value {
+      font-weight: 800;
+      font-size: 1.3rem;
+      line-height: 1.2;
+      font-family: "Space Grotesk", "Inter", sans-serif;
+    }
+
+    .detail {
+      margin-top: 0.16rem;
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    /* ─── Container & Sections ─── */
     .container {
       max-width: 1100px;
       margin: 0 auto;
-      display: flex;
-      flex-direction: column;
+      display: grid;
       gap: 1rem;
     }
 
     .section {
-      background: white;
-      border: 1px solid rgba(75, 46, 30, 0.1);
-      border-radius: 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
       padding: 1rem;
+      box-shadow: var(--shadow);
+      transition: background 320ms ease, border-color 320ms ease;
     }
 
     h2 {
+      font-family: "Space Grotesk", "Inter", sans-serif;
       font-size: 1.1rem;
-      margin-bottom: 0.55rem;
+      margin-bottom: 0.48rem;
     }
 
     h3 {
+      font-family: "Space Grotesk", "Inter", sans-serif;
       font-size: 1rem;
       margin-bottom: 0.35rem;
     }
@@ -136,6 +573,18 @@
       font-size: 0.9rem;
     }
 
+    code {
+      background: var(--code-bg);
+      padding: 0.1em 0.3em;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+
+    s {
+      color: var(--strikethrough);
+    }
+
+    /* ─── Timeline ─── */
     .timeline-bar {
       display: grid;
       grid-template-columns: repeat(13, minmax(0, 1fr));
@@ -161,19 +610,24 @@
     }
 
     .p3 {
-      background: #d8b500;
+      background: var(--phase3);
+    }
+
+    [data-theme="dark"] .p3 {
+      color: #151119;
     }
 
     .timeline-labels {
       display: grid;
       grid-template-columns: repeat(13, minmax(0, 1fr));
       gap: 0.22rem;
-      margin-top: 0.4rem;
-      font-size: 0.64rem;
-      color: rgba(75, 46, 30, 0.72);
+      margin-top: 0.38rem;
+      font-size: 0.63rem;
+      color: var(--muted);
       text-align: center;
     }
 
+    /* ─── Phase Tabs ─── */
     .phase-tabs {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -181,14 +635,20 @@
     }
 
     .phase-tab {
-      border: 1px solid rgba(75, 46, 30, 0.16);
-      background: #fff9f3;
+      border: 1px solid var(--border);
+      background: var(--tab-bg);
       border-radius: 10px;
-      padding: 0.65rem;
+      padding: 0.62rem;
       text-align: left;
       font-weight: 700;
-      color: var(--brown);
+      color: var(--ink);
       cursor: pointer;
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .phase-tab:hover {
+      transform: translateY(-2px);
+      border-color: var(--tab-hover-border);
     }
 
     .phase-tab .tab-label {
@@ -196,55 +656,59 @@
       margin-top: 0.15rem;
       font-size: 0.74rem;
       font-weight: 500;
-      color: rgba(75, 46, 30, 0.7);
+      color: var(--muted);
     }
 
     .phase-tab.active {
       border-color: var(--teal);
-      background: rgba(126, 206, 197, 0.12);
+      background: var(--tab-active-bg);
     }
 
     .phase-content {
       display: none;
-      margin-top: 0.9rem;
+      margin-top: 0.86rem;
     }
 
     .phase-content.active {
       display: block;
+      animation: rise 360ms ease both;
     }
 
+    /* ─── Callouts ─── */
     .callout {
       border-left: 4px solid var(--teal);
-      background: rgba(126, 206, 197, 0.1);
+      background: var(--callout-teal-bg);
       border-radius: 8px;
-      padding: 0.7rem 0.8rem;
-      margin: 0.6rem 0;
+      padding: 0.65rem 0.8rem;
+      margin: 0.65rem 0;
       font-size: 0.86rem;
     }
 
     .callout.warn {
       border-left-color: var(--peach);
-      background: rgba(244, 169, 136, 0.14);
+      background: var(--callout-peach-bg);
     }
 
+    /* ─── Week Blocks ─── */
     .week-block {
-      border: 1px solid rgba(75, 46, 30, 0.12);
+      border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 0.7rem;
-      margin-top: 0.65rem;
-      background: #fffdfa;
+      padding: 0.68rem;
+      margin-top: 0.62rem;
+      background: var(--week-bg);
+      transition: background 320ms ease;
     }
 
     .task-list {
       list-style: none;
       display: grid;
-      gap: 0.38rem;
+      gap: 0.37rem;
       margin-top: 0.3rem;
     }
 
     .task-list li {
       font-size: 0.85rem;
-      padding-left: 0.8rem;
+      padding-left: 0.86rem;
       position: relative;
     }
 
@@ -253,71 +717,136 @@
       position: absolute;
       left: 0;
       top: 0;
-      color: rgba(75, 46, 30, 0.55);
+      color: var(--task-bullet);
     }
 
+    /* ─── KPI Grid ─── */
     .kpi-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 0.5rem;
-      margin-top: 0.6rem;
+      gap: 0.48rem;
+      margin-top: 0.52rem;
     }
 
     .kpi-card {
-      border: 1px solid rgba(75, 46, 30, 0.12);
+      border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 0.55rem;
-      background: #fff;
+      padding: 0.5rem;
+      background: var(--kpi-bg);
+      transition: background 320ms ease, border-color 320ms ease;
     }
 
     .kpi-value {
-      font-weight: 700;
+      font-weight: 800;
       font-size: 1rem;
+      font-family: "Space Grotesk", "Inter", sans-serif;
     }
 
     .kpi-label {
-      font-size: 0.78rem;
-      color: rgba(75, 46, 30, 0.72);
+      font-size: 0.77rem;
+      color: var(--muted);
+      margin-top: 0.1rem;
     }
 
+    /* ─── Tables ─── */
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 0.4rem;
+      margin-top: 0.42rem;
       font-size: 0.84rem;
     }
 
     th,
     td {
-      border: 1px solid rgba(75, 46, 30, 0.12);
+      border: 1px solid var(--border);
       padding: 0.5rem;
       text-align: left;
       vertical-align: top;
     }
 
     th {
-      background: #fff7ee;
+      background: var(--th-bg);
       font-weight: 700;
     }
 
+    /* ─── Footer ─── */
     .footer {
       max-width: 1100px;
       margin: 1rem auto 0;
       text-align: center;
-      color: rgba(75, 46, 30, 0.65);
+      color: var(--muted);
       font-size: 0.76rem;
     }
 
+    /* ─── Animations ─── */
+    @keyframes rise {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+      }
+
+      .header,
+      .section,
+      .snap-card,
+      .progress-section,
+      .phase-content,
+      .phase-tab,
+      .phase-tabs,
+      .theme-toggle,
+      .snap-card,
+      .ms-node,
+      .week-block,
+      .callout,
+      .kpi-card,
+      .phase-bar-card,
+      .footer,
+      .progress-head {
+        animation: none;
+        transition: none;
+        transform: none;
+      }
+    }
+
+    /* ─── Responsive ─── */
     @media (max-width: 760px) {
       body {
-        padding: 0.8rem;
+        padding: 0.85rem;
       }
 
       .timeline-labels {
-        font-size: 0.58rem;
+        font-size: 0.56rem;
       }
 
       .phase-tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .gauge-row {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .step-wrap {
+        min-width: unset;
+        width: 100%;
+      }
+
+      .phase-bars {
         grid-template-columns: 1fr;
       }
     }
@@ -326,18 +855,131 @@
 
 <body>
 
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode" title="Toggle theme">
+    <span class="icon-moon">&#9790;</span>
+    <span class="icon-sun">&#9788;</span>
+  </button>
+
+  <!-- Header -->
   <div class="header">
     <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2)</h1>
     <div class="subtitle">Execution plan focused on critical-fix hardening, single-batch extension release, and then
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 17, 2026 (v2.2.0 in-extension messaging complete)</span>
+      <span>Updated: February 19, 2026 (v2.2.0 approved and published on CWS)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
   </div>
 
+  <!-- Progress Gauge -->
+  <div class="progress-section">
+    <div class="progress-head">
+      <h2>Roadmap Progress</h2>
+      <span class="progress-scope">16 of 25 tasks completed across 3 phases</span>
+    </div>
+    <div class="gauge-row">
+      <!-- Donut Chart -->
+      <div class="donut-wrap">
+        <svg viewBox="0 0 100 100">
+          <circle class="donut-track" cx="50" cy="50" r="40" />
+          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="90.5" />
+        </svg>
+        <div class="donut-center">
+          <span class="donut-num">64%</span>
+          <span class="donut-frac">16 / 25</span>
+          <span class="donut-label">tasks</span>
+        </div>
+      </div>
+
+      <!-- Milestone Step Tracker -->
+      <div class="step-wrap">
+        <div class="step-track">
+          <div class="ms-step step-done">
+            <div class="ms-node node-done">&#10003;</div>
+            <div class="ms-step-id">W1</div>
+            <div class="ms-step-name">Offer Decision</div>
+          </div>
+          <div class="ms-step step-done">
+            <div class="ms-node node-done">&#10003;</div>
+            <div class="ms-step-id">W2</div>
+            <div class="ms-step-name">Hardening</div>
+          </div>
+          <div class="ms-step step-done">
+            <div class="ms-node node-done">&#10003;</div>
+            <div class="ms-step-id">W2</div>
+            <div class="ms-step-name">Release Gate</div>
+          </div>
+          <div class="ms-step step-done step-next-open">
+            <div class="ms-node node-done">&#10003;</div>
+            <div class="ms-step-id">W3-4</div>
+            <div class="ms-step-name">Messaging</div>
+          </div>
+          <div class="ms-step">
+            <div class="ms-node node-active">&#9654;</div>
+            <div class="ms-step-id">W5-6</div>
+            <div class="ms-step-name">PH Launch</div>
+          </div>
+          <div class="ms-step">
+            <div class="ms-node node-pending">&#8943;</div>
+            <div class="ms-step-id">W7-9</div>
+            <div class="ms-step-name">Scale</div>
+          </div>
+          <div class="ms-step">
+            <div class="ms-node node-pending">&#8943;</div>
+            <div class="ms-step-id">W10-12</div>
+            <div class="ms-step-name">Paid Test</div>
+          </div>
+        </div>
+        <div class="step-legend">
+          <div class="step-legend-item">
+            <div class="legend-dot done"></div> Complete
+          </div>
+          <div class="step-legend-item">
+            <div class="legend-dot active"></div> In Progress
+          </div>
+          <div class="step-legend-item">
+            <div class="legend-dot pending"></div> Planned
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Per-Phase Progress Bars -->
+    <div class="phase-bars">
+      <div class="phase-bar-card">
+        <div class="phase-bar-head">
+          <span class="phase-bar-label">Phase 1</span>
+          <span class="phase-bar-count">11 / 11</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill fill-p1" style="width:100%"></div>
+        </div>
+      </div>
+      <div class="phase-bar-card">
+        <div class="phase-bar-head">
+          <span class="phase-bar-label">Phase 2</span>
+          <span class="phase-bar-count">5 / 7</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill fill-p2" style="width:71.4%"></div>
+        </div>
+      </div>
+      <div class="phase-bar-card">
+        <div class="phase-bar-head">
+          <span class="phase-bar-label">Phase 3</span>
+          <span class="phase-bar-count">0 / 7</span>
+        </div>
+        <div class="bar-track">
+          <div class="bar-fill fill-p3" style="width:0%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Snapshot Cards -->
   <div class="snapshot">
     <div class="snap-card">
       <div class="label">Starting Downloads</div>
@@ -352,7 +994,7 @@
     <div class="snap-card">
       <div class="label">Revenue Status</div>
       <div class="value">$0</div>
-      <div class="detail">Stripe verified, payouts active; v2.1.0 submitted to CWS, awaiting review</div>
+      <div class="detail">Stripe verified, payouts active; v2.2.0 approved and published on CWS</div>
     </div>
     <div class="snap-card">
       <div class="label">Current Offer in Code</div>
@@ -363,6 +1005,7 @@
 
   <div class="container">
 
+    <!-- Operating Rules -->
     <div class="section">
       <h2>Operating Rules</h2>
       <div class="callout">
@@ -381,8 +1024,9 @@
       </ul>
     </div>
 
+    <!-- Current Status -->
     <div class="section">
-      <h2>Current Status (February 16, 2026)</h2>
+      <h2>Current Status (February 19, 2026)</h2>
       <div class="week-block">
         <h4>Completed</h4>
         <ul class="task-list">
@@ -405,36 +1049,60 @@
             Plasmo/Parcel compatibility.</li>
           <li>CHANGELOG, README, and <code>package.json</code> version updated to 2.1.0.</li>
           <li>Commit pushed to <code>origin/main</code> with tag <code>v2.1.0</code>.</li>
-          <li>v2.1.0 submitted to Chrome Web Store via automated <code>submit-extension.yml</code> GitHub Actions workflow.</li>
+          <li>v2.1.0 submitted to Chrome Web Store via automated <code>submit-extension.yml</code> GitHub Actions
+            workflow.</li>
+          <li>v2.2.0 release prepared and shipped: <code>apps/extension/package.json</code> bumped from 2.1.0 to 2.2.0,
+            <code>CHANGELOG.md</code> updated, commit pushed to <code>origin/main</code>, and tag <code>v2.2.0</code>
+            created.</li>
+          <li>Chrome Web Store submission workflow completed successfully in 58 seconds (GitHub Actions run
+            <code>22153361425</code>).</li>
+          <li>GitHub release published for <code>v2.2.0</code>.</li>
+          <li>Cloud Build completed successfully for commit
+            <code>0e852743865b46ede968ae34410e5a511f21a6c5</code> (build
+            <code>8218e241-46d8-4b64-b8b3-84bc9291fd55</code>), and Cloud Run service <code>themegpt-web</code> updated
+            to ready revision <code>themegpt-web-00095-d57</code>.</li>
+          <li>Production health check verified at <code>https://themegpt.ai/api/health</code>: HTTP 200, all required
+            auth/env keys present, Firebase connected.</li>
           <li>Stripe account fully verified: identity confirmed, phone verified, no outstanding account tasks.</li>
           <li>Bank account linked (Rivermark Community Credit Union) with automatic daily payouts enabled.</li>
-          <li>All production environment variables confirmed set: live API keys, webhook secret, and all 3 price IDs.</li>
+          <li>All production environment variables confirmed set: live API keys, webhook secret, and all 3 price IDs.
+          </li>
         </ul>
       </div>
       <div class="week-block">
         <h4>Completed — v2.2.0 In-Extension Messaging</h4>
         <ul class="task-list">
-          <li>Escalating lifecycle nudge for locked premium theme clicks: 1st click shows soft trial CTA (no redirect); 2nd click shows stronger copy + opens pricing; 3rd+ shows "keep coming back" copy + opens pricing. Click count persisted to <code>chrome.storage.local</code>.</li>
-          <li>Non-incentivized review ask: triggers on the 3rd successful theme apply, shown once, permanently dismissed via <code>reviewAskDismissed</code> storage flag.</li>
-          <li>Trialing state fully surfaced: "Trial" header button label, "Trial Active" subscription badge, and days-remaining countdown when <code>trialEndsAt</code> is available from the API.</li>
-          <li>Canceled state handled: contextual "Your subscription has ended. Reactivate to restore access." message with link to account page.</li>
-          <li>Past-due state handled: "Payment failed. Update your billing details to restore access." with coral-colored billing link.</li>
-          <li>Header "Connect" button relabeled to "Sign In"; unauthenticated panel description updated to "Sign in to unlock 8 animated premium themes."</li>
+          <li>Escalating lifecycle nudge for locked premium theme clicks: 1st click shows soft trial CTA (no redirect);
+            2nd click shows stronger copy + opens pricing; 3rd+ shows "keep coming back" copy + opens pricing. Click
+            count persisted to <code>chrome.storage.local</code>.</li>
+          <li>Non-incentivized review ask: triggers on the 3rd successful theme apply, shown once, permanently dismissed
+            via <code>reviewAskDismissed</code> storage flag.</li>
+          <li>Trialing state fully surfaced: "Trial" header button label, "Trial Active" subscription badge, and
+            days-remaining countdown when <code>trialEndsAt</code> is available from the API.</li>
+          <li>Canceled state handled: contextual "Your subscription has ended. Reactivate to restore access." message
+            with link to account page.</li>
+          <li>Past-due state handled: "Payment failed. Update your billing details to restore access." with
+            coral-colored billing link.</li>
+          <li>Header "Connect" button relabeled to "Sign In"; unauthenticated panel description updated to "Sign in to
+            unlock 8 animated premium themes."</li>
           <li>"Subscribe" CTA relabeled to "Start free 30-day trial" to match offer copy consistently.</li>
           <li>TokenCounter footer copy updated: "Estimated · No data leaves your browser".</li>
-          <li><code>AccountStatus</code> interface extended with <code>subscriptionStatus</code> and <code>trialEndsAt</code>; both mapped from <code>data.subscription</code> in <code>checkAccountStatus</code>.</li>
+          <li><code>AccountStatus</code> interface extended with <code>subscriptionStatus</code> and
+            <code>trialEndsAt</code>; both mapped from <code>data.subscription</code> in
+            <code>checkAccountStatus</code>.</li>
           <li>Build verified clean: zero TypeScript errors, Plasmo and Next.js both compile successfully.</li>
         </ul>
       </div>
-      <div class="week-block">
-        <h4>Pending (Release Gate)</h4>
+      <div class="week-block" style="background: var(--callout-teal-bg);">
+        <h4>Completed (Release Gate)</h4>
         <ul class="task-list">
-          <li>Awaiting Chrome Web Store review approval for v2.1.0 submission.</li>
-          <li>v2.2.0 messaging changes ready to bundle into next CWS submission once v2.1.0 is approved.</li>
+          <li>Chrome Web Store review approved: <code>v2.2.0</code> is now the published version.</li>
+          <li>CWS dashboard shows: published version <code>2.2.0</code>. Phase 1 fully complete.</li>
         </ul>
       </div>
     </div>
 
+    <!-- Timeline -->
     <div class="section">
       <h2>Timeline (Absolute Dates)</h2>
       <div class="timeline-bar">
@@ -469,6 +1137,7 @@
       </div>
     </div>
 
+    <!-- Phase Details -->
     <div class="section">
       <div class="phase-tabs">
         <button class="phase-tab active" data-phase="1" onclick="showPhase(1)">
@@ -485,20 +1154,21 @@
         </button>
       </div>
 
+      <!-- Phase 1 -->
       <div class="phase-content active" id="phase-1">
         <h3>Phase 1 Goal</h3>
         <p>Lock and deploy critical monetization fixes so every customer sees one consistent offer and entitlement
           model.</p>
         <div class="callout">
-          Status: All critical fixes complete. Extension v2.1.0 submitted to Chrome Web Store, awaiting review approval.
+          Status: Phase 1 complete. Extension v2.2.0 approved and published on the Chrome Web Store as of February 19,
+          2026.
         </div>
 
         <div class="week-block">
           <h4>Week 1 - Completed: Canonical Offer Decision</h4>
           <ul class="task-list">
             <li>Finalized trial and lifetime policy and synchronized copy across pricing/legal messaging.</li>
-            <li>Removed stale lifetime inference from eligibility metadata and aligned with explicit lifetime state.
-            </li>
+            <li>Removed stale lifetime inference from eligibility metadata and aligned with explicit lifetime state.</li>
             <li>Updated canonical language for refund and case-study consent terms.</li>
           </ul>
         </div>
@@ -516,19 +1186,20 @@
         </div>
 
         <div class="week-block">
-          <h4>Week 2 - Remaining: Manual Extension Release Gate</h4>
+          <h4>Week 2 - Completed: Manual Extension Release Gate</h4>
           <ul class="task-list">
             <li><s>Run final extension regression pass for auth, purchase, trial, yearly, and lifetime entitlement
                 states.</s> Covered by automated QA suites.</li>
             <li><s>Confirm no additional critical fixes are pending in extension/web API integration.</s> Done: zero
-              open issues/PRs, all critical fixes merged, scope frozen for v2.1.0.</li>
-            <li><s>Prepare one consolidated Chrome Web Store submission package.</s> Done: v2.1.0 built, packaged,
+              open issues/PRs, all critical fixes merged, scope frozen for v2.2.0 release submission.</li>
+            <li><s>Prepare one consolidated Chrome Web Store submission package.</s> Done: v2.2.0 built, packaged,
               tagged, and pushed.</li>
-            <li><s>Submit Chrome Web Store update.</s> Done: v2.1.0 submitted via automated workflow.</li>
+            <li><s>Submit Chrome Web Store update.</s> Done: v2.2.0 submitted via automated workflow on February 18;
+              approved and published on February 19, 2026.</li>
           </ul>
         </div>
 
-        <div class="week-block" style="background: rgba(126,206,197,0.08);">
+        <div class="week-block" style="background: var(--callout-teal-bg);">
           <h4>Phase 1 Exit Criteria</h4>
           <div class="kpi-grid">
             <div class="kpi-card">
@@ -549,42 +1220,52 @@
             </div>
             <div class="kpi-card">
               <div class="kpi-value">Done</div>
-              <div class="kpi-label">v2.1.0 built, packaged, tagged, and pushed</div>
+              <div class="kpi-label">v2.2.0 built, packaged, tagged, and pushed</div>
             </div>
             <div class="kpi-card">
               <div class="kpi-value">Done</div>
-              <div class="kpi-label">CWS submission: v2.1.0 submitted, awaiting review</div>
+              <div class="kpi-label">CWS published: v2.2.0 approved and live on Chrome Web Store</div>
             </div>
           </div>
         </div>
       </div>
 
+      <!-- Phase 2 -->
       <div class="phase-content" id="phase-2">
         <h3>Phase 2 Goal</h3>
         <p>Convert existing demand first, run one launch channel, and collect high-signal feedback.</p>
 
-        <div class="week-block" style="background: rgba(126,206,197,0.08);">
+        <div class="week-block" style="background: var(--callout-teal-bg);">
           <h4>Weeks 3-4 - Completed: In-Extension Monetization Messaging (v2.2.0)</h4>
-          <div class="callout">Implemented February 17, 2026. Ready for next CWS submission after v2.1.0 approval.</div>
+          <div class="callout">Implemented February 17, 2026, submitted to CWS on February 18, 2026, and
+            approved/published on February 19, 2026.</div>
           <ul class="task-list">
-            <li><s>Tighten locked-theme upgrade messaging and CTA wording in popup and pricing destination.</s> Done: escalating 3-step nudge; "Start free 30-day trial" CTA; "Sign In" button; panel description copy updated.</li>
-            <li><s>Add one lifecycle nudge after repeated premium-theme attempts (helpful, not spammy).</s> Done: soft message on 1st click, redirect added on 2nd, "keep coming back" variant on 3rd+. Stored in <code>premiumClickCount</code>.</li>
-            <li><s>Ensure account and purchase state messaging is clear for trialing, active, canceled, and lifetime users.</s> Done: trialing shows "Trial Active" badge + days remaining; canceled and past_due render contextual recovery messages.</li>
-            <li><s>Launch non-incentivized review ask after a positive usage moment (for example after 3+ successful theme applies).</s> Done: banner fires on 3rd apply, one-time only, links to CWS reviews page, "Maybe later" dismisses permanently.</li>
+            <li><s>Tighten locked-theme upgrade messaging and CTA wording in popup and pricing destination.</s> Done:
+              escalating 3-step nudge; "Start free 30-day trial" CTA; "Sign In" button; panel description copy updated.
+            </li>
+            <li><s>Add one lifecycle nudge after repeated premium-theme attempts (helpful, not spammy).</s> Done: soft
+              message on 1st click, redirect added on 2nd, "keep coming back" variant on 3rd+. Stored in
+              <code>premiumClickCount</code>.</li>
+            <li><s>Ensure account and purchase state messaging is clear for trialing, active, canceled, and lifetime
+                users.</s> Done: trialing shows "Trial Active" badge + days remaining; canceled and past_due render
+              contextual recovery messages.</li>
+            <li><s>Launch non-incentivized review ask after a positive usage moment (for example after 3+ successful
+                theme applies).</s> Done: banner fires on 3rd apply, one-time only, links to CWS reviews page, "Maybe
+              later" dismisses permanently.</li>
           </ul>
         </div>
 
         <div class="week-block">
           <h4>Weeks 5-6 - One Launch Channel (Recommended: Product Hunt)</h4>
           <ul class="task-list">
-            <li><s>Prepare launch asset pack: before/after GIFs, 30-second demo, copy assets, PH gallery images, social post drafts.</s> Done: all assets in <code>asset/launch/</code>.</li>
+            <li><s>Prepare launch asset pack: before/after GIFs, 30-second demo, copy assets, PH gallery images, social
+                post drafts.</s> Done: all assets in <code>asset/launch/</code>.</li>
             <li>Run only one external launch channel for a full 2-week window to keep attribution clean.</li>
-            <li>Use weekly scorecard to identify the biggest funnel drop and fix only that one bottleneck each week.
-            </li>
+            <li>Use weekly scorecard to identify the biggest funnel drop and fix only that one bottleneck each week.</li>
           </ul>
         </div>
 
-        <div class="week-block" style="background: rgba(244,169,136,0.08);">
+        <div class="week-block" style="background: var(--callout-peach-bg);">
           <h4>Phase 2 Exit Criteria (End of March 29, 2026)</h4>
           <div class="kpi-grid">
             <div class="kpi-card">
@@ -607,6 +1288,7 @@
         </div>
       </div>
 
+      <!-- Phase 3 -->
       <div class="phase-content" id="phase-3">
         <h3>Phase 3 Goal</h3>
         <p>Scale what already converts, then run limited paid tests with strict kill rules.</p>
@@ -630,7 +1312,7 @@
           </ul>
         </div>
 
-        <div class="week-block" style="background: rgba(250,208,0,0.1);">
+        <div class="week-block" style="background: var(--callout-gold-bg);">
           <h4>Phase 3 Exit Criteria (End of May 10, 2026)</h4>
           <div class="kpi-grid">
             <div class="kpi-card">
@@ -654,6 +1336,7 @@
       </div>
     </div>
 
+    <!-- Metric Stack -->
     <div class="section">
       <h2>Metric Stack (Privacy-Aligned)</h2>
       <p>Use aggregate metrics from systems already required for operation. Do not introduce hidden telemetry.</p>
@@ -690,6 +1373,7 @@
       </table>
     </div>
 
+    <!-- Decision Gates -->
     <div class="section">
       <h2>Decision Gates</h2>
       <table>
@@ -718,58 +1402,73 @@
           </tr>
           <tr>
             <td>February 17, 2026</td>
-            <td>Launch asset pack complete: 4 before/after GIFs, 30s demo, copy assets, PH gallery images, social posts</td>
+            <td>Launch asset pack complete: 4 before/after GIFs, 30s demo, copy assets, PH gallery images, social posts
+            </td>
             <td>Status: Completed</td>
           </tr>
           <tr>
-            <td>February 17, 2026</td>
-            <td>Web deployed to Cloud Run (commit d837add, build a69c839f)</td>
-            <td>Status: Completed. themegpt.ai live, HTTP 200</td>
+            <td>February 18, 2026</td>
+            <td>Web deployment refreshed via Cloud Build + Cloud Run (commit 0e85274, build 8218e241)</td>
+            <td>Status: Completed. <code>themegpt-web</code> ready on revision <code>themegpt-web-00095-d57</code></td>
           </tr>
           <tr>
-            <td>February 17, 2026</td>
-            <td>v2.2.0 in-extension messaging implemented: lifecycle nudge, review ask, trialing/canceled/past_due states, copy updates. Build clean.</td>
-            <td>Status: Completed. Awaiting v2.1.0 CWS approval to bundle and submit v2.2.0.</td>
+            <td>February 18, 2026</td>
+            <td>v2.2.0 in-extension messaging implemented: lifecycle nudge, review ask, trialing/canceled/past_due
+              states, copy updates. Build clean.</td>
+            <td>Status: Completed. v2.2.0 approved and published on Chrome Web Store as of February 19, 2026.</td>
           </tr>
           <tr>
-            <td>Post v2.1.0 Approval</td>
-            <td>v2.1.0 approved and stable; submit v2.2.0 messaging bundle as next CWS update</td>
-            <td>Proceed to Weeks 5-6: Product Hunt launch preparation</td>
+            <td>February 18, 2026</td>
+            <td>GitHub release + extension submission automation complete (<code>release.yml</code>,
+              <code>submit-extension.yml</code>)</td>
+            <td>Status: Completed. Release <code>v2.2.0</code> published and CWS submission succeeded</td>
           </tr>
           <tr>
-            <td>Post v2.2.0 Approval</td>
-            <td>Extension update approved and stable for 7 days</td>
-            <td>Run one-channel launch (Product Hunt); monitor conversion scorecard weekly</td>
+            <td>February 19, 2026</td>
+            <td>v2.2.0 approved and published on Chrome Web Store</td>
+            <td>Status: Completed. Begin 7-day stability window; then launch Product Hunt campaign and monitor conversion
+              scorecard weekly</td>
           </tr>
         </tbody>
       </table>
     </div>
 
+    <!-- This Week -->
     <div class="section">
-      <h2>This Week (February 16-22, 2026): Top 5 Actions (Rebased)</h2>
+      <h2>This Week (February 16-22, 2026): Top Actions (Rebased)</h2>
       <div class="week-block" style="border: 2px solid var(--teal);">
         <ul class="task-list">
           <li><s>Freeze extension release scope: include all critical fixes, exclude non-critical churn.</s> Done:
-            zero open issues/PRs, all critical fixes merged, no non-critical churn included in v2.1.0.</li>
+            zero open issues/PRs, all critical fixes merged, no non-critical churn included in v2.2.0 submission.</li>
           <li><s>Run manual end-to-end extension QA across monthly, yearly, post-60 yearly trial, and lifetime
               conversions.</s> Done: automated QA suites now cover all monetization paths (8 backend + 7 frontend
             tests).</li>
           <li><s>Verify extension auth/session correctly reflects lifetime using Stripe metadata + DB-backed status
               routes.</s> Done: Verified via new unit test suites (<code>extension/status/route.test.ts</code> and
             <code>extension/auth/route.test.ts</code>).</li>
-          <li><s>Prepare one consolidated Chrome Web Store submission package and release notes.</s> Done: v2.1.0
-            built, packaged (1.21 MB), CHANGELOG and README updated, tagged and pushed to origin.</li>
-          <li><s>Submit Chrome Web Store update.</s> Done: v2.1.0 submitted via automated <code>submit-extension.yml</code> workflow.</li>
-          <li><s>Implement v2.2.0 in-extension messaging: lifecycle nudge, review ask, trial/canceled/past_due states, copy improvements.</s> Done: all 10 changes implemented in <code>popup.tsx</code> and <code>TokenCounter.tsx</code>, build clean.</li>
+          <li><s>Prepare one consolidated Chrome Web Store submission package and release notes.</s> Done: v2.2.0
+            built, packaged, CHANGELOG updated, tagged, and pushed to origin.</li>
+          <li><s>Submit Chrome Web Store update.</s> Done: v2.2.0 submitted via automated
+            <code>submit-extension.yml</code> workflow on February 18 and approved/published on February 19, 2026.</li>
+          <li><s>Publish release + deploy web/backend updates for verification.</s> Done: GitHub release
+            <code>v2.2.0</code> published; Cloud Build/Cloud Run deployment succeeded; health endpoint all green.</li>
+          <li><s>Implement v2.2.0 in-extension messaging: lifecycle nudge, review ask, trial/canceled/past_due states,
+              copy improvements.</s> Done: implemented in <code>popup.tsx</code> and <code>TokenCounter.tsx</code>,
+            build clean.</li>
         </ul>
       </div>
       <div class="week-block" style="border: 2px solid var(--peach); margin-top: 0.65rem;">
-        <h4>Next Actions (Pending CWS Approval)</h4>
+        <h4>Next Actions (v2.2.0 Published — Stability + Launch Prep)</h4>
         <ul class="task-list">
-          <li>Monitor CWS review queue for v2.1.0 approval.</li>
-          <li>Once v2.1.0 approved: update CHANGELOG and <code>package.json</code> to v2.2.0, tag, and submit v2.2.0 messaging bundle to Chrome Web Store.</li>
-          <li>Begin Product Hunt launch preparation: write hunt description, assign a hunter, schedule for a Tuesday/Wednesday slot.</li>
-          <li>Set up weekly scorecard to track install-to-trial and trial-to-paid conversion rates once extension is live with messaging changes.</li>
+          <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19,
+            2026.</li>
+          <li>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</li>
+          <li>Monitor 7-day stability window (February 19-26): watch for crash reports, rating changes, or support
+            issues.</li>
+          <li>Begin Product Hunt launch preparation: write hunt description, assign a hunter, schedule for a
+            Tuesday/Wednesday slot post-stability window.</li>
+          <li>Set up weekly scorecard to track install-to-trial and trial-to-paid conversion rates now that v2.2.0
+            messaging is live.</li>
         </ul>
       </div>
     </div>
@@ -777,16 +1476,34 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2 - Updated February 17, 2026 (v2.2.0 in-extension messaging complete)
+    ThemeGPT Lean Monetization Roadmap v2.2 - Updated February 19, 2026 (v2.2.0 approved and published on Chrome Web
+    Store)
   </div>
 
   <script>
+    // Phase tab switcher
     function showPhase(n) {
-      document.querySelectorAll('.phase-tab').forEach((t) => t.classList.remove('active'));
-      document.querySelectorAll('.phase-content').forEach((c) => c.classList.remove('active'));
+      document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.phase-content').forEach(c => c.classList.remove('active'));
       document.querySelector(`.phase-tab[data-phase="${n}"]`).classList.add('active');
       document.getElementById(`phase-${n}`).classList.add('active');
     }
+
+    // Theme toggle with localStorage persistence
+    function toggleTheme() {
+      const html = document.documentElement;
+      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', next);
+      try { localStorage.setItem('themegpt-roadmap-theme', next); } catch (e) { }
+    }
+
+    // Restore saved preference, default to dark
+    (function () {
+      try {
+        const saved = localStorage.getItem('themegpt-roadmap-theme');
+        if (saved) document.documentElement.setAttribute('data-theme', saved);
+      } catch (e) { }
+    })();
   </script>
 
 </body>

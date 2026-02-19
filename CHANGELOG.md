@@ -2,6 +2,17 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
+## [2.2.1] - 2026-02-19
+
+### Security
+
+- Resolved Dependabot advisory: upgraded svelte transitive override from `^4.2.20` to `^5.53.0` (SSR XSS / tag validation; transitive dep of `@plasmohq/parcel-transformer-svelte` — no `.svelte` files in project, zero-risk upgrade)
+- Resolved Dependabot advisory: added `minimatch` override at `^10.2.1` (resolves to `10.2.2`) to fix ReDoS vulnerability (High severity)
+
+### Fixed
+
+- Updated CWS install link UTM parameters sitewide from `utm_source=item-share-cb` to `utm_source=cws&utm_medium=share&utm_campaign=item-share` across all web pages, components, and README (Gate 2 attribution remediation)
+
 ## [2.2.0] - 2026-02-18
 
 ### Added

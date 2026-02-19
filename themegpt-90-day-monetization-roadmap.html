@@ -881,7 +881,7 @@
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 19, 2026 (v2.2.2 — full GA API audit: install conversion definitions clarified, Bridge Gate 1 failing at 25% unassigned (need <=10% for 7 consecutive days), funnel events missing, India elevated)</span>
+      <span>Updated: February 19, 2026 (v2.2.2 — full GA API audit: install conversion definitions clarified, Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), funnel events missing, India elevated; UTM attribution fix deployed (Gate 2 fix live, pending GA validation); Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -1373,7 +1373,7 @@
         <div class="week-block">
           <h4>Bridge Week (February 19-26, 2026): Stability + Measurement Integrity Gate</h4>
           <div class="callout warn">
-            <strong>Gate Status (Feb 19, 2026):</strong> Gate 1 ❌ FAILING — Unassigned at 25% (need <=10% for 7 consecutive days). Gate 2 ⚠️ PARTIAL — item-share-cb source missing medium classification. Gate 3 ❌ NOT MET — no trial_start / checkout_start / purchase_success events in GA. Attribution remediation is the active work this week. Product Hunt launch blocked until all three gates pass for 7 consecutive days.
+            <strong>Gate Status (Feb 19, 2026):</strong> Gate 1 ❌ FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 2 🔧 FIX DEPLOYED — UTM parameters updated (cws/share/item-share) across all CWS install links; GA impact pending 7-day validation window. Gate 3 ❌ NOT MET — no trial_start / checkout_start / purchase_success events in GA. Attribution remediation is the active work this week. Product Hunt launch blocked until all three gates pass for 7 consecutive days.
           </div>
           <ul class="task-list">
             <li>Gate condition 1: Unassigned traffic share must remain &lt;= 10% for 7 consecutive days. <strong>Current: 25% — FAILING.</strong> Root cause confirmed: item-share-cb sessions arrive with no <code>medium</code> set, counting as Unassigned.</li>
@@ -1386,7 +1386,7 @@
           </ul>
           <h4>Attribution Remediation Tasks — ACTIVE (Gate not met)</h4>
           <ul class="task-list">
-            <li><strong>Priority 1:</strong> Fix item-share-cb attribution — add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code> to any links ThemeGPT controls in its CWS listing. This is the largest single driver of Unassigned (18.4% of sessions).</li>
+            <li><s><strong>Priority 1:</strong> Fix item-share-cb attribution — add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code> to any links ThemeGPT controls in its CWS listing. This is the largest single driver of Unassigned (18.4% of sessions).</s> Done: UTM parameters updated across all web pages, components, and README (deployed Feb 19, 2026). GA impact pending next validation window.</li>
             <li><strong>Priority 2:</strong> Implement analytics contract funnel events in the web app and extension: <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. These must be visible in GA4 before Gate 3 can pass.</li>
             <li><strong>Priority 3:</strong> Add internal traffic filter in GA4 for staging URL <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> to remove dev noise from reports.</li>
             <li>Audit all extension/web links to CWS and pricing for UTM completeness (ext_sidebar, ext_app_menu sources should carry utm tags).</li>
@@ -1755,7 +1755,7 @@
         <ul class="task-list">
           <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19, 2026.</li>
           <li>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</li>
-          <li><strong>IMMEDIATE:</strong> Fix item-share-cb UTM classification — add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code> to any shareable links ThemeGPT controls. This is the single highest-impact attribution fix (reduces Unassigned from 25% toward target ≤10%).</li>
+          <li><s><strong>IMMEDIATE:</strong> Fix item-share-cb UTM classification — add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code> to any shareable links ThemeGPT controls. This is the single highest-impact attribution fix (reduces Unassigned from 25% toward target ≤10%).</s> Done: deployed Feb 19, 2026 via <code>fix(web): update CWS install link UTM parameters</code>.</li>
           <li><strong>IMMEDIATE:</strong> Implement GA4 funnel events in web app and extension: <code>trial_start</code> (when trial begins), <code>checkout_start</code> (when pricing page opens), <code>purchase_success</code> (on Stripe webhook confirmed). Gate 3 cannot pass until these fire.</li>
           <li>Add GA4 internal traffic filter to exclude <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</li>
           <li>Audit ext_sidebar and ext_app_menu links for UTM completeness — these are confirmed referral sources but need consistent tagging.</li>
@@ -1769,7 +1769,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2 - Updated February 19, 2026 (full GA API audit: install conversion definitions clarified (23.3% event-based user ratio, 16.5% listing-view ratio), Bridge Gate 1 failing at 25% unassigned (need <=10% for 7 consecutive days), Gate 3 not met, India elevated to active monitor)
+    ThemeGPT Lean Monetization Roadmap v2.2.2 - Updated February 19, 2026 (full GA API audit: install conversion definitions clarified (23.3% event-based user ratio, 16.5% listing-view ratio), Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), Gate 3 not met, India elevated to active monitor; UTM attribution fix deployed — Gate 2 fix live, pending GA validation; Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)
   </div>
 
   <script>

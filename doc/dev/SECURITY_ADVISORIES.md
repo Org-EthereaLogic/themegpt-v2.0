@@ -61,16 +61,32 @@ gh api \
 
 ## Archived Advisories
 
-*No archived advisories yet.*
+### [RESOLVED] Svelte SSR XSS / Tag Validation (Dependabot)
+
+**Resolved:** 2026-02-19
+**Resolution:** Upgraded `svelte` in `pnpm.overrides` from `^4.2.20` to `^5.53.0`
+**Original Severity:** Moderate
+
+Svelte had SSR-related XSS and tag validation vulnerabilities in versions prior to 5.x. Svelte is a transitive dependency of `@plasmohq/parcel-transformer-svelte` (pulled in by the Plasmo build toolchain). No `.svelte` files exist in this project — the upgrade is zero-risk. Override pins the transitive resolution to 5.53.0 in `pnpm-lock.yaml`.
+
+### [RESOLVED] minimatch ReDoS (Dependabot)
+
+**Resolved:** 2026-02-19
+**Resolution:** Added `minimatch` to `pnpm.overrides` at `^10.2.1` (resolves to `10.2.2` in lockfile)
+**Original Severity:** High
+
+minimatch had a Regular Expression Denial of Service (ReDoS) vulnerability in versions below 10.2.2. Fixed by pinning the transitive override, forcing all consumers to resolve to 10.2.2.
+
+---
 
 When an advisory is resolved (upstream patch applied and dependency updated), move it here with resolution details:
 
 ```markdown
 ### [RESOLVED] CVE-YYYY-NNNNN: Description
 
-**Resolved:** YYYY-MM-DD  
-**Resolution:** Upgraded dependency-name from X.X.X to Y.Y.Y  
-**Original Severity:** Moderate/High/Critical  
+**Resolved:** YYYY-MM-DD
+**Resolution:** Upgraded dependency-name from X.X.X to Y.Y.Y
+**Original Severity:** Moderate/High/Critical
 
 Brief description of the original issue and how it was resolved.
 ```

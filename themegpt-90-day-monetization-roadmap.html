@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2)</title>
+  <title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -720,6 +720,19 @@
       color: var(--task-bullet);
     }
 
+    ol.task-list {
+      list-style: decimal;
+      padding-left: 1.4rem;
+    }
+
+    ol.task-list li {
+      padding-left: 0.4rem;
+    }
+
+    ol.task-list li::before {
+      content: none;
+    }
+
     /* ─── KPI Grid ─── */
     .kpi-grid {
       display: grid;
@@ -863,12 +876,12 @@
 
   <!-- Header -->
   <div class="header">
-    <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2)</h1>
+    <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2)</h1>
     <div class="subtitle">Execution plan focused on critical-fix hardening, single-batch extension release, and then
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 19, 2026 (v2.2.0 approved and published on CWS)</span>
+      <span>Updated: February 19, 2026 (v2.2.2 — full GA API audit: install conversion definitions clarified, Bridge Gate 1 failing at 25% unassigned (need <=10% for 7 consecutive days), funnel events missing, India elevated)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -878,18 +891,18 @@
   <div class="progress-section">
     <div class="progress-head">
       <h2>Roadmap Progress</h2>
-      <span class="progress-scope">16 of 25 tasks completed across 3 phases</span>
+      <span class="progress-scope">16 of 36 tasks completed across 3 phases</span>
     </div>
     <div class="gauge-row">
       <!-- Donut Chart -->
       <div class="donut-wrap">
         <svg viewBox="0 0 100 100">
           <circle class="donut-track" cx="50" cy="50" r="40" />
-          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="90.5" />
+          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="139.6" />
         </svg>
         <div class="donut-center">
-          <span class="donut-num">64%</span>
-          <span class="donut-frac">16 / 25</span>
+          <span class="donut-num">44%</span>
+          <span class="donut-frac">16 / 36</span>
           <span class="donut-label">tasks</span>
         </div>
       </div>
@@ -919,6 +932,11 @@
           </div>
           <div class="ms-step">
             <div class="ms-node node-active">&#9654;</div>
+            <div class="ms-step-id">Feb 19-26</div>
+            <div class="ms-step-name">Bridge Gate</div>
+          </div>
+          <div class="ms-step">
+            <div class="ms-node node-pending">&#8943;</div>
             <div class="ms-step-id">W5-6</div>
             <div class="ms-step-name">PH Launch</div>
           </div>
@@ -961,10 +979,10 @@
       <div class="phase-bar-card">
         <div class="phase-bar-head">
           <span class="phase-bar-label">Phase 2</span>
-          <span class="phase-bar-count">5 / 7</span>
+          <span class="phase-bar-count">5 / 18</span>
         </div>
         <div class="bar-track">
-          <div class="bar-fill fill-p2" style="width:71.4%"></div>
+          <div class="bar-fill fill-p2" style="width:27.8%"></div>
         </div>
       </div>
       <div class="phase-bar-card">
@@ -1004,6 +1022,103 @@
   </div>
 
   <div class="container">
+
+    <!-- Data Baseline -->
+    <div class="section">
+      <h2>Data Baseline — GA API Audit (February 19, 2026)</h2>
+      <div class="callout">
+        Window: January 23 to February 19, 2026 (28 days). Confirmed via direct GA4 Data API query against property 521095252. All page-view data is for the Chrome Web Store listing; themegpt.ai web app analytics activated February 19 — web app data will appear in next audit window.
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-value">875</div>
+          <div class="kpi-label">CWS impressions (+28.11% vs prior period)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">85</div>
+          <div class="kpi-label">GA confirmed CWS listing page views (28-day window)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">10.5%</div>
+          <div class="kpi-label">Blended listing CTR (diagnostic only — not a launch gate)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">17</div>
+          <div class="kpi-label">Active users last 7 days (Feb 12–18)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">62 / 60 / 76</div>
+          <div class="kpi-label">GA new users / active users / sessions (28d, API confirmed)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">34.4s / 80.3%</div>
+          <div class="kpi-label">Avg session duration / bounce rate (CWS listing behavior)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value" style="color: var(--teal);">23.3% / 16.5%</div>
+          <div class="kpi-label">Install conversion (event-based user ratio / listing-view ratio): 14 installs / 60 active users and 14 installs / 85 listing views</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value" style="color: var(--coral);">25%</div>
+          <div class="kpi-label">Unassigned traffic share — Bridge Gate 1 FAILING (threshold: <=10% for 7 consecutive days)</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value" style="color: var(--coral);">0</div>
+          <div class="kpi-label">Funnel events (trial_start / checkout_start / purchase_success) — Gate 3 not met</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">$0 / 0</div>
+          <div class="kpi-label">Revenue / transactions</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">1 @ 5.0</div>
+          <div class="kpi-label">Total CWS ratings / average rating</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-value">25</div>
+          <div class="kpi-label">Countries reached in 28 days</div>
+        </div>
+      </div>
+
+      <div class="callout warn" style="margin-top:0.8rem;">
+        <strong>Bridge Gate Status:</strong> Gate 1 FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 3 FAILING — no conversion funnel events in GA. Attribution remediation is the immediate priority before any launch channel is activated.
+      </div>
+
+      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Traffic Mix (GA API confirmed, 28-day window)</h4>
+      <ul class="task-list">
+        <li>Direct: 39 sessions (51.3%) — branded intent and bookmarks, healthy baseline.</li>
+        <li>Unassigned: 19 sessions (25%) — <strong>root cause: item-share-cb source with no medium set.</strong> CWS share-button traffic is not classified and inflates Unassigned. Requires UTM fix.</li>
+        <li>Referral: 11 sessions (14.5%) — chatgpt.com is confirmed 3rd-largest source (6 sessions). High intent; organic discovery from within ChatGPT itself.</li>
+        <li>Organic Search: 6 sessions (7.9%) — Google (4), DuckDuckGo (1), Yahoo India (1).</li>
+        <li>Paid Search: 1 session (1.3%) — single test impression; no active paid campaign running.</li>
+      </ul>
+
+      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Traffic Sources — Ranked</h4>
+      <ul class="task-list">
+        <li>#1 Direct / (none): 39 sessions — baseline demand.</li>
+        <li>#2 item-share-cb: 14 sessions combined — CWS share button. High volume, zero medium tag → drives Unassigned. Fix: add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code>.</li>
+        <li>#3 chatgpt.com / referral: 6 sessions — organic discovery from ChatGPT UI. No action needed; monitor for growth.</li>
+        <li>#4 google / organic: 4 sessions — search visibility growing.</li>
+        <li>#5 Extension self-referral (ext_sidebar, ext_app_menu): 4 sessions — in-extension links working. Confirm UTM tagging is present.</li>
+        <li>#6 CWS staging URL (theme-gpt-web-dufb63uofq-uc.a.run.app): 3 sessions — internal/dev traffic. Add exclusion filter in GA.</li>
+      </ul>
+
+      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Geography (GA API confirmed)</h4>
+      <ul class="task-list">
+        <li>United States: 13 active users (22%) — primary optimization target.</li>
+        <li>India: 13 active users (22%) — <strong>tied with US; already at escalation-trigger level. Monitoring elevated from watchlist to active.</strong></li>
+        <li>Pakistan: 3 users (5%). Australia, Egypt, Italy, Kenya, Philippines, Sweden, Turkey: 2 users each.</li>
+        <li>25 countries total — broad organic reach from CWS listing.</li>
+      </ul>
+
+      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Device &amp; Install Signal</h4>
+      <ul class="task-list">
+        <li>Desktop: 58 users (97%) — expected for a Chrome extension; confirms target audience is on desktop.</li>
+        <li>Mobile: 2 users (3%) — ignore for optimization; mobile cannot install the extension.</li>
+        <li>Install events (GA4 <code>install</code>): 14 tracked, 10 unique users. Event-based user ratio: 23.3% (14/60 active users). Listing-view ratio: 16.5% (14/85 listing views).</li>
+        <li>Blended listing CTR is context only; paid-tagged traffic can inflate the numerator. Decision gates use split organic vs paid metrics.</li>
+      </ul>
+    </div>
 
     <!-- Operating Rules -->
     <div class="section">
@@ -1146,7 +1261,7 @@
         </button>
         <button class="phase-tab" data-phase="2" onclick="showPhase(2)">
           Phase 2
-          <span class="tab-label">Weeks 3-6 (Mar 2-Mar 29) - In-product conversion + one launch channel</span>
+          <span class="tab-label">Bridge + Weeks 3-6 (Feb 19-Mar 29) - Measurement gate, conversion + one launch channel</span>
         </button>
         <button class="phase-tab" data-phase="3" onclick="showPhase(3)">
           Phase 3
@@ -1256,17 +1371,89 @@
         </div>
 
         <div class="week-block">
+          <h4>Bridge Week (February 19-26, 2026): Stability + Measurement Integrity Gate</h4>
+          <div class="callout warn">
+            <strong>Gate Status (Feb 19, 2026):</strong> Gate 1 ❌ FAILING — Unassigned at 25% (need <=10% for 7 consecutive days). Gate 2 ⚠️ PARTIAL — item-share-cb source missing medium classification. Gate 3 ❌ NOT MET — no trial_start / checkout_start / purchase_success events in GA. Attribution remediation is the active work this week. Product Hunt launch blocked until all three gates pass for 7 consecutive days.
+          </div>
+          <ul class="task-list">
+            <li>Gate condition 1: Unassigned traffic share must remain &lt;= 10% for 7 consecutive days. <strong>Current: 25% — FAILING.</strong> Root cause confirmed: item-share-cb sessions arrive with no <code>medium</code> set, counting as Unassigned.</li>
+            <li>Gate condition 2: Campaign classification must be explicit: paid traffic when
+              <code>medium in (cpc, ppc, paid)</code> or source/campaign contains ad identifiers (for example
+              <code>pmax</code>); organic/referral/direct must remain separated. <strong>Current: PARTIAL — item-share-cb unclassified.</strong></li>
+            <li>Gate condition 3: Required funnel events must be visible in GA for 7 consecutive days:
+              <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. <strong>Current: NOT MET — zero funnel events present in GA. Analytics contract not yet implemented.</strong></li>
+            <li>If gate fails, this week shifts to attribution remediation only; no launch-channel scaling.</li>
+          </ul>
+          <h4>Attribution Remediation Tasks — ACTIVE (Gate not met)</h4>
+          <ul class="task-list">
+            <li><strong>Priority 1:</strong> Fix item-share-cb attribution — add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code> to any links ThemeGPT controls in its CWS listing. This is the largest single driver of Unassigned (18.4% of sessions).</li>
+            <li><strong>Priority 2:</strong> Implement analytics contract funnel events in the web app and extension: <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. These must be visible in GA4 before Gate 3 can pass.</li>
+            <li><strong>Priority 3:</strong> Add internal traffic filter in GA4 for staging URL <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> to remove dev noise from reports.</li>
+            <li>Audit all extension/web links to CWS and pricing for UTM completeness (ext_sidebar, ext_app_menu sources should carry utm tags).</li>
+            <li>Standardize campaign naming across links: <code>source</code>, <code>medium</code>, <code>campaign</code>.</li>
+            <li>Preserve referral continuity from extension to web to checkout entry.</li>
+            <li>Run a weekly "unassigned root-cause" review until Unassigned remains &lt;= 10%.</li>
+          </ul>
+        </div>
+
+        <div class="week-block">
           <h4>Weeks 5-6 - One Launch Channel (Recommended: Product Hunt)</h4>
           <ul class="task-list">
             <li><s>Prepare launch asset pack: before/after GIFs, 30-second demo, copy assets, PH gallery images, social
                 post drafts.</s> Done: all assets in <code>asset/launch/</code>.</li>
-            <li>Run only one external launch channel for a full 2-week window to keep attribution clean.</li>
-            <li>Use weekly scorecard to identify the biggest funnel drop and fix only that one bottleneck each week.</li>
+            <li>Run one external launch channel for a full 2-week window only after the Measurement Integrity Gate
+              passes.</li>
+            <li>Use a split-channel weekly scorecard (organic vs paid) to identify the biggest funnel drop and fix only
+              that one bottleneck each week.</li>
+          </ul>
+        </div>
+
+        <div class="week-block">
+          <h4>Geo Strategy (US-First — India Elevated to Active Monitor)</h4>
+          <div class="callout">
+            GA audit confirmed: India is tied with the United States at 22% of active users (13 each). India has already met the escalation threshold — it is no longer a passive watchlist item.
+          </div>
+          <ul class="task-list">
+            <li>Default Phase 2 optimization target: United States (copy and pricing emphasis).</li>
+            <li><strong>India — Active Monitor (escalated from watchlist):</strong> 13 users / 22% share, tied with US. Monitor for 2 consecutive weeks to determine if localized pricing or copy is needed. Engagement data at parity with US (both arrive via direct + CWS share mechanisms).</li>
+            <li>Remaining watchlist: Pakistan (5%), Australia, Egypt, Italy, Kenya, Philippines, Sweden, Turkey (3.3% each). 25 countries reached organically — no action until any single country hits ≥15% of new users.</li>
+            <li>Escalation rule: trigger localization/pricing review if India or any watchlist country reaches &gt;= 15% of new users for 2 consecutive weeks with engagement no worse than 20% below US baseline.</li>
+            <li>chatgpt.com confirmed as 3rd referral source (6 sessions) — organic discovery from within ChatGPT is working. No action; monitor for continued growth and ensure it is not miscategorized.</li>
           </ul>
         </div>
 
         <div class="week-block" style="background: var(--callout-peach-bg);">
-          <h4>Phase 2 Exit Criteria (End of March 29, 2026)</h4>
+          <h4>Phase 2 Exit Criteria - Commit (End of March 29, 2026)</h4>
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-value">120+</div>
+              <div class="kpi-label">Total listing page views</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">80+</div>
+              <div class="kpi-label">New users (28-day rolling)</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">1-3</div>
+              <div class="kpi-label">Paying customers</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">$14-$40</div>
+              <div class="kpi-label">MRR</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">4+</div>
+              <div class="kpi-label">Store reviews (no incentive offered)</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-value">&lt;= 10%</div>
+              <div class="kpi-label">Unassigned traffic share sustained</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="week-block" style="background: var(--callout-gold-bg);">
+          <h4>Phase 2 Exit Criteria - Stretch (Aspirational)</h4>
           <div class="kpi-grid">
             <div class="kpi-card">
               <div class="kpi-value">220-320</div>
@@ -1355,6 +1542,26 @@
             <td>Top-of-funnel and retention health</td>
           </tr>
           <tr>
+            <td>Organic listing views and organic listing CTR</td>
+            <td>CWS + GA campaign/source split</td>
+            <td>Organic discoverability quality (blended CTR is context only)</td>
+          </tr>
+          <tr>
+            <td>Paid listing views and paid listing CTR</td>
+            <td>CWS + GA campaign/source split</td>
+            <td>Paid traffic efficiency without polluting organic decisions</td>
+          </tr>
+          <tr>
+            <td>Organic conversion to trial and paid conversion to trial</td>
+            <td>GA funnel events + Stripe starts</td>
+            <td>Channel-specific top-to-mid funnel quality</td>
+          </tr>
+          <tr>
+            <td>Trial-to-paid conversion by channel</td>
+            <td>GA funnel events + Stripe purchases</td>
+            <td>Detect where monetization friction actually occurs</td>
+          </tr>
+          <tr>
             <td>Checkout starts, purchases, MRR, churn, refunds</td>
             <td>Stripe dashboard</td>
             <td>Revenue and pricing/funnel quality</td>
@@ -1371,6 +1578,91 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Weekly Scorecard -->
+    <div class="section">
+      <h2>Weekly Scorecard (Split Paid vs Organic)</h2>
+      <p>Use channel-separated KPIs as the decision surface. Keep blended metrics for context only.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Scorecard Field</th>
+            <th>Definition</th>
+            <th>Target Use</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>organic_listing_views</td>
+            <td>CWS listing views from non-paid sources</td>
+            <td>Organic top-of-funnel quality</td>
+          </tr>
+          <tr>
+            <td>paid_listing_views</td>
+            <td>CWS listing views from paid-tagged sources/campaigns</td>
+            <td>Paid efficiency without contaminating organic signal</td>
+          </tr>
+          <tr>
+            <td>organic_trial_conversion</td>
+            <td>organic <code>trial_start</code> / organic listing views</td>
+            <td>Organic mid-funnel performance</td>
+          </tr>
+          <tr>
+            <td>paid_trial_conversion</td>
+            <td>paid <code>trial_start</code> / paid listing views</td>
+            <td>Paid mid-funnel performance</td>
+          </tr>
+          <tr>
+            <td>trial_to_paid_by_channel</td>
+            <td><code>purchase_success</code> / <code>trial_start</code> by channel</td>
+            <td>Monetization quality and channel decisioning</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Analytics Contract -->
+    <div class="section">
+      <h2>Analytics Contract (Internal, No Public API Change)</h2>
+      <div class="callout">
+        No external/public API contract changes. Internal analytics contract must expand for funnel observability and
+        attribution hygiene.
+      </div>
+      <div class="week-block">
+        <h4><code>AnalyticsEventName</code> Union Coverage</h4>
+        <ul class="task-list">
+          <li>Happy-path events: <code>first_visit</code>, <code>store_detail_view</code>,
+            <code>extension_install</code>, <code>theme_apply_success</code>, <code>trial_start</code>,
+            <code>checkout_start</code>, <code>purchase_success</code>, <code>review_prompt_shown</code>,
+            <code>review_prompt_clicked</code>.</li>
+          <li>Failure/churn diagnostics: <code>checkout_abandoned</code>, <code>trial_expired</code>,
+            <code>subscription_canceled</code>, <code>payment_failed</code>, <code>uninstall</code>.</li>
+        </ul>
+      </div>
+      <div class="week-block">
+        <h4>Required Event Payload Fields</h4>
+        <ul class="task-list">
+          <li>Minimum fields on all analytics payloads: <code>source</code>, <code>medium</code>,
+            <code>campaign</code>, <code>country</code>, <code>extension_version</code>, <code>timestamp</code>.</li>
+          <li>Scorecard schema must remain split by <code>paid</code> and <code>organic</code>; blended CTR is context
+            only and cannot be used as a launch gate.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Operational QA -->
+    <div class="section">
+      <h2>Operational QA Scenarios</h2>
+      <ol class="task-list">
+        <li>Attribution QA: launch test links from each source and verify channel classification is correct (not
+          Unassigned).</li>
+        <li>Gate enforcement: simulate a week with Unassigned &gt; 10% and confirm launch remains blocked.</li>
+        <li>Funnel observability: verify <code>trial_start</code>, <code>checkout_start</code>, and
+          <code>purchase_success</code> appear in GA within 24 hours of test flows.</li>
+        <li>Channel split sanity: confirm paid-tagged sessions never appear in organic dashboard slices.</li>
+        <li>Geo trigger: confirm watchlist escalation only fires after 2 consecutive weeks at threshold.</li>
+      </ol>
     </div>
 
     <!-- Decision Gates -->
@@ -1426,8 +1718,8 @@
           <tr>
             <td>February 19, 2026</td>
             <td>v2.2.0 approved and published on Chrome Web Store</td>
-            <td>Status: Completed. Begin 7-day stability window; then launch Product Hunt campaign and monitor conversion
-              scorecard weekly</td>
+            <td>Status: Completed. Begin 7-day stability + Measurement Integrity Gate (Feb 19-26); launch Product Hunt
+              only after gate pass</td>
           </tr>
         </tbody>
       </table>
@@ -1458,17 +1750,18 @@
         </ul>
       </div>
       <div class="week-block" style="border: 2px solid var(--peach); margin-top: 0.65rem;">
-        <h4>Next Actions (v2.2.0 Published — Stability + Launch Prep)</h4>
+        <h4>Next Actions (v2.2.0 Published — Gate Remediation Mode)</h4>
+        <div class="callout warn">GA audit (Feb 19) confirms all three Bridge Gates are failing or not met. This week is attribution remediation. Product Hunt launch remains blocked.</div>
         <ul class="task-list">
-          <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19,
-            2026.</li>
+          <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19, 2026.</li>
           <li>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</li>
-          <li>Monitor 7-day stability window (February 19-26): watch for crash reports, rating changes, or support
-            issues.</li>
-          <li>Begin Product Hunt launch preparation: write hunt description, assign a hunter, schedule for a
-            Tuesday/Wednesday slot post-stability window.</li>
-          <li>Set up weekly scorecard to track install-to-trial and trial-to-paid conversion rates now that v2.2.0
-            messaging is live.</li>
+          <li><strong>IMMEDIATE:</strong> Fix item-share-cb UTM classification — add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code> to any shareable links ThemeGPT controls. This is the single highest-impact attribution fix (reduces Unassigned from 25% toward target ≤10%).</li>
+          <li><strong>IMMEDIATE:</strong> Implement GA4 funnel events in web app and extension: <code>trial_start</code> (when trial begins), <code>checkout_start</code> (when pricing page opens), <code>purchase_success</code> (on Stripe webhook confirmed). Gate 3 cannot pass until these fire.</li>
+          <li>Add GA4 internal traffic filter to exclude <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</li>
+          <li>Audit ext_sidebar and ext_app_menu links for UTM completeness — these are confirmed referral sources but need consistent tagging.</li>
+          <li>Set up split weekly scorecard: organic vs paid listing views, channel-specific trial conversion, and trial-to-paid by channel.</li>
+          <li>Monitor India user share weekly — currently tied with US at 22%. Escalation review triggered if this holds for 2 consecutive weeks.</li>
+          <li>Only after all three gates pass for 7 consecutive days, run Product Hunt launch with US-first optimization.</li>
         </ul>
       </div>
     </div>
@@ -1476,8 +1769,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2 - Updated February 19, 2026 (v2.2.0 approved and published on Chrome Web
-    Store)
+    ThemeGPT Lean Monetization Roadmap v2.2.2 - Updated February 19, 2026 (full GA API audit: install conversion definitions clarified (23.3% event-based user ratio, 16.5% listing-view ratio), Bridge Gate 1 failing at 25% unassigned (need <=10% for 7 consecutive days), Gate 3 not met, India elevated to active monitor)
   </div>
 
   <script>

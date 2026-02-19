@@ -41,6 +41,7 @@ export async function GET(request: Request) {
           planType,
           isLifetime,
           userEmail: session.customer_details?.email,
+          subscriptionStatus: subscription.status,
         });
       }
     }

@@ -206,7 +206,7 @@ export default function ExtensionAuthPage() {
                 <span>
                   Extension not detected.{" "}
                   <Link
-                    href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba"
+                    href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=web&utm_medium=referral&utm_campaign=extension_auth"
                     target="_blank"
                     className="underline font-medium"
                   >
@@ -342,7 +342,7 @@ export default function ExtensionAuthPage() {
               Install the ThemeGPT extension to unlock premium themes.
             </p>
             <Link
-              href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba"
+              href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=web&utm_medium=referral&utm_campaign=extension_auth"
               target="_blank"
               className="inline-block bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-amber-600 transition-colors"
             >

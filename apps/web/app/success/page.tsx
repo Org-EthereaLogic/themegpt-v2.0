@@ -4,10 +4,12 @@ import { useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { logEvent } from "firebase/analytics"
+import { analytics } from "@/lib/firebase"
 
 // Chrome Web Store extension ID
 const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
-const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba"
+const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=post_purchase&utm_campaign=install_prompt"
 
 interface SessionData {
   success: boolean
@@ -17,6 +19,7 @@ interface SessionData {
   isLifetime?: boolean
   userEmail?: string
   message?: string
+  subscriptionStatus?: string
 }
 
 // Check if extension is installed
@@ -110,6 +113,19 @@ function SuccessContent() {
         if (data.success && !data.pending) {
           setSessionData(data)
           setLoading(false)
+
+          // Gate 3: fire purchase funnel events once session is confirmed
+          if (analytics) {
+            logEvent(analytics, "purchase_success", {
+              plan_type: data.planType ?? "unknown",
+              is_lifetime: data.isLifetime ?? false,
+            })
+            // trial_start gates on actual Stripe subscription status — NOT planType.
+            // Monthly plans start trialing; yearly early-adopter pays immediately (active).
+            if (data.subscriptionStatus === "trialing") {
+              logEvent(analytics, "trial_start", { plan_type: data.planType ?? "unknown" })
+            }
+          }
         } else if (data.pending && attempts < maxAttempts) {
           attempts++
           setTimeout(fetchSessionData, 2000)

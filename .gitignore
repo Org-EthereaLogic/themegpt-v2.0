@@ -26,6 +26,8 @@ extension/build
 
 # Misc
 .history/
+.claude/worktrees/
+_tmp_*
 .DS_Store
 asset/istock/
 *.log

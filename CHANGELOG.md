@@ -2,6 +2,14 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
+## [2.2.2] - 2026-02-19 (Bridge Week Remediation)
+
+### Improved
+- **Attribution Remediation:** Standardized UTM parameters across extension and web surfaces to resolve "Unassigned" traffic issues (Bridge Gate 1).
+  - Extension links now carry `utm_source=extension`, `utm_medium=popup`, and specific campaigns (`auth_flow`, `trial_teaser`, `account_management`).
+  - Web app Chrome Web Store links harmonized to `utm_source=cws&utm_medium=share&utm_campaign=item-share`.
+- **Measurement Integrity:** Added `docs/ga4-filter-guide.md` to document internal traffic filtering for staging and development URLs.
+
 ## [2.2.1] - 2026-02-19
 
 > **Web-only release.** The Chrome Web Store extension version remains at **2.2.0**. These changes affect the web app (`apps/web`) and build configuration only — no extension code was modified and no new CWS submission was made.

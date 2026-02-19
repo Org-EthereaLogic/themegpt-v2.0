@@ -123,7 +123,7 @@ export default function Popup() {
 
   const handleConnect = () => {
     // Open auth page in new tab
-    window.open(`${API_BASE_URL}/auth/extension`, '_blank')
+    window.open(`${API_BASE_URL}/auth/extension?utm_source=extension&utm_medium=popup&utm_campaign=auth_flow`, '_blank')
   }
 
   const handleTokenSubmit = async () => {
@@ -248,10 +248,10 @@ export default function Popup() {
       setSlotError("This is a premium theme — start your free 30-day trial.")
     } else if (clickCount === 2) {
       setSlotError("Unlock all 8 premium themes with a free 30-day trial.")
-      window.open(`${API_BASE_URL}/#pricing`, '_blank')
+      window.open(`${API_BASE_URL}/#pricing?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser`, '_blank')
     } else {
       setSlotError("You keep coming back to premium themes. Unlock them all free for 30 days.")
-      window.open(`${API_BASE_URL}/#pricing`, '_blank')
+      window.open(`${API_BASE_URL}/#pricing?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser`, '_blank')
     }
   }
 
@@ -281,18 +281,18 @@ export default function Popup() {
         </div>
         <h1 className="text-lg font-display font-semibold tracking-tight text-brown">ThemeGPT</h1>
         <div className="ml-auto flex items-center gap-2">
-           <button
-             onClick={() => setShowAccountPanel(!showAccountPanel)}
-             className="text-xs font-medium text-teal hover:text-brown transition-colors"
-           >
-             {accountStatus.connected
-               ? (accountStatus.isLifetime
-                   ? "Lifetime"
-                   : accountStatus.subscriptionStatus === 'trialing'
-                     ? "Trial"
-                     : "Premium")
-               : "Sign In"}
-           </button>
+          <button
+            onClick={() => setShowAccountPanel(!showAccountPanel)}
+            className="text-xs font-medium text-teal hover:text-brown transition-colors"
+          >
+            {accountStatus.connected
+              ? (accountStatus.isLifetime
+                ? "Lifetime"
+                : accountStatus.subscriptionStatus === 'trialing'
+                  ? "Trial"
+                  : "Premium")
+              : "Sign In"}
+          </button>
           {accountStatus.connected && (
             <div
               className={`w-2 h-2 rounded-full ${accountStatus.isActive ? 'bg-teal shadow-[0_0_8px_rgba(91,181,162,0.8)]' : 'bg-coral'}`}
@@ -319,13 +319,12 @@ export default function Popup() {
               <div className="text-xs text-brown-soft mb-2">{accountStatus.email}</div>
               {accountStatus.hasSubscription && (
                 <div className="flex items-center gap-2">
-                  <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium ${
-                    accountStatus.isLifetime
+                  <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium ${accountStatus.isLifetime
                       ? 'bg-gradient-to-r from-teal to-teal-bright text-white'
                       : accountStatus.isActive
                         ? 'bg-teal/10 text-teal'
                         : 'bg-coral/10 text-coral'
-                  }`}>
+                    }`}>
                     {accountStatus.isLifetime
                       ? 'Lifetime Access'
                       : accountStatus.subscriptionStatus === 'trialing'
@@ -350,7 +349,7 @@ export default function Popup() {
               )}
               {!accountStatus.hasSubscription && (
                 <button
-                  onClick={() => window.open(`${API_BASE_URL}/#pricing`, '_blank')}
+                  onClick={() => window.open(`${API_BASE_URL}/#pricing?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser`, '_blank')}
                   className="mt-3 text-xs bg-teal text-white px-4 py-2 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300"
                 >
                   Start free 30-day trial
@@ -358,22 +357,22 @@ export default function Popup() {
               )}
               {accountStatus.hasSubscription && !accountStatus.isActive &&
                 accountStatus.subscriptionStatus === 'canceled' && (
-                <div className="mt-3 text-[10px] text-brown-soft">
-                  Your subscription has ended.{" "}
-                  <a href={`${API_BASE_URL}/account`} target="_blank" className="text-teal underline">
-                    Reactivate to restore access.
-                  </a>
-                </div>
-              )}
+                  <div className="mt-3 text-[10px] text-brown-soft">
+                    Your subscription has ended.{" "}
+                    <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management`} target="_blank" className="text-teal underline">
+                      Reactivate to restore access.
+                    </a>
+                  </div>
+                )}
               {accountStatus.hasSubscription && !accountStatus.isActive &&
                 accountStatus.subscriptionStatus === 'past_due' && (
-                <div className="mt-3 text-[10px] text-brown-soft">
-                  Payment failed.{" "}
-                  <a href={`${API_BASE_URL}/account`} target="_blank" className="text-coral underline">
-                    Update your billing details to restore access.
-                  </a>
-                </div>
-              )}
+                  <div className="mt-3 text-[10px] text-brown-soft">
+                    Payment failed.{" "}
+                    <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management`} target="_blank" className="text-coral underline">
+                      Update your billing details to restore access.
+                    </a>
+                  </div>
+                )}
             </>
           ) : (
             <>
@@ -506,17 +505,17 @@ export default function Popup() {
       {/* TOKEN COUNTER & FOOTER */}
       <div className="bg-cream-warm/60 border-t border-brown/10">
         <div className="px-4 pb-2">
-            <TokenCounter />
+          <TokenCounter />
         </div>
         <footer className="p-3 text-center border-t border-brown/5">
-            <a
-              href={`${API_BASE_URL}/account`}
-              target="_blank"
-              className="group inline-flex items-center gap-1 text-xs font-medium text-brown-soft hover:text-brown transition-colors"
-            >
-              Manage Account
-              <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
-            </a>
+          <a
+            href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management`}
+            target="_blank"
+            className="group inline-flex items-center gap-1 text-xs font-medium text-brown-soft hover:text-brown transition-colors"
+          >
+            Manage Account
+            <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
+          </a>
         </footer>
       </div>
     </div>

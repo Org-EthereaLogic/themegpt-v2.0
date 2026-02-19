@@ -75,7 +75,7 @@ export default function SupportPage() {
             Pricing
           </Link>
           <a
-            href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb"
+            href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share"
             target="_blank"
             rel="noopener noreferrer"
             className="rounded-full px-6 py-3 font-semibold text-white no-underline transition-all duration-300 hover:-translate-y-0.5"
@@ -237,7 +237,7 @@ export default function SupportPage() {
               Manage Account
             </Link>
             <a
-              href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb"
+              href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share"
               target="_blank"
               rel="noopener noreferrer"
               className="rounded-full px-6 py-3 text-sm font-medium no-underline transition-all duration-300 hover:-translate-y-0.5"

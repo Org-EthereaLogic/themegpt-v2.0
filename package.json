@@ -19,11 +19,12 @@
     "overrides": {
       "msgpackr": "^1.11.5",
       "content-security-policy-parser": "^0.6.0",
-      "svelte": "^4.2.20",
+      "svelte": "^5.53.0",
       "esbuild": "^0.25.0",
       "tsup": "^8.0.1",
       "preact": "^10.28.2",
-      "fast-xml-parser": "^5.3.4"
+      "fast-xml-parser": "^5.3.4",
+      "minimatch": "^10.2.1"
     },
     "auditConfig": {
       "ignoreCves": [

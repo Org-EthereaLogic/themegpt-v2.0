@@ -105,7 +105,9 @@ pnpm lint       # Lint code
 
 - **Web**: GCP Cloud Run, manual deploy via `gcloud builds submit --config=cloudbuild.yaml`
 - **Extension**: Chrome Web Store, automated via GitHub Actions `submit-extension.yml` workflow
-- **Current published version**: v2.2.0 (approved and published February 19, 2026)
+- **Current published extension version**: v2.2.0 (approved and published February 19, 2026)
+- **Current web version**: v2.2.1 (web-only maintenance release February 19, 2026 — Dependabot security patches for svelte and minimatch, UTM attribution fixes across core pages plus `auth/extension` and `success` CWS links, and GA4 funnel instrumentation for `trial_start` / `checkout_start` / `purchase_success`)
+- **Active measurement gates**: Bridge Gate 1 FAILING (unassigned traffic at 25%, threshold ≤10% for 7 consecutive days); Gate 3 instrumentation deployed and pending GA visibility validation for 7 consecutive days. Product Hunt launch is blocked until all three gates pass.
 - **Note**: `SUBMIT_KEYS` repository secret is required for automated CWS submission
 
 ## Key Resources

@@ -4,6 +4,8 @@ All notable changes to ThemeGPT will be documented in this file.
 
 ## [2.2.1] - 2026-02-19
 
+> **Web-only release.** The Chrome Web Store extension version remains at **2.2.0**. These changes affect the web app (`apps/web`) and build configuration only — no extension code was modified and no new CWS submission was made.
+
 ### Security
 
 - Resolved Dependabot advisory: upgraded svelte transitive override from `^4.2.20` to `^5.53.0` (SSR XSS / tag validation; transitive dep of `@plasmohq/parcel-transformer-svelte` — no `.svelte` files in project, zero-risk upgrade)
@@ -11,7 +13,8 @@ All notable changes to ThemeGPT will be documented in this file.
 
 ### Fixed
 
-- Updated CWS install link UTM parameters from `utm_source=item-share-cb` to `utm_source=cws&utm_medium=share&utm_campaign=item-share` across core pages (Navigation, Hero, FeaturesSection, Footer, privacy, terms, support) and README (Gate 2 attribution remediation — partial; `auth/extension` and `success` page CWS links remain to be tagged)
+- Updated CWS install link UTM parameters from `utm_source=item-share-cb` to explicit campaign tags: `utm_source=cws&utm_medium=share&utm_campaign=item-share` for core marketing surfaces, `utm_source=web&utm_medium=referral&utm_campaign=extension_auth` for `auth/extension` links, and `utm_source=cws&utm_medium=post_purchase&utm_campaign=install_prompt` for `success` page install prompts
+- Implemented GA4 funnel instrumentation in web flows: `checkout_start` (pre-checkout POST), `purchase_success` (confirmed session), and `trial_start` (gated on `subscriptionStatus === "trialing"`)
 
 ## [2.2.0] - 2026-02-18
 

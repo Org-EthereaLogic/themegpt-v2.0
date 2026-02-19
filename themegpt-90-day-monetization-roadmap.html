@@ -881,7 +881,7 @@
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 19, 2026 (v2.2.2 — full GA API audit: install conversion definitions clarified, Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), funnel events missing, India elevated; UTM attribution partially deployed — core pages fixed, auth/extension and success page links remain; Gate 3 requires funnel event implementation; Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)</span>
+      <span>Updated: February 19, 2026 (v2.2.2 — full GA API audit: install conversion definitions clarified, Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), GA4 funnel instrumentation deployed (checkout_start/purchase_success/trial_start) with visibility validation in progress, India elevated; UTM attribution remediation completed for core pages plus auth/extension and success CWS links; Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -1063,8 +1063,8 @@
           <div class="kpi-label">Unassigned traffic share — Bridge Gate 1 FAILING (threshold: <=10% for 7 consecutive days)</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-value" style="color: var(--coral);">0</div>
-          <div class="kpi-label">Funnel events (trial_start / checkout_start / purchase_success) — Gate 3 not met</div>
+          <div class="kpi-value" style="color: var(--gold);">Deployed</div>
+          <div class="kpi-label">Funnel events (trial_start / checkout_start / purchase_success) instrumentation live — Gate 3 visibility validation in progress (7-day requirement)</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-value">$0 / 0</div>
@@ -1081,7 +1081,7 @@
       </div>
 
       <div class="callout warn" style="margin-top:0.8rem;">
-        <strong>Bridge Gate Status:</strong> Gate 1 FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 3 FAILING — no conversion funnel events in GA. Attribution remediation is the immediate priority before any launch channel is activated.
+        <strong>Bridge Gate Status:</strong> Gate 1 FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 2 implementation complete (all targeted CWS links now tagged). Gate 3 instrumentation deployed; GA visibility must hold for 7 consecutive days before pass. Attribution validation is the immediate priority before any launch channel is activated.
       </div>
 
       <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Traffic Mix (GA API confirmed, 28-day window)</h4>
@@ -1213,6 +1213,16 @@
         <ul class="task-list">
           <li>Chrome Web Store review approved: <code>v2.2.0</code> is now the published version.</li>
           <li>CWS dashboard shows: published version <code>2.2.0</code>. Phase 1 fully complete.</li>
+        </ul>
+      </div>
+      <div class="week-block" style="background: var(--callout-teal-bg);">
+        <h4>Completed — v2.2.1 Web Maintenance (February 19, 2026)</h4>
+        <div class="callout">Web-only deployment. Chrome Web Store extension version remains <code>2.2.0</code>. No CWS submission was made.</div>
+        <ul class="task-list">
+          <li>Resolved Dependabot advisory: upgraded svelte transitive override to <code>^5.53.0</code> (SSR XSS / tag validation; no <code>.svelte</code> files in project — zero exploitable risk).</li>
+          <li>Resolved Dependabot advisory: added <code>minimatch</code> override at <code>^10.2.1</code> (resolves to <code>10.2.2</code>) to fix ReDoS vulnerability (High severity).</li>
+          <li>UTM attribution remediation completed: updated CWS install links from <code>utm_source=item-share-cb</code> to explicit campaign tags across core pages, plus <code>auth/extension/page.tsx</code> links with <code>utm_source=web&amp;utm_medium=referral&amp;utm_campaign=extension_auth</code> and <code>success/page.tsx</code> install prompts with <code>utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
+          <li>GA4 funnel instrumentation deployed in web: <code>checkout_start</code> in checkout initiation, <code>purchase_success</code> on confirmed session resolution, and <code>trial_start</code> gated on actual subscription status <code>trialing</code>.</li>
         </ul>
       </div>
     </div>
@@ -1373,21 +1383,21 @@
         <div class="week-block">
           <h4>Bridge Week (February 19-26, 2026): Stability + Measurement Integrity Gate</h4>
           <div class="callout warn">
-            <strong>Gate Status (Feb 19, 2026):</strong> Gate 1 ❌ FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 2 ⚠️ PARTIAL — UTM fix deployed for core pages (Navigation, Hero, FeaturesSection, Footer, privacy, terms, support, README); <code>auth/extension</code> and <code>success</code> page CWS links remain untagged. Gate 3 ❌ NOT MET — no trial_start / checkout_start / purchase_success events in GA. Attribution remediation is the active work this week. Product Hunt launch blocked until all three gates pass for 7 consecutive days.
+            <strong>Gate Status (current implementation state):</strong> Gate 1 ❌ FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 2 ✅ IMPLEMENTED — UTM tags now cover core pages plus <code>auth/extension</code> and <code>success</code> CWS links. Gate 3 ⏳ IN VALIDATION — <code>trial_start</code> / <code>checkout_start</code> / <code>purchase_success</code> instrumentation is deployed; GA visibility must be confirmed for 7 consecutive days. Product Hunt launch remains blocked until all three gates pass for 7 consecutive days.
           </div>
           <ul class="task-list">
             <li>Gate condition 1: Unassigned traffic share must remain &lt;= 10% for 7 consecutive days. <strong>Current: 25% — FAILING.</strong> Root cause confirmed: item-share-cb sessions arrive with no <code>medium</code> set, counting as Unassigned.</li>
             <li>Gate condition 2: Campaign classification must be explicit: paid traffic when
               <code>medium in (cpc, ppc, paid)</code> or source/campaign contains ad identifiers (for example
-              <code>pmax</code>); organic/referral/direct must remain separated. <strong>Current: PARTIAL — core pages fixed; <code>auth/extension</code> (2 links) and <code>success</code> page (3 uses of untagged <code>CHROME_STORE_URL</code> constant) remain untagged.</strong></li>
+              <code>pmax</code>); organic/referral/direct must remain separated. <strong>Current: IMPLEMENTED — core pages, <code>auth/extension</code> links, and <code>success</code> page install prompts are tagged with explicit source/medium/campaign values.</strong></li>
             <li>Gate condition 3: Required funnel events must be visible in GA for 7 consecutive days:
-              <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. <strong>Current: NOT MET — zero funnel events present in GA. Analytics contract not yet implemented.</strong></li>
+              <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. <strong>Current: IN VALIDATION — analytics contract is implemented in web code; GA visibility window is pending confirmation.</strong></li>
             <li>If gate fails, this week shifts to attribution remediation only; no launch-channel scaling.</li>
           </ul>
           <h4>Attribution Remediation Tasks — ACTIVE (Gate not met)</h4>
           <ul class="task-list">
-            <li><strong>Priority 1 (partial):</strong> Fix item-share-cb attribution — add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code> to all CWS links. Core pages fixed Feb 19, 2026. Remaining: <code>app/auth/extension/page.tsx</code> (2 bare links, lines 209 &amp; 345) and <code>app/success/page.tsx</code> (<code>CHROME_STORE_URL</code> constant, 3 render sites — lines 188, 272, 317). Tag constant with <code>?utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
-            <li><strong>Priority 2:</strong> Implement analytics contract funnel events. Firebase Analytics initialized; no <code>logEvent()</code> calls exist yet. Correct event map: <code>checkout_start</code> — fire in <code>app/page.tsx</code> <code>handleCheckout()</code> before POST; <code>purchase_success</code> — fire in <code>app/success/page.tsx</code> inside session-resolution effect when <code>data.success &amp;&amp; !data.pending</code>; <code>trial_start</code> — fire in same location, gated on actual subscription status (NOT inferred from <code>planType</code>) because yearly early-adopter flow is immediate paid with no trial. Pragmatic order: web-side events first for immediate GA visibility; webhook-confirmed instrumentation and extension-side funnel events to follow.</li>
+            <li><strong>Priority 1:</strong> Completed UTM attribution remediation for CWS links: core pages use <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code>; <code>auth/extension</code> uses <code>utm_source=web&amp;utm_medium=referral&amp;utm_campaign=extension_auth</code>; <code>success</code> uses <code>utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
+            <li><strong>Priority 2:</strong> Completed GA4 funnel instrumentation contract in web code. Implemented map: <code>checkout_start</code> in <code>app/page.tsx</code> before checkout POST; <code>purchase_success</code> in <code>app/success/page.tsx</code> on confirmed session (<code>data.success &amp;&amp; !data.pending</code>); <code>trial_start</code> in the same block gated on actual subscription status <code>trialing</code> (not inferred from <code>planType</code>).</li>
             <li><strong>Priority 3:</strong> Add internal traffic filter in GA4 for staging URL <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> to remove dev noise from reports.</li>
             <li>Audit all extension/web links to CWS and pricing for UTM completeness (ext_sidebar, ext_app_menu sources should carry utm tags).</li>
             <li>Standardize campaign naming across links: <code>source</code>, <code>medium</code>, <code>campaign</code>.</li>
@@ -1721,6 +1731,11 @@
             <td>Status: Completed. Begin 7-day stability + Measurement Integrity Gate (Feb 19-26); launch Product Hunt
               only after gate pass</td>
           </tr>
+          <tr>
+            <td>February 19, 2026</td>
+            <td>v2.2.1 web-only maintenance release: Dependabot security patches (svelte <code>^5.53.0</code>, minimatch <code>^10.2.1</code>) + UTM attribution remediation across core marketing pages, <code>auth/extension</code>, and <code>success</code> install prompts</td>
+            <td>Status: Completed. Web deployed. CWS extension version unchanged at <code>2.2.0</code>.</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -1751,12 +1766,12 @@
       </div>
       <div class="week-block" style="border: 2px solid var(--peach); margin-top: 0.65rem;">
         <h4>Next Actions (v2.2.0 Published — Gate Remediation Mode)</h4>
-        <div class="callout warn">GA audit (Feb 19) confirms all three Bridge Gates are failing or not met. This week is attribution remediation. Product Hunt launch remains blocked.</div>
+        <div class="callout warn">GA audit (Feb 19) set remediation priorities. Current state: Gate 1 still failing, Gate 2 implementation complete, Gate 3 instrumentation deployed and awaiting GA visibility validation. Product Hunt launch remains blocked.</div>
         <ul class="task-list">
           <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19, 2026.</li>
           <li>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</li>
-          <li><strong>IN PROGRESS:</strong> Fix item-share-cb UTM classification. Core pages deployed Feb 19, 2026 (<code>fix(web): update CWS install link UTM parameters</code>). Remaining: tag CWS links in <code>auth/extension</code> (2 links) and update <code>CHROME_STORE_URL</code> constant in <code>success/page.tsx</code> (3 render sites) with post-purchase UTM params.</li>
-          <li><strong>IMMEDIATE:</strong> Implement GA4 funnel events — Gate 3 blocker. Event map: <code>checkout_start</code> in <code>app/page.tsx</code> <code>handleCheckout()</code>; <code>purchase_success</code> and <code>trial_start</code> in <code>app/success/page.tsx</code> session-resolution effect. Note: <code>trial_start</code> must gate on actual subscription trialing status, not <code>planType</code> — yearly early-adopter flow pays immediately. Web-side first; webhook-confirmed and extension-side instrumentation to follow.</li>
+          <li><s>Fix item-share-cb UTM classification.</s> Done: core pages, <code>auth/extension</code> links, and <code>success</code> install prompts are now tagged with explicit UTM source/medium/campaign values.</li>
+          <li><s>Implement GA4 funnel events — Gate 3 blocker.</s> Done: <code>checkout_start</code>, <code>purchase_success</code>, and <code>trial_start</code> are implemented in web flows with correct <code>trial_start</code> gating on actual subscription status. Next: verify GA event visibility for 7 consecutive days.</li>
           <li>Add GA4 internal traffic filter to exclude <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</li>
           <li>Audit ext_sidebar and ext_app_menu links for UTM completeness — these are confirmed referral sources but need consistent tagging.</li>
           <li>Set up split weekly scorecard: organic vs paid listing views, channel-specific trial conversion, and trial-to-paid by channel.</li>
@@ -1769,7 +1784,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2 - Updated February 19, 2026 (full GA API audit: install conversion definitions clarified (23.3% event-based user ratio, 16.5% listing-view ratio), Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), Gate 3 not met, India elevated to active monitor; UTM attribution partial — core pages fixed, auth/extension and success page CWS links remain untagged; Gate 3 requires funnel event implementation: checkout_start/purchase_success/trial_start with correct trial_start gating on subscription status not planType; Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)
+    ThemeGPT Lean Monetization Roadmap v2.2.2 - Updated February 19, 2026 (full GA API audit: install conversion definitions clarified (23.3% event-based user ratio, 16.5% listing-view ratio), Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), Gate 2 implementation complete (UTM tagging across core + auth/extension + success), Gate 3 instrumentation deployed with validation pending in GA for 7 consecutive days, India elevated to active monitor; Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)
   </div>
 
   <script>

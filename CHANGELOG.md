@@ -11,7 +11,7 @@ All notable changes to ThemeGPT will be documented in this file.
 
 ### Fixed
 
-- Updated CWS install link UTM parameters sitewide from `utm_source=item-share-cb` to `utm_source=cws&utm_medium=share&utm_campaign=item-share` across all web pages, components, and README (Gate 2 attribution remediation)
+- Updated CWS install link UTM parameters from `utm_source=item-share-cb` to `utm_source=cws&utm_medium=share&utm_campaign=item-share` across core pages (Navigation, Hero, FeaturesSection, Footer, privacy, terms, support) and README (Gate 2 attribution remediation — partial; `auth/extension` and `success` page CWS links remain to be tagged)
 
 ## [2.2.0] - 2026-02-18
 

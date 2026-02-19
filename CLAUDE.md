@@ -105,6 +105,7 @@ pnpm lint       # Lint code
 
 - **Web**: GCP Cloud Run, manual deploy via `gcloud builds submit --config=cloudbuild.yaml`
 - **Extension**: Chrome Web Store, automated via GitHub Actions `submit-extension.yml` workflow
+- **Current published version**: v2.2.0 (approved and published February 19, 2026)
 - **Note**: `SUBMIT_KEYS` repository secret is required for automated CWS submission
 
 ## Key Resources

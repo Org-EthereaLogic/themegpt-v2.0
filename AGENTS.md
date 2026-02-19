@@ -1,6 +1,6 @@
 # ThemeGPT v2.0 Repository Guidelines
 
-Operational procedures for AI coding agents working on ThemeGPT v2.0. Before reading this document, familiarize yourself with the historical context in `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`.
+Operational procedures for AI coding agents working on ThemeGPT v2.0. The current published extension version is **v2.2.0** (approved and live on Chrome Web Store as of February 19, 2026). Before reading this document, familiarize yourself with the historical context in `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`.
 
 ## Project Structure & Module Organization
 

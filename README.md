@@ -15,7 +15,7 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=item-share-cb)**
 
-> **Version 2.1.0** submitted for Chrome Web Store review (February 2026). This release improves premium theme access reliability, strengthens authentication flows, and applies the latest security patches.
+> **Version 2.2.0** — now live on the Chrome Web Store (February 19, 2026). This release adds in-extension lifecycle messaging (escalating upgrade nudges, trial/canceled/past-due state indicators, and a non-incentivized review prompt), improves premium theme access reliability, strengthens authentication flows, and applies the latest security patches.
 
 ---
 

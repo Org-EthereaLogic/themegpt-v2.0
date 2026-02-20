@@ -15,7 +15,13 @@ export async function GET(request: Request) {
   try {
     const session = await getStripe().checkout.sessions.retrieve(sessionId);
 
-    if (session.payment_status !== "paid") {
+    // Subscription trials can complete with no immediate charge.
+    // In that case Stripe marks payment_status as "no_payment_required".
+    const paymentConfirmed =
+      session.payment_status === "paid" ||
+      (session.mode === "subscription" && session.payment_status === "no_payment_required");
+
+    if (!paymentConfirmed) {
       return NextResponse.json(
         { success: false, message: "Payment not completed" },
         { status: 400 }

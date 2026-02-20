@@ -334,7 +334,7 @@ function SuccessContent() {
               </li>
               <li className="flex items-start gap-2">
                 <span className="bg-coral text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>
-                <span>Click &quot;Connect&quot; in the extension header</span>
+                <span>Click &quot;Sign In&quot; in the extension header</span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="bg-coral text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">3</span>

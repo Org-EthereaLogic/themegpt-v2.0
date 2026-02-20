@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "@/lib/firebase";
@@ -14,6 +14,9 @@ import { PricingSection } from "@/components/sections/PricingSection";
 import { Footer } from "@/components/sections/Footer";
 
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
+const PENDING_CHECKOUT_KEY = "themegpt_pending_checkout_v1";
+
+type CheckoutType = "yearly" | "monthly" | "single";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -22,12 +25,10 @@ export default function Home() {
   );
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
-  const handleCheckout = async (
-    type: "yearly" | "monthly" | "single",
-    themeId?: string
-  ) => {
-    // Enforce login before checkout
+  const handleCheckout = useCallback(async (type: CheckoutType, themeId?: string) => {
+    // Enforce login before checkout; persist intent so purchase resumes immediately after auth.
     if (!session) {
+      window.sessionStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify({ type, themeId }));
       signIn(undefined, { callbackUrl: window.location.href });
       return;
     }
@@ -64,7 +65,32 @@ export default function Home() {
       console.error("Checkout error", error);
       setCheckoutError("Unable to process checkout. Please try again.");
     }
-  };
+  }, [session]);
+
+  useEffect(() => {
+    if (!session) {
+      return;
+    }
+
+    const raw = window.sessionStorage.getItem(PENDING_CHECKOUT_KEY);
+    if (!raw) {
+      return;
+    }
+
+    window.sessionStorage.removeItem(PENDING_CHECKOUT_KEY);
+
+    try {
+      const parsed = JSON.parse(raw) as { type?: CheckoutType; themeId?: string };
+      if (parsed.type === "monthly" || parsed.type === "yearly" || parsed.type === "single") {
+        const resumeTimer = window.setTimeout(() => {
+          void handleCheckout(parsed.type as CheckoutType, parsed.themeId);
+        }, 0);
+        return () => window.clearTimeout(resumeTimer);
+      }
+    } catch (error) {
+      console.error("Failed to restore pending checkout intent", error);
+    }
+  }, [session, handleCheckout]);
 
   return (
     <div className="min-h-screen" style={{ background: "var(--cream)" }}>

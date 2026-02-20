@@ -168,6 +168,28 @@ export default function PrivacyPolicy() {
               className="text-2xl font-semibold mb-4"
               style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
             >
+              Website Analytics
+            </h2>
+            <p className="leading-relaxed" style={{ color: "#7A6555" }}>
+              The themegpt.ai marketing website uses Google Analytics (GA4) to understand
+              how visitors interact with our purchase funnel. Analytics are only activated
+              after you provide consent via the cookie banner. We track:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 mt-2" style={{ color: "#7A6555" }}>
+              <li>Page views (automatic when consent is given)</li>
+              <li>Checkout start, purchase success, and trial start events</li>
+            </ul>
+            <p className="leading-relaxed mt-4" style={{ color: "#7A6555" }}>
+              You can withdraw consent at any time by clearing your browser data for
+              themegpt.ai. The ThemeGPT Chrome extension does not use any analytics or tracking.
+            </p>
+          </section>
+
+          <section>
+            <h2
+              className="text-2xl font-semibold mb-4"
+              style={{ fontFamily: "var(--font-fraunces), serif", color: "#4A3728" }}
+            >
               License Validation
             </h2>
             <p className="leading-relaxed" style={{ color: "#7A6555" }}>
@@ -338,7 +360,7 @@ export default function PrivacyPolicy() {
           </Link>
         </div>
         <p className="opacity-40 text-[0.85rem]">
-          No tracking - No data collection - Just beautiful themes
+          Extension: No tracking. Website: Analytics with consent.
         </p>
       </footer>
     </div>

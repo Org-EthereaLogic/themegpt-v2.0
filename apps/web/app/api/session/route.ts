@@ -46,7 +46,6 @@ export async function GET(request: Request) {
           success: true,
           planType,
           isLifetime,
-          userEmail: session.customer_details?.email,
           subscriptionStatus: subscription.status,
         });
       }
@@ -58,7 +57,7 @@ export async function GET(request: Request) {
       if (!customer.deleted && customer.metadata?.licenseKey) {
         return NextResponse.json({
           success: true,
-          licenseKey: customer.metadata.licenseKey,
+          hasLicense: true,
           planType: "single",
           themeId: session.metadata?.themeId,
           themeName: session.metadata?.themeName,
@@ -79,7 +78,6 @@ export async function GET(request: Request) {
     return NextResponse.json({
       success: true,
       planType: session.metadata?.planType || "monthly",
-      userEmail: session.customer_details?.email,
     });
   } catch (error) {
     console.error("Session retrieval error:", error);

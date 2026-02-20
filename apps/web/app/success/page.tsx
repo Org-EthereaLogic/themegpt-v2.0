@@ -5,7 +5,7 @@ import { Suspense, useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { logEvent } from "firebase/analytics"
-import { analytics } from "@/lib/firebase"
+import { initAnalyticsIfConsented } from "@/lib/firebase"
 
 // Chrome Web Store extension ID
 const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
@@ -17,7 +17,7 @@ interface SessionData {
   themeId?: string
   themeName?: string
   isLifetime?: boolean
-  userEmail?: string
+  hasLicense?: boolean
   message?: string
   subscriptionStatus?: string
 }
@@ -114,17 +114,22 @@ function SuccessContent() {
           setSessionData(data)
           setLoading(false)
 
-          // Gate 3: fire purchase funnel events once session is confirmed
-          if (analytics) {
-            logEvent(analytics, "purchase_success", {
-              plan_type: data.planType ?? "unknown",
-              is_lifetime: data.isLifetime ?? false,
-            })
-            // trial_start gates on actual Stripe subscription status — NOT planType.
-            // Monthly plans start trialing; yearly early-adopter pays immediately (active).
-            if (data.subscriptionStatus === "trialing") {
-              logEvent(analytics, "trial_start", { plan_type: data.planType ?? "unknown" })
+          // Gate 3: fire purchase funnel events once, deduplicated by session
+          const trackingKey = `purchase_tracked_${sessionId}`;
+          if (!sessionStorage.getItem(trackingKey)) {
+            const a = initAnalyticsIfConsented();
+            if (a) {
+              logEvent(a, "purchase_success", {
+                plan_type: data.planType ?? "unknown",
+                is_lifetime: data.isLifetime ?? false,
+              })
+              // trial_start gates on actual Stripe subscription status — NOT planType.
+              // Monthly plans start trialing; yearly early-adopter pays immediately (active).
+              if (data.subscriptionStatus === "trialing") {
+                logEvent(a, "trial_start", { plan_type: data.planType ?? "unknown" })
+              }
             }
+            sessionStorage.setItem(trackingKey, "1");
           }
         } else if (data.pending && attempts < maxAttempts) {
           attempts++

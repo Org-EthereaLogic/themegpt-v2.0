@@ -34,39 +34,61 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  switch (event.type) {
-    case "checkout.session.completed": {
-      const session = event.data.object as Stripe.Checkout.Session;
-      await handleCheckoutComplete(session);
-      break;
-    }
-    case "checkout.session.expired": {
-      const session = event.data.object as Stripe.Checkout.Session;
-      await handleCheckoutExpired(session);
-      break;
-    }
-    case "invoice.paid":
-    case "invoice.payment_succeeded": {
-      const invoice = event.data.object as Stripe.Invoice;
-      await handleInvoicePaid(invoice);
-      break;
-    }
-    case "customer.subscription.updated": {
-      const subscription = event.data.object as Stripe.Subscription;
-      await handleSubscriptionUpdated(subscription);
-      break;
-    }
-    case "customer.subscription.deleted": {
-      const subscription = event.data.object as Stripe.Subscription;
-      await handleSubscriptionDeleted(subscription);
-      break;
-    }
-    case "customer.subscription.trial_will_end": {
-      const subscription = event.data.object as Stripe.Subscription;
-      await handleTrialWillEnd(subscription);
-      break;
-    }
+  const processingState = await db.beginWebhookEventProcessing(event.id, event.type);
+  if (processingState === "already_processed") {
+    console.log(`Skipping already-processed event: ${event.id} (${event.type})`);
+    return NextResponse.json({ received: true });
   }
+  if (processingState === "error") {
+    return NextResponse.json({ error: "Failed to acquire webhook processing lock" }, { status: 500 });
+  }
+  if (processingState === "in_progress") {
+    console.log(`Event already in progress, will retry: ${event.id} (${event.type})`);
+    return NextResponse.json({ error: "Event processing already in progress" }, { status: 409 });
+  }
+
+  try {
+    switch (event.type) {
+      case "checkout.session.completed": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        await handleCheckoutComplete(session);
+        break;
+      }
+      case "checkout.session.expired": {
+        const session = event.data.object as Stripe.Checkout.Session;
+        await handleCheckoutExpired(session);
+        break;
+      }
+      case "invoice.paid":
+      case "invoice.payment_succeeded": {
+        const invoice = event.data.object as Stripe.Invoice;
+        await handleInvoicePaid(invoice);
+        break;
+      }
+      case "customer.subscription.updated": {
+        const subscription = event.data.object as Stripe.Subscription;
+        await handleSubscriptionUpdated(subscription);
+        break;
+      }
+      case "customer.subscription.deleted": {
+        const subscription = event.data.object as Stripe.Subscription;
+        await handleSubscriptionDeleted(subscription);
+        break;
+      }
+      case "customer.subscription.trial_will_end": {
+        const subscription = event.data.object as Stripe.Subscription;
+        await handleTrialWillEnd(subscription);
+        break;
+      }
+    }
+  } catch (error) {
+    // Release lock so Stripe retries can process the event again.
+    await db.abandonWebhookEventProcessing(event.id);
+    console.error(`Webhook processing failed for event ${event.id}:`, error);
+    return NextResponse.json({ error: "Webhook processing failed" }, { status: 500 });
+  }
+
+  await db.completeWebhookEventProcessing(event.id, event.type);
 
   return NextResponse.json({ received: true });
 }

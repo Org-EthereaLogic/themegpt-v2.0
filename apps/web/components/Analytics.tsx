@@ -1,12 +1,16 @@
 "use client";
 
-// Importing analytics triggers Firebase Analytics initialization on the client.
-// Pageview tracking is automatic once initialized.
-import { analytics } from "@/lib/firebase";
-
-// Consume the import to satisfy linters — analytics init is the side effect.
-void analytics;
+import { useEffect } from "react";
+import { initAnalyticsIfConsented } from "@/lib/firebase";
 
 export function Analytics() {
+  useEffect(() => {
+    initAnalyticsIfConsented();
+
+    const handler = () => initAnalyticsIfConsented();
+    window.addEventListener("analytics-consent-changed", handler);
+    return () => window.removeEventListener("analytics-consent-changed", handler);
+  }, []);
+
   return null;
 }

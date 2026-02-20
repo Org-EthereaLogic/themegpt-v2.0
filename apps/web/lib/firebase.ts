@@ -4,7 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 
 // Firebase client config — NEXT_PUBLIC_ vars are baked in at build time.
 // When not configured (e.g. Docker build without build-args), degrade gracefully
-// so prerendering and SSR don't crash. All call-sites already guard: if (analytics) {...}
+// so prerendering and SSR don't crash.
 const hasConfig =
   !!process.env.NEXT_PUBLIC_FIREBASE_API_KEY &&
   !!process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN &&
@@ -25,7 +25,17 @@ if (hasConfig) {
   };
 
   app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
-  analytics = typeof window !== "undefined" ? getAnalytics(app) : null;
+  // Analytics is NOT initialized eagerly — gated on user consent via initAnalyticsIfConsented()
+}
+
+/** Initialize GA4 only if the user has accepted analytics consent. Memoized. */
+export function initAnalyticsIfConsented(): ReturnType<typeof getAnalytics> | null {
+  if (typeof window === "undefined" || !app) return null;
+  if (localStorage.getItem("themegpt_analytics_consent") !== "accepted") return null;
+  if (!analytics) {
+    analytics = getAnalytics(app);
+  }
+  return analytics;
 }
 
 export { app, analytics };

@@ -18,6 +18,23 @@ const DOWNLOADS_COLLECTION = 'downloads';
 const LICENSE_LINKS_COLLECTION = 'license_links';
 const EARLY_ADOPTER_COLLECTION = 'early_adopter_program';
 const ABANDONED_CHECKOUTS_COLLECTION = 'abandoned_checkouts';
+const PROCESSED_EVENTS_COLLECTION = 'processed_webhook_events';
+const WEBHOOK_PROCESSING_STALE_MS = 10 * 60 * 1000;
+
+type WebhookEventProcessingState = 'acquired' | 'already_processed' | 'in_progress' | 'error';
+
+function toMillis(value: unknown): number | null {
+  if (value instanceof Date) return value.getTime();
+
+  if (value && typeof value === 'object' && 'toDate' in value) {
+    const candidate = value as { toDate: () => Date };
+    const date = candidate.toDate();
+    return date.getTime();
+  }
+
+  if (typeof value === 'number') return value;
+  return null;
+}
 
 // Database Interface
 export const db = {
@@ -536,6 +553,92 @@ export const db = {
     } catch (error) {
       console.error("Error getting early adopter count:", error);
       return 0;
+    }
+  },
+
+  // === Webhook Idempotency Methods ===
+  async beginWebhookEventProcessing(
+    eventId: string,
+    eventType: string
+  ): Promise<WebhookEventProcessingState> {
+    const ref = firestore.collection(PROCESSED_EVENTS_COLLECTION).doc(eventId);
+    try {
+      // Atomic create: only one delivery can acquire processing for this event.
+      await ref.create({
+        eventType,
+        status: 'processing',
+        processingStartedAt: new Date(),
+      });
+      return 'acquired';
+    } catch (error) {
+      const code = (error as { code?: unknown })?.code;
+      const isAlreadyExists =
+        code === 6 ||
+        code === 'already-exists' ||
+        (error instanceof Error && error.message.includes('Already exists'));
+
+      if (!isAlreadyExists) {
+        console.error("Error acquiring webhook event lock:", error);
+        return 'error';
+      }
+
+      try {
+        const doc = await ref.get();
+        const data = doc.data();
+        const status = data?.status;
+        if (status === 'processed') {
+          return 'already_processed';
+        }
+
+        if (status === 'processing') {
+          const startedAtMs = toMillis(data?.processingStartedAt);
+          const isStale = startedAtMs !== null && (Date.now() - startedAtMs) > WEBHOOK_PROCESSING_STALE_MS;
+
+          if (isStale) {
+            console.warn(`Reclaiming stale webhook lock for event ${eventId}`);
+            await ref.delete();
+            await ref.create({
+              eventType,
+              status: 'processing',
+              processingStartedAt: new Date(),
+              recoveredAt: new Date(),
+            });
+            return 'acquired';
+          }
+        }
+      } catch (readError) {
+        console.error("Error reading webhook event state:", readError);
+        return 'error';
+      }
+
+      return 'in_progress';
+    }
+  },
+
+  async completeWebhookEventProcessing(eventId: string, eventType: string): Promise<void> {
+    try {
+      await firestore.collection(PROCESSED_EVENTS_COLLECTION).doc(eventId).set(
+        {
+          eventType,
+          status: 'processed',
+          processedAt: new Date(),
+        },
+        { merge: true }
+      );
+    } catch (error) {
+      console.error("Error marking event processed:", error);
+    }
+  },
+
+  async abandonWebhookEventProcessing(eventId: string): Promise<void> {
+    try {
+      const ref = firestore.collection(PROCESSED_EVENTS_COLLECTION).doc(eventId);
+      const doc = await ref.get();
+      if (doc.exists && doc.data()?.status === 'processing') {
+        await ref.delete();
+      }
+    } catch (error) {
+      console.error("Error abandoning webhook event lock:", error);
     }
   },
 };

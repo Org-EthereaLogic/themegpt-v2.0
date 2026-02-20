@@ -258,7 +258,11 @@ export default function TermsOfService() {
               10. Data Collection &amp; Case Studies
             </h2>
             <p className="leading-relaxed" style={{ color: "#7A6555" }}>
-              ThemeGPT does not collect analytics, telemetry, or usage data. If we wish
+              The ThemeGPT Chrome extension does not collect analytics, telemetry,
+              or usage data. The themegpt.ai website uses Google Analytics (GA4)
+              with your consent to understand how visitors interact with our
+              purchase funnel. You can accept or decline analytics via the cookie
+              banner. If we wish
               to feature your experience in a case study, testimonial, or marketing material,
               we will request your explicit, written consent beforehand. Participation is
               entirely voluntary and may be withdrawn at any time by contacting{" "}
@@ -329,7 +333,7 @@ export default function TermsOfService() {
           </Link>
         </div>
         <p className="opacity-40 text-[0.85rem]">
-          No tracking - No data collection - Just beautiful themes
+          Extension: No tracking. Website: Analytics with consent.
         </p>
       </footer>
     </div>

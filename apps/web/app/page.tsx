@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { logEvent } from "firebase/analytics";
-import { analytics } from "@/lib/firebase";
+import { initAnalyticsIfConsented } from "@/lib/firebase";
 import { DEFAULT_THEMES } from "@themegpt/shared";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Navigation } from "@/components/sections/Navigation";
@@ -36,8 +36,9 @@ export default function Home() {
     setCheckoutError(null);
 
     // Gate 3: fire checkout_start before the POST so the event is always recorded
-    if (analytics) {
-      logEvent(analytics, "checkout_start", { plan_type: type });
+    const a = initAnalyticsIfConsented();
+    if (a) {
+      logEvent(a, "checkout_start", { plan_type: type });
     }
 
     try {

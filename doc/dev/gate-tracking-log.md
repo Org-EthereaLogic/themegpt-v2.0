@@ -39,7 +39,7 @@
 
 | Date | Unassigned % | Filter Active? | Status | Notes |
 |------|-------------|----------------|--------|-------|
-| 2026-02-20 | | Y | TRACKING | Filter active; Day 1 of observation window |
+| 2026-02-20 | TBD (GA4 check) | Y | TRACKING | Filter active; Day 1 prefill; replace with measured value |
 | 2026-02-21 | | | | |
 | 2026-02-22 | | | | |
 | 2026-02-23 | | | | |
@@ -55,7 +55,7 @@
 
 | Date | `trial_start` | `checkout_start` | `purchase_success` | All 3 visible? | Notes |
 |------|--------------|-----------------|-------------------|----------------|-------|
-| 2026-02-20 | | | | | Day 1 of validation window (earliest pass date: 2026-02-26) |
+| 2026-02-20 | TBD | TBD | TBD | TBD | Day 1 prefill; replace after GA4 event check (earliest pass date: 2026-02-26) |
 | 2026-02-21 | | | | | |
 | 2026-02-22 | | | | | |
 | 2026-02-23 | | | | | |
@@ -63,7 +63,7 @@
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |
 
-**Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working)
+**Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
 
 ---
 

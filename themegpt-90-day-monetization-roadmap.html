@@ -881,7 +881,7 @@
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 20, 2026 (staging URL verified live: themegpt-web-dufb63uofq-uc.a.run.app → themegpt.ai; GA4 internal traffic filter applied/verified/activated on Feb 20; Bridge Gate 1 observation Day 1 started Feb 20 with pre-filter baseline 25% on Feb 19; Gate 3 validation Day 1 started Feb 20 with earliest pass date Feb 26; v2.2.2 still pending CWS review; Firestore indexes confirmed built; canary purchase + extension auto-link validation complete Feb 19)</span>
+      <span>Updated: February 20, 2026 (pre-launch hardening deployed: consent-gated GA4 + cookie banner, atomic webhook idempotency, session API PII removal, client-side event dedup, 28 web tests wired; Gate 1 and Gate 3 observation windows active; v2.2.2 pending CWS review)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -891,18 +891,18 @@
   <div class="progress-section">
     <div class="progress-head">
       <h2>Roadmap Progress</h2>
-      <span class="progress-scope">18 of 38 tasks completed across 3 phases</span>
+      <span class="progress-scope">23 of 43 tasks completed across 3 phases</span>
     </div>
     <div class="gauge-row">
       <!-- Donut Chart -->
       <div class="donut-wrap">
         <svg viewBox="0 0 100 100">
           <circle class="donut-track" cx="50" cy="50" r="40" />
-          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="133.2" />
+          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="117" />
         </svg>
         <div class="donut-center">
-          <span class="donut-num">47%</span>
-          <span class="donut-frac">18 / 38</span>
+          <span class="donut-num">53%</span>
+          <span class="donut-frac">23 / 43</span>
           <span class="donut-label">tasks</span>
         </div>
       </div>
@@ -979,10 +979,10 @@
       <div class="phase-bar-card">
         <div class="phase-bar-head">
           <span class="phase-bar-label">Phase 2</span>
-          <span class="phase-bar-count">7 / 20</span>
+          <span class="phase-bar-count">12 / 25</span>
         </div>
         <div class="bar-track">
-          <div class="bar-fill fill-p2" style="width:35%"></div>
+          <div class="bar-fill fill-p2" style="width:48%"></div>
         </div>
       </div>
       <div class="phase-bar-card">
@@ -1130,8 +1130,8 @@
       <ul class="task-list">
         <li>One source of truth for offers: checkout behavior, pricing page, extension copy, and legal text must match.
         </li>
-        <li>Privacy consistency is mandatory: either stay no-tracking end-to-end or add explicit consent + updated
-          policy.</li>
+        <li><s>Privacy consistency is mandatory: either stay no-tracking end-to-end or add explicit consent + updated
+          policy.</s> Resolved Feb 20: consent-gated GA4 with cookie banner deployed; privacy policy, terms, README, and marketing copy updated to distinguish extension (no tracking) from web (analytics with consent).</li>
         <li>Use one launch channel at a time to keep signal clean and execution realistic for a solo builder.</li>
         <li>No paid acquisition until an organic conversion baseline is proven.</li>
         <li>Chrome extension deployment is manual: hold submission until all critical fixes are merged, verified, and
@@ -1141,7 +1141,7 @@
 
     <!-- Current Status -->
     <div class="section">
-      <h2>Current Status (February 19, 2026)</h2>
+      <h2>Current Status (February 20, 2026)</h2>
       <div class="week-block">
         <h4>Completed</h4>
         <ul class="task-list">
@@ -1222,7 +1222,7 @@
           <li>Resolved Dependabot advisory: upgraded svelte transitive override to <code>^5.53.0</code> (SSR XSS / tag validation; no <code>.svelte</code> files in project — zero exploitable risk).</li>
           <li>Resolved Dependabot advisory: added <code>minimatch</code> override at <code>^10.2.1</code> (resolves to <code>10.2.2</code>) to fix ReDoS vulnerability (High severity).</li>
           <li>UTM attribution remediation completed: updated CWS install links from <code>utm_source=item-share-cb</code> to explicit campaign tags across core pages, plus <code>auth/extension/page.tsx</code> links with <code>utm_source=web&amp;utm_medium=referral&amp;utm_campaign=extension_auth</code> and <code>success/page.tsx</code> install prompts with <code>utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
-          <li>GA4 funnel instrumentation deployed in web: <code>checkout_start</code> in checkout initiation, <code>purchase_success</code> on confirmed session resolution, and <code>trial_start</code> gated on actual subscription status <code>trialing</code>.</li>
+          <li>GA4 funnel instrumentation deployed in web (consent-gated as of Feb 20): <code>checkout_start</code> in checkout initiation, <code>purchase_success</code> on confirmed session resolution, and <code>trial_start</code> gated on actual subscription status <code>trialing</code>. Events deduplicated per session via <code>sessionStorage</code>.</li>
         </ul>
       </div>
       <div class="week-block" style="background: var(--callout-teal-bg);">
@@ -1244,6 +1244,17 @@
           <li>Same missing index also caused extension premium themes to remain locked despite active subscription (<code>/api/extension/status</code> calls the same query path).</li>
           <li>Fix: added both required composite indexes to <code>firestore.indexes.json</code> and deployed via Firebase CLI. Two indexes: <code>subscriptions</code> (<code>userId</code> ASC + <code>createdAt</code> DESC) and <code>downloads</code> (<code>userId</code> ASC + <code>downloadedAt</code> DESC). Deploy confirmed successful.</li>
           <li>Commit <code>c719b7b</code> pushed to <code>origin/main</code>.</li>
+        </ul>
+      </div>
+      <div class="week-block" style="background: var(--callout-teal-bg);">
+        <h4>Completed — Pre-Launch Hardening (February 20, 2026)</h4>
+        <div class="callout">Audit-driven hardening sprint. 5 findings addressed (2xP1, 2xP2, 1xP3). Deployed to Cloud Run as commit <code>b527d78</code>. Cookie consent banner verified live on themegpt.ai.</div>
+        <ul class="task-list">
+          <li><strong>P1 Privacy/analytics resolved:</strong> GA4 now consent-gated via <code>initAnalyticsIfConsented()</code> + <code>CookieConsent.tsx</code> banner (chocolate bg, Accept/Decline). Analytics only initialize after explicit user consent stored in <code>localStorage</code>. Privacy policy, terms, README, AGENTS, MARKETING, CONTRIBUTING, and CHANGELOG all updated to distinguish extension (no tracking) from web (consent-gated GA4).</li>
+          <li><strong>P1 Webhook idempotency:</strong> Added <code>processed_webhook_events</code> Firestore collection with atomic <code>create()</code> lock pattern via <code>beginWebhookEventProcessing()</code>. Returns 409 for in-progress events (Stripe retries), 200 for already-processed (Stripe stops). Stale lock reclaim at 10 minutes. <code>abandonWebhookEventProcessing()</code> releases lock on handler failure.</li>
+          <li><strong>P2 Session API hardened:</strong> <code>/api/session</code> no longer returns <code>licenseKey</code> or <code>userEmail</code>. Replaced with <code>hasLicense: true</code> boolean. No authentication bypass risk from session enumeration.</li>
+          <li><strong>P2 Client-side event dedup:</strong> <code>purchase_success</code> and <code>trial_start</code> GA4 events now guarded by <code>sessionStorage</code> keyed on <code>session_id</code>. Page refresh no longer double-counts.</li>
+          <li><strong>P3 Web test infrastructure:</strong> vitest wired into <code>apps/web</code> with <code>vitest.config.ts</code> and path aliases. 5 test files, 28 tests passing: db.qa (8), extension/auth (4), extension/status (6), webhooks/stripe (9), session (4). Webhook tests cover idempotency, lock contention, handler failure cleanup, subscription creation, and license creation.</li>
         </ul>
       </div>
     </div>
@@ -1557,7 +1568,7 @@
     <!-- Metric Stack -->
     <div class="section">
       <h2>Metric Stack (Privacy-Aligned)</h2>
-      <p>Use aggregate metrics from systems already required for operation. Do not introduce hidden telemetry.</p>
+      <p>Use aggregate metrics from systems already required for operation. GA4 web analytics are consent-gated (cookie banner deployed Feb 20, 2026). The extension has zero analytics.</p>
       <table>
         <thead>
           <tr>
@@ -1776,6 +1787,11 @@
             <td>GA4 internal traffic filter activated after Testing + Realtime verification; staging URL check confirmed live at <code>themegpt-web-dufb63uofq-uc.a.run.app</code> (redirects to <code>themegpt.ai</code>).</td>
             <td>Status: Completed. Gate 1 and Gate 3 observation windows both started Feb 20; earliest pass date is Feb 26, 2026.</td>
           </tr>
+          <tr>
+            <td>February 20, 2026</td>
+            <td>Pre-launch hardening deployed (commit <code>b527d78</code>): consent-gated GA4 + cookie banner, atomic webhook idempotency (<code>processed_webhook_events</code> collection), session API PII removal, client-side event dedup, 28 web tests wired. Cloud Run build <code>bf2093d2</code> completed in 4m42s.</td>
+            <td>Status: Completed. Cookie consent banner verified live on themegpt.ai. All 5 audit findings (2xP1, 2xP2, 1xP3) resolved.</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -1829,7 +1845,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 20, 2026 (staging URL verified live; GA4 internal traffic filter active; Gate 1 and Gate 3 Day 1 started Feb 20 with earliest pass date Feb 26; v2.2.2 still pending CWS review; canary purchase, account page, and extension auto-link validations remain confirmed)
+    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 20, 2026 (pre-launch hardening deployed: consent-gated GA4 + cookie banner, atomic webhook idempotency, session API hardened, event dedup, 28 web tests; Gate 1 and Gate 3 observation active with earliest pass Feb 26; v2.2.2 pending CWS review)
   </div>
 
   <script>

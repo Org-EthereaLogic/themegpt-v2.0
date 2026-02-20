@@ -4,6 +4,8 @@
 **Branch:** `main`
 **Repository:** Org-EthereaLogic/themegpt-v2.0
 
+> **Note:** Sections 2–8 reflect the project state at initial report generation (Feb 17, 2026). The architecture and feature set have grown significantly since then (subscription system, premium themes, full Stripe/Firestore integration, abandoned checkout recovery). Sections 9–11 and the Executive Summary are kept current.
+
 ---
 
 ## Executive Summary
@@ -16,10 +18,10 @@ ThemeGPT v2.0 is a **privacy-first Chrome extension** that enables users to cust
 | Extension LOC | ~1,200+ | Premium themes + subscription integration |
 | Web App LOC | ~1,500+ | Marketing site + API routes + Stripe webhooks |
 | Shared Package LOC | ~400+ | Types, constants, shared utilities |
-| Test Coverage | Backend + frontend QA suites | 15+ tests, all passing |
-| Public Version | v2.2.0 live / v2.2.2 pending CWS review | End-to-end payment flow validated Feb 19, 2026 |
+| Test Coverage | 5 test files | 94/94 passing |
+| Public Version | v2.2.0 live / v2.2.2 pending CWS review / v2.3.0 committed (awaiting submission) | End-to-end payment flow validated Feb 19, 2026 |
 
-**Overall Project Health: GOOD** — v2.2.0 live on CWS; v2.2.2 pending review; Stripe, Firestore indexes, and full payment funnel confirmed operational.
+**Overall Project Health: GOOD** — v2.2.0 live on CWS; v2.2.2 pending review; v2.3.0 committed and tagged (CWS submission queued); abandoned checkout recovery deployed to Cloud Run; Stripe, Firestore indexes, and full payment funnel confirmed operational.
 
 ---
 
@@ -316,10 +318,26 @@ pnpm lint   # ESLint validation
 - Early adopter lifetime offer (first 60 paid yearly)
 - Automated CWS submission via GitHub Actions
 
+### COMPLETE (v2.2.x)
+
+- v2.2.0 live on CWS: in-extension lifecycle messaging (trialing/canceled/past_due states, escalating nudge, review prompt)
+- v2.2.1 (web): Dependabot security patches, UTM attribution fixes, GA4 funnel instrumentation (`trial_start`, `checkout_start`, `purchase_success`)
+- v2.2.2 (CWS pending): pricing CTA URL parameter order fix; missing Firestore composite indexes for subscription + download queries
+- End-to-end payment flow confirmed operational (Feb 19, 2026)
+
+### COMPLETE (v2.3.0)
+
+- `extension_version` UTM parameter on all 7 outbound extension links (`getExtensionVersion()` helper)
+- QA test suite: 94/94 passing across 5 test files (6 new tests: trialing, canceled, past_due, escalating nudge, review ask, footer UTM)
+- Abandoned checkout recovery (web, deployed Feb 19, 2026): `checkout.session.expired` webhook, `abandoned_checkouts` Firestore collection, `sendCheckoutRecoveryEmail` with promotions opt-in gating
+- `invoice.payment_succeeded` alias added alongside `invoice.paid` for Stripe event compatibility
+
 ### IN PROGRESS
 
-- Chrome Web Store review approval (v2.1.0 submitted)
-- Monetization growth (Phase 2 launch channel planning)
+- CWS review clearance for v2.2.2 (prerequisite for v2.3.0 submission)
+- Bridge Gate 1: unassigned traffic reduction (currently 25%; threshold ≤10% for 7 consecutive days)
+- Gate 3: GA4 visibility validation (7-day observation window)
+- Product Hunt launch (blocked until all 3 measurement gates pass)
 
 ### NOT STARTED
 
@@ -335,9 +353,8 @@ pnpm lint   # ESLint validation
 
 ### Immediate Priority
 
-1. **Add component tests for extension** - Currently no tests for popup or token counter
+1. **Accessibility audit** - Verify color contrast compliance
 2. **Complete premium themes implementation** - Framework is ready
-3. **Accessibility audit** - Verify color contrast compliance
 
 ### Short-Term
 
@@ -395,7 +412,9 @@ pnpm clean        # Clean all build artifacts
 
 ### Chrome Web Store
 
-- **Current Version:** 2.1.0 (submitted, awaiting review)
+- **Published:** 2.2.0 (live)
+- **Pending Review:** 2.2.2
+- **Queued (git only):** 2.3.0 (commit `c1fffae`, tag `v2.3.0`) — submit via `submit-extension.yml` once v2.2.2 clears review
 - **Extension ID:** `dlphknialdlpmcgoknkcmapmclgckhba`
 - **URL:** https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba
 
@@ -404,12 +423,12 @@ pnpm clean        # Clean all build artifacts
 ## Appendix: Recent Git History
 
 ```
-1a47858 chore: remove duplicate pnpm.auditConfig from extension
-5d218b3 chore: configure pnpm audit ignore for CVE-2025-56648
-7648511 fix(ci): resolve CodeQL security alerts for workflow permissions
-3e39bc1 docs: add security advisory documentation for CVE-2025-56648
-8bdb597 Merge pull request #22 (animated-logo-gif)
-b7bd753 feat: optimize animated logo GIF for README header
+c1fffae feat(extension): v2.3.0 — extension_version UTM attribution + abandoned checkout recovery
+2c2c283 docs: confirm end-to-end payment validation — update roadmap, changelog, and workspace docs
+1402707 fix(web): resolve lint typing in extension route tests
+1a6bec3 docs: correct date — all events occurred Feb 19 2026 (PST), not Feb 20
+336fd00 docs: sync all docs to Feb 20 state — v2.2.2 CWS submission, Firestore index fix, canary purchase
+46eaccd fix(web): resume checkout after auth and support trial checkout status
 ```
 
 ---

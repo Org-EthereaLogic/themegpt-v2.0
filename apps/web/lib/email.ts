@@ -368,6 +368,101 @@ export async function sendTrialEndingEmail(
 }
 
 /**
+ * Send an abandoned checkout recovery reminder email.
+ * This email is only sent when the customer opted in to promotions at Checkout.
+ */
+export async function sendCheckoutRecoveryEmail(
+  to: string,
+  recoveryUrl: string,
+  checkoutType: "monthly" | "yearly" | "single" | "subscription" | "unknown"
+): Promise<EmailResult> {
+  const friendlyType = checkoutType === "single"
+    ? "single theme purchase"
+    : checkoutType === "yearly"
+      ? "yearly subscription"
+      : checkoutType === "monthly" || checkoutType === "subscription"
+        ? "monthly subscription"
+        : "ThemeGPT purchase";
+
+  try {
+    const { data, error } = await getResend().emails.send({
+      from: EMAIL_FROM,
+      to,
+      subject: "Complete your ThemeGPT checkout",
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: ${BRAND_COLORS.cream};">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: ${BRAND_COLORS.cream};">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <tr>
+            <td style="padding: 40px 40px 20px; text-align: center; background-color: ${BRAND_COLORS.brown}; border-radius: 12px 12px 0 0;">
+              <img src="https://themegpt.ai/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
+              <h1 style="margin: 0; color: ${BRAND_COLORS.cream}; font-size: 28px; font-weight: 700;">ThemeGPT</h1>
+              <p style="margin: 8px 0 0; color: ${BRAND_COLORS.coral}; font-size: 14px;">Premium Themes for ChatGPT</p>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="margin: 0 0 16px; color: ${BRAND_COLORS.brown}; font-size: 24px;">Finish your checkout</h2>
+              <p style="margin: 0 0 24px; color: #666; font-size: 16px; line-height: 1.6;">
+                You started a ${friendlyType} but didn&apos;t complete payment.
+                Your secure checkout link is still available for a limited time.
+              </p>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <a href="${recoveryUrl}" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                      Resume Checkout
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding: 24px 40px; background-color: #f9f9f9; border-radius: 0 0 12px 12px; text-align: center;">
+              <p style="margin: 0; color: #999; font-size: 12px;">
+                You&apos;re receiving this because you opted in to promotional emails during checkout.
+              </p>
+              <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.ai</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+      `.trim(),
+    });
+
+    if (error) {
+      console.error("Failed to send checkout recovery email:", error);
+      return { success: false, error: error.message };
+    }
+
+    console.log(`Checkout recovery email sent, messageId: ${data?.id}`);
+    return { success: true, messageId: data?.id };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("Error sending checkout recovery email:", message);
+    return { success: false, error: message };
+  }
+}
+
+/**
  * Send a multilingual structured content test email
  */
 export async function sendStructuredContentTestEmail(

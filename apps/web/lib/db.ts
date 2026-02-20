@@ -17,6 +17,7 @@ const SUBSCRIPTIONS_COLLECTION = 'subscriptions';
 const DOWNLOADS_COLLECTION = 'downloads';
 const LICENSE_LINKS_COLLECTION = 'license_links';
 const EARLY_ADOPTER_COLLECTION = 'early_adopter_program';
+const ABANDONED_CHECKOUTS_COLLECTION = 'abandoned_checkouts';
 
 // Database Interface
 export const db = {
@@ -303,6 +304,75 @@ export const db = {
     } catch (error) {
       console.error("Error fetching user:", error);
       return null;
+    }
+  },
+
+  async getUserById(userId: string): Promise<{ id: string; email: string } | null> {
+    try {
+      const doc = await firestore.collection(USERS_COLLECTION).doc(userId).get();
+      if (!doc.exists) {
+        return null;
+      }
+
+      const data = doc.data();
+      const email = data?.email;
+      if (typeof email !== 'string' || !email) {
+        return null;
+      }
+
+      return { id: doc.id, email };
+    } catch (error) {
+      console.error("Error fetching user by id:", error);
+      return null;
+    }
+  },
+
+  async getAbandonedCheckoutBySessionId(sessionId: string): Promise<{
+    reminderAttemptedAt?: Date | null;
+    reminderSentAt?: Date | null;
+  } | null> {
+    try {
+      const doc = await firestore.collection(ABANDONED_CHECKOUTS_COLLECTION).doc(sessionId).get();
+      if (!doc.exists) {
+        return null;
+      }
+
+      const data = doc.data();
+      return {
+        reminderAttemptedAt: data?.reminderAttemptedAt?.toDate?.() || null,
+        reminderSentAt: data?.reminderSentAt?.toDate?.() || null,
+      };
+    } catch (error) {
+      console.error("Error fetching abandoned checkout:", error);
+      return null;
+    }
+  },
+
+  async upsertAbandonedCheckout(sessionId: string, payload: Record<string, unknown>): Promise<boolean> {
+    try {
+      const ref = firestore.collection(ABANDONED_CHECKOUTS_COLLECTION).doc(sessionId);
+      const existing = await ref.get();
+
+      if (existing.exists) {
+        await ref.set(
+          {
+            ...payload,
+            updatedAt: new Date(),
+          },
+          { merge: true }
+        );
+      } else {
+        await ref.set({
+          ...payload,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error upserting abandoned checkout:", error);
+      return false;
     }
   },
 

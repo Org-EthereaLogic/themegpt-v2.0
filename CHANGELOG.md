@@ -2,6 +2,30 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
+## [2.3.0] - 2026-02-19 (CWS Submission — Pending Review)
+
+### Added (Extension)
+
+- **`extension_version` UTM Attribution:** New `getExtensionVersion()` helper reads the manifest version at runtime and appends `&extension_version=X.Y.Z` to all 7 outbound links in `popup.tsx`, satisfying the Analytics Contract roadmap requirement for per-version tracking in GA4.
+- **Abandoned Checkout Recovery (Web):** Stripe Checkout sessions now enable `after_expiration.recovery` and collect promotional consent via `consent_collection: { promotions: "auto" }`. The `checkout.session.expired` webhook event triggers `handleCheckoutExpired()`, which records the abandoned session to a new `abandoned_checkouts` Firestore collection and sends a recovery email when the customer opted in to promotions.
+- **`sendCheckoutRecoveryEmail` (Web):** New transactional email sent to opted-in customers with a Stripe-hosted recovery URL; uses the brand's Cream & Chocolate design.
+
+### Improved (Extension)
+
+- **QA Test Coverage:** 6 new tests added to `popup.qa.test.tsx` covering trialing state ("Trial" header, "Trial Active" badge, days-remaining countdown), canceled state (reactivation copy + UTM-tagged account link), past-due state (billing failure copy + coral-styled link), escalating lifecycle nudge (3-click sequence), review ask banner (3rd apply trigger, CWS link, permanent dismiss), and footer UTM validation.
+
+### Improved (Web)
+
+- **Webhook Event Coverage:** Added `invoice.payment_succeeded` as an alias for `invoice.paid` to handle both Stripe event name variants. Added `checkout.session.expired` to the webhook listener and updated the setup script and documentation.
+- **Firestore `abandoned_checkouts` collection:** New methods `upsertAbandonedCheckout`, `getAbandonedCheckoutBySessionId`, and `getUserById` in `lib/db.ts` for tracking abandoned checkout sessions, reminder eligibility, and send state.
+
+### Tested
+
+- Updated `popup.test.tsx` and `popup.qa.test.tsx` to match new URL shape with `extension_version=unknown` test-env fallback — 94/94 tests passing (was 88).
+- Recovery email template verified via `test-email.ts recovery <email>` script.
+
+---
+
 ## [2.2.2] - 2026-02-19 (CWS Submission — Pending Review)
 
 ### Fixed

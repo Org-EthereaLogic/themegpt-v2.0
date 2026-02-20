@@ -6,6 +6,7 @@
  *   npx tsx scripts/test-email.ts subscription <email>  # Test subscription confirmation
  *   npx tsx scripts/test-email.ts purchase <email>      # Test theme purchase confirmation
  *   npx tsx scripts/test-email.ts trial <email>         # Test trial ending reminder
+ *   npx tsx scripts/test-email.ts recovery <email>      # Test abandoned checkout recovery reminder
  *   npx tsx scripts/test-email.ts structured <email> <en|es> # Test multilingual structured content email
  *   npx tsx scripts/test-email.ts all <email>           # Test all email templates
  */
@@ -91,6 +92,26 @@ async function testTrialEmail(email: string) {
   return result;
 }
 
+async function testRecoveryEmail(email: string) {
+  console.log(`📧 Sending abandoned checkout recovery email to ${email}...`);
+
+  const { sendCheckoutRecoveryEmail } = await loadEmailModule();
+
+  const result = await sendCheckoutRecoveryEmail(
+    email,
+    "https://checkout.stripe.com/c/pay/cs_test_recovery_link_placeholder",
+    "monthly"
+  );
+
+  if (result.success) {
+    console.log(`✅ Success! Message ID: ${result.messageId}`);
+  } else {
+    console.error(`❌ Failed: ${result.error}`);
+  }
+
+  return result;
+}
+
 async function testStructuredContentEmail(
   email: string,
   locale: "en" | "es" = "en"
@@ -156,6 +177,18 @@ async function testAllEmails(email: string) {
     failed++;
   }
 
+  // Wait a bit
+  await new Promise((r) => setTimeout(r, 1000));
+
+  // Test recovery email
+  console.log("\n4. Abandoned Checkout Recovery Email");
+  const recovery = await testRecoveryEmail(email);
+  if (recovery.success) {
+    passed++;
+  } else {
+    failed++;
+  }
+
   // Summary
   console.log("\n" + "─".repeat(50));
   console.log(`\n📊 Results: ${passed} passed, ${failed} failed`);
@@ -178,6 +211,7 @@ async function main() {
     console.log("  npx tsx scripts/test-email.ts subscription <email>");
     console.log("  npx tsx scripts/test-email.ts purchase <email>");
     console.log("  npx tsx scripts/test-email.ts trial <email>");
+    console.log("  npx tsx scripts/test-email.ts recovery <email>");
     console.log("  npx tsx scripts/test-email.ts structured <email> <en|es>");
     console.log("  npx tsx scripts/test-email.ts all <email>");
     process.exit(1);
@@ -199,6 +233,9 @@ async function main() {
     case "trial":
       await testTrialEmail(email);
       break;
+    case "recovery":
+      await testRecoveryEmail(email);
+      break;
     case "structured":
       await testStructuredContentEmail(email, parseLocale(process.argv[4]));
       break;
@@ -212,6 +249,7 @@ async function main() {
       console.log("  npx tsx scripts/test-email.ts subscription <email>  # Test subscription confirmation");
       console.log("  npx tsx scripts/test-email.ts purchase <email>      # Test theme purchase confirmation");
       console.log("  npx tsx scripts/test-email.ts trial <email>         # Test trial ending reminder");
+      console.log("  npx tsx scripts/test-email.ts recovery <email>      # Test abandoned checkout recovery reminder");
       console.log("  npx tsx scripts/test-email.ts structured <email> <en|es>  # Test multilingual structured content email");
       console.log("  npx tsx scripts/test-email.ts all <email>           # Test all email templates");
       console.log("");

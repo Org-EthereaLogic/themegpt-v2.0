@@ -153,11 +153,11 @@ describe('Popup', () => {
       fireEvent.click(screen.getByText('Sign In'))
       fireEvent.click(screen.getByText('Connect with Google/GitHub'))
 
-      expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/auth/extension?utm_source=extension&utm_medium=popup&utm_campaign=auth_flow`, '_blank')
+      expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/auth/extension?utm_source=extension&utm_medium=popup&utm_campaign=auth_flow&extension_version=unknown`, '_blank')
     })
 
     it('shows connecting status when token is submitted', async () => {
-      mockFetch.mockImplementation(() => new Promise(() => {}))
+      mockFetch.mockImplementation(() => new Promise(() => { }))
 
       render(<Popup />)
       fireEvent.click(screen.getByText('Sign In'))
@@ -344,7 +344,7 @@ describe('Popup', () => {
       fireEvent.click(themeCard)
 
       await waitFor(() => {
-        expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')
+        expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=unknown#pricing`, '_blank')
       })
     })
 

@@ -47,6 +47,7 @@ export async function POST(request: NextRequest) {
     // Require authenticated user for checkout
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id;
+    const userEmail = session?.user?.email;
     if (!userId) {
       return NextResponse.json(
         { success: false, message: "Authentication required" },
@@ -122,6 +123,15 @@ export async function POST(request: NextRequest) {
         themeId: themeId || "",
         userId: userId || "",
         isEarlyAdopterEligible: isEarlyAdopterEligible ? "true" : "false",
+      },
+      customer_email: userEmail || undefined,
+      consent_collection: {
+        promotions: "auto",
+      },
+      after_expiration: {
+        recovery: {
+          enabled: true,
+        },
       },
       success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/?canceled=true`,

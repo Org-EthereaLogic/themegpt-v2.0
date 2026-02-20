@@ -4,6 +4,7 @@ import { getStripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import {
   sendSubscriptionConfirmationEmail,
+  sendCheckoutRecoveryEmail,
   sendThemePurchaseConfirmationEmail,
   sendTrialEndingEmail,
 } from "@/lib/email";
@@ -39,7 +40,13 @@ export async function POST(request: Request) {
       await handleCheckoutComplete(session);
       break;
     }
-    case "invoice.paid": {
+    case "checkout.session.expired": {
+      const session = event.data.object as Stripe.Checkout.Session;
+      await handleCheckoutExpired(session);
+      break;
+    }
+    case "invoice.paid":
+    case "invoice.payment_succeeded": {
       const invoice = event.data.object as Stripe.Invoice;
       await handleInvoicePaid(invoice);
       break;
@@ -169,6 +176,94 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   } else {
     console.warn("No customer email found for confirmation email");
   }
+}
+
+type CheckoutRecoveryType = "monthly" | "yearly" | "single" | "subscription" | "unknown";
+
+function getCheckoutRecoveryType(rawType: unknown): CheckoutRecoveryType {
+  if (rawType === "monthly" || rawType === "yearly" || rawType === "single" || rawType === "subscription") {
+    return rawType;
+  }
+  return "unknown";
+}
+
+async function resolveCheckoutEmail(session: Stripe.Checkout.Session): Promise<string | null> {
+  if (session.customer_email) {
+    return session.customer_email;
+  }
+
+  if (session.customer_details?.email) {
+    return session.customer_details.email;
+  }
+
+  const metadataUserId = session.metadata?.userId;
+  if (metadataUserId) {
+    const user = await db.getUserById(metadataUserId);
+    if (user?.email) {
+      return user.email;
+    }
+  }
+
+  if (typeof session.customer === "string") {
+    try {
+      const customer = await getStripe().customers.retrieve(session.customer);
+      if (!customer.deleted && customer.email) {
+        return customer.email;
+      }
+    } catch (error) {
+      console.error(`Failed to resolve customer email for session ${session.id}:`, error);
+    }
+  }
+
+  return null;
+}
+
+async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
+  const sessionId = session.id;
+  const checkoutType = getCheckoutRecoveryType(session.metadata?.type);
+  const email = await resolveCheckoutEmail(session);
+  const promotionsConsent = session.consent?.promotions || null;
+  const recoveryUrl = session.after_expiration?.recovery?.url || null;
+  const recoveryExpiresAt = session.after_expiration?.recovery?.expires_at
+    ? new Date(session.after_expiration.recovery.expires_at * 1000)
+    : null;
+  const reminderEligible = Boolean(email && recoveryUrl && promotionsConsent === "opt_in");
+
+  const existingRecord = await db.getAbandonedCheckoutBySessionId(sessionId);
+  const reminderAlreadyAttempted = Boolean(
+    existingRecord?.reminderAttemptedAt || existingRecord?.reminderSentAt
+  );
+
+  await db.upsertAbandonedCheckout(sessionId, {
+    stripeSessionId: sessionId,
+    userId: session.metadata?.userId || null,
+    customerId: typeof session.customer === "string" ? session.customer : null,
+    customerEmail: email,
+    checkoutType,
+    planType: session.metadata?.planType || null,
+    mode: session.mode,
+    sessionStatus: session.status,
+    paymentStatus: session.payment_status,
+    promotionsConsent,
+    recoveryUrl,
+    recoveryExpiresAt,
+    checkoutCreatedAt: new Date(session.created * 1000),
+    checkoutExpiresAt: session.expires_at ? new Date(session.expires_at * 1000) : null,
+    abandonedAt: new Date(),
+    reminderEligible,
+  });
+
+  if (!reminderEligible || reminderAlreadyAttempted || !email || !recoveryUrl) {
+    return;
+  }
+
+  const reminderResult = await sendCheckoutRecoveryEmail(email, recoveryUrl, checkoutType);
+  await db.upsertAbandonedCheckout(sessionId, {
+    reminderAttemptedAt: new Date(),
+    reminderSentAt: reminderResult.success ? new Date() : null,
+    reminderMessageId: reminderResult.messageId || null,
+    reminderError: reminderResult.success ? null : reminderResult.error || "Unknown email error",
+  });
 }
 
 async function handleInvoicePaid(invoice: Stripe.Invoice) {

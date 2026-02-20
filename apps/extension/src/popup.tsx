@@ -13,6 +13,15 @@ const storage = new Storage({ area: "local" })
 // Environment-controlled: true in dev, false in production
 const DEV_UNLOCK_ALL_PREMIUM = process.env.PLASMO_PUBLIC_DEV_UNLOCK_PREMIUM === 'true'
 
+// Extension version for UTM attribution (Analytics Contract requirement)
+function getExtensionVersion(): string {
+  try {
+    return chrome?.runtime?.getManifest?.()?.version ?? 'unknown'
+  } catch {
+    return 'unknown'
+  }
+}
+
 interface AccountStatus {
   connected: boolean
   email?: string
@@ -123,7 +132,7 @@ export default function Popup() {
 
   const handleConnect = () => {
     // Open auth page in new tab
-    window.open(`${API_BASE_URL}/auth/extension?utm_source=extension&utm_medium=popup&utm_campaign=auth_flow`, '_blank')
+    window.open(`${API_BASE_URL}/auth/extension?utm_source=extension&utm_medium=popup&utm_campaign=auth_flow&extension_version=${getExtensionVersion()}`, '_blank')
   }
 
   const handleTokenSubmit = async () => {
@@ -248,10 +257,10 @@ export default function Popup() {
       setSlotError("This is a premium theme — start your free 30-day trial.")
     } else if (clickCount === 2) {
       setSlotError("Unlock all 8 premium themes with a free 30-day trial.")
-      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')
+      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`, '_blank')
     } else {
       setSlotError("You keep coming back to premium themes. Unlock them all free for 30 days.")
-      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')
+      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`, '_blank')
     }
   }
 
@@ -320,10 +329,10 @@ export default function Popup() {
               {accountStatus.hasSubscription && (
                 <div className="flex items-center gap-2">
                   <span className={`text-[10px] px-2.5 py-1 rounded-full font-medium ${accountStatus.isLifetime
-                      ? 'bg-gradient-to-r from-teal to-teal-bright text-white'
-                      : accountStatus.isActive
-                        ? 'bg-teal/10 text-teal'
-                        : 'bg-coral/10 text-coral'
+                    ? 'bg-gradient-to-r from-teal to-teal-bright text-white'
+                    : accountStatus.isActive
+                      ? 'bg-teal/10 text-teal'
+                      : 'bg-coral/10 text-coral'
                     }`}>
                     {accountStatus.isLifetime
                       ? 'Lifetime Access'
@@ -349,7 +358,7 @@ export default function Popup() {
               )}
               {!accountStatus.hasSubscription && (
                 <button
-                  onClick={() => window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')}
+                  onClick={() => window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`, '_blank')}
                   className="mt-3 text-xs bg-teal text-white px-4 py-2 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300"
                 >
                   Start free 30-day trial
@@ -359,7 +368,7 @@ export default function Popup() {
                 accountStatus.subscriptionStatus === 'canceled' && (
                   <div className="mt-3 text-[10px] text-brown-soft">
                     Your subscription has ended.{" "}
-                    <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management`} target="_blank" className="text-teal underline">
+                    <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management&extension_version=${getExtensionVersion()}`} target="_blank" className="text-teal underline">
                       Reactivate to restore access.
                     </a>
                   </div>
@@ -368,7 +377,7 @@ export default function Popup() {
                 accountStatus.subscriptionStatus === 'past_due' && (
                   <div className="mt-3 text-[10px] text-brown-soft">
                     Payment failed.{" "}
-                    <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management`} target="_blank" className="text-coral underline">
+                    <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management&extension_version=${getExtensionVersion()}`} target="_blank" className="text-coral underline">
                       Update your billing details to restore access.
                     </a>
                   </div>
@@ -509,7 +518,7 @@ export default function Popup() {
         </div>
         <footer className="p-3 text-center border-t border-brown/5">
           <a
-            href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management`}
+            href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management&extension_version=${getExtensionVersion()}`}
             target="_blank"
             className="group inline-flex items-center gap-1 text-xs font-medium text-brown-soft hover:text-brown transition-colors"
           >

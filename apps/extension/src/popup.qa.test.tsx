@@ -1,7 +1,7 @@
 
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { API_BASE_URL } from '@themegpt/shared'
+import { API_BASE_URL, DEFAULT_THEMES } from '@themegpt/shared'
 import Popup from './popup'
 
 // Hoisted mocks
@@ -200,5 +200,186 @@ describe('QA: Extension Popup UI', () => {
 
         expect(screen.getByText('Connect Account')).toBeInTheDocument()
         expect(screen.getByText(/Connect with Google/)).toBeInTheDocument()
+    })
+
+    // --- NEW QA TESTS: Monetization State Coverage ---
+
+    it('displays "Trial" header button, "Trial Active" badge, and days remaining for trialing users', async () => {
+        mockStorageData['authToken'] = 'valid-token'
+        // Set trial end 15 days from now
+        const trialEnd = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000).toISOString()
+        mockStatusResponse({
+            isActive: true,
+            planType: 'monthly',
+            isLifetime: false,
+            status: 'trialing',
+            trialEndsAt: trialEnd,
+            creditsRemaining: 10
+        })
+
+        render(<Popup />)
+
+        // Header should show "Trial" button
+        await waitFor(() => {
+            expect(screen.getByText('Trial')).toBeInTheDocument()
+        })
+
+        // Open account panel
+        fireEvent.click(screen.getByText('Trial'))
+
+        // Should show "Trial Active" badge
+        expect(screen.getByText('Trial Active')).toBeInTheDocument()
+
+        // Should show days remaining (approximately 15 days)
+        expect(screen.getByText(/\d+ days left in trial/)).toBeInTheDocument()
+    })
+
+    it('shows reactivation message for canceled subscription', async () => {
+        mockStorageData['authToken'] = 'valid-token'
+        mockStatusResponse({
+            isActive: false,
+            planType: 'monthly',
+            isLifetime: false,
+            status: 'canceled',
+            creditsRemaining: 0
+        })
+
+        render(<Popup />)
+
+        await waitFor(() => {
+            const btn = screen.getByText('Premium')
+            fireEvent.click(btn)
+        })
+
+        expect(screen.getByText(/Your subscription has ended/)).toBeInTheDocument()
+        expect(screen.getByText(/Reactivate to restore access/)).toBeInTheDocument()
+
+        // Verify the reactivation link points to account with UTM
+        const reactivateLink = screen.getByText(/Reactivate to restore access/).closest('a')
+        expect(reactivateLink?.getAttribute('href')).toContain('utm_source=extension')
+        expect(reactivateLink?.getAttribute('href')).toContain('utm_campaign=account_management')
+    })
+
+    it('shows billing failure message for past_due subscription', async () => {
+        mockStorageData['authToken'] = 'valid-token'
+        mockStatusResponse({
+            isActive: false,
+            planType: 'monthly',
+            isLifetime: false,
+            status: 'past_due',
+            creditsRemaining: 0
+        })
+
+        render(<Popup />)
+
+        await waitFor(() => {
+            const btn = screen.getByText('Premium')
+            fireEvent.click(btn)
+        })
+
+        expect(screen.getByText(/Payment failed/)).toBeInTheDocument()
+        expect(screen.getByText(/Update your billing details/)).toBeInTheDocument()
+
+        // Verify the billing link has coral styling (className check)
+        const billingLink = screen.getByText(/Update your billing details/).closest('a')
+        expect(billingLink?.className).toContain('text-coral')
+        expect(billingLink?.getAttribute('href')).toContain('utm_source=extension')
+    })
+
+    it('shows escalating lifecycle nudge on premium theme clicks (3-step)', async () => {
+        render(<Popup />)
+
+        const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
+        const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
+
+        // Click 1: soft CTA, no redirect
+        fireEvent.click(themeCard)
+        await waitFor(() => {
+            expect(screen.getByText(/premium theme/i)).toBeInTheDocument()
+        })
+        expect(window.open).not.toHaveBeenCalled()
+
+        // Click 2: stronger CTA + redirect to pricing
+        fireEvent.click(themeCard)
+        await waitFor(() => {
+            expect(window.open).toHaveBeenCalledTimes(1)
+            expect(window.open).toHaveBeenCalledWith(
+                expect.stringContaining('utm_campaign=trial_teaser'),
+                '_blank'
+            )
+        })
+
+        // Click 3: persistent CTA + redirect
+        fireEvent.click(themeCard)
+        await waitFor(() => {
+            expect(screen.getByText(/keep coming back/i)).toBeInTheDocument()
+            expect(window.open).toHaveBeenCalledTimes(2)
+        })
+    })
+
+    it('shows review ask banner on 3rd successful theme apply and dismisses permanently', async () => {
+        const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
+        mockStorageData['authToken'] = 'valid-token'
+        // Simulate 2 prior applies
+        mockStorageData['themeApplyCount'] = 2
+
+        // Mock status: active subscriber
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: () => Promise.resolve({
+                success: true,
+                user: { email: 'test@example.com' },
+                hasSubscription: true,
+                subscription: { isActive: true, creditsRemaining: 5 },
+                accessibleThemes: []
+            })
+        })
+
+        render(<Popup />)
+        await waitFor(() => { expect(mockFetch).toHaveBeenCalled() })
+
+        // Mock download success + subsequent status check
+        mockFetch.mockResolvedValueOnce({ ok: true })
+        mockFetch.mockResolvedValueOnce({
+            ok: true,
+            json: () => Promise.resolve({
+                success: true,
+                accessibleThemes: [premiumTheme.id]
+            })
+        })
+
+        // Click premium theme (3rd apply)
+        const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
+        fireEvent.click(themeCard)
+
+        // Review ask banner should appear
+        await waitFor(() => {
+            expect(screen.getByText(/Loving ThemeGPT/)).toBeInTheDocument()
+        })
+
+        // Verify CWS review link
+        const reviewLink = screen.getByText('Leave a review')
+        expect(reviewLink.getAttribute('href')).toContain('chromewebstore.google.com')
+
+        // Dismiss — verify storage flag is set
+        fireEvent.click(screen.getByText('Maybe later'))
+        await waitFor(() => {
+            expect(mockSet).toHaveBeenCalledWith('reviewAskDismissed', true)
+        })
+        expect(screen.queryByText(/Loving ThemeGPT/)).not.toBeInTheDocument()
+    })
+
+    it('renders Manage Account footer link with correct UTM parameters', async () => {
+        render(<Popup />)
+
+        const footerLink = screen.getByText('Manage Account').closest('a')
+        expect(footerLink).toBeTruthy()
+
+        const href = footerLink!.getAttribute('href')!
+        expect(href).toContain(`${API_BASE_URL}/account`)
+        expect(href).toContain('utm_source=extension')
+        expect(href).toContain('utm_medium=popup')
+        expect(href).toContain('utm_campaign=account_management')
+        expect(href).toContain('extension_version=')
     })
 })

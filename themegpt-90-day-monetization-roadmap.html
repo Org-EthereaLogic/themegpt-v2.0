@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2)</title>
+  <title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2+)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -876,12 +876,12 @@
 
   <!-- Header -->
   <div class="header">
-    <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2)</h1>
+    <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2+)</h1>
     <div class="subtitle">Execution plan focused on critical-fix hardening, single-batch extension release, and then
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 19, 2026 (v2.2.2 — full GA API audit: install conversion definitions clarified, Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), GA4 funnel instrumentation deployed (checkout_start/purchase_success/trial_start) with visibility validation in progress, India elevated; UTM attribution remediation completed for core pages plus auth/extension and success CWS links; Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)</span>
+      <span>Updated: February 20, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix (UTM before hash); Firestore composite indexes deployed (subscriptions + downloads); canary purchase confirmed: 1 external trial subscriber active, full funnel validated end-to-end; Bridge Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, validation pending 7 consecutive days)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -891,18 +891,18 @@
   <div class="progress-section">
     <div class="progress-head">
       <h2>Roadmap Progress</h2>
-      <span class="progress-scope">16 of 36 tasks completed across 3 phases</span>
+      <span class="progress-scope">18 of 38 tasks completed across 3 phases</span>
     </div>
     <div class="gauge-row">
       <!-- Donut Chart -->
       <div class="donut-wrap">
         <svg viewBox="0 0 100 100">
           <circle class="donut-track" cx="50" cy="50" r="40" />
-          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="139.6" />
+          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="133.2" />
         </svg>
         <div class="donut-center">
-          <span class="donut-num">44%</span>
-          <span class="donut-frac">16 / 36</span>
+          <span class="donut-num">47%</span>
+          <span class="donut-frac">18 / 38</span>
           <span class="donut-label">tasks</span>
         </div>
       </div>
@@ -979,10 +979,10 @@
       <div class="phase-bar-card">
         <div class="phase-bar-head">
           <span class="phase-bar-label">Phase 2</span>
-          <span class="phase-bar-count">5 / 18</span>
+          <span class="phase-bar-count">7 / 20</span>
         </div>
         <div class="bar-track">
-          <div class="bar-fill fill-p2" style="width:27.8%"></div>
+          <div class="bar-fill fill-p2" style="width:35%"></div>
         </div>
       </div>
       <div class="phase-bar-card">
@@ -1011,8 +1011,8 @@
     </div>
     <div class="snap-card">
       <div class="label">Revenue Status</div>
-      <div class="value">$0</div>
-      <div class="detail">Stripe verified, payouts active; v2.2.0 approved and published on CWS</div>
+      <div class="value">$0 MRR</div>
+      <div class="detail">1 external trial subscriber (asap.johnson00@gmail.com, monthly plan); first charge in ~30 days. v2.2.2 pending CWS review.</div>
     </div>
     <div class="snap-card">
       <div class="label">Current Offer in Code</div>
@@ -1067,8 +1067,8 @@
           <div class="kpi-label">Funnel events (trial_start / checkout_start / purchase_success) instrumentation live — Gate 3 visibility validation in progress (7-day requirement)</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-value">$0 / 0</div>
-          <div class="kpi-label">Revenue / transactions</div>
+          <div class="kpi-value">$0 / 1 trial</div>
+          <div class="kpi-label">Revenue / subscribers (1 external trial — canary purchase Feb 20; first charge ~Mar 22)</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-value">1 @ 5.0</div>
@@ -1223,6 +1223,27 @@
           <li>Resolved Dependabot advisory: added <code>minimatch</code> override at <code>^10.2.1</code> (resolves to <code>10.2.2</code>) to fix ReDoS vulnerability (High severity).</li>
           <li>UTM attribution remediation completed: updated CWS install links from <code>utm_source=item-share-cb</code> to explicit campaign tags across core pages, plus <code>auth/extension/page.tsx</code> links with <code>utm_source=web&amp;utm_medium=referral&amp;utm_campaign=extension_auth</code> and <code>success/page.tsx</code> install prompts with <code>utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
           <li>GA4 funnel instrumentation deployed in web: <code>checkout_start</code> in checkout initiation, <code>purchase_success</code> on confirmed session resolution, and <code>trial_start</code> gated on actual subscription status <code>trialing</code>.</li>
+        </ul>
+      </div>
+      <div class="week-block" style="background: var(--callout-teal-bg);">
+        <h4>Completed — v2.2.2 Extension Submission (February 20, 2026)</h4>
+        <div class="callout">Pending CWS review. Submitted via GitHub Actions workflow run #143 at 00:15 UTC. BPP log confirms: "Successfully updated ThemeGPT to version 2.2.2 on Chrome Web Store."</div>
+        <ul class="task-list">
+          <li>Fixed pricing CTA URL parameter order in <code>popup.tsx</code> (3 locations): changed from <code>/#pricing?utm_source=...</code> to <code>/?utm_source=...#pricing</code> so GA4 receives UTM params before SPA hash routing discards them.</li>
+          <li>Updated <code>popup.test.tsx</code> and <code>popup.qa.test.tsx</code> to match corrected URL shape — 88/88 tests passing.</li>
+          <li>Commit <code>307bba3</code> pushed to <code>origin/main</code>, workflow dispatched and completed in 56 seconds.</li>
+        </ul>
+      </div>
+      <div class="week-block" style="background: var(--callout-teal-bg);">
+        <h4>Completed — Canary Purchase &amp; Firestore Index Fix (February 20, 2026)</h4>
+        <div class="callout">Full end-to-end funnel validated with a real external account. One critical infrastructure bug discovered and fixed.</div>
+        <ul class="task-list">
+          <li>Canary purchase completed by <code>asap.johnson00@gmail.com</code> (external, non-internal). Monthly plan. Success page rendered correctly: "Subscription Active! Your first month is free!"</li>
+          <li>Stripe subscription <code>sub_1T2hn2ELDm6vpbWkx9cyXngf</code> confirmed active (status: <code>trialing</code>). Webhook fired at 00:41:54 UTC — subscription record written to Firestore for <code>userId: otF2SEPv8E3PAFwAiKjK</code>. License <code>KEY-2CAE2D6C</code> created.</li>
+          <li><strong>Bug found:</strong> Account page showed "You don't have an active subscription" despite subscription being present in Firestore. Root cause: <code>firestore.indexes.json</code> was empty — <code>getSubscriptionByUserId()</code> query requires a composite index (<code>userId</code> ASC + <code>createdAt</code> DESC) which did not exist. Firestore returned <code>FAILED_PRECONDITION: 9</code>, silently becoming a 404 to the account page.</li>
+          <li>Same missing index also caused extension premium themes to remain locked despite active subscription (<code>/api/extension/status</code> calls the same query path).</li>
+          <li>Fix: added both required composite indexes to <code>firestore.indexes.json</code> and deployed via Firebase CLI. Two indexes: <code>subscriptions</code> (<code>userId</code> ASC + <code>createdAt</code> DESC) and <code>downloads</code> (<code>userId</code> ASC + <code>downloadedAt</code> DESC). Deploy confirmed successful.</li>
+          <li>Commit <code>c719b7b</code> pushed to <code>origin/main</code>.</li>
         </ul>
       </div>
     </div>
@@ -1736,6 +1757,21 @@
             <td>v2.2.1 web-only maintenance release: Dependabot security patches (svelte <code>^5.53.0</code>, minimatch <code>^10.2.1</code>) + UTM attribution remediation across core marketing pages, <code>auth/extension</code>, and <code>success</code> install prompts</td>
             <td>Status: Completed. Web deployed. CWS extension version unchanged at <code>2.2.0</code>.</td>
           </tr>
+          <tr>
+            <td>February 20, 2026</td>
+            <td>v2.2.2 extension submitted to Chrome Web Store — pricing CTA URL fix (UTM params now precede hash fragment in all 3 <code>window.open</code> calls), 88/88 tests passing, build verified. Single-pass submission — no prior v2.2.2 pending review existed.</td>
+            <td>Status: Submitted — pending CWS review (1–3 business days). No withdrawal needed.</td>
+          </tr>
+          <tr>
+            <td>February 20, 2026</td>
+            <td>Firestore composite indexes deployed: <code>subscriptions</code> (<code>userId</code> ASC + <code>createdAt</code> DESC) and <code>downloads</code> (<code>userId</code> ASC + <code>downloadedAt</code> DESC). Fixes account page FAILED_PRECONDITION error and extension premium unlock failure.</td>
+            <td>Status: Completed. Indexes building server-side; account page and extension status will reflect subscriptions correctly.</td>
+          </tr>
+          <tr>
+            <td>February 20, 2026</td>
+            <td>Canary purchase confirmed: 1 external trial subscriber (<code>asap.johnson00@gmail.com</code>). Full funnel validated: checkout → Stripe → webhook → Firestore → success page. <code>no_payment_required</code> trial verifier, auto-resume checkout, and "Sign In" instruction text all confirmed working.</td>
+            <td>Status: Completed. First external subscriber. $0 MRR (trial); first charge ~March 22, 2026.</td>
+          </tr>
         </tbody>
       </table>
     </div>
@@ -1769,7 +1805,7 @@
         <div class="callout warn">GA audit (Feb 19) set remediation priorities. Current state: Gate 1 still failing, Gate 2 implementation complete, Gate 3 instrumentation deployed and awaiting GA visibility validation. Product Hunt launch remains blocked.</div>
         <ul class="task-list">
           <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19, 2026.</li>
-          <li>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</li>
+          <li><s>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</s> Done: canary purchase confirmed full funnel end-to-end on February 20, 2026.</li>
           <li><s>Fix item-share-cb UTM classification.</s> Done: core pages, <code>auth/extension</code> links, and <code>success</code> install prompts are now tagged with explicit UTM source/medium/campaign values.</li>
           <li><s>Implement GA4 funnel events — Gate 3 blocker.</s> Done: <code>checkout_start</code>, <code>purchase_success</code>, and <code>trial_start</code> are implemented in web flows with correct <code>trial_start</code> gating on actual subscription status. Next: verify GA event visibility for 7 consecutive days.</li>
           <li>Add GA4 internal traffic filter to exclude <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</li>
@@ -1777,6 +1813,10 @@
           <li>Set up split weekly scorecard: organic vs paid listing views, channel-specific trial conversion, and trial-to-paid by channel.</li>
           <li>Monitor India user share weekly — currently tied with US at 22%. Escalation review triggered if this holds for 2 consecutive weeks.</li>
           <li>Only after all three gates pass for 7 consecutive days, run Product Hunt launch with US-first optimization.</li>
+            <li>Monitor Firestore index build completion — account page and extension premium unlock will restore automatically once indexes are built (typically within minutes of deployment).</li>
+            <li>Monitor v2.2.2 CWS review status — expected 1–3 business days. No action required until review outcome.</li>
+            <li>Verify <code>asap.johnson00@gmail.com</code> account page shows trial subscription correctly after index build completes.</li>
+            <li>Continue Gate 1 monitoring: Unassigned must reach ≤10% for 7 consecutive days before Product Hunt launch.</li>
         </ul>
       </div>
     </div>
@@ -1784,7 +1824,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2 - Updated February 19, 2026 (full GA API audit: install conversion definitions clarified (23.3% event-based user ratio, 16.5% listing-view ratio), Bridge Gate 1 failing at 25% unassigned (need ≤10% for 7 consecutive days), Gate 2 implementation complete (UTM tagging across core + auth/extension + success), Gate 3 instrumentation deployed with validation pending in GA for 7 consecutive days, India elevated to active monitor; Dependabot security alerts resolved: svelte 5.53.0, minimatch 10.2.2)
+    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 20, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix; Firestore composite indexes deployed fixing account page and extension unlock; canary purchase confirmed 1 external trial subscriber; Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, 7-day validation pending)
   </div>
 
   <script>

@@ -18,6 +18,8 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 > **Version 2.2.0** — now live on the Chrome Web Store (February 19, 2026). This release adds in-extension lifecycle messaging (escalating upgrade nudges, trial/canceled/past-due state indicators, and a non-incentivized review prompt), improves premium theme access reliability, strengthens authentication flows, and applies the latest security patches.
 >
 > **Web v2.2.1** (February 19, 2026) — web-only maintenance release: Dependabot security patches (svelte, minimatch) and UTM attribution improvements for core marketing pages. Chrome extension version remains 2.2.0.
+>
+> **Extension v2.2.2** (submitted February 20, 2026 — pending CWS review) — fixes pricing CTA URL parameter order so GA4 receives UTM params before the hash fragment, and adds missing Firestore composite indexes for subscription and download queries.
 
 ---
 

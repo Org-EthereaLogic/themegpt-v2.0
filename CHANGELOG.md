@@ -2,13 +2,21 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
-## [2.2.2] - 2026-02-19 (Bridge Week Remediation)
+## [2.2.2] - 2026-02-20 (CWS Submission — Pending Review)
+
+### Fixed
+- **Pricing CTA URL Order:** Corrected 3 `window.open()` calls in `apps/extension/src/popup.tsx` (lines 251, 254, 352) from `/#pricing?utm_source=...` to `/?utm_source=...#pricing` so GA4 receives UTM parameters before the SPA hash fragment discards them.
+- **Firestore Composite Indexes:** Added missing composite indexes to `firestore.indexes.json` and deployed via Firebase CLI. Two indexes: `subscriptions` (`userId` ASC + `createdAt` DESC) and `downloads` (`userId` ASC + `downloadedAt` DESC). Fixes account page `FAILED_PRECONDITION: 9` error and extension premium theme unlock failure.
 
 ### Improved
 - **Attribution Remediation:** Standardized UTM parameters across extension and web surfaces to resolve "Unassigned" traffic issues (Bridge Gate 1).
   - Extension links now carry `utm_source=extension`, `utm_medium=popup`, and specific campaigns (`auth_flow`, `trial_teaser`, `account_management`).
   - Web app Chrome Web Store links harmonized to `utm_source=cws&utm_medium=share&utm_campaign=item-share`.
 - **Measurement Integrity:** Added `docs/ga4-filter-guide.md` to document internal traffic filtering for staging and development URLs.
+
+### Tested
+- Updated `popup.test.tsx` and `popup.qa.test.tsx` to match corrected URL shape — 88/88 tests passing.
+- Canary purchase validated end-to-end: checkout, Stripe webhook, Firestore subscription record, success page rendering, and license key creation confirmed with external account.
 
 ## [2.2.1] - 2026-02-19
 

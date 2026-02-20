@@ -881,7 +881,7 @@
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 20, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix (UTM before hash); Firestore composite indexes deployed (subscriptions + downloads); canary purchase confirmed: 1 external trial subscriber active, full funnel validated end-to-end; Bridge Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, validation pending 7 consecutive days)</span>
+      <span>Updated: February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix (UTM before hash); Firestore composite indexes deployed (subscriptions + downloads); canary purchase confirmed: 1 external trial subscriber active, full funnel validated end-to-end; Bridge Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, validation pending 7 consecutive days)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -1226,7 +1226,7 @@
         </ul>
       </div>
       <div class="week-block" style="background: var(--callout-teal-bg);">
-        <h4>Completed — v2.2.2 Extension Submission (February 20, 2026)</h4>
+        <h4>Completed — v2.2.2 Extension Submission (February 19, 2026)</h4>
         <div class="callout">Pending CWS review. Submitted via GitHub Actions workflow run #143 at 00:15 UTC. BPP log confirms: "Successfully updated ThemeGPT to version 2.2.2 on Chrome Web Store."</div>
         <ul class="task-list">
           <li>Fixed pricing CTA URL parameter order in <code>popup.tsx</code> (3 locations): changed from <code>/#pricing?utm_source=...</code> to <code>/?utm_source=...#pricing</code> so GA4 receives UTM params before SPA hash routing discards them.</li>
@@ -1235,7 +1235,7 @@
         </ul>
       </div>
       <div class="week-block" style="background: var(--callout-teal-bg);">
-        <h4>Completed — Canary Purchase &amp; Firestore Index Fix (February 20, 2026)</h4>
+        <h4>Completed — Canary Purchase &amp; Firestore Index Fix (February 19, 2026)</h4>
         <div class="callout">Full end-to-end funnel validated with a real external account. One critical infrastructure bug discovered and fixed.</div>
         <ul class="task-list">
           <li>Canary purchase completed by <code>asap.johnson00@gmail.com</code> (external, non-internal). Monthly plan. Success page rendered correctly: "Subscription Active! Your first month is free!"</li>
@@ -1758,17 +1758,17 @@
             <td>Status: Completed. Web deployed. CWS extension version unchanged at <code>2.2.0</code>.</td>
           </tr>
           <tr>
-            <td>February 20, 2026</td>
+            <td>February 19, 2026</td>
             <td>v2.2.2 extension submitted to Chrome Web Store — pricing CTA URL fix (UTM params now precede hash fragment in all 3 <code>window.open</code> calls), 88/88 tests passing, build verified. Single-pass submission — no prior v2.2.2 pending review existed.</td>
             <td>Status: Submitted — pending CWS review (1–3 business days). No withdrawal needed.</td>
           </tr>
           <tr>
-            <td>February 20, 2026</td>
+            <td>February 19, 2026</td>
             <td>Firestore composite indexes deployed: <code>subscriptions</code> (<code>userId</code> ASC + <code>createdAt</code> DESC) and <code>downloads</code> (<code>userId</code> ASC + <code>downloadedAt</code> DESC). Fixes account page FAILED_PRECONDITION error and extension premium unlock failure.</td>
             <td>Status: Completed. Indexes building server-side; account page and extension status will reflect subscriptions correctly.</td>
           </tr>
           <tr>
-            <td>February 20, 2026</td>
+            <td>February 19, 2026</td>
             <td>Canary purchase confirmed: 1 external trial subscriber (<code>asap.johnson00@gmail.com</code>). Full funnel validated: checkout → Stripe → webhook → Firestore → success page. <code>no_payment_required</code> trial verifier, auto-resume checkout, and "Sign In" instruction text all confirmed working.</td>
             <td>Status: Completed. First external subscriber. $0 MRR (trial); first charge ~March 22, 2026.</td>
           </tr>
@@ -1805,7 +1805,7 @@
         <div class="callout warn">GA audit (Feb 19) set remediation priorities. Current state: Gate 1 still failing, Gate 2 implementation complete, Gate 3 instrumentation deployed and awaiting GA visibility validation. Product Hunt launch remains blocked.</div>
         <ul class="task-list">
           <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19, 2026.</li>
-          <li><s>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</s> Done: canary purchase confirmed full funnel end-to-end on February 20, 2026.</li>
+          <li><s>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</s> Done: canary purchase confirmed full funnel end-to-end on February 19, 2026.</li>
           <li><s>Fix item-share-cb UTM classification.</s> Done: core pages, <code>auth/extension</code> links, and <code>success</code> install prompts are now tagged with explicit UTM source/medium/campaign values.</li>
           <li><s>Implement GA4 funnel events — Gate 3 blocker.</s> Done: <code>checkout_start</code>, <code>purchase_success</code>, and <code>trial_start</code> are implemented in web flows with correct <code>trial_start</code> gating on actual subscription status. Next: verify GA event visibility for 7 consecutive days.</li>
           <li>Add GA4 internal traffic filter to exclude <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</li>
@@ -1824,7 +1824,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 20, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix; Firestore composite indexes deployed fixing account page and extension unlock; canary purchase confirmed 1 external trial subscriber; Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, 7-day validation pending)
+    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix; Firestore composite indexes deployed fixing account page and extension unlock; canary purchase confirmed 1 external trial subscriber; Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, 7-day validation pending)
   </div>
 
   <script>

@@ -881,7 +881,7 @@
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix (UTM before hash); Firestore composite indexes deployed (subscriptions + downloads); canary purchase confirmed: 1 external trial subscriber active, full funnel validated end-to-end; Bridge Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, validation pending 7 consecutive days)</span>
+      <span>Updated: February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix (UTM before hash); Firestore composite indexes deployed (subscriptions + downloads); canary purchase confirmed: 1 external trial subscriber active, full funnel validated end-to-end; Bridge Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, validation pending 7 consecutive days; Firestore indexes confirmed built — account page verified showing Trial + Monthly Plan + Full Access; extension auto-linking confirmed automatic — Generate Link Code is graceful fallback only; Feb 19 post-fix validation complete)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -1068,7 +1068,7 @@
         </div>
         <div class="kpi-card">
           <div class="kpi-value">$0 / 1 trial</div>
-          <div class="kpi-label">Revenue / subscribers (1 external trial — canary purchase Feb 20; first charge ~Mar 22)</div>
+          <div class="kpi-label">Revenue / subscribers (1 external trial — canary purchase Feb 19; first charge ~Mar 22)</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-value">1 @ 5.0</div>
@@ -1765,7 +1765,7 @@
           <tr>
             <td>February 19, 2026</td>
             <td>Firestore composite indexes deployed: <code>subscriptions</code> (<code>userId</code> ASC + <code>createdAt</code> DESC) and <code>downloads</code> (<code>userId</code> ASC + <code>downloadedAt</code> DESC). Fixes account page FAILED_PRECONDITION error and extension premium unlock failure.</td>
-            <td>Status: Completed. Indexes building server-side; account page and extension status will reflect subscriptions correctly.</td>
+            <td>Status: Confirmed complete (Feb 19, 2026): account page verified showing Trial + Monthly Plan + Full Access. Extension auto-linked automatically via shared auth session.</td>
           </tr>
           <tr>
             <td>February 19, 2026</td>
@@ -1813,9 +1813,10 @@
           <li>Set up split weekly scorecard: organic vs paid listing views, channel-specific trial conversion, and trial-to-paid by channel.</li>
           <li>Monitor India user share weekly — currently tied with US at 22%. Escalation review triggered if this holds for 2 consecutive weeks.</li>
           <li>Only after all three gates pass for 7 consecutive days, run Product Hunt launch with US-first optimization.</li>
-            <li>Monitor Firestore index build completion — account page and extension premium unlock will restore automatically once indexes are built (typically within minutes of deployment).</li>
+            <li><s>Monitor Firestore index build completion — account page and extension premium unlock will restore automatically once indexes are built (typically within minutes of deployment).</s> Done: indexes confirmed built; account page verified correct (Feb 19, 2026).</li>
             <li>Monitor v2.2.2 CWS review status — expected 1–3 business days. No action required until review outcome.</li>
-            <li>Verify <code>asap.johnson00@gmail.com</code> account page shows trial subscription correctly after index build completes.</li>
+            <li><s>Verify <code>asap.johnson00@gmail.com</code> account page shows trial subscription correctly after index build completes.</s> Done: Trial + Monthly Plan + Full Access confirmed via account page (Feb 19, 2026).</li>
+            <li><s>Confirm extension account linking behavior post-index fix.</s> Done: extension auto-linked automatically via shared auth session. Generate Link Code is confirmed graceful fallback for edge cases (different browser profile, incognito, session issues).</li>
             <li>Continue Gate 1 monitoring: Unassigned must reach ≤10% for 7 consecutive days before Product Hunt launch.</li>
         </ul>
       </div>
@@ -1824,7 +1825,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix; Firestore composite indexes deployed fixing account page and extension unlock; canary purchase confirmed 1 external trial subscriber; Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, 7-day validation pending)
+    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix; Firestore composite indexes deployed and confirmed operational; canary purchase confirmed 1 external trial subscriber; account page verified correct; extension auto-link confirmed automatic; Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, 7-day validation pending)
   </div>
 
   <script>

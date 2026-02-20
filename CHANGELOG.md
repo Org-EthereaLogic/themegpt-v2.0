@@ -2,7 +2,7 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
-## [2.2.2] - 2026-02-20 (CWS Submission — Pending Review)
+## [2.2.2] - 2026-02-19 (CWS Submission — Pending Review)
 
 ### Fixed
 - **Pricing CTA URL Order:** Corrected 3 `window.open()` calls in `apps/extension/src/popup.tsx` (lines 251, 254, 352) from `/#pricing?utm_source=...` to `/?utm_source=...#pricing` so GA4 receives UTM parameters before the SPA hash fragment discards them.
@@ -17,6 +17,8 @@ All notable changes to ThemeGPT will be documented in this file.
 ### Tested
 - Updated `popup.test.tsx` and `popup.qa.test.tsx` to match corrected URL shape — 88/88 tests passing.
 - Canary purchase validated end-to-end: checkout, Stripe webhook, Firestore subscription record, success page rendering, and license key creation confirmed with external account.
+- Firestore indexes confirmed built and operational: account page verified showing Trial + Monthly Plan + Full Access (confirmed Feb 19, 2026).
+- Extension account linking confirmed automatic via shared auth session; Generate Link Code button serves as graceful fallback for edge cases (different browser profile, incognito, session issues) only.
 
 ## [2.2.1] - 2026-02-19
 

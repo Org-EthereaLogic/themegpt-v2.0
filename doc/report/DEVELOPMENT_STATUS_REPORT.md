@@ -1,6 +1,6 @@
 # ThemeGPT v2.0 - Development Status Report
 
-**Generated:** 2026-02-17
+**Generated:** 2026-02-17 | **Last updated:** 2026-02-19
 **Branch:** `main`
 **Repository:** Org-EthereaLogic/themegpt-v2.0
 
@@ -17,9 +17,9 @@ ThemeGPT v2.0 is a **privacy-first Chrome extension** that enables users to cust
 | Web App LOC | ~1,500+ | Marketing site + API routes + Stripe webhooks |
 | Shared Package LOC | ~400+ | Types, constants, shared utilities |
 | Test Coverage | Backend + frontend QA suites | 15+ tests, all passing |
-| Public Version | 2.1.0 | Submitted to Chrome Web Store |
+| Public Version | v2.2.0 live / v2.2.2 pending CWS review | End-to-end payment flow validated Feb 19, 2026 |
 
-**Overall Project Health: GOOD** — v2.1.0 submitted to Chrome Web Store, Stripe fully verified, all QA passing.
+**Overall Project Health: GOOD** — v2.2.0 live on CWS; v2.2.2 pending review; Stripe, Firestore indexes, and full payment funnel confirmed operational.
 
 ---
 

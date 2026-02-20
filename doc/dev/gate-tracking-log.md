@@ -39,7 +39,7 @@
 
 | Date | Unassigned % | Filter Active? | Status | Notes |
 |------|-------------|----------------|--------|-------|
-| 2026-02-20 | TBD (GA4 check) | Y | TRACKING | Filter active; Day 1 prefill; replace with measured value |
+| 2026-02-20 | 60% (3/5) | Y | FAIL | Filter active Day 1; only 5 total sessions — high variance from tiny sample |
 | 2026-02-21 | | | | |
 | 2026-02-22 | | | | |
 | 2026-02-23 | | | | |
@@ -55,7 +55,7 @@
 
 | Date | `trial_start` | `checkout_start` | `purchase_success` | All 3 visible? | Notes |
 |------|--------------|-----------------|-------------------|----------------|-------|
-| 2026-02-20 | TBD | TBD | TBD | TBD | Day 1 prefill; replace after GA4 event check (earliest pass date: 2026-02-26) |
+| 2026-02-20 | N | N | N | N | Day 1; zero conversion events fired — no trial/checkout/purchase activity |
 | 2026-02-21 | | | | | |
 | 2026-02-22 | | | | | |
 | 2026-02-23 | | | | | |

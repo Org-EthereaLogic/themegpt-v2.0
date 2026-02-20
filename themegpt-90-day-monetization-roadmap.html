@@ -1,1879 +1,600 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="dark">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2+)</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700;800&display=swap"
-    rel="stylesheet" />
-  <style>
-    :root {
-      --paper: #faf6f0;
-      --card: #ffffff;
-      --ink: #4b2e1e;
-      --muted: #7a6558;
-      --border: rgba(75, 46, 30, 0.12);
-      --teal: #7ecec5;
-      --peach: #f4a988;
-      --coral: #e87d5c;
-      --gold: #d8b500;
-      --phase1: #7ecec5;
-      --phase2: #f4a988;
-      --phase3: #e2c440;
-      --shadow: 0 10px 30px rgba(75, 46, 30, 0.08);
-      --meta-bg: #fff8f0;
-      --tab-bg: #fff9f3;
-      --week-bg: #fffdfa;
-      --kpi-bg: #fff;
-      --th-bg: #fff7ee;
-      --callout-teal-bg: rgba(126, 206, 197, 0.1);
-      --callout-peach-bg: rgba(244, 169, 136, 0.14);
-      --callout-gold-bg: rgba(250, 208, 0, 0.1);
-      --task-bullet: rgba(75, 46, 30, 0.48);
-      --tab-active-bg: rgba(126, 206, 197, 0.12);
-      --tab-hover-border: rgba(75, 46, 30, 0.34);
-      --code-bg: rgba(75, 46, 30, 0.06);
-      --body-grad1: rgba(126, 206, 197, 0.10);
-      --body-grad2: rgba(244, 169, 136, 0.12);
-      --body-grad-start: #fffaf5;
-      --body-grad-end: #faf6f0;
-      --done-color: #4a9e8e;
-      --pending-color: rgba(75, 46, 30, 0.18);
-      --gauge-track: rgba(75, 46, 30, 0.08);
-      --strikethrough: rgba(75, 46, 30, 0.45);
-    }
-
-    [data-theme="dark"] {
-      --paper: #151119;
-      --card: #1e1924;
-      --ink: #e4ddd6;
-      --muted: #9a8e84;
-      --border: rgba(255, 255, 255, 0.09);
-      --teal: #8fd8cf;
-      --peach: #f4a988;
-      --coral: #e87d5c;
-      --gold: #e8d44d;
-      --phase1: #7ecec5;
-      --phase2: #d4882e;
-      --phase3: #c4a824;
-      --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-      --meta-bg: #261f2c;
-      --tab-bg: #231d28;
-      --week-bg: #211b26;
-      --kpi-bg: #261f2c;
-      --th-bg: #261f2c;
-      --callout-teal-bg: rgba(126, 206, 197, 0.09);
-      --callout-peach-bg: rgba(244, 169, 136, 0.09);
-      --callout-gold-bg: rgba(250, 208, 0, 0.08);
-      --task-bullet: rgba(255, 255, 255, 0.34);
-      --tab-active-bg: rgba(126, 206, 197, 0.13);
-      --tab-hover-border: rgba(255, 255, 255, 0.22);
-      --code-bg: rgba(255, 255, 255, 0.07);
-      --body-grad1: rgba(126, 206, 197, 0.06);
-      --body-grad2: rgba(244, 169, 136, 0.04);
-      --body-grad-start: #151119;
-      --body-grad-end: #151119;
-      --done-color: #8fd8cf;
-      --pending-color: rgba(255, 255, 255, 0.12);
-      --gauge-track: rgba(255, 255, 255, 0.06);
-      --strikethrough: rgba(255, 255, 255, 0.45);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: "Inter", "Segoe UI", sans-serif;
-      color: var(--ink);
-      line-height: 1.6;
-      padding: 1.5rem;
-      background:
-        radial-gradient(circle at 10% 0%, var(--body-grad1), transparent 35%),
-        radial-gradient(circle at 95% 10%, var(--body-grad2), transparent 28%),
-        linear-gradient(160deg, var(--body-grad-start) 0%, var(--paper) 54%, var(--body-grad-end) 100%);
-      transition: background 320ms ease, color 320ms ease;
-    }
-
-    .header,
-    .section,
-    .snap-card,
-    .progress-section {
-      animation: rise 520ms ease both;
-    }
-
-    .header {
-      max-width: 1100px;
-      margin: 0 auto 1rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 1.2rem 1.4rem;
-      box-shadow: var(--shadow);
-      transition: background 320ms ease, border-color 320ms ease;
-    }
-
-    .header h1 {
-      font-family: "Space Grotesk", "Inter", sans-serif;
-      font-size: clamp(1.35rem, 3vw, 2rem);
-      letter-spacing: -0.01em;
-      line-height: 1.2;
-      margin-bottom: 0.35rem;
-    }
-
-    .subtitle {
-      font-size: 0.95rem;
-      color: var(--muted);
-      margin-bottom: 0.8rem;
-      max-width: 72ch;
-    }
-
-    .meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      font-size: 0.79rem;
-      color: var(--muted);
-    }
-
-    .meta span {
-      background: var(--meta-bg);
-      border: 1px solid var(--border);
-      padding: 0.22rem 0.56rem;
-      border-radius: 999px;
-      transition: background 320ms ease, border-color 320ms ease;
-    }
-
-    /* ─── Theme Toggle ─── */
-    .theme-toggle {
-      position: fixed;
-      top: 1rem;
-      right: 1rem;
-      z-index: 100;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      border: 1px solid var(--border);
-      background: var(--card);
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.2rem;
-      transition: background 200ms ease, border-color 200ms ease, transform 200ms ease;
-    }
-
-    .theme-toggle:hover {
-      border-color: var(--teal);
-      transform: scale(1.08);
-    }
-
-    .theme-toggle .icon-sun,
-    .theme-toggle .icon-moon {
-      pointer-events: none;
-      line-height: 1;
-    }
-
-    .theme-toggle .icon-sun {
-      display: none;
-    }
-
-    .theme-toggle .icon-moon {
-      display: block;
-    }
-
-    [data-theme="dark"] .theme-toggle .icon-sun {
-      display: block;
-    }
-
-    [data-theme="dark"] .theme-toggle .icon-moon {
-      display: none;
-    }
-
-    /* ─── Progress Gauge ─── */
-    .progress-section {
-      max-width: 1100px;
-      margin: 0 auto 1rem;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1rem 1.3rem;
-      box-shadow: var(--shadow);
-      transition: background 320ms ease, border-color 320ms ease;
-    }
-
-    .progress-head {
-      display: flex;
-      align-items: baseline;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin-bottom: 0.85rem;
-    }
-
-    .progress-head h2 {
-      margin-bottom: 0;
-      font-family: "Space Grotesk", "Inter", sans-serif;
-    }
-
-    .progress-scope {
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    .gauge-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.8rem;
-      flex-wrap: wrap;
-    }
-
-    .donut-wrap {
-      flex-shrink: 0;
-      position: relative;
-      width: 100px;
-      height: 100px;
-    }
-
-    .donut-wrap svg {
-      width: 100px;
-      height: 100px;
-      transform: rotate(-90deg);
-    }
-
-    .donut-track {
-      fill: none;
-      stroke: var(--gauge-track);
-      stroke-width: 8;
-    }
-
-    .donut-fill {
-      fill: none;
-      stroke: var(--done-color);
-      stroke-width: 8;
-      stroke-linecap: round;
-      transition: stroke-dashoffset 800ms ease;
-    }
-
-    .donut-center {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-    }
-
-    .donut-num {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 1.4rem;
-      font-weight: 800;
-      line-height: 1;
-      color: var(--ink);
-    }
-
-    .donut-frac {
-      font-size: 0.72rem;
-      font-weight: 500;
-      color: var(--muted);
-    }
-
-    .donut-label {
-      font-size: 0.58rem;
-      color: var(--muted);
-      margin-top: 0.12rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .step-wrap {
-      flex: 1;
-      min-width: 260px;
-      display: flex;
-      flex-direction: column;
-      gap: 0.55rem;
-    }
-
-    .step-track {
-      display: flex;
-      align-items: flex-start;
-    }
-
-    .ms-step {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      min-width: 0;
-    }
-
-    .ms-step::after {
-      content: "";
-      position: absolute;
-      top: 14px;
-      left: 50%;
-      width: 100%;
-      height: 2px;
-      background: var(--border);
-      z-index: 0;
-    }
-
-    .ms-step:last-child::after {
-      display: none;
-    }
-
-    .ms-step.step-done::after {
-      background: var(--done-color);
-    }
-
-    .ms-step.step-done.step-next-open::after {
-      background: var(--border);
-      opacity: 0.55;
-    }
-
-    .ms-node {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.78rem;
-      position: relative;
-      z-index: 1;
-      flex-shrink: 0;
-      border: 2px solid transparent;
-      transition: transform 180ms ease;
-    }
-
-    .ms-node:hover {
-      transform: scale(1.12);
-    }
-
-    .ms-node.node-done {
-      background: var(--done-color);
-      color: #fff;
-    }
-
-    [data-theme="dark"] .ms-node.node-done {
-      color: #151119;
-    }
-
-    .ms-node.node-active {
-      background: var(--peach);
-      color: #fff;
-      box-shadow: 0 0 0 4px rgba(244, 169, 136, 0.2);
-    }
-
-    .ms-node.node-pending {
-      background: var(--card);
-      border-color: var(--border);
-      color: var(--muted);
-      font-size: 0.62rem;
-    }
-
-    .ms-step-id {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 0.62rem;
-      font-weight: 700;
-      color: var(--ink);
-      margin-top: 0.3rem;
-      text-align: center;
-      line-height: 1.2;
-    }
-
-    .ms-step-name {
-      font-size: 0.54rem;
-      color: var(--muted);
-      text-align: center;
-      line-height: 1.2;
-      max-width: 72px;
-    }
-
-    .step-legend {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-      font-size: 0.71rem;
-      color: var(--muted);
-    }
-
-    .step-legend-item {
-      display: flex;
-      align-items: center;
-      gap: 0.28rem;
-    }
-
-    .legend-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-
-    .legend-dot.done {
-      background: var(--done-color);
-    }
-
-    .legend-dot.active {
-      background: var(--peach);
-    }
-
-    .legend-dot.pending {
-      background: var(--card);
-      border: 1.5px solid var(--muted);
-    }
-
-    /* ─── Phase Progress Bars ─── */
-    .phase-bars {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 0.7rem;
-      margin-top: 0.85rem;
-    }
-
-    .phase-bar-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.6rem;
-      background: var(--week-bg);
-      transition: background 320ms ease;
-    }
-
-    .phase-bar-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      margin-bottom: 0.35rem;
-    }
-
-    .phase-bar-label {
-      font-family: "Space Grotesk", sans-serif;
-      font-size: 0.78rem;
-      font-weight: 700;
-    }
-
-    .phase-bar-count {
-      font-size: 0.7rem;
-      color: var(--muted);
-    }
-
-    .bar-track {
-      height: 6px;
-      border-radius: 3px;
-      background: var(--gauge-track);
-      overflow: hidden;
-    }
-
-    .bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 800ms ease;
-    }
-
-    .bar-fill.fill-p1 {
-      background: var(--phase1);
-    }
-
-    .bar-fill.fill-p2 {
-      background: var(--phase2);
-    }
-
-    .bar-fill.fill-p3 {
-      background: var(--phase3);
-    }
-
-    /* ─── Snapshot Cards ─── */
-    .snapshot {
-      max-width: 1100px;
-      margin: 0 auto 1rem;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 0.66rem;
-    }
-
-    .snap-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 0.85rem;
-      box-shadow: var(--shadow);
-      transition: background 320ms ease, border-color 320ms ease, transform 180ms ease;
-    }
-
-    .snap-card:hover {
-      transform: translateY(-2px);
-    }
-
-    .label {
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
-      color: var(--muted);
-      margin-bottom: 0.18rem;
-    }
-
-    .value {
-      font-weight: 800;
-      font-size: 1.3rem;
-      line-height: 1.2;
-      font-family: "Space Grotesk", "Inter", sans-serif;
-    }
-
-    .detail {
-      margin-top: 0.16rem;
-      font-size: 0.8rem;
-      color: var(--muted);
-    }
-
-    /* ─── Container & Sections ─── */
-    .container {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      gap: 1rem;
-    }
-
-    .section {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 1rem;
-      box-shadow: var(--shadow);
-      transition: background 320ms ease, border-color 320ms ease;
-    }
-
-    h2 {
-      font-family: "Space Grotesk", "Inter", sans-serif;
-      font-size: 1.1rem;
-      margin-bottom: 0.48rem;
-    }
-
-    h3 {
-      font-family: "Space Grotesk", "Inter", sans-serif;
-      font-size: 1rem;
-      margin-bottom: 0.35rem;
-    }
-
-    h4 {
-      font-size: 0.92rem;
-      margin-bottom: 0.35rem;
-    }
-
-    p {
-      font-size: 0.9rem;
-    }
-
-    code {
-      background: var(--code-bg);
-      padding: 0.1em 0.3em;
-      border-radius: 4px;
-      font-size: 0.88em;
-    }
-
-    s {
-      color: var(--strikethrough);
-    }
-
-    /* ─── Timeline ─── */
-    .timeline-bar {
-      display: grid;
-      grid-template-columns: repeat(13, minmax(0, 1fr));
-      gap: 0.22rem;
-      margin-top: 0.6rem;
-    }
-
-    .week-cell {
-      text-align: center;
-      padding: 0.35rem 0;
-      border-radius: 6px;
-      color: #fff;
-      font-weight: 700;
-      font-size: 0.68rem;
-    }
-
-    .p1 {
-      background: var(--phase1);
-    }
-
-    .p2 {
-      background: var(--phase2);
-    }
-
-    .p3 {
-      background: var(--phase3);
-    }
-
-    [data-theme="dark"] .p3 {
-      color: #151119;
-    }
-
-    .timeline-labels {
-      display: grid;
-      grid-template-columns: repeat(13, minmax(0, 1fr));
-      gap: 0.22rem;
-      margin-top: 0.38rem;
-      font-size: 0.63rem;
-      color: var(--muted);
-      text-align: center;
-    }
-
-    /* ─── Phase Tabs ─── */
-    .phase-tabs {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 0.5rem;
-    }
-
-    .phase-tab {
-      border: 1px solid var(--border);
-      background: var(--tab-bg);
-      border-radius: 10px;
-      padding: 0.62rem;
-      text-align: left;
-      font-weight: 700;
-      color: var(--ink);
-      cursor: pointer;
-      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
-    }
-
-    .phase-tab:hover {
-      transform: translateY(-2px);
-      border-color: var(--tab-hover-border);
-    }
-
-    .phase-tab .tab-label {
-      display: block;
-      margin-top: 0.15rem;
-      font-size: 0.74rem;
-      font-weight: 500;
-      color: var(--muted);
-    }
-
-    .phase-tab.active {
-      border-color: var(--teal);
-      background: var(--tab-active-bg);
-    }
-
-    .phase-content {
-      display: none;
-      margin-top: 0.86rem;
-    }
-
-    .phase-content.active {
-      display: block;
-      animation: rise 360ms ease both;
-    }
-
-    /* ─── Callouts ─── */
-    .callout {
-      border-left: 4px solid var(--teal);
-      background: var(--callout-teal-bg);
-      border-radius: 8px;
-      padding: 0.65rem 0.8rem;
-      margin: 0.65rem 0;
-      font-size: 0.86rem;
-    }
-
-    .callout.warn {
-      border-left-color: var(--peach);
-      background: var(--callout-peach-bg);
-    }
-
-    /* ─── Week Blocks ─── */
-    .week-block {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.68rem;
-      margin-top: 0.62rem;
-      background: var(--week-bg);
-      transition: background 320ms ease;
-    }
-
-    .task-list {
-      list-style: none;
-      display: grid;
-      gap: 0.37rem;
-      margin-top: 0.3rem;
-    }
-
-    .task-list li {
-      font-size: 0.85rem;
-      padding-left: 0.86rem;
-      position: relative;
-    }
-
-    .task-list li::before {
-      content: "-";
-      position: absolute;
-      left: 0;
-      top: 0;
-      color: var(--task-bullet);
-    }
-
-    ol.task-list {
-      list-style: decimal;
-      padding-left: 1.4rem;
-    }
-
-    ol.task-list li {
-      padding-left: 0.4rem;
-    }
-
-    ol.task-list li::before {
-      content: none;
-    }
-
-    /* ─── KPI Grid ─── */
-    .kpi-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-      gap: 0.48rem;
-      margin-top: 0.52rem;
-    }
-
-    .kpi-card {
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 0.5rem;
-      background: var(--kpi-bg);
-      transition: background 320ms ease, border-color 320ms ease;
-    }
-
-    .kpi-value {
-      font-weight: 800;
-      font-size: 1rem;
-      font-family: "Space Grotesk", "Inter", sans-serif;
-    }
-
-    .kpi-label {
-      font-size: 0.77rem;
-      color: var(--muted);
-      margin-top: 0.1rem;
-    }
-
-    /* ─── Tables ─── */
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 0.42rem;
-      font-size: 0.84rem;
-    }
-
-    th,
-    td {
-      border: 1px solid var(--border);
-      padding: 0.5rem;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    th {
-      background: var(--th-bg);
-      font-weight: 700;
-    }
-
-    /* ─── Footer ─── */
-    .footer {
-      max-width: 1100px;
-      margin: 1rem auto 0;
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.76rem;
-    }
-
-    /* ─── Animations ─── */
-    @keyframes rise {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ThemeGPT 90-Day Monetization Roadmap (Consolidated)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --paper: #faf6f0;
+        --card: #ffffff;
+        --ink: #4b2e1e;
+        --muted: #7a6558;
+        --line: rgba(75, 46, 30, 0.14);
+        --teal: #7ecec5;
+        --peach: #f4a988;
+        --gold: #d8b500;
+        --warn-bg: rgba(244, 169, 136, 0.16);
+        --ok-bg: rgba(126, 206, 197, 0.16);
+        --active-bg: rgba(216, 181, 0, 0.14);
+        --shadow: 0 12px 28px rgba(75, 46, 30, 0.08);
       }
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --paper: #151119;
+          --card: #1e1924;
+          --ink: #e4ddd6;
+          --muted: #9d9087;
+          --line: rgba(255, 255, 255, 0.1);
+          --teal: #8fd8cf;
+          --peach: #f4a988;
+          --gold: #e8d44d;
+          --warn-bg: rgba(244, 169, 136, 0.13);
+          --ok-bg: rgba(143, 216, 207, 0.12);
+          --active-bg: rgba(232, 212, 77, 0.12);
+          --shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        }
       }
-    }
 
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        transition: none !important;
-        transform: none !important;
+      * {
+        box-sizing: border-box;
       }
 
-      .header,
-      .section,
-      .snap-card,
-      .progress-section,
-      .phase-content,
-      .phase-tab,
-      .phase-tabs,
-      .theme-toggle,
-      .snap-card,
-      .ms-node,
-      .week-block,
-      .callout,
-      .kpi-card,
-      .phase-bar-card,
-      .footer,
-      .progress-head {
-        animation: none;
-        transition: none;
-        transform: none;
-      }
-    }
-
-    /* ─── Responsive ─── */
-    @media (max-width: 760px) {
       body {
-        padding: 0.85rem;
+        margin: 0;
+        padding: 1.25rem;
+        font-family: "Inter", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(
+            circle at 8% 0%,
+            rgba(126, 206, 197, 0.12),
+            transparent 34%
+          ),
+          radial-gradient(
+            circle at 96% 8%,
+            rgba(244, 169, 136, 0.12),
+            transparent 30%
+          ),
+          var(--paper);
+        line-height: 1.55;
       }
 
-      .timeline-labels {
-        font-size: 0.56rem;
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
       }
 
-      .phase-tabs {
-        grid-template-columns: 1fr;
+      .panel {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: var(--shadow);
+        padding: 1rem 1.15rem;
+        margin-bottom: 0.9rem;
       }
 
-      .gauge-row {
-        flex-direction: column;
-        gap: 1rem;
+      h1,
+      h2,
+      h3 {
+        font-family: "Space Grotesk", "Inter", sans-serif;
+        letter-spacing: -0.01em;
+        margin: 0 0 0.55rem;
+        line-height: 1.2;
       }
 
-      .step-wrap {
-        min-width: unset;
+      h1 {
+        font-size: clamp(1.35rem, 2.8vw, 2rem);
+      }
+
+      h2 {
+        font-size: 1.08rem;
+        margin-top: 0.2rem;
+      }
+
+      h3 {
+        font-size: 0.96rem;
+        margin-top: 0.15rem;
+      }
+
+      p {
+        margin: 0 0 0.7rem;
+        color: var(--muted);
+      }
+
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-top: 0.7rem;
+        font-size: 0.79rem;
+        color: var(--muted);
+      }
+
+      .meta span {
+        padding: 0.2rem 0.54rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.25);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 0.65rem;
+        margin-top: 0.55rem;
+      }
+
+      .stat {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 0.7rem 0.75rem;
+      }
+
+      .stat .label {
+        color: var(--muted);
+        font-size: 0.78rem;
+        margin-bottom: 0.2rem;
+      }
+
+      .stat .value {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+
+      .ok {
+        background: var(--ok-bg);
+      }
+
+      .active {
+        background: var(--active-bg);
+      }
+
+      .warn {
+        background: var(--warn-bg);
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 1.1rem;
+      }
+
+      li {
+        margin-bottom: 0.38rem;
+      }
+
+      table {
         width: 100%;
+        border-collapse: collapse;
+        margin-top: 0.4rem;
+        font-size: 0.92rem;
       }
 
-      .phase-bars {
-        grid-template-columns: 1fr;
+      th,
+      td {
+        text-align: left;
+        border-bottom: 1px solid var(--line);
+        padding: 0.52rem 0.32rem;
+        vertical-align: top;
       }
-    }
-  </style>
-</head>
 
-<body>
+      th {
+        color: var(--muted);
+        font-size: 0.79rem;
+        font-weight: 600;
+      }
 
-  <!-- Theme Toggle -->
-  <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark/light mode" title="Toggle theme">
-    <span class="icon-moon">&#9790;</span>
-    <span class="icon-sun">&#9788;</span>
-  </button>
+      .mono {
+        font-family: "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+        font-size: 0.88em;
+        background: rgba(75, 46, 30, 0.08);
+        border-radius: 4px;
+        padding: 0.07rem 0.28rem;
+        color: inherit;
+        border: 1px solid var(--line);
+      }
 
-  <!-- Header -->
-  <div class="header">
-    <h1>ThemeGPT - 90-Day Monetization Roadmap (Lean v2.2.2+)</h1>
-    <div class="subtitle">Execution plan focused on critical-fix hardening, single-batch extension release, and then
-      growth.</div>
-    <div class="meta">
-      <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 20, 2026 (pre-launch hardening deployed: consent-gated GA4 + cookie banner, atomic webhook idempotency, session API PII removal, client-side event dedup, 28 web tests wired; Gate 1 and Gate 3 observation windows active; v2.2.2 pending CWS review)</span>
-      <span>Model: Freemium + Subscription</span>
-      <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
-    </div>
-  </div>
-
-  <!-- Progress Gauge -->
-  <div class="progress-section">
-    <div class="progress-head">
-      <h2>Roadmap Progress</h2>
-      <span class="progress-scope">23 of 43 tasks completed across 3 phases</span>
-    </div>
-    <div class="gauge-row">
-      <!-- Donut Chart -->
-      <div class="donut-wrap">
-        <svg viewBox="0 0 100 100">
-          <circle class="donut-track" cx="50" cy="50" r="40" />
-          <circle class="donut-fill" cx="50" cy="50" r="40" stroke-dasharray="251.3" stroke-dashoffset="117" />
-        </svg>
-        <div class="donut-center">
-          <span class="donut-num">53%</span>
-          <span class="donut-frac">23 / 43</span>
-          <span class="donut-label">tasks</span>
+      .footer {
+        font-size: 0.78rem;
+        color: var(--muted);
+        text-align: center;
+        margin-top: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header class="panel">
+        <h1>ThemeGPT 90-Day Monetization Roadmap (Consolidated)</h1>
+        <p>
+          Single source of truth for roadmap status. Duplicated status blocks
+          were removed so gate tracking, release status, and next actions stay
+          consistent.
+        </p>
+        <div class="meta">
+          <span>Prepared: February 16, 2026</span>
+          <span>Updated: February 20, 2026 (Day 1 data)</span>
+          <span>Published extension: v2.2.2</span>
+          <span>CWS pending review: v2.3.0</span>
         </div>
-      </div>
+      </header>
 
-      <!-- Milestone Step Tracker -->
-      <div class="step-wrap">
-        <div class="step-track">
-          <div class="ms-step step-done">
-            <div class="ms-node node-done">&#10003;</div>
-            <div class="ms-step-id">W1</div>
-            <div class="ms-step-name">Offer Decision</div>
+      <section class="panel">
+        <h2>Executive Status (As of February 20, 2026 — Day 1 Actuals)</h2>
+        <p>
+          All implementation work is complete. Payment infrastructure confirmed
+          healthy via Stripe (1 active sub, 1 trialing sub, 1 succeeded
+          payment). GA4 gates recording but no conversions on Day 1.
+        </p>
+        <div class="grid">
+          <div class="stat ok">
+            <div class="label">Payment flow</div>
+            <div class="value">Healthy (Stripe verified)</div>
           </div>
-          <div class="ms-step step-done">
-            <div class="ms-node node-done">&#10003;</div>
-            <div class="ms-step-id">W2</div>
-            <div class="ms-step-name">Hardening</div>
+          <div class="stat warn">
+            <div class="label">Gate 1 — Day 1</div>
+            <div class="value">60% unassigned (5 sessions — noisy)</div>
           </div>
-          <div class="ms-step step-done">
-            <div class="ms-node node-done">&#10003;</div>
-            <div class="ms-step-id">W2</div>
-            <div class="ms-step-name">Release Gate</div>
+          <div class="stat warn">
+            <div class="label">Gate 3 — Day 1</div>
+            <div class="value">0/3 events (no conversions today)</div>
           </div>
-          <div class="ms-step step-done step-next-open">
-            <div class="ms-node node-done">&#10003;</div>
-            <div class="ms-step-id">W3-4</div>
-            <div class="ms-step-name">Messaging</div>
-          </div>
-          <div class="ms-step">
-            <div class="ms-node node-active">&#9654;</div>
-            <div class="ms-step-id">Feb 19-26</div>
-            <div class="ms-step-name">Bridge Gate</div>
-          </div>
-          <div class="ms-step">
-            <div class="ms-node node-pending">&#8943;</div>
-            <div class="ms-step-id">W5-6</div>
-            <div class="ms-step-name">PH Launch</div>
-          </div>
-          <div class="ms-step">
-            <div class="ms-node node-pending">&#8943;</div>
-            <div class="ms-step-id">W7-9</div>
-            <div class="ms-step-name">Scale</div>
-          </div>
-          <div class="ms-step">
-            <div class="ms-node node-pending">&#8943;</div>
-            <div class="ms-step-id">W10-12</div>
-            <div class="ms-step-name">Paid Test</div>
+          <div class="stat warn">
+            <div class="label">Product Hunt launch</div>
+            <div class="value">Blocked until gates pass</div>
           </div>
         </div>
-        <div class="step-legend">
-          <div class="step-legend-item">
-            <div class="legend-dot done"></div> Complete
-          </div>
-          <div class="step-legend-item">
-            <div class="legend-dot active"></div> In Progress
-          </div>
-          <div class="step-legend-item">
-            <div class="legend-dot pending"></div> Planned
-          </div>
-        </div>
-      </div>
-    </div>
+      </section>
 
-    <!-- Per-Phase Progress Bars -->
-    <div class="phase-bars">
-      <div class="phase-bar-card">
-        <div class="phase-bar-head">
-          <span class="phase-bar-label">Phase 1</span>
-          <span class="phase-bar-count">11 / 11</span>
-        </div>
-        <div class="bar-track">
-          <div class="bar-fill fill-p1" style="width:100%"></div>
-        </div>
-      </div>
-      <div class="phase-bar-card">
-        <div class="phase-bar-head">
-          <span class="phase-bar-label">Phase 2</span>
-          <span class="phase-bar-count">12 / 25</span>
-        </div>
-        <div class="bar-track">
-          <div class="bar-fill fill-p2" style="width:48%"></div>
-        </div>
-      </div>
-      <div class="phase-bar-card">
-        <div class="phase-bar-head">
-          <span class="phase-bar-label">Phase 3</span>
-          <span class="phase-bar-count">0 / 7</span>
-        </div>
-        <div class="bar-track">
-          <div class="bar-fill fill-p3" style="width:0%"></div>
-        </div>
-      </div>
-    </div>
-  </div>
+      <section class="panel">
+        <h2>Day 1 GA4 Data (February 20, 2026)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Channel</th>
+              <th>Sessions</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Unassigned / (not set)</td>
+              <td>3</td>
+              <td>No UTM, no referrer — likely internal or direct</td>
+            </tr>
+            <tr>
+              <td>Direct / (none)</td>
+              <td>2</td>
+              <td>Direct visits</td>
+            </tr>
+            <tr>
+              <td><strong>Total</strong></td>
+              <td><strong>5</strong></td>
+              <td>Too low for statistical significance</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          Gate 3 funnel events: zero <span class="mono">trial_start</span>,
+          zero <span class="mono">checkout_start</span>, zero
+          <span class="mono">purchase_success</span>. Expected — no conversion
+          activity occurred on Day 1. Instrumentation is deployed and will fire
+          on the next real conversion from a consenting user.
+        </p>
+      </section>
 
-  <!-- Snapshot Cards -->
-  <div class="snapshot">
-    <div class="snap-card">
-      <div class="label">Starting Downloads</div>
-      <div class="value">167</div>
-      <div class="detail">Since November 2, 2025</div>
-    </div>
-    <div class="snap-card">
-      <div class="label">Active Installs</div>
-      <div class="value">131</div>
-      <div class="detail">Approx. 78% retained</div>
-    </div>
-    <div class="snap-card">
-      <div class="label">Revenue Status</div>
-      <div class="value">$0 MRR</div>
-      <div class="detail">1 external trial subscriber (asap.johnson00@gmail.com, monthly plan); first charge in ~30 days. v2.2.2 pending CWS review.</div>
-    </div>
-    <div class="snap-card">
-      <div class="label">Current Offer in Code</div>
-      <div class="value" style="font-size:1.02rem;">$6.99/mo + 30d trial</div>
-      <div class="detail">$69.99/yr: first 60 paid yearly => lifetime; post-60 => 30d trial</div>
-    </div>
-  </div>
+      <section class="panel">
+        <h2>Identified Observability Gap</h2>
+        <p>
+          Abandoned checkout recovery emails contain a direct Stripe Checkout
+          URL. Users clicking that link bypass the web app, so
+          <span class="mono">checkout_start</span> never fires for email
+          recovery conversions. The
+          <span class="mono">purchase_success</span> event still fires on the
+          <span class="mono">/success</span> page. This means
+          <span class="mono">checkout_start</span> counts will undercount total
+          conversions. Not a payment bug — a measurement gap only.
+        </p>
+      </section>
 
-  <div class="container">
-
-    <!-- Data Baseline -->
-    <div class="section">
-      <h2>Data Baseline — GA API Audit (February 19, 2026)</h2>
-      <div class="callout">
-        Window: January 23 to February 19, 2026 (28 days). Confirmed via direct GA4 Data API query against property 521095252. All page-view data is for the Chrome Web Store listing; themegpt.ai web app analytics activated February 19 — web app data will appear in next audit window.
-      </div>
-      <div class="kpi-grid">
-        <div class="kpi-card">
-          <div class="kpi-value">875</div>
-          <div class="kpi-label">CWS impressions (+28.11% vs prior period)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">85</div>
-          <div class="kpi-label">GA confirmed CWS listing page views (28-day window)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">10.5%</div>
-          <div class="kpi-label">Blended listing CTR (diagnostic only — not a launch gate)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">17</div>
-          <div class="kpi-label">Active users last 7 days (Feb 12–18)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">62 / 60 / 76</div>
-          <div class="kpi-label">GA new users / active users / sessions (28d, API confirmed)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">34.4s / 80.3%</div>
-          <div class="kpi-label">Avg session duration / bounce rate (CWS listing behavior)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value" style="color: var(--teal);">23.3% / 16.5%</div>
-          <div class="kpi-label">Install conversion (event-based user ratio / listing-view ratio): 14 installs / 60 active users and 14 installs / 85 listing views</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value" style="color: var(--gold);">Day 1 (Feb 20)</div>
-          <div class="kpi-label">Unassigned traffic share — Bridge Gate 1 tracking active (filter activated Feb 20; pre-filter baseline 25% on Feb 19; pass threshold: <=10% for 7 consecutive days)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value" style="color: var(--gold);">Day 1 (Feb 20)</div>
-          <div class="kpi-label">Funnel events (trial_start / checkout_start / purchase_success) instrumentation live — Gate 3 visibility validation window active (earliest pass date: Feb 26)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">$0 / 1 trial</div>
-          <div class="kpi-label">Revenue / subscribers (1 external trial — canary purchase Feb 19; first charge ~Mar 22)</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">1 @ 5.0</div>
-          <div class="kpi-label">Total CWS ratings / average rating</div>
-        </div>
-        <div class="kpi-card">
-          <div class="kpi-value">25</div>
-          <div class="kpi-label">Countries reached in 28 days</div>
-        </div>
-      </div>
-
-      <div class="callout warn" style="margin-top:0.8rem;">
-        <strong>Bridge Gate Status:</strong> Gate 1 ⏳ TRACKING ACTIVE — filter activated Feb 20; Day 1 started (pre-filter baseline: 25% on Feb 19). Gate 2 ✅ IMPLEMENTED — all targeted CWS links are tagged. Gate 3 ⏳ TRACKING ACTIVE — instrumentation deployed; Day 1 started Feb 20 (earliest pass date Feb 26). Product Hunt launch remains blocked until all three gates pass for 7 consecutive days.
-      </div>
-
-      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Traffic Mix (GA API confirmed, 28-day window)</h4>
-      <ul class="task-list">
-        <li>Direct: 39 sessions (51.3%) — branded intent and bookmarks, healthy baseline.</li>
-        <li>Unassigned: 19 sessions (25%) in the Feb 19 pre-filter baseline — root cause was mixed attribution noise (item-share-cb plus internal/dev traffic). UTM remediation shipped and GA4 internal traffic filter activated Feb 20; monitor post-filter trend daily.</li>
-        <li>Referral: 11 sessions (14.5%) — chatgpt.com is confirmed 3rd-largest source (6 sessions). High intent; organic discovery from within ChatGPT itself.</li>
-        <li>Organic Search: 6 sessions (7.9%) — Google (4), DuckDuckGo (1), Yahoo India (1).</li>
-        <li>Paid Search: 1 session (1.3%) — single test impression; no active paid campaign running.</li>
-      </ul>
-
-      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Traffic Sources — Ranked</h4>
-      <ul class="task-list">
-        <li>#1 Direct / (none): 39 sessions — baseline demand.</li>
-        <li>#2 item-share-cb: 14 sessions combined in baseline sample — CWS share button. Remediation is completed in web/CWS links with explicit <code>utm_source</code>/<code>utm_medium</code>/<code>utm_campaign</code> tagging.</li>
-        <li>#3 chatgpt.com / referral: 6 sessions — organic discovery from ChatGPT UI. No action needed; monitor for growth.</li>
-        <li>#4 google / organic: 4 sessions — search visibility growing.</li>
-        <li>#5 Extension self-referral (ext_sidebar, ext_app_menu): 4 sessions — in-extension links working. Confirm UTM tagging is present.</li>
-        <li>#6 CWS staging URL (themegpt-web-dufb63uofq-uc.a.run.app): 3 sessions — internal/dev traffic in baseline sample. GA4 internal traffic filter is now active (Feb 20).</li>
-      </ul>
-
-      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Geography (GA API confirmed)</h4>
-      <ul class="task-list">
-        <li>United States: 13 active users (22%) — primary optimization target.</li>
-        <li>India: 13 active users (22%) — <strong>tied with US; already at escalation-trigger level. Monitoring elevated from watchlist to active.</strong></li>
-        <li>Pakistan: 3 users (5%). Australia, Egypt, Italy, Kenya, Philippines, Sweden, Turkey: 2 users each.</li>
-        <li>25 countries total — broad organic reach from CWS listing.</li>
-      </ul>
-
-      <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Device &amp; Install Signal</h4>
-      <ul class="task-list">
-        <li>Desktop: 58 users (97%) — expected for a Chrome extension; confirms target audience is on desktop.</li>
-        <li>Mobile: 2 users (3%) — ignore for optimization; mobile cannot install the extension.</li>
-        <li>Install events (GA4 <code>install</code>): 14 tracked, 10 unique users. Event-based user ratio: 23.3% (14/60 active users). Listing-view ratio: 16.5% (14/85 listing views).</li>
-        <li>Blended listing CTR is context only; paid-tagged traffic can inflate the numerator. Decision gates use split organic vs paid metrics.</li>
-      </ul>
-    </div>
-
-    <!-- Operating Rules -->
-    <div class="section">
-      <h2>Operating Rules</h2>
-      <div class="callout">
-        Keep the roadmap skeleton, but run lean. Ship only what changes revenue, reduces funnel friction, or protects
-        trust.
-      </div>
-      <ul class="task-list">
-        <li>One source of truth for offers: checkout behavior, pricing page, extension copy, and legal text must match.
-        </li>
-        <li><s>Privacy consistency is mandatory: either stay no-tracking end-to-end or add explicit consent + updated
-          policy.</s> Resolved Feb 20: consent-gated GA4 with cookie banner deployed; privacy policy, terms, README, and marketing copy updated to distinguish extension (no tracking) from web (analytics with consent).</li>
-        <li>Use one launch channel at a time to keep signal clean and execution realistic for a solo builder.</li>
-        <li>No paid acquisition until an organic conversion baseline is proven.</li>
-        <li>Chrome extension deployment is manual: hold submission until all critical fixes are merged, verified, and
-          bundled into one store submission.</li>
-      </ul>
-    </div>
-
-    <!-- Current Status -->
-    <div class="section">
-      <h2>Current Status (February 20, 2026)</h2>
-      <div class="week-block">
-        <h4>Completed</h4>
-        <ul class="task-list">
-          <li>Offer policy finalized: first 60 paid yearly customers convert to lifetime; post-60 yearly gets 30-day
-            trial.</li>
-          <li>Lifetime conversion moved to first paid invoice flow; pre-payment lifetime claims blocked.</li>
-          <li>Webhook hardening completed: live eligibility re-check, event-ordering retry, and slot rollback on
-            conversion failure.</li>
-          <li>Stripe subscription metadata sync added for <code>isLifetime=true</code> after successful conversion.</li>
-          <li>Legal and pricing copy updated to match policy and refund language.</li>
-          <li>Web/backend deployment completed and verified healthy.</li>
-          <li>QA test suites hardened: fixed structurally flawed <code>claimEarlyAdopterSlot</code> mock (was hardcoding
-            success), added 7 missing test cases covering inactive program guard, expired cutoff, auto-deactivation on
-            last slot, inactive subscription UI, free-user CTA, zero-credits edge case, and disconnected state. 15 tests
-            total, all passing.</li>
-          <li>Extension auth/session verification: Added <code>status</code> and <code>auth</code> route unit tests
-            confirming lifetime status is correctly synced from Stripe metadata and served to the extension.</li>
-          <li>Release scope frozen: all critical fixes confirmed complete, no non-critical churn included.</li>
-          <li>Extension v2.1.0 built, packaged (1.21 MB), and tagged. Fixed Tailwind CSS build by pinning to v3 for
-            Plasmo/Parcel compatibility.</li>
-          <li>CHANGELOG, README, and <code>package.json</code> version updated to 2.1.0.</li>
-          <li>Commit pushed to <code>origin/main</code> with tag <code>v2.1.0</code>.</li>
-          <li>v2.1.0 submitted to Chrome Web Store via automated <code>submit-extension.yml</code> GitHub Actions
-            workflow.</li>
-          <li>v2.2.0 release prepared and shipped: <code>apps/extension/package.json</code> bumped from 2.1.0 to 2.2.0,
-            <code>CHANGELOG.md</code> updated, commit pushed to <code>origin/main</code>, and tag <code>v2.2.0</code>
-            created.</li>
-          <li>Chrome Web Store submission workflow completed successfully in 58 seconds (GitHub Actions run
-            <code>22153361425</code>).</li>
-          <li>GitHub release published for <code>v2.2.0</code>.</li>
-          <li>Cloud Build completed successfully for commit
-            <code>0e852743865b46ede968ae34410e5a511f21a6c5</code> (build
-            <code>8218e241-46d8-4b64-b8b3-84bc9291fd55</code>), and Cloud Run service <code>themegpt-web</code> updated
-            to ready revision <code>themegpt-web-00095-d57</code>.</li>
-          <li>Production health check verified at <code>https://themegpt.ai/api/health</code>: HTTP 200, all required
-            auth/env keys present, Firebase connected.</li>
-          <li>Stripe account fully verified: identity confirmed, phone verified, no outstanding account tasks.</li>
-          <li>Bank account linked (Rivermark Community Credit Union) with automatic daily payouts enabled.</li>
-          <li>All production environment variables confirmed set: live API keys, webhook secret, and all 3 price IDs.
+      <section class="panel">
+        <h2>Resolved Implementation Work</h2>
+        <ul>
+          <li>
+            UTM attribution remediation completed across core web pages,
+            <span class="mono">auth/extension</span>, and
+            <span class="mono">success</span> install prompts.
+          </li>
+          <li>
+            Extension outbound-link UTM audit completed: all 7 popup links
+            include <span class="mono">utm_source</span>,
+            <span class="mono">utm_medium</span>, and
+            <span class="mono">utm_campaign</span> (plus
+            <span class="mono">extension_version</span> in v2.3.0).
+          </li>
+          <li>
+            No separate <span class="mono">ext_sidebar</span> or
+            <span class="mono">ext_app_menu</span> components exist in the
+            current codebase; popup is the only built extension surface.
+          </li>
+          <li>
+            GA4 funnel events implemented in web flows:
+            <span class="mono">checkout_start</span>,
+            <span class="mono">purchase_success</span>,
+            <span class="mono">trial_start</span>.
+          </li>
+          <li>
+            GA4 analytics are consent-gated via cookie banner and
+            <span class="mono">initAnalyticsIfConsented()</span>.
+          </li>
+          <li>
+            GA4 internal traffic filter was applied, realtime-verified, and
+            activated on February 20, 2026.
+          </li>
+          <li>
+            Split scorecard template exists at
+            <span class="mono">doc/dev/weekly-split-scorecard-template.md</span
+            >.
+          </li>
+          <li>
+            Payment flow and entitlement path validated end-to-end on February
+            19, 2026; required Firestore composite indexes were deployed.
           </li>
         </ul>
-      </div>
-      <div class="week-block">
-        <h4>Completed — v2.2.0 In-Extension Messaging</h4>
-        <ul class="task-list">
-          <li>Escalating lifecycle nudge for locked premium theme clicks: 1st click shows soft trial CTA (no redirect);
-            2nd click shows stronger copy + opens pricing; 3rd+ shows "keep coming back" copy + opens pricing. Click
-            count persisted to <code>chrome.storage.local</code>.</li>
-          <li>Non-incentivized review ask: triggers on the 3rd successful theme apply, shown once, permanently dismissed
-            via <code>reviewAskDismissed</code> storage flag.</li>
-          <li>Trialing state fully surfaced: "Trial" header button label, "Trial Active" subscription badge, and
-            days-remaining countdown when <code>trialEndsAt</code> is available from the API.</li>
-          <li>Canceled state handled: contextual "Your subscription has ended. Reactivate to restore access." message
-            with link to account page.</li>
-          <li>Past-due state handled: "Payment failed. Update your billing details to restore access." with
-            coral-colored billing link.</li>
-          <li>Header "Connect" button relabeled to "Sign In"; unauthenticated panel description updated to "Sign in to
-            unlock 8 animated premium themes."</li>
-          <li>"Subscribe" CTA relabeled to "Start free 30-day trial" to match offer copy consistently.</li>
-          <li>TokenCounter footer copy updated: "Estimated · No data leaves your browser".</li>
-          <li><code>AccountStatus</code> interface extended with <code>subscriptionStatus</code> and
-            <code>trialEndsAt</code>; both mapped from <code>data.subscription</code> in
-            <code>checkAccountStatus</code>.</li>
-          <li>Build verified clean: zero TypeScript errors, Plasmo and Next.js both compile successfully.</li>
+      </section>
+
+      <section class="panel">
+        <h2>Active Monitoring (No Code Work Required)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Current state</th>
+              <th>Pass/trigger condition</th>
+              <th>Earliest date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Bridge Gate 1 (Unassigned share)</td>
+              <td>Day 1: 60% (3/5 sessions). Pre-filter baseline: 25%. Sample too small to be meaningful.</td>
+              <td>
+                <span class="mono">&lt;= 10%</span> for 7 consecutive days.
+              </td>
+              <td>Feb 26 earliest (sliding if FAIL continues)</td>
+            </tr>
+            <tr>
+              <td>Bridge Gate 3 (Funnel event visibility)</td>
+              <td>
+                Day 1: 0/3 events. No conversion activity today. Instrumentation
+                deployed; needs real user conversion.
+              </td>
+              <td>
+                All 3 events visible with count &gt; 0 for 7 consecutive days.
+              </td>
+              <td>Feb 26 earliest (sliding if no events)</td>
+            </tr>
+            <tr>
+              <td>v2.3.0 CWS review</td>
+              <td>Submitted February 20, 2026 (run <span class="mono">22238384383</span>).</td>
+              <td>Review approved or rejected.</td>
+              <td>Expected 1-3 business days from submission</td>
+            </tr>
+            <tr>
+              <td>India user share watch</td>
+              <td>India tied US at 22% in current baseline.</td>
+              <td>
+                Escalate if tie or overtake holds for 2 weekly scorecards.
+              </td>
+              <td>Weekly cadence</td>
+            </tr>
+            <tr>
+              <td>Product Hunt launch</td>
+              <td>Blocked.</td>
+              <td>Launch only after Gate 1 and Gate 3 both pass.</td>
+              <td>After both gate windows pass</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>Release Track</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>v2.2.0</td>
+              <td>Published on Chrome Web Store</td>
+              <td>February 19, 2026</td>
+              <td>First public CWS release (superseded by v2.2.2).</td>
+            </tr>
+            <tr>
+              <td>v2.2.1 (web-only)</td>
+              <td>Deployed to web</td>
+              <td>February 19, 2026</td>
+              <td>
+                Dependabot patches plus UTM and GA4 bridge instrumentation
+                updates.
+              </td>
+            </tr>
+            <tr>
+              <td>v2.2.2</td>
+              <td>Published on Chrome Web Store</td>
+              <td>February 20, 2026</td>
+              <td>Pricing CTA URL ordering fix. Published via run <span class="mono">22205732502</span>.</td>
+            </tr>
+            <tr>
+              <td>v2.3.0</td>
+              <td>Submitted, pending CWS review</td>
+              <td>February 20, 2026</td>
+              <td>
+                Submitted via run <span class="mono">22238384383</span>. Includes
+                <span class="mono">extension_version</span> UTM param and abandoned
+                checkout recovery (web-side already live on Cloud Run).
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>90-Day Plan (Condensed)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Phase</th>
+              <th>Window</th>
+              <th>Goal</th>
+              <th>State</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Phase 1</td>
+              <td>Weeks 1-2 (Feb 16-Mar 1)</td>
+              <td>
+                Offer-policy alignment, payment flow hardening, and extension
+                release gate.
+              </td>
+              <td>Complete</td>
+            </tr>
+            <tr>
+              <td>Phase 2</td>
+              <td>Bridge + Weeks 3-6 (Feb 19-Mar 29)</td>
+              <td>
+                Measurement integrity gate, then one launch channel with split
+                scorecard.
+              </td>
+              <td>Active (gate tracking)</td>
+            </tr>
+            <tr>
+              <td>Phase 3</td>
+              <td>Weeks 7-12 (Mar 30-May 10)</td>
+              <td>
+                Scale proven organic channel; run limited paid test only if gate
+                criteria pass.
+              </td>
+              <td>Planned</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>Daily Operating Checklist During Gate Window</h2>
+        <ul>
+          <li>
+            Record Gate 1 and Gate 3 daily values in
+            <span class="mono">doc/dev/gate-tracking-log.md</span>.
+          </li>
+          <li>
+            Use weekly scorecard template in
+            <span class="mono">doc/dev/weekly-split-scorecard-template.md</span
+            >.
+          </li>
+          <li>
+            Do not launch Product Hunt until both gates pass for 7 consecutive
+            days.
+          </li>
+          <li>
+            v2.3.0 submitted to CWS Feb 20 (run <span class="mono">22238384383</span>).
+            Monitor review status; expected 1–3 business days.
+          </li>
         </ul>
-      </div>
-      <div class="week-block" style="background: var(--callout-teal-bg);">
-        <h4>Completed (Release Gate)</h4>
-        <ul class="task-list">
-          <li>Chrome Web Store review approved: <code>v2.2.0</code> is now the published version.</li>
-          <li>CWS dashboard shows: published version <code>2.2.0</code>. Phase 1 fully complete.</li>
+      </section>
+
+      <section class="panel">
+        <h2>Next Steps (Post Day 1 Review)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Priority</th>
+              <th>Action</th>
+              <th>Rationale</th>
+              <th>Owner</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Continue daily gate pulls (Feb 21+)</td>
+              <td>Day 1 data is noise at 5 sessions. Need several days of data before drawing conclusions.</td>
+              <td>Ops</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Verify internal traffic filter is excluding dev sessions</td>
+              <td>60% unassigned may mean the filter isn't applied or dev traffic isn't matching the filter rule.</td>
+              <td>Growth</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Monitor v2.3.0 CWS review (expected by Feb 23)</td>
+              <td>Pending approval; no action unless rejected.</td>
+              <td>Product</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Assess Gate 3 viability by Feb 23</td>
+              <td>If zero funnel events persist for 3+ days, reconsider gate criteria. Events require real conversions from consenting users — if traffic is too low, the gate may need a longer window or adjusted criteria.</td>
+              <td>Growth</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>No new code work</td>
+              <td>Payment flow is healthy. Webhook idempotency is robust. No bugs to fix. Resist urge to build during observation window.</td>
+              <td>All</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="panel">
+        <h2>Reference Files</h2>
+        <ul>
+          <li>
+            <span class="mono">CLAUDE.md</span> (current high-level status and
+            next actions)
+          </li>
+          <li>
+            <span class="mono">doc/dev/utm-audit.md</span> (extension link
+            attribution audit)
+          </li>
+          <li>
+            <span class="mono">docs/ga4-filter-guide.md</span> (GA4 filter
+            activation record)
+          </li>
+          <li>
+            <span class="mono">doc/dev/gate-tracking-log.md</span> (daily gate
+            tracking log)
+          </li>
+          <li>
+            <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>
+            (weekly report template)
+          </li>
         </ul>
-      </div>
-      <div class="week-block" style="background: var(--callout-teal-bg);">
-        <h4>Completed — v2.2.1 Web Maintenance (February 19, 2026)</h4>
-        <div class="callout">Web-only deployment. Chrome Web Store extension version remains <code>2.2.0</code>. No CWS submission was made.</div>
-        <ul class="task-list">
-          <li>Resolved Dependabot advisory: upgraded svelte transitive override to <code>^5.53.0</code> (SSR XSS / tag validation; no <code>.svelte</code> files in project — zero exploitable risk).</li>
-          <li>Resolved Dependabot advisory: added <code>minimatch</code> override at <code>^10.2.1</code> (resolves to <code>10.2.2</code>) to fix ReDoS vulnerability (High severity).</li>
-          <li>UTM attribution remediation completed: updated CWS install links from <code>utm_source=item-share-cb</code> to explicit campaign tags across core pages, plus <code>auth/extension/page.tsx</code> links with <code>utm_source=web&amp;utm_medium=referral&amp;utm_campaign=extension_auth</code> and <code>success/page.tsx</code> install prompts with <code>utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
-          <li>GA4 funnel instrumentation deployed in web (consent-gated as of Feb 20): <code>checkout_start</code> in checkout initiation, <code>purchase_success</code> on confirmed session resolution, and <code>trial_start</code> gated on actual subscription status <code>trialing</code>. Events deduplicated per session via <code>sessionStorage</code>.</li>
-        </ul>
-      </div>
-      <div class="week-block" style="background: var(--callout-teal-bg);">
-        <h4>Completed — v2.2.2 Extension Submission (February 19, 2026)</h4>
-        <div class="callout">Pending CWS review. Submitted via GitHub Actions workflow run #143 at 00:15 UTC. BPP log confirms: "Successfully updated ThemeGPT to version 2.2.2 on Chrome Web Store."</div>
-        <ul class="task-list">
-          <li>Fixed pricing CTA URL parameter order in <code>popup.tsx</code> (3 locations): changed from <code>/#pricing?utm_source=...</code> to <code>/?utm_source=...#pricing</code> so GA4 receives UTM params before SPA hash routing discards them.</li>
-          <li>Updated <code>popup.test.tsx</code> and <code>popup.qa.test.tsx</code> to match corrected URL shape — 88/88 tests passing.</li>
-          <li>Commit <code>307bba3</code> pushed to <code>origin/main</code>, workflow dispatched and completed in 56 seconds.</li>
-        </ul>
-      </div>
-      <div class="week-block" style="background: var(--callout-teal-bg);">
-        <h4>Completed — Canary Purchase &amp; Firestore Index Fix (February 19, 2026)</h4>
-        <div class="callout">Full end-to-end funnel validated with a real external account. One critical infrastructure bug discovered and fixed.</div>
-        <ul class="task-list">
-          <li>Canary purchase completed by <code>asap.johnson00@gmail.com</code> (external, non-internal). Monthly plan. Success page rendered correctly: "Subscription Active! Your first month is free!"</li>
-          <li>Stripe subscription <code>sub_1T2hn2ELDm6vpbWkx9cyXngf</code> confirmed active (status: <code>trialing</code>). Webhook fired at 00:41:54 UTC — subscription record written to Firestore for <code>userId: otF2SEPv8E3PAFwAiKjK</code>. License <code>KEY-2CAE2D6C</code> created.</li>
-          <li><strong>Bug found:</strong> Account page showed "You don't have an active subscription" despite subscription being present in Firestore. Root cause: <code>firestore.indexes.json</code> was empty — <code>getSubscriptionByUserId()</code> query requires a composite index (<code>userId</code> ASC + <code>createdAt</code> DESC) which did not exist. Firestore returned <code>FAILED_PRECONDITION: 9</code>, silently becoming a 404 to the account page.</li>
-          <li>Same missing index also caused extension premium themes to remain locked despite active subscription (<code>/api/extension/status</code> calls the same query path).</li>
-          <li>Fix: added both required composite indexes to <code>firestore.indexes.json</code> and deployed via Firebase CLI. Two indexes: <code>subscriptions</code> (<code>userId</code> ASC + <code>createdAt</code> DESC) and <code>downloads</code> (<code>userId</code> ASC + <code>downloadedAt</code> DESC). Deploy confirmed successful.</li>
-          <li>Commit <code>c719b7b</code> pushed to <code>origin/main</code>.</li>
-        </ul>
-      </div>
-      <div class="week-block" style="background: var(--callout-teal-bg);">
-        <h4>Completed — Pre-Launch Hardening (February 20, 2026)</h4>
-        <div class="callout">Audit-driven hardening sprint. 5 findings addressed (2xP1, 2xP2, 1xP3). Deployed to Cloud Run as commit <code>b527d78</code>. Cookie consent banner verified live on themegpt.ai.</div>
-        <ul class="task-list">
-          <li><strong>P1 Privacy/analytics resolved:</strong> GA4 now consent-gated via <code>initAnalyticsIfConsented()</code> + <code>CookieConsent.tsx</code> banner (chocolate bg, Accept/Decline). Analytics only initialize after explicit user consent stored in <code>localStorage</code>. Privacy policy, terms, README, AGENTS, MARKETING, CONTRIBUTING, and CHANGELOG all updated to distinguish extension (no tracking) from web (consent-gated GA4).</li>
-          <li><strong>P1 Webhook idempotency:</strong> Added <code>processed_webhook_events</code> Firestore collection with atomic <code>create()</code> lock pattern via <code>beginWebhookEventProcessing()</code>. Returns 409 for in-progress events (Stripe retries), 200 for already-processed (Stripe stops). Stale lock reclaim at 10 minutes. <code>abandonWebhookEventProcessing()</code> releases lock on handler failure.</li>
-          <li><strong>P2 Session API hardened:</strong> <code>/api/session</code> no longer returns <code>licenseKey</code> or <code>userEmail</code>. Replaced with <code>hasLicense: true</code> boolean. No authentication bypass risk from session enumeration.</li>
-          <li><strong>P2 Client-side event dedup:</strong> <code>purchase_success</code> and <code>trial_start</code> GA4 events now guarded by <code>sessionStorage</code> keyed on <code>session_id</code>. Page refresh no longer double-counts.</li>
-          <li><strong>P3 Web test infrastructure:</strong> vitest wired into <code>apps/web</code> with <code>vitest.config.ts</code> and path aliases. 5 test files, 28 tests passing: db.qa (8), extension/auth (4), extension/status (6), webhooks/stripe (9), session (4). Webhook tests cover idempotency, lock contention, handler failure cleanup, subscription creation, and license creation.</li>
-        </ul>
+      </section>
+
+      <div class="footer">
+        ThemeGPT consolidated roadmap updated February 20, 2026 (Day 1
+        actuals). Focus: daily gate monitoring, no new code during observation
+        window, reassess Gate 3 criteria by Feb 23 if zero events persist.
       </div>
     </div>
-
-    <!-- Timeline -->
-    <div class="section">
-      <h2>Timeline (Absolute Dates)</h2>
-      <div class="timeline-bar">
-        <div class="week-cell p1">W1</div>
-        <div class="week-cell p1">W2</div>
-        <div class="week-cell p2">W3</div>
-        <div class="week-cell p2">W4</div>
-        <div class="week-cell p2">W5</div>
-        <div class="week-cell p2">W6</div>
-        <div class="week-cell p3">W7</div>
-        <div class="week-cell p3">W8</div>
-        <div class="week-cell p3">W9</div>
-        <div class="week-cell p3">W10</div>
-        <div class="week-cell p3">W11</div>
-        <div class="week-cell p3">W12</div>
-        <div class="week-cell p3">W13</div>
-      </div>
-      <div class="timeline-labels">
-        <div>Feb 16</div>
-        <div>Feb 23</div>
-        <div>Mar 2</div>
-        <div>Mar 9</div>
-        <div>Mar 16</div>
-        <div>Mar 23</div>
-        <div>Mar 30</div>
-        <div>Apr 6</div>
-        <div>Apr 13</div>
-        <div>Apr 20</div>
-        <div>Apr 27</div>
-        <div>May 4</div>
-        <div>May 11</div>
-      </div>
-    </div>
-
-    <!-- Phase Details -->
-    <div class="section">
-      <div class="phase-tabs">
-        <button class="phase-tab active" data-phase="1" onclick="showPhase(1)">
-          Phase 1
-          <span class="tab-label">Weeks 1-2 (Feb 16-Mar 1) - Align offer, policy, and money flow</span>
-        </button>
-        <button class="phase-tab" data-phase="2" onclick="showPhase(2)">
-          Phase 2
-          <span class="tab-label">Bridge + Weeks 3-6 (Feb 19-Mar 29) - Measurement gate, conversion + one launch channel</span>
-        </button>
-        <button class="phase-tab" data-phase="3" onclick="showPhase(3)">
-          Phase 3
-          <span class="tab-label">Weeks 7-12 (Mar 30-May 10) - Scale only proven channels, then test paid</span>
-        </button>
-      </div>
-
-      <!-- Phase 1 -->
-      <div class="phase-content active" id="phase-1">
-        <h3>Phase 1 Goal</h3>
-        <p>Lock and deploy critical monetization fixes so every customer sees one consistent offer and entitlement
-          model.</p>
-        <div class="callout">
-          Status: Phase 1 complete. Extension v2.2.0 approved and published on the Chrome Web Store as of February 19,
-          2026.
-        </div>
-
-        <div class="week-block">
-          <h4>Week 1 - Completed: Canonical Offer Decision</h4>
-          <ul class="task-list">
-            <li>Finalized trial and lifetime policy and synchronized copy across pricing/legal messaging.</li>
-            <li>Removed stale lifetime inference from eligibility metadata and aligned with explicit lifetime state.</li>
-            <li>Updated canonical language for refund and case-study consent terms.</li>
-          </ul>
-        </div>
-
-        <div class="week-block">
-          <h4>Week 2 - Completed: Payment Hardening + Deploy</h4>
-          <ul class="task-list">
-            <li>Hardened webhook lifetime flow (post-payment claiming, retries, rollback, Stripe metadata sync).</li>
-            <li>Deployed current fixes to production web/backend and verified service health.</li>
-            <li>Updated security advisory documentation and alert disposition process.</li>
-            <li>Hardened QA test suites: fixed mock that was hardcoding success instead of testing transaction logic,
-              added coverage for inactive program, expired cutoff, auto-deactivation, inactive subscription UI,
-              free-user CTA, zero-credits, and disconnected state (15 tests, all green).</li>
-          </ul>
-        </div>
-
-        <div class="week-block">
-          <h4>Week 2 - Completed: Manual Extension Release Gate</h4>
-          <ul class="task-list">
-            <li><s>Run final extension regression pass for auth, purchase, trial, yearly, and lifetime entitlement
-                states.</s> Covered by automated QA suites.</li>
-            <li><s>Confirm no additional critical fixes are pending in extension/web API integration.</s> Done: zero
-              open issues/PRs, all critical fixes merged, scope frozen for v2.2.0 release submission.</li>
-            <li><s>Prepare one consolidated Chrome Web Store submission package.</s> Done: v2.2.0 built, packaged,
-              tagged, and pushed.</li>
-            <li><s>Submit Chrome Web Store update.</s> Done: v2.2.0 submitted via automated workflow on February 18;
-              approved and published on February 19, 2026.</li>
-          </ul>
-        </div>
-
-        <div class="week-block" style="background: var(--callout-teal-bg);">
-          <h4>Phase 1 Exit Criteria</h4>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-value">Done</div>
-              <div class="kpi-label">Offer-copy consistency across web/legal</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">Done</div>
-              <div class="kpi-label">Webhook lifetime hardening + Stripe metadata sync</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">Done</div>
-              <div class="kpi-label">Web/backend deployment and health verification</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">Done</div>
-              <div class="kpi-label">QA test suites hardened (15 tests, all passing)</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">Done</div>
-              <div class="kpi-label">v2.2.0 built, packaged, tagged, and pushed</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">Done</div>
-              <div class="kpi-label">CWS published: v2.2.0 approved and live on Chrome Web Store</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Phase 2 -->
-      <div class="phase-content" id="phase-2">
-        <h3>Phase 2 Goal</h3>
-        <p>Convert existing demand first, run one launch channel, and collect high-signal feedback.</p>
-
-        <div class="week-block" style="background: var(--callout-teal-bg);">
-          <h4>Weeks 3-4 - Completed: In-Extension Monetization Messaging (v2.2.0)</h4>
-          <div class="callout">Implemented February 17, 2026, submitted to CWS on February 18, 2026, and
-            approved/published on February 19, 2026.</div>
-          <ul class="task-list">
-            <li><s>Tighten locked-theme upgrade messaging and CTA wording in popup and pricing destination.</s> Done:
-              escalating 3-step nudge; "Start free 30-day trial" CTA; "Sign In" button; panel description copy updated.
-            </li>
-            <li><s>Add one lifecycle nudge after repeated premium-theme attempts (helpful, not spammy).</s> Done: soft
-              message on 1st click, redirect added on 2nd, "keep coming back" variant on 3rd+. Stored in
-              <code>premiumClickCount</code>.</li>
-            <li><s>Ensure account and purchase state messaging is clear for trialing, active, canceled, and lifetime
-                users.</s> Done: trialing shows "Trial Active" badge + days remaining; canceled and past_due render
-              contextual recovery messages.</li>
-            <li><s>Launch non-incentivized review ask after a positive usage moment (for example after 3+ successful
-                theme applies).</s> Done: banner fires on 3rd apply, one-time only, links to CWS reviews page, "Maybe
-              later" dismisses permanently.</li>
-          </ul>
-        </div>
-
-        <div class="week-block">
-          <h4>Bridge Week (February 19-26, 2026): Stability + Measurement Integrity Gate</h4>
-          <div class="callout warn">
-            <strong>Gate Status (current implementation state):</strong> Gate 1 ⏳ TRACKING STARTED — GA4 internal traffic filter is Active (Feb 20), Day 1 of 7-day observation. Gate 2 ✅ IMPLEMENTED — UTM tags now cover core pages plus <code>auth/extension</code> and <code>success</code> CWS links. Gate 3 ⏳ TRACKING STARTED — <code>trial_start</code> / <code>checkout_start</code> / <code>purchase_success</code> instrumentation is deployed; Day 1 started Feb 20 (earliest pass date Feb 26). Product Hunt launch remains blocked until all three gates pass for 7 consecutive days.
-          </div>
-          <ul class="task-list">
-            <li>Gate condition 1: Unassigned traffic share must remain &lt;= 10% for 7 consecutive days. <strong>Current: TRACKING STARTED (Day 1 = Feb 20).</strong> Pre-filter baseline on Feb 19 was 25%; internal traffic filter is now active.</li>
-            <li>Gate condition 2: Campaign classification must be explicit: paid traffic when
-              <code>medium in (cpc, ppc, paid)</code> or source/campaign contains ad identifiers (for example
-              <code>pmax</code>); organic/referral/direct must remain separated. <strong>Current: IMPLEMENTED — core pages, <code>auth/extension</code> links, and <code>success</code> page install prompts are tagged with explicit source/medium/campaign values.</strong></li>
-            <li>Gate condition 3: Required funnel events must be visible in GA for 7 consecutive days:
-              <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. <strong>Current: TRACKING STARTED — Day 1 is Feb 20; earliest pass date is Feb 26 if all three events remain visible daily.</strong></li>
-            <li>If gate fails, this week shifts to attribution remediation only; no launch-channel scaling.</li>
-          </ul>
-          <h4>Attribution Remediation Tasks — ACTIVE (Gate validation in progress)</h4>
-          <ul class="task-list">
-            <li><strong>Priority 1:</strong> Completed UTM attribution remediation for CWS links: core pages use <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code>; <code>auth/extension</code> uses <code>utm_source=web&amp;utm_medium=referral&amp;utm_campaign=extension_auth</code>; <code>success</code> uses <code>utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
-            <li><strong>Priority 2:</strong> Completed GA4 funnel instrumentation contract in web code. Implemented map: <code>checkout_start</code> in <code>app/page.tsx</code> before checkout POST; <code>purchase_success</code> in <code>app/success/page.tsx</code> on confirmed session (<code>data.success &amp;&amp; !data.pending</code>); <code>trial_start</code> in the same block gated on actual subscription status <code>trialing</code> (not inferred from <code>planType</code>).</li>
-            <li><strong>Priority 3:</strong> <s>Add internal traffic filter in GA4 for staging URL <code>themegpt-web-dufb63uofq-uc.a.run.app</code> to remove dev noise from reports.</s> Done: filter applied, realtime-verified, and activated on Feb 20, 2026.</li>
-            <li>Audit all extension/web links to CWS and pricing for UTM completeness (ext_sidebar, ext_app_menu sources should carry utm tags).</li>
-            <li>Standardize campaign naming across links: <code>source</code>, <code>medium</code>, <code>campaign</code>.</li>
-            <li>Preserve referral continuity from extension to web to checkout entry.</li>
-            <li>Run a weekly "unassigned root-cause" review until Unassigned remains &lt;= 10%.</li>
-          </ul>
-        </div>
-
-        <div class="week-block">
-          <h4>Weeks 5-6 - One Launch Channel (Recommended: Product Hunt)</h4>
-          <ul class="task-list">
-            <li><s>Prepare launch asset pack: before/after GIFs, 30-second demo, copy assets, PH gallery images, social
-                post drafts.</s> Done: all assets in <code>asset/launch/</code>.</li>
-            <li>Run one external launch channel for a full 2-week window only after the Measurement Integrity Gate
-              passes.</li>
-            <li>Use a split-channel weekly scorecard (organic vs paid) to identify the biggest funnel drop and fix only
-              that one bottleneck each week.</li>
-          </ul>
-        </div>
-
-        <div class="week-block">
-          <h4>Geo Strategy (US-First — India Elevated to Active Monitor)</h4>
-          <div class="callout">
-            GA audit confirmed: India is tied with the United States at 22% of active users (13 each). India has already met the escalation threshold — it is no longer a passive watchlist item.
-          </div>
-          <ul class="task-list">
-            <li>Default Phase 2 optimization target: United States (copy and pricing emphasis).</li>
-            <li><strong>India — Active Monitor (escalated from watchlist):</strong> 13 users / 22% share, tied with US. Monitor for 2 consecutive weeks to determine if localized pricing or copy is needed. Engagement data at parity with US (both arrive via direct + CWS share mechanisms).</li>
-            <li>Remaining watchlist: Pakistan (5%), Australia, Egypt, Italy, Kenya, Philippines, Sweden, Turkey (3.3% each). 25 countries reached organically — no action until any single country hits ≥15% of new users.</li>
-            <li>Escalation rule: trigger localization/pricing review if India or any watchlist country reaches &gt;= 15% of new users for 2 consecutive weeks with engagement no worse than 20% below US baseline.</li>
-            <li>chatgpt.com confirmed as 3rd referral source (6 sessions) — organic discovery from within ChatGPT is working. No action; monitor for continued growth and ensure it is not miscategorized.</li>
-          </ul>
-        </div>
-
-        <div class="week-block" style="background: var(--callout-peach-bg);">
-          <h4>Phase 2 Exit Criteria - Commit (End of March 29, 2026)</h4>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-value">120+</div>
-              <div class="kpi-label">Total listing page views</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">80+</div>
-              <div class="kpi-label">New users (28-day rolling)</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">1-3</div>
-              <div class="kpi-label">Paying customers</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">$14-$40</div>
-              <div class="kpi-label">MRR</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">4+</div>
-              <div class="kpi-label">Store reviews (no incentive offered)</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">&lt;= 10%</div>
-              <div class="kpi-label">Unassigned traffic share sustained</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="week-block" style="background: var(--callout-gold-bg);">
-          <h4>Phase 2 Exit Criteria - Stretch (Aspirational)</h4>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-value">220-320</div>
-              <div class="kpi-label">Total installs</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">8-15</div>
-              <div class="kpi-label">Paying customers</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">$60-$120</div>
-              <div class="kpi-label">MRR</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">10+</div>
-              <div class="kpi-label">Store reviews, no incentive offered</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Phase 3 -->
-      <div class="phase-content" id="phase-3">
-        <h3>Phase 3 Goal</h3>
-        <p>Scale what already converts, then run limited paid tests with strict kill rules.</p>
-
-        <div class="week-block">
-          <h4>Weeks 7-9 - Scale Proven Organic Motion</h4>
-          <ul class="task-list">
-            <li>Double down only on the best-performing channel from Phase 2.</li>
-            <li>Release 1-2 new premium themes to re-engage users and create fresh launch moments.</li>
-            <li>Run a focused win-back campaign to trial drop-offs with a clear single CTA.</li>
-          </ul>
-        </div>
-
-        <div class="week-block">
-          <h4>Weeks 10-12 - Paid Test (Only if Gate Passed)</h4>
-          <ul class="task-list">
-            <li>Start paid only if organic conversion from install to paid is at least 3% for 2 consecutive weeks.</li>
-            <li>Run one paid channel at low spend first ($150-300 total test budget).</li>
-            <li>Kill paid test if CAC is greater than $12 or payback exceeds 2 months.</li>
-            <li>If paid test passes, scale gradually and keep weekly holdout comparison.</li>
-          </ul>
-        </div>
-
-        <div class="week-block" style="background: var(--callout-gold-bg);">
-          <h4>Phase 3 Exit Criteria (End of May 10, 2026)</h4>
-          <div class="kpi-grid">
-            <div class="kpi-card">
-              <div class="kpi-value">20-35</div>
-              <div class="kpi-label">Paying customers</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">$140-$280</div>
-              <div class="kpi-label">MRR</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">&lt;= $12</div>
-              <div class="kpi-label">CAC on paid test (if run)</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-value">Weekly</div>
-              <div class="kpi-label">Decision cadence and scorecard reviews</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Metric Stack -->
-    <div class="section">
-      <h2>Metric Stack (Privacy-Aligned)</h2>
-      <p>Use aggregate metrics from systems already required for operation. GA4 web analytics are consent-gated (cookie banner deployed Feb 20, 2026). The extension has zero analytics.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Source</th>
-            <th>Decision Use</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Store listing visits, installs, uninstalls</td>
-            <td>Chrome Web Store dashboard</td>
-            <td>Top-of-funnel and retention health</td>
-          </tr>
-          <tr>
-            <td>Organic listing views and organic listing CTR</td>
-            <td>CWS + GA campaign/source split</td>
-            <td>Organic discoverability quality (blended CTR is context only)</td>
-          </tr>
-          <tr>
-            <td>Paid listing views and paid listing CTR</td>
-            <td>CWS + GA campaign/source split</td>
-            <td>Paid traffic efficiency without polluting organic decisions</td>
-          </tr>
-          <tr>
-            <td>Organic conversion to trial and paid conversion to trial</td>
-            <td>GA funnel events + Stripe starts</td>
-            <td>Channel-specific top-to-mid funnel quality</td>
-          </tr>
-          <tr>
-            <td>Trial-to-paid conversion by channel</td>
-            <td>GA funnel events + Stripe purchases</td>
-            <td>Detect where monetization friction actually occurs</td>
-          </tr>
-          <tr>
-            <td>Checkout starts, purchases, MRR, churn, refunds</td>
-            <td>Stripe dashboard</td>
-            <td>Revenue and pricing/funnel quality</td>
-          </tr>
-          <tr>
-            <td>Entitlement success/failure rate</td>
-            <td>Web API logs + DB records</td>
-            <td>Operational reliability after purchase</td>
-          </tr>
-          <tr>
-            <td>Review count and rating trend</td>
-            <td>Chrome Web Store listing</td>
-            <td>Social proof and listing conversion support</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Weekly Scorecard -->
-    <div class="section">
-      <h2>Weekly Scorecard (Split Paid vs Organic)</h2>
-      <p>Use channel-separated KPIs as the decision surface. Keep blended metrics for context only.</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Scorecard Field</th>
-            <th>Definition</th>
-            <th>Target Use</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>organic_listing_views</td>
-            <td>CWS listing views from non-paid sources</td>
-            <td>Organic top-of-funnel quality</td>
-          </tr>
-          <tr>
-            <td>paid_listing_views</td>
-            <td>CWS listing views from paid-tagged sources/campaigns</td>
-            <td>Paid efficiency without contaminating organic signal</td>
-          </tr>
-          <tr>
-            <td>organic_trial_conversion</td>
-            <td>organic <code>trial_start</code> / organic listing views</td>
-            <td>Organic mid-funnel performance</td>
-          </tr>
-          <tr>
-            <td>paid_trial_conversion</td>
-            <td>paid <code>trial_start</code> / paid listing views</td>
-            <td>Paid mid-funnel performance</td>
-          </tr>
-          <tr>
-            <td>trial_to_paid_by_channel</td>
-            <td><code>purchase_success</code> / <code>trial_start</code> by channel</td>
-            <td>Monetization quality and channel decisioning</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- Analytics Contract -->
-    <div class="section">
-      <h2>Analytics Contract (Internal, No Public API Change)</h2>
-      <div class="callout">
-        No external/public API contract changes. Internal analytics contract must expand for funnel observability and
-        attribution hygiene.
-      </div>
-      <div class="week-block">
-        <h4><code>AnalyticsEventName</code> Union Coverage</h4>
-        <ul class="task-list">
-          <li>Happy-path events: <code>first_visit</code>, <code>store_detail_view</code>,
-            <code>extension_install</code>, <code>theme_apply_success</code>, <code>trial_start</code>,
-            <code>checkout_start</code>, <code>purchase_success</code>, <code>review_prompt_shown</code>,
-            <code>review_prompt_clicked</code>.</li>
-          <li>Failure/churn diagnostics: <code>checkout_abandoned</code>, <code>trial_expired</code>,
-            <code>subscription_canceled</code>, <code>payment_failed</code>, <code>uninstall</code>.</li>
-        </ul>
-      </div>
-      <div class="week-block">
-        <h4>Required Event Payload Fields</h4>
-        <ul class="task-list">
-          <li>Minimum fields on all analytics payloads: <code>source</code>, <code>medium</code>,
-            <code>campaign</code>, <code>country</code>, <code>extension_version</code>, <code>timestamp</code>.</li>
-          <li>Scorecard schema must remain split by <code>paid</code> and <code>organic</code>; blended CTR is context
-            only and cannot be used as a launch gate.</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Operational QA -->
-    <div class="section">
-      <h2>Operational QA Scenarios</h2>
-      <ol class="task-list">
-        <li>Attribution QA: launch test links from each source and verify channel classification is correct (not
-          Unassigned).</li>
-        <li>Gate enforcement: simulate a week with Unassigned &gt; 10% and confirm launch remains blocked.</li>
-        <li>Funnel observability: verify <code>trial_start</code>, <code>checkout_start</code>, and
-          <code>purchase_success</code> appear in GA within 24 hours of test flows.</li>
-        <li>Channel split sanity: confirm paid-tagged sessions never appear in organic dashboard slices.</li>
-        <li>Geo trigger: confirm watchlist escalation only fires after 2 consecutive weeks at threshold.</li>
-      </ol>
-    </div>
-
-    <!-- Decision Gates -->
-    <div class="section">
-      <h2>Decision Gates</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Date Gate</th>
-            <th>Condition</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>February 16, 2026</td>
-            <td>Web/backend critical fixes deployed and health-verified</td>
-            <td>Status: Completed</td>
-          </tr>
-          <tr>
-            <td>February 16, 2026</td>
-            <td>Stripe account verified, bank linked, automatic daily payouts enabled</td>
-            <td>Status: Completed</td>
-          </tr>
-          <tr>
-            <td>February 16, 2026</td>
-            <td>All critical fixes merged, scope frozen, v2.1.0 built and tagged</td>
-            <td>Status: Completed. v2.1.0 submitted to CWS</td>
-          </tr>
-          <tr>
-            <td>February 17, 2026</td>
-            <td>Launch asset pack complete: 4 before/after GIFs, 30s demo, copy assets, PH gallery images, social posts
-            </td>
-            <td>Status: Completed</td>
-          </tr>
-          <tr>
-            <td>February 18, 2026</td>
-            <td>Web deployment refreshed via Cloud Build + Cloud Run (commit 0e85274, build 8218e241)</td>
-            <td>Status: Completed. <code>themegpt-web</code> ready on revision <code>themegpt-web-00095-d57</code></td>
-          </tr>
-          <tr>
-            <td>February 18, 2026</td>
-            <td>v2.2.0 in-extension messaging implemented: lifecycle nudge, review ask, trialing/canceled/past_due
-              states, copy updates. Build clean.</td>
-            <td>Status: Completed. v2.2.0 approved and published on Chrome Web Store as of February 19, 2026.</td>
-          </tr>
-          <tr>
-            <td>February 18, 2026</td>
-            <td>GitHub release + extension submission automation complete (<code>release.yml</code>,
-              <code>submit-extension.yml</code>)</td>
-            <td>Status: Completed. Release <code>v2.2.0</code> published and CWS submission succeeded</td>
-          </tr>
-          <tr>
-            <td>February 19, 2026</td>
-            <td>v2.2.0 approved and published on Chrome Web Store</td>
-            <td>Status: Completed. Stability week underway; Measurement Integrity observation window is Feb 20-26 (Day 1 after filter activation). Launch Product Hunt only after gate pass.</td>
-          </tr>
-          <tr>
-            <td>February 19, 2026</td>
-            <td>v2.2.1 web-only maintenance release: Dependabot security patches (svelte <code>^5.53.0</code>, minimatch <code>^10.2.1</code>) + UTM attribution remediation across core marketing pages, <code>auth/extension</code>, and <code>success</code> install prompts</td>
-            <td>Status: Completed. Web deployed. CWS extension version unchanged at <code>2.2.0</code>.</td>
-          </tr>
-          <tr>
-            <td>February 19, 2026</td>
-            <td>v2.2.2 extension submitted to Chrome Web Store — pricing CTA URL fix (UTM params now precede hash fragment in all 3 <code>window.open</code> calls), 88/88 tests passing, build verified. Single-pass submission — no prior v2.2.2 pending review existed.</td>
-            <td>Status: Submitted — pending CWS review (1–3 business days). No withdrawal needed.</td>
-          </tr>
-          <tr>
-            <td>February 19, 2026</td>
-            <td>Firestore composite indexes deployed: <code>subscriptions</code> (<code>userId</code> ASC + <code>createdAt</code> DESC) and <code>downloads</code> (<code>userId</code> ASC + <code>downloadedAt</code> DESC). Fixes account page FAILED_PRECONDITION error and extension premium unlock failure.</td>
-            <td>Status: Confirmed complete (Feb 19, 2026): account page verified showing Trial + Monthly Plan + Full Access. Extension auto-linked automatically via shared auth session.</td>
-          </tr>
-          <tr>
-            <td>February 19, 2026</td>
-            <td>Canary purchase confirmed: 1 external trial subscriber (<code>asap.johnson00@gmail.com</code>). Full funnel validated: checkout → Stripe → webhook → Firestore → success page. <code>no_payment_required</code> trial verifier, auto-resume checkout, and "Sign In" instruction text all confirmed working.</td>
-            <td>Status: Completed. First external subscriber. $0 MRR (trial); first charge ~March 22, 2026.</td>
-          </tr>
-          <tr>
-            <td>February 20, 2026</td>
-            <td>GA4 internal traffic filter activated after Testing + Realtime verification; staging URL check confirmed live at <code>themegpt-web-dufb63uofq-uc.a.run.app</code> (redirects to <code>themegpt.ai</code>).</td>
-            <td>Status: Completed. Gate 1 and Gate 3 observation windows both started Feb 20; earliest pass date is Feb 26, 2026.</td>
-          </tr>
-          <tr>
-            <td>February 20, 2026</td>
-            <td>Pre-launch hardening deployed (commit <code>b527d78</code>): consent-gated GA4 + cookie banner, atomic webhook idempotency (<code>processed_webhook_events</code> collection), session API PII removal, client-side event dedup, 28 web tests wired. Cloud Run build <code>bf2093d2</code> completed in 4m42s.</td>
-            <td>Status: Completed. Cookie consent banner verified live on themegpt.ai. All 5 audit findings (2xP1, 2xP2, 1xP3) resolved.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <!-- This Week -->
-    <div class="section">
-      <h2>This Week (February 16-22, 2026): Top Actions (Rebased)</h2>
-      <div class="week-block" style="border: 2px solid var(--teal);">
-        <ul class="task-list">
-          <li><s>Freeze extension release scope: include all critical fixes, exclude non-critical churn.</s> Done:
-            zero open issues/PRs, all critical fixes merged, no non-critical churn included in v2.2.0 submission.</li>
-          <li><s>Run manual end-to-end extension QA across monthly, yearly, post-60 yearly trial, and lifetime
-              conversions.</s> Done: automated QA suites now cover all monetization paths (8 backend + 7 frontend
-            tests).</li>
-          <li><s>Verify extension auth/session correctly reflects lifetime using Stripe metadata + DB-backed status
-              routes.</s> Done: Verified via new unit test suites (<code>extension/status/route.test.ts</code> and
-            <code>extension/auth/route.test.ts</code>).</li>
-          <li><s>Prepare one consolidated Chrome Web Store submission package and release notes.</s> Done: v2.2.0
-            built, packaged, CHANGELOG updated, tagged, and pushed to origin.</li>
-          <li><s>Submit Chrome Web Store update.</s> Done: v2.2.0 submitted via automated
-            <code>submit-extension.yml</code> workflow on February 18 and approved/published on February 19, 2026.</li>
-          <li><s>Publish release + deploy web/backend updates for verification.</s> Done: GitHub release
-            <code>v2.2.0</code> published; Cloud Build/Cloud Run deployment succeeded; health endpoint all green.</li>
-          <li><s>Implement v2.2.0 in-extension messaging: lifecycle nudge, review ask, trial/canceled/past_due states,
-              copy improvements.</s> Done: implemented in <code>popup.tsx</code> and <code>TokenCounter.tsx</code>,
-            build clean.</li>
-        </ul>
-      </div>
-      <div class="week-block" style="border: 2px solid var(--peach); margin-top: 0.65rem;">
-        <h4>Next Actions (v2.2.0 Published — Gate Remediation Mode)</h4>
-        <div class="callout warn">GA audit (Feb 19) set remediation priorities. Current state: Gate 1 tracking is active (filter activated Feb 20), Gate 2 is implemented, and Gate 3 validation clock started Feb 20. Product Hunt launch remains blocked pending 7 consecutive pass days.</div>
-        <ul class="task-list">
-          <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19, 2026.</li>
-          <li><s>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</s> Done: canary purchase confirmed full funnel end-to-end on February 19, 2026.</li>
-          <li><s>Fix item-share-cb UTM classification.</s> Done: core pages, <code>auth/extension</code> links, and <code>success</code> install prompts are now tagged with explicit UTM source/medium/campaign values.</li>
-          <li><s>Implement GA4 funnel events — Gate 3 blocker.</s> Done: <code>checkout_start</code>, <code>purchase_success</code>, and <code>trial_start</code> are implemented in web flows with correct <code>trial_start</code> gating on actual subscription status. Next: verify GA event visibility for 7 consecutive days.</li>
-          <li><s>Add GA4 internal traffic filter to exclude <code>themegpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</s> Done: Applied, realtime-verified, and activated on Feb 20, 2026.</li>
-          <li>Audit ext_sidebar and ext_app_menu links for UTM completeness — these are confirmed referral sources but need consistent tagging.</li>
-          <li>Set up split weekly scorecard: organic vs paid listing views, channel-specific trial conversion, and trial-to-paid by channel.</li>
-          <li>Monitor India user share weekly — currently tied with US at 22%. Escalation review triggered if this holds for 2 consecutive weeks.</li>
-          <li>Only after all three gates pass for 7 consecutive days, run Product Hunt launch with US-first optimization.</li>
-            <li><s>Monitor Firestore index build completion — account page and extension premium unlock will restore automatically once indexes are built (typically within minutes of deployment).</s> Done: indexes confirmed built; account page verified correct (Feb 19, 2026).</li>
-            <li>Monitor v2.2.2 CWS review status — expected 1–3 business days. No action required until review outcome.</li>
-            <li><s>Verify <code>asap.johnson00@gmail.com</code> account page shows trial subscription correctly after index build completes.</s> Done: Trial + Monthly Plan + Full Access confirmed via account page (Feb 19, 2026).</li>
-            <li><s>Confirm extension account linking behavior post-index fix.</s> Done: extension auto-linked automatically via shared auth session. Generate Link Code is confirmed graceful fallback for edge cases (different browser profile, incognito, session issues).</li>
-            <li>Continue Gate 1 monitoring: Unassigned must reach ≤10% for 7 consecutive days before Product Hunt launch.</li>
-        </ul>
-      </div>
-    </div>
-
-  </div>
-
-  <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 20, 2026 (pre-launch hardening deployed: consent-gated GA4 + cookie banner, atomic webhook idempotency, session API hardened, event dedup, 28 web tests; Gate 1 and Gate 3 observation active with earliest pass Feb 26; v2.2.2 pending CWS review)
-  </div>
-
-  <script>
-    // Phase tab switcher
-    function showPhase(n) {
-      document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.phase-content').forEach(c => c.classList.remove('active'));
-      document.querySelector(`.phase-tab[data-phase="${n}"]`).classList.add('active');
-      document.getElementById(`phase-${n}`).classList.add('active');
-    }
-
-    // Theme toggle with localStorage persistence
-    function toggleTheme() {
-      const html = document.documentElement;
-      const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      html.setAttribute('data-theme', next);
-      try { localStorage.setItem('themegpt-roadmap-theme', next); } catch (e) { }
-    }
-
-    // Restore saved preference, default to dark
-    (function () {
-      try {
-        const saved = localStorage.getItem('themegpt-roadmap-theme');
-        if (saved) document.documentElement.setAttribute('data-theme', saved);
-      } catch (e) { }
-    })();
-  </script>
-
-</body>
-
+  </body>
 </html>

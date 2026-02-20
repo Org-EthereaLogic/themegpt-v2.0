@@ -19,9 +19,9 @@ ThemeGPT v2.0 is a **privacy-first Chrome extension** that enables users to cust
 | Web App LOC | ~1,500+ | Marketing site + API routes + Stripe webhooks |
 | Shared Package LOC | ~400+ | Types, constants, shared utilities |
 | Test Coverage | 5 test files | 94/94 passing |
-| Public Version | v2.2.0 live / v2.2.2 pending CWS review / v2.3.0 committed (awaiting submission) | End-to-end payment flow validated Feb 19, 2026 |
+| Public Version | v2.2.2 live / v2.3.0 pending CWS review | End-to-end payment flow validated Feb 19, 2026 |
 
-**Overall Project Health: GOOD** — v2.2.0 live on CWS; v2.2.2 pending review; v2.3.0 committed and tagged (CWS submission queued); abandoned checkout recovery deployed to Cloud Run; Stripe, Firestore indexes, and full payment funnel confirmed operational; GA4 Gate 1/3 observation windows are active as of Feb 20, 2026.
+**Overall Project Health: GOOD** — v2.2.2 live on CWS (published Feb 20); v2.3.0 submitted to CWS Feb 20 (run `22238384383`, pending review); abandoned checkout recovery deployed to Cloud Run; Stripe, Firestore indexes, and full payment funnel confirmed operational; GA4 Gate 1/3 observation windows are active as of Feb 20, 2026.
 
 ---
 
@@ -322,7 +322,7 @@ pnpm lint   # ESLint validation
 
 - v2.2.0 live on CWS: in-extension lifecycle messaging (trialing/canceled/past_due states, escalating nudge, review prompt)
 - v2.2.1 (web): Dependabot security patches, UTM attribution fixes, GA4 funnel instrumentation (`trial_start`, `checkout_start`, `purchase_success`)
-- v2.2.2 (CWS pending): pricing CTA URL parameter order fix; missing Firestore composite indexes for subscription + download queries
+- v2.2.2 live on CWS (published Feb 20, 2026): pricing CTA URL parameter order fix; missing Firestore composite indexes for subscription + download queries
 - End-to-end payment flow confirmed operational (Feb 19, 2026)
 
 ### COMPLETE (v2.3.0)
@@ -334,7 +334,7 @@ pnpm lint   # ESLint validation
 
 ### IN PROGRESS
 
-- CWS review clearance for v2.2.2 (prerequisite for v2.3.0 submission)
+- v2.3.0 CWS review (submitted Feb 20, 2026 — run `22238384383`; expected 1–3 business days)
 - Bridge Gate 1: unassigned traffic reduction (pre-filter baseline 25% on Feb 19; filter active; 7-day observation window in progress Feb 20-26)
 - Gate 3: GA4 visibility validation (7-day observation window in progress Feb 20-26; earliest pass date Feb 26)
 - Product Hunt launch (blocked until all 3 measurement gates pass)
@@ -412,9 +412,8 @@ pnpm clean        # Clean all build artifacts
 
 ### Chrome Web Store
 
-- **Published:** 2.2.0 (live)
-- **Pending Review:** 2.2.2
-- **Queued (git only):** 2.3.0 (commit `c1fffae`, tag `v2.3.0`) — submit via `submit-extension.yml` once v2.2.2 clears review
+- **Published:** 2.2.2 (live — published Feb 20, 2026 via run `22205732502`)
+- **Pending Review:** 2.3.0 (submitted Feb 20, 2026 via run `22238384383`)
 - **Extension ID:** `dlphknialdlpmcgoknkcmapmclgckhba`
 - **URL:** https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba
 

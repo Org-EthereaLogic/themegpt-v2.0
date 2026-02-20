@@ -105,12 +105,34 @@ pnpm lint       # Lint code
 
 - **Web**: GCP Cloud Run, manual deploy via `gcloud builds submit --config=cloudbuild.yaml`
 - **Extension**: Chrome Web Store, automated via GitHub Actions `submit-extension.yml` workflow
-- **Current published extension version**: v2.2.0 (live on CWS)
-- **v2.2.2** — pending CWS review (submitted February 19, 2026 — pricing CTA URL fix: UTM params before hash fragment)
-- **v2.3.0** — committed to `main`, tagged; CWS submission blocked pending v2.2.2 review clearance; re-run `submit-extension.yml` once review clears
+- **Current published extension version**: v2.2.2 (live on CWS — published February 20, 2026 via run `22205732502`)
+- **v2.3.0** — submitted to CWS February 20, 2026 (run `22238384383`); pending review
 - **Current web version**: v2.2.1 base + abandoned checkout recovery deployed (Cloud Run commit `c1fffae`, February 19, 2026 — `checkout.session.expired` webhook, `abandoned_checkouts` Firestore collection, recovery email)
 - **Active measurement gates**: Bridge Gate 1 TRACKING (GA4 internal traffic filter activated Feb 20; pre-filter baseline 25% on Feb 19; Day 1 of 7-day observation window started Feb 20; threshold ≤10% for 7 consecutive days). Gate 3 TRACKING (instrumentation deployed; Day 1 = Feb 20; earliest pass date Feb 26). Product Hunt launch is blocked until all three gates pass for 7 consecutive days. End-to-end payment flow confirmed validated Feb 19, 2026 (account page + extension auto-link both working).
 - **Note**: `SUBMIT_KEYS` repository secret is required for automated CWS submission
+
+### Next Actions (v2.2.2 Published — Gate Observation Mode, updated Feb 20 2026)
+
+**Resolved:**
+- ~~Monitor CWS review queue for v2.2.0 approval.~~ Done Feb 19.
+- ~~Validate listing propagation and verify extension runtime behavior.~~ Done Feb 19 (canary purchase confirmed).
+- ~~Fix item-share-cb UTM classification.~~ Done (all core pages, auth/extension, success install prompts tagged).
+- ~~Implement GA4 funnel events (Gate 3 blocker).~~ Done (`checkout_start`, `purchase_success`, `trial_start` implemented with consent gating).
+- ~~Add GA4 internal traffic filter.~~ Done Feb 20 (activated, realtime-verified).
+- ~~Audit ext_sidebar and ext_app_menu links for UTM completeness.~~ Done (all 7 popup.tsx outbound links have full utm_source/medium/campaign; no separate sidebar/app_menu components exist).
+- ~~Set up split weekly scorecard.~~ Done (template at `doc/dev/weekly-split-scorecard-template.md`).
+- ~~Monitor Firestore index build completion.~~ Done Feb 19.
+- ~~Verify account page shows trial subscription correctly.~~ Done Feb 19.
+- ~~Confirm extension account linking behavior post-index fix.~~ Done Feb 19.
+- ~~v2.2.2 CWS review.~~ Published Feb 20 (run `22205732502`).
+- ~~Submit v2.3.0 to CWS.~~ Submitted Feb 20 (run `22238384383`); pending review.
+
+**Pending (monitoring — no code work required):**
+- Gate 1 monitoring: Day 1 = Feb 20. Pre-filter baseline 25%. Threshold ≤10% for 7 consecutive days. Earliest pass: Feb 26.
+- Gate 3 monitoring: Day 1 = Feb 20. All 3 events must be visible (count > 0) for 7 consecutive days. Earliest pass: Feb 26.
+- Monitor v2.3.0 CWS review status — submitted Feb 20; expected 1–3 business days.
+- Monitor India user share weekly — currently tied with US at 22%. Escalation review if this holds for 2 consecutive weeks.
+- Only after all gates pass for 7 consecutive days: run Product Hunt launch with US-first optimization.
 
 ## Key Resources
 

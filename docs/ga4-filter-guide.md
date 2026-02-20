@@ -36,3 +36,17 @@ To fulfill **Priority 3** of the Bridge Week roadmap (v2.2.2), follow these step
 
 > [!IMPORTANT]
 > Once a filter is **Active**, the data is permanently excluded from your reports and cannot be recovered. Always use `Testing` first.
+
+---
+
+## Filter Application Status
+
+Update this table manually after completing each step above.
+
+| Field | Value |
+|-------|-------|
+| Filter applied (Testing state) | _(not yet applied)_ |
+| Verified in Realtime report | _(not yet verified)_ |
+| Filter activated (Active state) | _(not yet activated)_ |
+
+> Once activated, the Gate 1 observation window begins in earnest. Track daily unassigned traffic % in `doc/dev/gate-tracking-log.md`.

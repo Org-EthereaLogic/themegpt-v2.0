@@ -2,7 +2,7 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
-## [2.3.0] - 2026-02-19 (CWS Submission — Pending Review)
+## [2.3.0] - 2026-02-19 (Awaiting CWS Submission — Blocked by v2.2.2 Review)
 
 ### Added (Extension)
 

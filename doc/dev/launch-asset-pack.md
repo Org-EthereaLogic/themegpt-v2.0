@@ -88,7 +88,7 @@ Alternatives:
 | 2 | Gallery: hero before/after | `ph-gallery-1-hero.png` | [x] Done |
 | 3 | Gallery: theme grid | `ph-gallery-2-themes.png` | [x] Done |
 | 4 | Gallery: privacy callout | `ph-gallery-3-privacy.png` | [x] Done |
-| 5 | Gallery: pricing card | `ph-gallery-4-pricing.png` | [x] Done |
+| 5 | Gallery: pricing card | `ph-gallery-4-pricing.png` | [x] Done (regenerated Feb 20 — now shows Free/Monthly/Yearly with early adopter callout + single theme note) |
 | 6 | Maker comment | See draft below | [x] Finalized |
 | 7 | Tagline | "Make ChatGPT yours." (20 chars) | [x] Finalized |
 

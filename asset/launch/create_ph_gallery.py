@@ -218,71 +218,129 @@ def create_gallery_3_privacy():
     print(f"  Gallery 3 (privacy): {path}")
 
 
+def card_centered_text(draw, text, y, card_x, card_w, fnt, fill):
+    """Draw text centered within a card (not the full image)."""
+    bbox = draw.textbbox((0, 0), text, font=fnt)
+    tw = bbox[2] - bbox[0]
+    x = card_x + (card_w - tw) // 2
+    draw.text((x, y), text, font=fnt, fill=fill)
+
+
 def create_gallery_4_pricing():
-    """Pricing card."""
+    """Pricing card — three tiers: Free, Monthly, Yearly (Best Value)."""
     img = Image.new("RGB", (GW, GH), CREAM)
     draw = ImageDraw.Draw(img)
 
     # Header
-    centered_text(draw, "Simple, Honest Pricing", 40, GW, font(FONT_BOLD, 48), CHOCOLATE)
-    centered_text(draw, "Start free. Upgrade when you're ready.", 100, GW, font(FONT_REG, 24), (120, 90, 70))
+    centered_text(draw, "Simple, Honest Pricing", 30, GW, font(FONT_BOLD, 44), CHOCOLATE)
+    centered_text(draw, "Start free. Upgrade when you're ready.", 82, GW, font(FONT_REG, 21), (120, 90, 70))
 
-    # Two pricing cards side by side
-    card_w = 480
-    card_h = 440
-    gap = 60
-    left_x = (GW - 2 * card_w - gap) // 2
-    right_x = left_x + card_w + gap
-    card_y = 160
+    # Three pricing cards
+    card_w = 370
+    card_h = 420
+    gap = 24
+    total_w = 3 * card_w + 2 * gap
+    start_x = (GW - total_w) // 2
+    card_y = 130
 
-    # FREE card
-    draw_rounded_rect(draw, (left_x, card_y, left_x + card_w, card_y + card_h), fill=WHITE, radius=20)
-    draw_rounded_rect(draw, (left_x, card_y, left_x + card_w, card_y + 60), fill=TEAL, radius=20)
-    draw.rectangle(((left_x, card_y + 40), (left_x + card_w, card_y + 60)), fill=TEAL)
-    centered_text(draw, "FREE", card_y + 14, left_x * 2 + card_w, font(FONT_BOLD, 26), WHITE)
-
-    centered_text(draw, "$0", card_y + 90, left_x * 2 + card_w, font(FONT_BOLD, 56), CHOCOLATE)
-    centered_text(draw, "forever", card_y + 155, left_x * 2 + card_w, font(FONT_REG, 20), (120, 90, 70))
-
-    free_features = [
-        "7 handcrafted themes",
-        "One-click apply",
-        "No account required",
-        "Privacy-first architecture",
+    cards = [
+        {
+            "title": "FREE",
+            "color": TEAL,
+            "price": "$0",
+            "subtitle": "forever",
+            "features": [
+                "7 handcrafted themes",
+                "One-click apply",
+                "No account required",
+                "Privacy-first",
+            ],
+        },
+        {
+            "title": "MONTHLY",
+            "color": PEACH,
+            "price": "$6.99",
+            "subtitle": "/month  \u00b7  30-day free trial",
+            "features": [
+                "Everything in Free",
+                "8 premium animated themes",
+                "Cancel anytime",
+            ],
+        },
+        {
+            "title": "YEARLY  \u2014  Best Value",
+            "color": PEACH,
+            "price": "$69.99",
+            "subtitle": "/year  \u00b7  Save 17%",
+            "features": [
+                "Everything in Free",
+                "8 premium animated themes",
+                "All future theme updates",
+            ],
+            "highlight": "\u2605 First 60 paid get lifetime access",
+            "is_featured": True,
+        },
     ]
-    fy = card_y + 210
-    for feat in free_features:
-        draw.text((left_x + 50, fy), "\u2713", font=font(FONT_BOLD, 20), fill=TEAL)
-        draw.text((left_x + 80, fy), feat, font=font(FONT_REG, 20), fill=CHOCOLATE)
-        fy += 40
 
-    # PREMIUM card
-    draw_rounded_rect(draw, (right_x, card_y, right_x + card_w, card_y + card_h), fill=WHITE, radius=20)
-    draw_rounded_rect(draw, (right_x, card_y, right_x + card_w, card_y + 60), fill=PEACH, radius=20)
-    draw.rectangle(((right_x, card_y + 40), (right_x + card_w, card_y + 60)), fill=PEACH)
-    centered_text(draw, "PREMIUM", card_y + 14, right_x * 2 + card_w, font(FONT_BOLD, 26), WHITE)
+    for i, card in enumerate(cards):
+        cx = start_x + i * (card_w + gap)
+        accent = card["color"]
+        is_featured = card.get("is_featured", False)
 
-    centered_text(draw, "$6.99", card_y + 90, right_x * 2 + card_w, font(FONT_BOLD, 56), CHOCOLATE)
-    centered_text(draw, "/month  \u00b7  30-day free trial", card_y + 155, right_x * 2 + card_w, font(FONT_REG, 20), (120, 90, 70))
+        # Featured card: slight vertical offset (raised) and border
+        cy = card_y - 8 if is_featured else card_y
+        ch = card_h + 16 if is_featured else card_h
 
-    premium_features = [
-        "Everything in Free",
-        "8 premium animated themes",
-        "Aurora Borealis, Synth Wave & more",
-        "Early adopter lifetime offer",
-    ]
-    py = card_y + 210
-    for feat in premium_features:
-        draw.text((right_x + 50, py), "\u2713", font=font(FONT_BOLD, 20), fill=PEACH)
-        draw.text((right_x + 80, py), feat, font=font(FONT_REG, 20), fill=CHOCOLATE)
-        py += 40
+        # Card background
+        draw_rounded_rect(draw, (cx, cy, cx + card_w, cy + ch), fill=WHITE, radius=20)
+
+        # Featured border highlight
+        if is_featured:
+            draw_rounded_rect(draw, (cx - 2, cy - 2, cx + card_w + 2, cy + ch + 2), fill=None, radius=22)
+            draw.rounded_rectangle(
+                (cx - 2, cy - 2, cx + card_w + 2, cy + ch + 2),
+                radius=22,
+                outline=PEACH,
+                width=3,
+            )
+
+        # Header stripe
+        draw_rounded_rect(draw, (cx, cy, cx + card_w, cy + 52), fill=accent, radius=20)
+        draw.rectangle(((cx, cy + 36), (cx + card_w, cy + 52)), fill=accent)
+        card_centered_text(draw, card["title"], cy + 12, cx, card_w, font(FONT_BOLD, 22), WHITE)
+
+        # Price
+        card_centered_text(draw, card["price"], cy + 72, cx, card_w, font(FONT_BOLD, 48), CHOCOLATE)
+
+        # Subtitle
+        card_centered_text(draw, card["subtitle"], cy + 128, cx, card_w, font(FONT_REG, 17), (120, 90, 70))
+
+        # Features
+        fy = cy + 175
+        for feat in card["features"]:
+            draw.text((cx + 35, fy), "\u2713", font=font(FONT_BOLD, 17), fill=accent)
+            draw.text((cx + 60, fy), feat, font=font(FONT_REG, 17), fill=CHOCOLATE)
+            fy += 34
+
+        # Highlight line (early adopter callout)
+        if "highlight" in card:
+            fy += 8
+            draw_rounded_rect(draw, (cx + 16, fy, cx + card_w - 16, fy + 36), fill=(255, 248, 230), radius=8)
+            hl_bbox = draw.textbbox((0, 0), card["highlight"], font=font(FONT_BOLD, 14))
+            hl_w = hl_bbox[2] - hl_bbox[0]
+            hl_x = cx + (card_w - hl_w) // 2
+            draw.text((hl_x, fy + 8), card["highlight"], font=font(FONT_BOLD, 14), fill=CHOCOLATE)
+
+    # Single theme note below cards
+    note_y = card_y + card_h + 36
+    centered_text(draw, "Single themes also available from $3.99  \u00b7  One-time purchase, yours forever", note_y, GW, font(FONT_REG, 18), (120, 90, 70))
 
     # Bottom CTA
-    cta_w, cta_h = 360, 56
+    cta_w, cta_h = 360, 52
     cta_x = (GW - cta_w) // 2
-    cta_y = card_y + card_h + 30
-    draw_rounded_rect(draw, (cta_x, cta_y, cta_x + cta_w, cta_y + cta_h), fill=PEACH, radius=28)
-    centered_text(draw, "Start Your Free Trial", cta_y + 12, GW, font(FONT_BOLD, 24), WHITE)
+    cta_y = note_y + 36
+    draw_rounded_rect(draw, (cta_x, cta_y, cta_x + cta_w, cta_y + cta_h), fill=PEACH, radius=26)
+    centered_text(draw, "Start Your Free Trial", cta_y + 10, GW, font(FONT_BOLD, 24), WHITE)
 
     # Bottom bar
     draw.rectangle([(0, GH - 10), (GW, GH)], fill=PEACH)

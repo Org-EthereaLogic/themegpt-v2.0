@@ -1,6 +1,6 @@
 # UTM Attribution Audit
 
-**Audited:** 2026-02-19
+**Audited:** 2026-02-20
 **Scope:** All outbound links originating from the Chrome extension popup
 **Trigger:** Bridge Gate 1 investigation — reducing unassigned GA4 traffic to ≤10%
 
@@ -67,10 +67,10 @@ A browser toolbar or context menu entry. All outbound links from this surface sh
 
 The unassigned traffic at 25% (Gate 1) is **not caused by missing UTM tags on built surfaces**. All built links are properly tagged as of v2.2.2/v2.3.0.
 
-The most likely cause is internal and staging traffic reaching GA4 without being filtered:
-- Staging URL: `https://theme-gpt-web-dufb63uofq-uc.a.run.app`
+The pre-filter baseline cause was internal and staging traffic reaching GA4 without being filtered:
+- Staging URL: `https://themegpt-web-dufb63uofq-uc.a.run.app`
 - Local development sessions
 
-**Fix:** Apply the GA4 internal traffic filter per `docs/ga4-filter-guide.md`. Once the filter is activated, track daily unassigned % in `doc/dev/gate-tracking-log.md`.
+**Status (Feb 20, 2026):** GA4 internal traffic filter is applied, realtime-verified, and active per `docs/ga4-filter-guide.md`. Gate 1 observation tracking is now in progress; continue daily unassigned % logging in `doc/dev/gate-tracking-log.md`.
 
 The unbuilt `ext_sidebar` and `ext_app_menu` surfaces will not affect Gate 1 until those features are built and shipped.

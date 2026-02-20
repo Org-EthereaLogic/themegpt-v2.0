@@ -4,14 +4,14 @@
 ThemeGPT - Custom ChatGPT Themes & Token Tracker
 
 ## Short Description (132 chars max)
-🎨 Transform ChatGPT with 15 stunning themes + animated effects. Track tokens locally. 100% privacy - data never leaves your browser.
+🎨 Transform ChatGPT with 15 stunning themes + animated effects. Track tokens locally. Privacy-first extension with local-only token stats.
 
 ## Long Description (Copy everything below this line)
 ---BEGIN DESCRIPTION---
 
 🎨 Transform your ChatGPT experience with ThemeGPT 2.0!
 
-The privacy-first theme manager featuring 15 beautiful themes, stunning animated visual effects, and local token tracking. Your conversations stay private because everything runs 100% locally in your browser.
+The privacy-first theme manager featuring 15 beautiful themes, stunning animated visual effects, and local token tracking. Extension theme rendering and token counting run locally in your browser.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -52,7 +52,7 @@ The privacy-first theme manager featuring 15 beautiful themes, stunning animated
 🔑 KEY FEATURES
 
 🔒 PRIVACY FIRST
-Your chat data never leaves your browser. No accounts required for free themes. No tracking. No analytics. Just beautiful themes.
+Your chat data never leaves your browser. No accounts required for free themes. No tracking or analytics in the extension. (The optional themegpt.ai purchase flow uses consent-gated analytics.)
 
 📊 LOCAL TOKEN TRACKING
 Monitor your ChatGPT usage with built-in token counting. See input/output tokens in real-time, all calculated locally on your device.

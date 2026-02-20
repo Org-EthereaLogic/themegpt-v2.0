@@ -881,7 +881,7 @@
       growth.</div>
     <div class="meta">
       <span>Prepared: February 16, 2026</span>
-      <span>Updated: February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix (UTM before hash); Firestore composite indexes deployed (subscriptions + downloads); canary purchase confirmed: 1 external trial subscriber active, full funnel validated end-to-end; Bridge Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, validation pending 7 consecutive days; Firestore indexes confirmed built — account page verified showing Trial + Monthly Plan + Full Access; extension auto-linking confirmed automatic — Generate Link Code is graceful fallback only; Feb 19 post-fix validation complete)</span>
+      <span>Updated: February 20, 2026 (staging URL verified live: themegpt-web-dufb63uofq-uc.a.run.app → themegpt.ai; GA4 internal traffic filter applied/verified/activated on Feb 20; Bridge Gate 1 observation Day 1 started Feb 20 with pre-filter baseline 25% on Feb 19; Gate 3 validation Day 1 started Feb 20 with earliest pass date Feb 26; v2.2.2 still pending CWS review; Firestore indexes confirmed built; canary purchase + extension auto-link validation complete Feb 19)</span>
       <span>Model: Freemium + Subscription</span>
       <span>Cadence: 2 weeks + 4 weeks + 6 weeks (plus 1-week buffer)</span>
     </div>
@@ -1059,12 +1059,12 @@
           <div class="kpi-label">Install conversion (event-based user ratio / listing-view ratio): 14 installs / 60 active users and 14 installs / 85 listing views</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-value" style="color: var(--coral);">25%</div>
-          <div class="kpi-label">Unassigned traffic share — Bridge Gate 1 FAILING (threshold: <=10% for 7 consecutive days)</div>
+          <div class="kpi-value" style="color: var(--gold);">Day 1 (Feb 20)</div>
+          <div class="kpi-label">Unassigned traffic share — Bridge Gate 1 tracking active (filter activated Feb 20; pre-filter baseline 25% on Feb 19; pass threshold: <=10% for 7 consecutive days)</div>
         </div>
         <div class="kpi-card">
-          <div class="kpi-value" style="color: var(--gold);">Deployed</div>
-          <div class="kpi-label">Funnel events (trial_start / checkout_start / purchase_success) instrumentation live — Gate 3 visibility validation in progress (7-day requirement)</div>
+          <div class="kpi-value" style="color: var(--gold);">Day 1 (Feb 20)</div>
+          <div class="kpi-label">Funnel events (trial_start / checkout_start / purchase_success) instrumentation live — Gate 3 visibility validation window active (earliest pass date: Feb 26)</div>
         </div>
         <div class="kpi-card">
           <div class="kpi-value">$0 / 1 trial</div>
@@ -1081,13 +1081,13 @@
       </div>
 
       <div class="callout warn" style="margin-top:0.8rem;">
-        <strong>Bridge Gate Status:</strong> Gate 1 FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 2 implementation complete (all targeted CWS links now tagged). Gate 3 instrumentation deployed; GA visibility must hold for 7 consecutive days before pass. Attribution validation is the immediate priority before any launch channel is activated.
+        <strong>Bridge Gate Status:</strong> Gate 1 ⏳ TRACKING ACTIVE — filter activated Feb 20; Day 1 started (pre-filter baseline: 25% on Feb 19). Gate 2 ✅ IMPLEMENTED — all targeted CWS links are tagged. Gate 3 ⏳ TRACKING ACTIVE — instrumentation deployed; Day 1 started Feb 20 (earliest pass date Feb 26). Product Hunt launch remains blocked until all three gates pass for 7 consecutive days.
       </div>
 
       <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Traffic Mix (GA API confirmed, 28-day window)</h4>
       <ul class="task-list">
         <li>Direct: 39 sessions (51.3%) — branded intent and bookmarks, healthy baseline.</li>
-        <li>Unassigned: 19 sessions (25%) — <strong>root cause: item-share-cb source with no medium set.</strong> CWS share-button traffic is not classified and inflates Unassigned. Requires UTM fix.</li>
+        <li>Unassigned: 19 sessions (25%) in the Feb 19 pre-filter baseline — root cause was mixed attribution noise (item-share-cb plus internal/dev traffic). UTM remediation shipped and GA4 internal traffic filter activated Feb 20; monitor post-filter trend daily.</li>
         <li>Referral: 11 sessions (14.5%) — chatgpt.com is confirmed 3rd-largest source (6 sessions). High intent; organic discovery from within ChatGPT itself.</li>
         <li>Organic Search: 6 sessions (7.9%) — Google (4), DuckDuckGo (1), Yahoo India (1).</li>
         <li>Paid Search: 1 session (1.3%) — single test impression; no active paid campaign running.</li>
@@ -1096,11 +1096,11 @@
       <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Traffic Sources — Ranked</h4>
       <ul class="task-list">
         <li>#1 Direct / (none): 39 sessions — baseline demand.</li>
-        <li>#2 item-share-cb: 14 sessions combined — CWS share button. High volume, zero medium tag → drives Unassigned. Fix: add <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code>.</li>
+        <li>#2 item-share-cb: 14 sessions combined in baseline sample — CWS share button. Remediation is completed in web/CWS links with explicit <code>utm_source</code>/<code>utm_medium</code>/<code>utm_campaign</code> tagging.</li>
         <li>#3 chatgpt.com / referral: 6 sessions — organic discovery from ChatGPT UI. No action needed; monitor for growth.</li>
         <li>#4 google / organic: 4 sessions — search visibility growing.</li>
         <li>#5 Extension self-referral (ext_sidebar, ext_app_menu): 4 sessions — in-extension links working. Confirm UTM tagging is present.</li>
-        <li>#6 CWS staging URL (theme-gpt-web-dufb63uofq-uc.a.run.app): 3 sessions — internal/dev traffic. Add exclusion filter in GA.</li>
+        <li>#6 CWS staging URL (themegpt-web-dufb63uofq-uc.a.run.app): 3 sessions — internal/dev traffic in baseline sample. GA4 internal traffic filter is now active (Feb 20).</li>
       </ul>
 
       <h4 style="margin-top:0.8rem; margin-bottom:0.3rem;">Geography (GA API confirmed)</h4>
@@ -1404,22 +1404,22 @@
         <div class="week-block">
           <h4>Bridge Week (February 19-26, 2026): Stability + Measurement Integrity Gate</h4>
           <div class="callout warn">
-            <strong>Gate Status (current implementation state):</strong> Gate 1 ❌ FAILING — Unassigned at 25% (need ≤10% for 7 consecutive days). Gate 2 ✅ IMPLEMENTED — UTM tags now cover core pages plus <code>auth/extension</code> and <code>success</code> CWS links. Gate 3 ⏳ IN VALIDATION — <code>trial_start</code> / <code>checkout_start</code> / <code>purchase_success</code> instrumentation is deployed; GA visibility must be confirmed for 7 consecutive days. Product Hunt launch remains blocked until all three gates pass for 7 consecutive days.
+            <strong>Gate Status (current implementation state):</strong> Gate 1 ⏳ TRACKING STARTED — GA4 internal traffic filter is Active (Feb 20), Day 1 of 7-day observation. Gate 2 ✅ IMPLEMENTED — UTM tags now cover core pages plus <code>auth/extension</code> and <code>success</code> CWS links. Gate 3 ⏳ TRACKING STARTED — <code>trial_start</code> / <code>checkout_start</code> / <code>purchase_success</code> instrumentation is deployed; Day 1 started Feb 20 (earliest pass date Feb 26). Product Hunt launch remains blocked until all three gates pass for 7 consecutive days.
           </div>
           <ul class="task-list">
-            <li>Gate condition 1: Unassigned traffic share must remain &lt;= 10% for 7 consecutive days. <strong>Current: 25% — FAILING.</strong> Root cause confirmed: item-share-cb sessions arrive with no <code>medium</code> set, counting as Unassigned.</li>
+            <li>Gate condition 1: Unassigned traffic share must remain &lt;= 10% for 7 consecutive days. <strong>Current: TRACKING STARTED (Day 1 = Feb 20).</strong> Pre-filter baseline on Feb 19 was 25%; internal traffic filter is now active.</li>
             <li>Gate condition 2: Campaign classification must be explicit: paid traffic when
               <code>medium in (cpc, ppc, paid)</code> or source/campaign contains ad identifiers (for example
               <code>pmax</code>); organic/referral/direct must remain separated. <strong>Current: IMPLEMENTED — core pages, <code>auth/extension</code> links, and <code>success</code> page install prompts are tagged with explicit source/medium/campaign values.</strong></li>
             <li>Gate condition 3: Required funnel events must be visible in GA for 7 consecutive days:
-              <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. <strong>Current: IN VALIDATION — analytics contract is implemented in web code; GA visibility window is pending confirmation.</strong></li>
+              <code>trial_start</code>, <code>checkout_start</code>, <code>purchase_success</code>. <strong>Current: TRACKING STARTED — Day 1 is Feb 20; earliest pass date is Feb 26 if all three events remain visible daily.</strong></li>
             <li>If gate fails, this week shifts to attribution remediation only; no launch-channel scaling.</li>
           </ul>
-          <h4>Attribution Remediation Tasks — ACTIVE (Gate not met)</h4>
+          <h4>Attribution Remediation Tasks — ACTIVE (Gate validation in progress)</h4>
           <ul class="task-list">
             <li><strong>Priority 1:</strong> Completed UTM attribution remediation for CWS links: core pages use <code>utm_source=cws&amp;utm_medium=share&amp;utm_campaign=item-share</code>; <code>auth/extension</code> uses <code>utm_source=web&amp;utm_medium=referral&amp;utm_campaign=extension_auth</code>; <code>success</code> uses <code>utm_source=cws&amp;utm_medium=post_purchase&amp;utm_campaign=install_prompt</code>.</li>
             <li><strong>Priority 2:</strong> Completed GA4 funnel instrumentation contract in web code. Implemented map: <code>checkout_start</code> in <code>app/page.tsx</code> before checkout POST; <code>purchase_success</code> in <code>app/success/page.tsx</code> on confirmed session (<code>data.success &amp;&amp; !data.pending</code>); <code>trial_start</code> in the same block gated on actual subscription status <code>trialing</code> (not inferred from <code>planType</code>).</li>
-            <li><strong>Priority 3:</strong> Add internal traffic filter in GA4 for staging URL <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> to remove dev noise from reports.</li>
+            <li><strong>Priority 3:</strong> <s>Add internal traffic filter in GA4 for staging URL <code>themegpt-web-dufb63uofq-uc.a.run.app</code> to remove dev noise from reports.</s> Done: filter applied, realtime-verified, and activated on Feb 20, 2026.</li>
             <li>Audit all extension/web links to CWS and pricing for UTM completeness (ext_sidebar, ext_app_menu sources should carry utm tags).</li>
             <li>Standardize campaign naming across links: <code>source</code>, <code>medium</code>, <code>campaign</code>.</li>
             <li>Preserve referral continuity from extension to web to checkout entry.</li>
@@ -1749,8 +1749,7 @@
           <tr>
             <td>February 19, 2026</td>
             <td>v2.2.0 approved and published on Chrome Web Store</td>
-            <td>Status: Completed. Begin 7-day stability + Measurement Integrity Gate (Feb 19-26); launch Product Hunt
-              only after gate pass</td>
+            <td>Status: Completed. Stability week underway; Measurement Integrity observation window is Feb 20-26 (Day 1 after filter activation). Launch Product Hunt only after gate pass.</td>
           </tr>
           <tr>
             <td>February 19, 2026</td>
@@ -1771,6 +1770,11 @@
             <td>February 19, 2026</td>
             <td>Canary purchase confirmed: 1 external trial subscriber (<code>asap.johnson00@gmail.com</code>). Full funnel validated: checkout → Stripe → webhook → Firestore → success page. <code>no_payment_required</code> trial verifier, auto-resume checkout, and "Sign In" instruction text all confirmed working.</td>
             <td>Status: Completed. First external subscriber. $0 MRR (trial); first charge ~March 22, 2026.</td>
+          </tr>
+          <tr>
+            <td>February 20, 2026</td>
+            <td>GA4 internal traffic filter activated after Testing + Realtime verification; staging URL check confirmed live at <code>themegpt-web-dufb63uofq-uc.a.run.app</code> (redirects to <code>themegpt.ai</code>).</td>
+            <td>Status: Completed. Gate 1 and Gate 3 observation windows both started Feb 20; earliest pass date is Feb 26, 2026.</td>
           </tr>
         </tbody>
       </table>
@@ -1802,13 +1806,13 @@
       </div>
       <div class="week-block" style="border: 2px solid var(--peach); margin-top: 0.65rem;">
         <h4>Next Actions (v2.2.0 Published — Gate Remediation Mode)</h4>
-        <div class="callout warn">GA audit (Feb 19) set remediation priorities. Current state: Gate 1 still failing, Gate 2 implementation complete, Gate 3 instrumentation deployed and awaiting GA visibility validation. Product Hunt launch remains blocked.</div>
+        <div class="callout warn">GA audit (Feb 19) set remediation priorities. Current state: Gate 1 tracking is active (filter activated Feb 20), Gate 2 is implemented, and Gate 3 validation clock started Feb 20. Product Hunt launch remains blocked pending 7 consecutive pass days.</div>
         <ul class="task-list">
           <li><s>Monitor CWS review queue for v2.2.0 approval.</s> Done: v2.2.0 approved and published on February 19, 2026.</li>
           <li><s>Validate listing propagation and verify extension runtime behavior on fresh installs and updates.</s> Done: canary purchase confirmed full funnel end-to-end on February 19, 2026.</li>
           <li><s>Fix item-share-cb UTM classification.</s> Done: core pages, <code>auth/extension</code> links, and <code>success</code> install prompts are now tagged with explicit UTM source/medium/campaign values.</li>
           <li><s>Implement GA4 funnel events — Gate 3 blocker.</s> Done: <code>checkout_start</code>, <code>purchase_success</code>, and <code>trial_start</code> are implemented in web flows with correct <code>trial_start</code> gating on actual subscription status. Next: verify GA event visibility for 7 consecutive days.</li>
-          <li>Add GA4 internal traffic filter to exclude <code>theme-gpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</li>
+          <li><s>Add GA4 internal traffic filter to exclude <code>themegpt-web-dufb63uofq-uc.a.run.app</code> from reports (dev noise).</s> Done: Applied, realtime-verified, and activated on Feb 20, 2026.</li>
           <li>Audit ext_sidebar and ext_app_menu links for UTM completeness — these are confirmed referral sources but need consistent tagging.</li>
           <li>Set up split weekly scorecard: organic vs paid listing views, channel-specific trial conversion, and trial-to-paid by channel.</li>
           <li>Monitor India user share weekly — currently tied with US at 22%. Escalation review triggered if this holds for 2 consecutive weeks.</li>
@@ -1825,7 +1829,7 @@
   </div>
 
   <div class="footer">
-    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 19, 2026 (v2.2.2 submitted to CWS pending review — pricing CTA URL fix; Firestore composite indexes deployed and confirmed operational; canary purchase confirmed 1 external trial subscriber; account page verified correct; extension auto-link confirmed automatic; Gate 1 still failing at 25% unassigned; Gate 3 instrumentation deployed, 7-day validation pending)
+    ThemeGPT Lean Monetization Roadmap v2.2.2+ — Updated February 20, 2026 (staging URL verified live; GA4 internal traffic filter active; Gate 1 and Gate 3 Day 1 started Feb 20 with earliest pass date Feb 26; v2.2.2 still pending CWS review; canary purchase, account page, and extension auto-link validations remain confirmed)
   </div>
 
   <script>

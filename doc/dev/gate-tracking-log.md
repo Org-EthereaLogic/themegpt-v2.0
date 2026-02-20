@@ -12,8 +12,8 @@
 
 - **Measures:** Percentage of GA4 sessions with no UTM attribution and no referrer (Session source/medium = `(not set)`)
 - **Pass criterion:** ≤10% unassigned sessions for 7 consecutive calendar days
-- **Status as of Feb 19:** FAILING — currently at 25%
-- **Required action before tracking begins:** Apply the GA4 internal traffic filter per `docs/ga4-filter-guide.md`. The filter must be activated (not just set to Testing) before the 7-day window starts in earnest.
+- **Status as of Feb 20:** TRACKING STARTED — pre-filter baseline was 25% on Feb 19; GA4 internal traffic filter is Active as of Feb 20
+- **Filter activation status:** COMPLETE — applied, realtime-verified, and activated per `docs/ga4-filter-guide.md`
 - **How to measure:**
   1. GA4 → Reports → Acquisition → Traffic Acquisition
   2. Set date range to the single day being logged
@@ -25,8 +25,8 @@
 - **Measures:** Whether three conversion events are visible with nonzero counts in GA4
 - **Events required:** `trial_start`, `checkout_start`, `purchase_success`
 - **Pass criterion:** All three events visible in GA4 for 7 consecutive calendar days
-- **Observation window started:** Feb 19, 2026 (instrumentation deployed in v2.2.1 web release)
-- **Status as of Feb 19:** PENDING — instrumentation deployed; first data expected within 24-48 hours
+- **Observation window started:** Feb 20, 2026 (instrumentation deployed in v2.2.1 web release)
+- **Status as of Feb 20:** TRACKING STARTED — Day 1 of the 7-day validation window (earliest possible pass date: Feb 26, 2026)
 - **How to measure:**
   1. GA4 → Reports → Engagement → Events
   2. Set date range to the single day being logged
@@ -39,7 +39,7 @@
 
 | Date | Unassigned % | Filter Active? | Status | Notes |
 |------|-------------|----------------|--------|-------|
-| 2026-02-20 | | | | |
+| 2026-02-20 | | Y | TRACKING | Filter active; Day 1 of observation window |
 | 2026-02-21 | | | | |
 | 2026-02-22 | | | | |
 | 2026-02-23 | | | | |
@@ -47,7 +47,7 @@
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
 
-**Status values:** `PASS` (≤10%), `FAIL` (>10%), `PENDING` (filter not yet active)
+**Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
 
 ---
 
@@ -55,7 +55,7 @@
 
 | Date | `trial_start` | `checkout_start` | `purchase_success` | All 3 visible? | Notes |
 |------|--------------|-----------------|-------------------|----------------|-------|
-| 2026-02-20 | | | | | |
+| 2026-02-20 | | | | | Day 1 of validation window (earliest pass date: 2026-02-26) |
 | 2026-02-21 | | | | | |
 | 2026-02-22 | | | | | |
 | 2026-02-23 | | | | | |
@@ -87,7 +87,7 @@ Product Hunt launch unlocked:
 
 ## Countdown Note
 
-If Gate 1 begins passing on Feb 20 (immediately after filter activation), and Gate 3 also begins passing on Feb 20, the earliest possible Product Hunt launch window is the week of **Feb 27, 2026**. If either gate does not begin passing until later in the week, the launch date slides by the same number of days.
+With Day 1 set to Feb 20, 2026 for both Gate 1 and Gate 3, the earliest gate pass date is **Feb 26, 2026** and the earliest Product Hunt launch window is the week of **Feb 27, 2026**. If either gate does not begin passing until later, the launch date slides by the same number of days.
 
 Gate 1 and Gate 3 are independent — one passing does not affect the other. Both must accumulate 7 consecutive passing days; they need not pass simultaneously.
 

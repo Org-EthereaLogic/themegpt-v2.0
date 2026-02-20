@@ -5,7 +5,7 @@ Thank you for your interest in contributing to ThemeGPT!
 **Important:** All contributions must respect the **Local-First privacy architecture**. This means:
 
 - No external API calls for core functionality
-- No analytics or tracking code
+- No analytics or tracking code in the extension (the web app uses consent-gated GA4)
 - All data processing must happen in the browser
 - No dependencies that send data externally
 

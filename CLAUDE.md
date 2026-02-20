@@ -109,7 +109,7 @@ pnpm lint       # Lint code
 - **v2.2.2** — pending CWS review (submitted February 19, 2026 — pricing CTA URL fix: UTM params before hash fragment)
 - **v2.3.0** — committed to `main`, tagged; CWS submission blocked pending v2.2.2 review clearance; re-run `submit-extension.yml` once review clears
 - **Current web version**: v2.2.1 base + abandoned checkout recovery deployed (Cloud Run commit `c1fffae`, February 19, 2026 — `checkout.session.expired` webhook, `abandoned_checkouts` Firestore collection, recovery email)
-- **Active measurement gates**: Bridge Gate 1 FAILING (unassigned traffic at 25%, threshold ≤10% for 7 consecutive days); Gate 3 instrumentation deployed and pending GA visibility validation for 7 consecutive days. Product Hunt launch is blocked until all three gates pass. End-to-end payment flow confirmed validated Feb 19, 2026 (account page + extension auto-link both working).
+- **Active measurement gates**: Bridge Gate 1 TRACKING (GA4 internal traffic filter activated Feb 20; pre-filter baseline 25% on Feb 19; Day 1 of 7-day observation window started Feb 20; threshold ≤10% for 7 consecutive days). Gate 3 TRACKING (instrumentation deployed; Day 1 = Feb 20; earliest pass date Feb 26). Product Hunt launch is blocked until all three gates pass for 7 consecutive days. End-to-end payment flow confirmed validated Feb 19, 2026 (account page + extension auto-link both working).
 - **Note**: `SUBMIT_KEYS` repository secret is required for automated CWS submission
 
 ## Key Resources

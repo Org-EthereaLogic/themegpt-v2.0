@@ -127,4 +127,4 @@ All notable changes to ThemeGPT will be documented in this file.
 ### Security
 
 - Privacy-first architecture: all data stays local
-- No analytics or tracking
+- No analytics or tracking in the extension

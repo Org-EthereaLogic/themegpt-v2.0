@@ -31,7 +31,7 @@ To fulfill **Priority 3** of the Bridge Week roadmap (v2.2.2), follow these step
 
 1.  Go to the **Realtime** report.
 2.  Add a comparison: **Test data filter name** exactly matches `Exclude Internal Traffic`.
-3.  Perform actions on the staging site: `https://theme-gpt-web-dufb63uofq-uc.a.run.app`
+3.  Perform actions on the staging site: `https://themegpt-web-dufb63uofq-uc.a.run.app`
 4.  Once verified that your staging traffic is being caught by the filter, go back to **Data Filters** and change the state from `Testing` to `Active`.
 
 > [!IMPORTANT]
@@ -41,12 +41,13 @@ To fulfill **Priority 3** of the Bridge Week roadmap (v2.2.2), follow these step
 
 ## Filter Application Status
 
-Update this table manually after completing each step above.
+Current verified status:
 
 | Field | Value |
 |-------|-------|
-| Filter applied (Testing state) | _(not yet applied)_ |
-| Verified in Realtime report | _(not yet verified)_ |
-| Filter activated (Active state) | _(not yet activated)_ |
+| Filter applied (Testing state) | Applied (Feb 20, 2026) |
+| Verified in Realtime report | Verified (Feb 20, 2026) |
+| Filter activated (Active state) | Activated (Feb 20, 2026) |
+| Staging URL reachability check | Verified live (Feb 20, 2026) — redirects to `https://themegpt.ai/` |
 
 > Once activated, the Gate 1 observation window begins in earnest. Track daily unassigned traffic % in `doc/dev/gate-tracking-log.md`.

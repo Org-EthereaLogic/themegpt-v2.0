@@ -1,6 +1,6 @@
 # ThemeGPT v2.0 - Development Status Report
 
-**Generated:** 2026-02-17 | **Last updated:** 2026-02-19
+**Generated:** 2026-02-17 | **Last updated:** 2026-02-20
 **Branch:** `main`
 **Repository:** Org-EthereaLogic/themegpt-v2.0
 
@@ -21,7 +21,7 @@ ThemeGPT v2.0 is a **privacy-first Chrome extension** that enables users to cust
 | Test Coverage | 5 test files | 94/94 passing |
 | Public Version | v2.2.0 live / v2.2.2 pending CWS review / v2.3.0 committed (awaiting submission) | End-to-end payment flow validated Feb 19, 2026 |
 
-**Overall Project Health: GOOD** — v2.2.0 live on CWS; v2.2.2 pending review; v2.3.0 committed and tagged (CWS submission queued); abandoned checkout recovery deployed to Cloud Run; Stripe, Firestore indexes, and full payment funnel confirmed operational.
+**Overall Project Health: GOOD** — v2.2.0 live on CWS; v2.2.2 pending review; v2.3.0 committed and tagged (CWS submission queued); abandoned checkout recovery deployed to Cloud Run; Stripe, Firestore indexes, and full payment funnel confirmed operational; GA4 Gate 1/3 observation windows are active as of Feb 20, 2026.
 
 ---
 
@@ -335,8 +335,8 @@ pnpm lint   # ESLint validation
 ### IN PROGRESS
 
 - CWS review clearance for v2.2.2 (prerequisite for v2.3.0 submission)
-- Bridge Gate 1: unassigned traffic reduction (currently 25%; threshold ≤10% for 7 consecutive days)
-- Gate 3: GA4 visibility validation (7-day observation window)
+- Bridge Gate 1: unassigned traffic reduction (pre-filter baseline 25% on Feb 19; filter active; 7-day observation window in progress Feb 20-26)
+- Gate 3: GA4 visibility validation (7-day observation window in progress Feb 20-26; earliest pass date Feb 26)
 - Product Hunt launch (blocked until all 3 measurement gates pass)
 
 ### NOT STARTED

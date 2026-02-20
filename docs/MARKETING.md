@@ -20,7 +20,7 @@ Premium themes include stunning visual effects: aurora gradients, animated snowf
 Adjust font sizes, line heights, and padding to match your preference.
 
 🔒 **PRIVACY FIRST**
-Your chat data never leaves your browser. No accounts required for free themes. No tracking. No analytics. Just beautiful themes.
+Your chat data never leaves your browser. No accounts required for free themes. No tracking in the extension. Just beautiful themes.
 
 ---
 

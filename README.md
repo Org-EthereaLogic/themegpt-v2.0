@@ -7,7 +7,7 @@
     <img src="https://img.shields.io/badge/License-MIT-blue" alt="License" />
   </p>
 </div>
-A Chrome extension that lets you customize ChatGPT's appearance and track your token usage—all without any data ever leaving your browser.
+A Chrome extension that lets you customize ChatGPT's appearance and track token usage locally. Optional web account/billing flows run on themegpt.ai.
 
 ---
 
@@ -29,8 +29,8 @@ A Chrome extension that lets you customize ChatGPT's appearance and track your t
 
 > **Your data stays with you. Always.**
 
-- **No data leaves your browser** — All processing happens locally
-- **No analytics or tracking** — We don't collect anything
+- **Extension theme/token data stays on-device** — Rendering and token counting happen locally in your browser
+- **No analytics in the extension** — The web app uses consent-gated GA4 for funnel analytics
 - **Token counting is 100% local** — Uses bundled `gpt-tokenizer` library
 - **Open source** — Full transparency and auditability
 

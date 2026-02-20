@@ -147,7 +147,7 @@ describe('QA: Extension Popup UI', () => {
         expect(screen.queryByText(/downloads left/)).not.toBeInTheDocument()
     })
 
-    it('shows "Subscribe" CTA for free users with no subscription', async () => {
+    it('shows "Start free 30-day trial" CTA for free users with no subscription', async () => {
         mockStorageData['authToken'] = 'valid-token'
         mockFetch.mockResolvedValue({
             ok: true,
@@ -167,7 +167,7 @@ describe('QA: Extension Popup UI', () => {
             fireEvent.click(btn)
         })
 
-        expect(screen.getByText('Subscribe')).toBeInTheDocument()
+        expect(screen.getByText('Start free 30-day trial')).toBeInTheDocument()
     })
 
     it('shows "0 downloads left" when credits are zero', async () => {
@@ -189,12 +189,12 @@ describe('QA: Extension Popup UI', () => {
         expect(screen.getByText('0 downloads left')).toBeInTheDocument()
     })
 
-    it('shows "Connect" button when not authenticated', async () => {
+    it('shows "Sign In" button when not authenticated', async () => {
         // No authToken set — user is disconnected
         render(<Popup />)
 
         await waitFor(() => {
-            const btn = screen.getByText('Connect')
+            const btn = screen.getByText('Sign In')
             fireEvent.click(btn)
         })
 

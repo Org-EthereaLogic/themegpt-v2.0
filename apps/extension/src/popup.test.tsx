@@ -77,9 +77,9 @@ describe('Popup', () => {
       expect(screen.getByText(/Manage Account/)).toBeInTheDocument()
     })
 
-    it('renders Connect button when not authenticated', () => {
+    it('renders Sign In button when not authenticated', () => {
       render(<Popup />)
-      expect(screen.getByText('Connect')).toBeInTheDocument()
+      expect(screen.getByText('Sign In')).toBeInTheDocument()
     })
 
     it('renders Free Collection section with theme count badge', () => {
@@ -106,10 +106,10 @@ describe('Popup', () => {
   })
 
   describe('Account Panel Toggle', () => {
-    it('shows account panel when Connect button is clicked', () => {
+    it('shows account panel when Sign In button is clicked', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       expect(screen.getByText('Connect Account')).toBeInTheDocument()
       expect(screen.getByText('Connect with Google/GitHub')).toBeInTheDocument()
@@ -118,17 +118,17 @@ describe('Popup', () => {
     it('hides account panel when clicked again', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
       expect(screen.getByText('Connect Account')).toBeInTheDocument()
 
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
       expect(screen.queryByText('Connect Account')).not.toBeInTheDocument()
     })
 
     it('shows token input field with placeholder', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       expect(screen.getByPlaceholderText('Paste token...')).toBeInTheDocument()
       expect(screen.getByText('Go')).toBeInTheDocument()
@@ -137,7 +137,7 @@ describe('Popup', () => {
     it('updates token input value on change', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       const input = screen.getByPlaceholderText('Paste token...') as HTMLInputElement
       fireEvent.change(input, { target: { value: 'test-token' } })
@@ -150,17 +150,17 @@ describe('Popup', () => {
     it('opens auth page when Connect with Google/GitHub is clicked', () => {
       render(<Popup />)
 
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
       fireEvent.click(screen.getByText('Connect with Google/GitHub'))
 
-      expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/auth/extension`, '_blank')
+      expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/auth/extension?utm_source=extension&utm_medium=popup&utm_campaign=auth_flow`, '_blank')
     })
 
     it('shows connecting status when token is submitted', async () => {
       mockFetch.mockImplementation(() => new Promise(() => {}))
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       const input = screen.getByPlaceholderText('Paste token...')
       fireEvent.change(input, { target: { value: 'test-token' } })
@@ -184,13 +184,13 @@ describe('Popup', () => {
       })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       const input = screen.getByPlaceholderText('Paste token...')
       fireEvent.change(input, { target: { value: 'valid-token' } })
       fireEvent.click(screen.getByText('Go'))
 
-      // After successful connection, header button changes from "Connect" to "Premium"
+      // After successful connection, header button changes from "Sign In" to "Premium"
       expect(await screen.findByText('Premium')).toBeInTheDocument()
     })
 
@@ -198,7 +198,7 @@ describe('Popup', () => {
       mockFetch.mockResolvedValue({ ok: false, status: 401 })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       const input = screen.getByPlaceholderText('Paste token...')
       fireEvent.change(input, { target: { value: 'invalid-token' } })
@@ -211,7 +211,7 @@ describe('Popup', () => {
       mockFetch.mockRejectedValue(new Error('Network error'))
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       const input = screen.getByPlaceholderText('Paste token...')
       fireEvent.change(input, { target: { value: 'any-token' } })
@@ -232,7 +232,7 @@ describe('Popup', () => {
       })
 
       render(<Popup />)
-      fireEvent.click(screen.getByText('Connect'))
+      fireEvent.click(screen.getByText('Sign In'))
 
       const input = screen.getByPlaceholderText('Paste token...')
       fireEvent.change(input, { target: { value: 'my-token' } })
@@ -332,14 +332,20 @@ describe('Popup', () => {
       })
     })
 
-    it('opens pricing page for locked premium theme when not subscribed', () => {
+    it('opens pricing page for locked premium theme when not subscribed', async () => {
       render(<Popup />)
 
       const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
       const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
       fireEvent.click(themeCard)
+      await waitFor(() => {
+        expect(mockSet).toHaveBeenCalledWith('premiumClickCount', 1)
+      })
+      fireEvent.click(themeCard)
 
-      expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/#pricing`, '_blank')
+      await waitFor(() => {
+        expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')
+      })
     })
 
     it('applies unlocked premium theme', async () => {

@@ -248,10 +248,10 @@ export default function Popup() {
       setSlotError("This is a premium theme — start your free 30-day trial.")
     } else if (clickCount === 2) {
       setSlotError("Unlock all 8 premium themes with a free 30-day trial.")
-      window.open(`${API_BASE_URL}/#pricing?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser`, '_blank')
+      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')
     } else {
       setSlotError("You keep coming back to premium themes. Unlock them all free for 30 days.")
-      window.open(`${API_BASE_URL}/#pricing?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser`, '_blank')
+      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')
     }
   }
 
@@ -349,7 +349,7 @@ export default function Popup() {
               )}
               {!accountStatus.hasSubscription && (
                 <button
-                  onClick={() => window.open(`${API_BASE_URL}/#pricing?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser`, '_blank')}
+                  onClick={() => window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser#pricing`, '_blank')}
                   className="mt-3 text-xs bg-teal text-white px-4 py-2 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300"
                 >
                   Start free 30-day trial

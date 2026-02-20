@@ -5,13 +5,18 @@ import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { jwtVerify } from 'jose';
 
+type MockResponseInit = {
+    status?: number;
+    headers?: Record<string, string>;
+};
+
 // Mock dependencies
 vi.mock('next/server', async () => {
     const actual = await vi.importActual('next/server');
     return {
         ...actual,
         NextResponse: {
-            json: (body: any, init?: any) => {
+            json: (body: unknown, init?: MockResponseInit) => {
                 return {
                     json: async () => body,
                     status: init?.status || 200,
@@ -45,6 +50,9 @@ vi.mock('@/lib/rate-limit', () => ({
     RATE_LIMITS: { sync: {} },
 }));
 
+const mockJwtVerify = vi.mocked(jwtVerify);
+const mockGetSubscriptionByUserId = vi.mocked(db.getSubscriptionByUserId);
+
 describe('Extension Status Route', () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -71,7 +79,7 @@ describe('Extension Status Route', () => {
     });
 
     it('returns 401 if token is invalid', async () => {
-        (jwtVerify as any).mockRejectedValue(new Error('Invalid token'));
+        mockJwtVerify.mockRejectedValue(new Error('Invalid token'));
 
         const req = createRequest('invalid-token');
         const res = await GET(req);
@@ -82,9 +90,9 @@ describe('Extension Status Route', () => {
     });
 
     it('returns correct status for active yearly subscription', async () => {
-        (jwtVerify as any).mockResolvedValue({
+        mockJwtVerify.mockResolvedValue({
             payload: { userId: 'user-123', email: 'test@example.com' },
-        });
+        } as unknown as Awaited<ReturnType<typeof jwtVerify>>);
 
         const mockSubscription = {
             id: 'sub-1',
@@ -95,7 +103,7 @@ describe('Extension Status Route', () => {
             trialEndsAt: null,
         };
 
-        (db.getSubscriptionByUserId as any).mockResolvedValue(mockSubscription);
+        mockGetSubscriptionByUserId.mockResolvedValue(mockSubscription as Awaited<ReturnType<typeof db.getSubscriptionByUserId>>);
 
         const req = createRequest('valid-token');
         const res = await GET(req);
@@ -109,9 +117,9 @@ describe('Extension Status Route', () => {
     });
 
     it('returns correct status for LIFETIME subscription', async () => {
-        (jwtVerify as any).mockResolvedValue({
+        mockJwtVerify.mockResolvedValue({
             payload: { userId: 'user-life', email: 'life@example.com' },
-        });
+        } as unknown as Awaited<ReturnType<typeof jwtVerify>>);
 
         const mockSubscription = {
             id: 'sub-life',
@@ -122,7 +130,7 @@ describe('Extension Status Route', () => {
             trialEndsAt: null,
         };
 
-        (db.getSubscriptionByUserId as any).mockResolvedValue(mockSubscription);
+        mockGetSubscriptionByUserId.mockResolvedValue(mockSubscription as Awaited<ReturnType<typeof db.getSubscriptionByUserId>>);
 
         const req = createRequest('valid-token');
         const res = await GET(req);
@@ -138,9 +146,9 @@ describe('Extension Status Route', () => {
     });
 
     it('returns correct status for expired subscription', async () => {
-        (jwtVerify as any).mockResolvedValue({
+        mockJwtVerify.mockResolvedValue({
             payload: { userId: 'user-expired', email: 'expired@example.com' },
-        });
+        } as unknown as Awaited<ReturnType<typeof jwtVerify>>);
 
         const mockSubscription = {
             id: 'sub-expired',
@@ -151,7 +159,7 @@ describe('Extension Status Route', () => {
             trialEndsAt: null,
         };
 
-        (db.getSubscriptionByUserId as any).mockResolvedValue(mockSubscription);
+        mockGetSubscriptionByUserId.mockResolvedValue(mockSubscription as Awaited<ReturnType<typeof db.getSubscriptionByUserId>>);
 
         const req = createRequest('valid-token');
         const res = await GET(req);
@@ -165,12 +173,12 @@ describe('Extension Status Route', () => {
     });
 
     it('returns correct status for Internal User override', async () => {
-        (jwtVerify as any).mockResolvedValue({
+        mockJwtVerify.mockResolvedValue({
             payload: { userId: 'user-internal', email: 'admin@etherealogic.ai' },
-        });
+        } as unknown as Awaited<ReturnType<typeof jwtVerify>>);
 
         // No DB subscription
-        (db.getSubscriptionByUserId as any).mockResolvedValue(null);
+        mockGetSubscriptionByUserId.mockResolvedValue(null);
 
         const req = createRequest('valid-token');
         const res = await GET(req);

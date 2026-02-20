@@ -4,7 +4,11 @@ import { POST } from './route';
 import { NextRequest } from 'next/server';
 import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
-import { getStripe } from '@/lib/stripe';
+
+type MockResponseInit = {
+    status?: number;
+    headers?: Record<string, string>;
+};
 
 // Mock dependencies
 vi.mock('next/server', async () => {
@@ -12,7 +16,7 @@ vi.mock('next/server', async () => {
     return {
         ...actual,
         NextResponse: {
-            json: (body: any, init?: any) => {
+            json: (body: unknown, init?: MockResponseInit) => {
                 return {
                     json: async () => body,
                     status: init?.status || 200,
@@ -69,6 +73,10 @@ vi.mock('jose', () => ({
     }
 }));
 
+const mockGetServerSession = vi.mocked(getServerSession);
+const mockGetSubscriptionByUserId = vi.mocked(db.getSubscriptionByUserId);
+const mockGetSubscriptionByStripeId = vi.mocked(db.getSubscriptionByStripeId);
+
 describe('Extension Auth Route', () => {
     beforeEach(() => {
         vi.clearAllMocks();
@@ -82,7 +90,7 @@ describe('Extension Auth Route', () => {
     };
 
     it('returns 401 if not authenticated', async () => {
-        (getServerSession as any).mockResolvedValue(null);
+        mockGetServerSession.mockResolvedValue(null);
 
         const req = createRequest();
         const res = await POST(req);
@@ -93,11 +101,11 @@ describe('Extension Auth Route', () => {
     });
 
     it('returns token if already subscribed (skip Stripe link)', async () => {
-        (getServerSession as any).mockResolvedValue({
+        mockGetServerSession.mockResolvedValue({
             user: { id: 'user-1', email: 'test@example.com', name: 'Test User' },
-        });
+        } as Awaited<ReturnType<typeof getServerSession>>);
 
-        (db.getSubscriptionByUserId as any).mockResolvedValue({ id: 'sub-1' });
+        mockGetSubscriptionByUserId.mockResolvedValue({ id: 'sub-1' } as Awaited<ReturnType<typeof db.getSubscriptionByUserId>>);
 
         const req = createRequest();
         const res = await POST(req);
@@ -110,12 +118,12 @@ describe('Extension Auth Route', () => {
     });
 
     it('links Stripe subscription with LIFETIME metadata correctly', async () => {
-        (getServerSession as any).mockResolvedValue({
+        mockGetServerSession.mockResolvedValue({
             user: { id: 'user-life', email: 'life@example.com', name: 'Life User' },
-        });
+        } as Awaited<ReturnType<typeof getServerSession>>);
 
         // No existing DB subscription
-        (db.getSubscriptionByUserId as any).mockResolvedValue(null);
+        mockGetSubscriptionByUserId.mockResolvedValue(null);
 
         // Mock Stripe Customer
         mockStripe.customers.list.mockResolvedValue({
@@ -139,7 +147,7 @@ describe('Extension Auth Route', () => {
         });
 
         // No existing DB sub by Stripe ID either
-        (db.getSubscriptionByStripeId as any).mockResolvedValue(null);
+        mockGetSubscriptionByStripeId.mockResolvedValue(null);
 
         const req = createRequest();
         const res = await POST(req);
@@ -158,11 +166,11 @@ describe('Extension Auth Route', () => {
     });
 
     it('links Stripe subscription with YEARLY metadata (standard) correctly', async () => {
-        (getServerSession as any).mockResolvedValue({
+        mockGetServerSession.mockResolvedValue({
             user: { id: 'user-year', email: 'year@example.com', name: 'Year User' },
-        });
+        } as Awaited<ReturnType<typeof getServerSession>>);
 
-        (db.getSubscriptionByUserId as any).mockResolvedValue(null);
+        mockGetSubscriptionByUserId.mockResolvedValue(null);
 
         mockStripe.customers.list.mockResolvedValue({
             data: [{ id: 'cus_456', email: 'year@example.com' }],
@@ -183,7 +191,7 @@ describe('Extension Auth Route', () => {
             }],
         });
 
-        (db.getSubscriptionByStripeId as any).mockResolvedValue(null);
+        mockGetSubscriptionByStripeId.mockResolvedValue(null);
 
         const req = createRequest();
         await POST(req);

@@ -125,9 +125,6 @@ export async function POST(request: NextRequest) {
         isEarlyAdopterEligible: isEarlyAdopterEligible ? "true" : "false",
       },
       customer_email: userEmail || undefined,
-      consent_collection: {
-        promotions: "auto",
-      },
       after_expiration: {
         recovery: {
           enabled: true,

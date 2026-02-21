@@ -3,10 +3,18 @@ const { GoogleAuth } = require('google-auth-library');
 function parseDateArg() {
   const input = process.argv[2];
   if (!input) {
-    return new Date().toISOString().slice(0, 10);
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const dateStr = yesterday.toISOString().slice(0, 10);
+    console.log(`No date provided. Defaulting to prior day: ${dateStr}`);
+    return dateStr;
   }
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input)) {
     throw new Error('Date must be in YYYY-MM-DD format.');
+  }
+  const todayStr = new Date().toISOString().slice(0, 10);
+  if (input === todayStr) {
+    console.warn(`WARNING: Pulling data for today (${todayStr}) is only a smoke check due to GA4 API lag. Reliable data requires pulling the prior day.`);
   }
   return input;
 }
@@ -29,7 +37,8 @@ async function main() {
 
   const headers = {
     'Authorization': `Bearer ${accessToken}`,
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    'x-goog-user-project': 'gen-lang-client-0312336987'
   };
 
   const gate1Body = {
@@ -43,7 +52,7 @@ async function main() {
     headers,
     body: JSON.stringify(gate1Body)
   });
-  
+
   if (!res1.ok) {
     console.error('Error fetching Gate 1:', await res1.text());
   } else {

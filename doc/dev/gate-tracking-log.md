@@ -41,7 +41,7 @@
 
 | Date | Unassigned % | Filter Active? | Status | Notes |
 |------|-------------|----------------|--------|-------|
-| 2026-02-20 | N/A | Y | NO DATA | GA4 was not collecting web data until mid-day redeploy. Root cause: Firebase env vars missing from Cloud Run build. Fix deployed; GA4 Realtime confirmed working (1 active user, 25 events). Data API will lag until Feb 21. |
+| 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | | | | |
 | 2026-02-22 | | | | |
 | 2026-02-23 | | | | |

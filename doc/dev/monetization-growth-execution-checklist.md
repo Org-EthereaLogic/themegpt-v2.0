@@ -33,7 +33,7 @@
 ## 3) Channel Launch Tasks (This Week)
 
 - [x] Launch Google Search campaign with distinct UTM campaign name (`search_launch_v1`, $25/day, published Feb 21).
-- [ ] Launch Reddit paid campaign with distinct UTM campaign name.
+- [x] Launch Reddit paid campaign with distinct UTM campaign name (`reddit_launch_v1`, $50/day — approved exception for $500 ad credit, published Feb 21).
 - [ ] Publish week-1 social posts using `doc/dev/launch-asset-pack.md`.
 - [ ] Ensure every outbound campaign URL uses unique `utm_source`, `utm_medium`, `utm_campaign`.
 
@@ -59,6 +59,7 @@
   - Pause a channel at `>= $75` spend with zero checkout sessions.
   - Pause a channel if CAC `> $45` for 3 consecutive days.
   - Do not increase daily caps during first 7 days.
+  - **Budget exception:** Reddit approved at `$50/day` (vs standard `$25/day`) to qualify for `$500` ad credit. Google Search remains at `$25/day`.
 
 ---
 

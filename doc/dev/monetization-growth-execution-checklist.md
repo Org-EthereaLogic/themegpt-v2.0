@@ -22,11 +22,11 @@
 
 ## 2) Manual Console Tasks (Owner Action Required)
 
-- [ ] Link Clarity project `vky4a128au` to GA4 property `516189580` in Clarity settings.
-- [ ] Opt in to CWS GA4 in Chrome Web Store Developer Dashboard.
-- [ ] Mark CWS `install` event as conversion in the CWS GA4 property.
-- [ ] Create Clarity funnel 1: `Landing -> pricing_view -> checkout_start -> purchase_success`.
-- [ ] Create Clarity funnel 2: `/auth/extension -> /account -> checkout_start -> purchase_success`.
+- [x] Link Clarity project `vky4a128au` to GA4 property `516189580` in Clarity settings.
+- [x] Opt in to CWS GA4 in Chrome Web Store Developer Dashboard.
+- [x] Mark CWS `install` event as key event in the CWS GA4 property.
+- [x] Create Clarity funnel 1: `Marketing → Purchase` (Landing → Purchase Success).
+- [x] Create Clarity funnel 2: `Extension → Purchase` (Extension Auth → Account → Purchase Success).
 
 ---
 

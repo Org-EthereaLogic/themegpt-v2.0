@@ -217,7 +217,7 @@
       </p>
       <div class="meta">
         <span>Prepared: February 16, 2026</span>
-        <span>Updated: February 21, 2026 (growth pivot)</span>
+        <span>Updated: February 21, 2026 (console setup complete)</span>
         <span>Published extension: v2.2.2</span>
         <span>CWS pending review: v2.3.0</span>
       </div>
@@ -247,6 +247,14 @@
         <div class="stat ok">
           <div class="label">Revenue source of truth</div>
           <div class="value">Server-side checkout + invoice events</div>
+        </div>
+        <div class="stat ok">
+          <div class="label">Clarity analytics</div>
+          <div class="value">Live, linked to GA4, funnels configured</div>
+        </div>
+        <div class="stat ok">
+          <div class="label">CWS GA4</div>
+          <div class="value">Opted in, install marked as key event</div>
         </div>
       </div>
     </section>
@@ -343,6 +351,21 @@
           <span class="mono">apps/web/app/api/checkout/route.test.ts</span>
           verifies checkout creation does not set
           <span class="mono">consent_collection.promotions</span>.
+        </li>
+        <li>
+          Microsoft Clarity integrated via
+          <span class="mono">@microsoft/clarity</span> npm SDK, consent-gated
+          alongside GA4 using the same
+          <span class="mono">themegpt_analytics_consent</span> localStorage key.
+        </li>
+        <li>
+          Clarity linked to GA4 property
+          <span class="mono">516189580</span>; two conversion funnels configured
+          (Marketing → Purchase, Extension → Purchase).
+        </li>
+        <li>
+          CWS GA4 opted in; <span class="mono">install</span> event marked as key
+          event with $1 proxy value for ROAS calculations.
         </li>
       </ul>
     </section>
@@ -548,10 +571,10 @@
             <td>Run launch posts and tie all outbound links to distinct UTM campaigns for attribution clarity.</td>
             <td>Marketing</td>
           </tr>
-          <tr>
+          <tr class="ok">
             <td>6</td>
-            <td>Complete external console setup</td>
-            <td>Link Clarity to GA4 and opt in to CWS GA4 in Google dashboards (manual UI tasks).</td>
+            <td>Complete external console setup ✓</td>
+            <td>Clarity linked to GA4, CWS GA4 opted in, install key event set, two Clarity funnels created.</td>
             <td>Ops</td>
           </tr>
         </tbody>
@@ -593,9 +616,9 @@
     </section>
 
     <div class="footer">
-      ThemeGPT consolidated roadmap updated February 21, 2026 (growth pivot).
+      ThemeGPT consolidated roadmap updated February 21, 2026 (console setup complete).
       Focus: immediate advertising with spend guardrails, deterministic
-      attribution, and server-side revenue-based optimization.
+      attribution, Clarity session replays, and server-side revenue-based optimization.
     </div>
   </div>
 </body>

@@ -2,7 +2,7 @@
 
 **Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
 **Updated:** Daily, by checking GA4
-**Blocker:** Product Hunt launch is blocked until Gate 1 AND Gate 3 both pass
+**Blocker:** Product Hunt launch remains blocked until Gate 1 AND Gate 3 both pass (7 consecutive days each).
 
 ---
 

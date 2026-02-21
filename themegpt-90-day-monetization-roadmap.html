@@ -1,600 +1,599 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ThemeGPT 90-Day Monetization Roadmap (Consolidated)</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
-      rel="stylesheet"
-    />
-    <style>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThemeGPT 90-Day Monetization Roadmap (Consolidated)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --paper: #faf6f0;
+      --card: #ffffff;
+      --ink: #4b2e1e;
+      --muted: #7a6558;
+      --line: rgba(75, 46, 30, 0.14);
+      --teal: #7ecec5;
+      --peach: #f4a988;
+      --gold: #d8b500;
+      --warn-bg: rgba(244, 169, 136, 0.16);
+      --ok-bg: rgba(126, 206, 197, 0.16);
+      --active-bg: rgba(216, 181, 0, 0.14);
+      --shadow: 0 12px 28px rgba(75, 46, 30, 0.08);
+    }
+
+    @media (prefers-color-scheme: dark) {
       :root {
-        --paper: #faf6f0;
-        --card: #ffffff;
-        --ink: #4b2e1e;
-        --muted: #7a6558;
-        --line: rgba(75, 46, 30, 0.14);
-        --teal: #7ecec5;
+        --paper: #151119;
+        --card: #1e1924;
+        --ink: #e4ddd6;
+        --muted: #9d9087;
+        --line: rgba(255, 255, 255, 0.1);
+        --teal: #8fd8cf;
         --peach: #f4a988;
-        --gold: #d8b500;
-        --warn-bg: rgba(244, 169, 136, 0.16);
-        --ok-bg: rgba(126, 206, 197, 0.16);
-        --active-bg: rgba(216, 181, 0, 0.14);
-        --shadow: 0 12px 28px rgba(75, 46, 30, 0.08);
+        --gold: #e8d44d;
+        --warn-bg: rgba(244, 169, 136, 0.13);
+        --ok-bg: rgba(143, 216, 207, 0.12);
+        --active-bg: rgba(232, 212, 77, 0.12);
+        --shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
       }
+    }
 
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --paper: #151119;
-          --card: #1e1924;
-          --ink: #e4ddd6;
-          --muted: #9d9087;
-          --line: rgba(255, 255, 255, 0.1);
-          --teal: #8fd8cf;
-          --peach: #f4a988;
-          --gold: #e8d44d;
-          --warn-bg: rgba(244, 169, 136, 0.13);
-          --ok-bg: rgba(143, 216, 207, 0.12);
-          --active-bg: rgba(232, 212, 77, 0.12);
-          --shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-        }
-      }
+    * {
+      box-sizing: border-box;
+    }
 
-      * {
-        box-sizing: border-box;
-      }
+    body {
+      margin: 0;
+      padding: 1.25rem;
+      font-family: "Inter", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 8% 0%,
+          rgba(126, 206, 197, 0.12),
+          transparent 34%),
+        radial-gradient(circle at 96% 8%,
+          rgba(244, 169, 136, 0.12),
+          transparent 30%),
+        var(--paper);
+      line-height: 1.55;
+    }
 
-      body {
-        margin: 0;
-        padding: 1.25rem;
-        font-family: "Inter", "Segoe UI", sans-serif;
-        color: var(--ink);
-        background:
-          radial-gradient(
-            circle at 8% 0%,
-            rgba(126, 206, 197, 0.12),
-            transparent 34%
-          ),
-          radial-gradient(
-            circle at 96% 8%,
-            rgba(244, 169, 136, 0.12),
-            transparent 30%
-          ),
-          var(--paper);
-        line-height: 1.55;
-      }
+    .wrap {
+      max-width: 980px;
+      margin: 0 auto;
+    }
 
-      .wrap {
-        max-width: 980px;
-        margin: 0 auto;
-      }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 1rem 1.15rem;
+      margin-bottom: 0.9rem;
+    }
 
-      .panel {
-        background: var(--card);
-        border: 1px solid var(--line);
-        border-radius: 18px;
-        box-shadow: var(--shadow);
-        padding: 1rem 1.15rem;
-        margin-bottom: 0.9rem;
-      }
+    h1,
+    h2,
+    h3 {
+      font-family: "Space Grotesk", "Inter", sans-serif;
+      letter-spacing: -0.01em;
+      margin: 0 0 0.55rem;
+      line-height: 1.2;
+    }
 
-      h1,
-      h2,
-      h3 {
-        font-family: "Space Grotesk", "Inter", sans-serif;
-        letter-spacing: -0.01em;
-        margin: 0 0 0.55rem;
-        line-height: 1.2;
-      }
+    h1 {
+      font-size: clamp(1.35rem, 2.8vw, 2rem);
+    }
 
-      h1 {
-        font-size: clamp(1.35rem, 2.8vw, 2rem);
-      }
+    h2 {
+      font-size: 1.08rem;
+      margin-top: 0.2rem;
+    }
 
-      h2 {
-        font-size: 1.08rem;
-        margin-top: 0.2rem;
-      }
+    h3 {
+      font-size: 0.96rem;
+      margin-top: 0.15rem;
+    }
 
-      h3 {
-        font-size: 0.96rem;
-        margin-top: 0.15rem;
-      }
+    p {
+      margin: 0 0 0.7rem;
+      color: var(--muted);
+    }
 
-      p {
-        margin: 0 0 0.7rem;
-        color: var(--muted);
-      }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.7rem;
+      font-size: 0.79rem;
+      color: var(--muted);
+    }
 
-      .meta {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin-top: 0.7rem;
-        font-size: 0.79rem;
-        color: var(--muted);
-      }
+    .meta span {
+      padding: 0.2rem 0.54rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.25);
+    }
 
-      .meta span {
-        padding: 0.2rem 0.54rem;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.25);
-      }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.65rem;
+      margin-top: 0.55rem;
+    }
 
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 0.65rem;
-        margin-top: 0.55rem;
-      }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.7rem 0.75rem;
+    }
 
-      .stat {
-        border: 1px solid var(--line);
-        border-radius: 14px;
-        padding: 0.7rem 0.75rem;
-      }
+    .stat .label {
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-bottom: 0.2rem;
+    }
 
-      .stat .label {
-        color: var(--muted);
-        font-size: 0.78rem;
-        margin-bottom: 0.2rem;
-      }
+    .stat .value {
+      font-size: 1rem;
+      font-weight: 700;
+    }
 
-      .stat .value {
-        font-size: 1rem;
-        font-weight: 700;
-      }
+    .ok {
+      background: var(--ok-bg);
+    }
 
-      .ok {
-        background: var(--ok-bg);
-      }
+    .active {
+      background: var(--active-bg);
+    }
 
-      .active {
-        background: var(--active-bg);
-      }
+    .warn {
+      background: var(--warn-bg);
+    }
 
-      .warn {
-        background: var(--warn-bg);
-      }
+    ul {
+      margin: 0;
+      padding-left: 1.1rem;
+    }
 
-      ul {
-        margin: 0;
-        padding-left: 1.1rem;
-      }
+    li {
+      margin-bottom: 0.38rem;
+    }
 
-      li {
-        margin-bottom: 0.38rem;
-      }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 0.4rem;
+      font-size: 0.92rem;
+    }
 
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 0.4rem;
-        font-size: 0.92rem;
-      }
+    th,
+    td {
+      text-align: left;
+      border-bottom: 1px solid var(--line);
+      padding: 0.52rem 0.32rem;
+      vertical-align: top;
+    }
 
-      th,
-      td {
-        text-align: left;
-        border-bottom: 1px solid var(--line);
-        padding: 0.52rem 0.32rem;
-        vertical-align: top;
-      }
+    th {
+      color: var(--muted);
+      font-size: 0.79rem;
+      font-weight: 600;
+    }
 
-      th {
-        color: var(--muted);
-        font-size: 0.79rem;
-        font-weight: 600;
-      }
+    .mono {
+      font-family: "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
+      font-size: 0.88em;
+      background: rgba(75, 46, 30, 0.08);
+      border-radius: 4px;
+      padding: 0.07rem 0.28rem;
+      color: inherit;
+      border: 1px solid var(--line);
+    }
 
-      .mono {
-        font-family: "JetBrains Mono", "SFMono-Regular", Menlo, monospace;
-        font-size: 0.88em;
-        background: rgba(75, 46, 30, 0.08);
-        border-radius: 4px;
-        padding: 0.07rem 0.28rem;
-        color: inherit;
-        border: 1px solid var(--line);
-      }
+    .footer {
+      font-size: 0.78rem;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 0.9rem;
+    }
+  </style>
+</head>
 
-      .footer {
-        font-size: 0.78rem;
-        color: var(--muted);
-        text-align: center;
-        margin-top: 0.9rem;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="wrap">
-      <header class="panel">
-        <h1>ThemeGPT 90-Day Monetization Roadmap (Consolidated)</h1>
-        <p>
-          Single source of truth for roadmap status. Duplicated status blocks
-          were removed so gate tracking, release status, and next actions stay
-          consistent.
-        </p>
-        <div class="meta">
-          <span>Prepared: February 16, 2026</span>
-          <span>Updated: February 21, 2026 (post-fix gate reset)</span>
-          <span>Published extension: v2.2.2</span>
-          <span>CWS pending review: v2.3.0</span>
-        </div>
-      </header>
-
-      <section class="panel">
-        <h2>Executive Status (As of February 21, 2026 — Post-Fix Reset)</h2>
-        <p>
-          All implementation work is complete. Payment infrastructure confirmed
-          healthy via Stripe (1 active sub, 1 trialing sub, 1 succeeded
-          payment). GA4 collection was restored mid-day Feb 20 after Cloud Run
-          build env fixes; true Day 1 for both gates is Feb 21.
-        </p>
-        <div class="grid">
-          <div class="stat ok">
-            <div class="label">Payment flow</div>
-            <div class="value">Healthy (Stripe verified)</div>
-          </div>
-          <div class="stat warn">
-            <div class="label">Gate 1 — Feb 20</div>
-            <div class="value">NO DATA (pre-fix collection gap)</div>
-          </div>
-          <div class="stat warn">
-            <div class="label">Gate 3 — Day 1</div>
-            <div class="value">Starts Feb 21 (full-day data)</div>
-          </div>
-          <div class="stat warn">
-            <div class="label">Product Hunt launch</div>
-            <div class="value">Blocked until gates pass</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="panel">
-        <h2>GA4 Recovery Snapshot (February 20, 2026)</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Channel</th>
-              <th>Sessions</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Unassigned / (not set)</td>
-              <td>N/A</td>
-              <td>No reliable daily report data before redeploy.</td>
-            </tr>
-            <tr>
-              <td>Direct / (none)</td>
-              <td>N/A</td>
-              <td>Data API lag expected until Feb 21.</td>
-            </tr>
-            <tr>
-              <td><strong>Total</strong></td>
-              <td><strong>N/A</strong></td>
-              <td>Realtime confirmed recovery (1 active user, 25 events).</td>
-            </tr>
-          </tbody>
-        </table>
-        <p>
-          Feb 20 is logged as a recovery day, not a valid Day 1 measurement day.
-          Gate tracking starts from Feb 21 using the corrected GA4 property
-          (<span class="mono">516189580</span>) and the first full day of
-          post-fix collection.
-        </p>
-      </section>
-
-      <section class="panel">
-        <h2>Identified Observability Gap</h2>
-        <p>
-          Abandoned checkout recovery emails contain a direct Stripe Checkout
-          URL. Users clicking that link bypass the web app, so
-          <span class="mono">checkout_start</span> never fires for email
-          recovery conversions. The
-          <span class="mono">purchase_success</span> event still fires on the
-          <span class="mono">/success</span> page. This means
-          <span class="mono">checkout_start</span> counts will undercount total
-          conversions. Not a payment bug — a measurement gap only.
-        </p>
-      </section>
-
-      <section class="panel">
-        <h2>Resolved Implementation Work</h2>
-        <ul>
-          <li>
-            UTM attribution remediation completed across core web pages,
-            <span class="mono">auth/extension</span>, and
-            <span class="mono">success</span> install prompts.
-          </li>
-          <li>
-            Extension outbound-link UTM audit completed: all 7 popup links
-            include <span class="mono">utm_source</span>,
-            <span class="mono">utm_medium</span>, and
-            <span class="mono">utm_campaign</span> (plus
-            <span class="mono">extension_version</span> in v2.3.0).
-          </li>
-          <li>
-            No separate <span class="mono">ext_sidebar</span> or
-            <span class="mono">ext_app_menu</span> components exist in the
-            current codebase; popup is the only built extension surface.
-          </li>
-          <li>
-            GA4 funnel events implemented in web flows:
-            <span class="mono">checkout_start</span>,
-            <span class="mono">purchase_success</span>,
-            <span class="mono">trial_start</span>.
-          </li>
-          <li>
-            GA4 analytics are consent-gated via cookie banner and
-            <span class="mono">initAnalyticsIfConsented()</span>.
-          </li>
-          <li>
-            GA4 internal traffic filter was applied, realtime-verified, and
-            activated on February 20, 2026.
-          </li>
-          <li>
-            Split scorecard template exists at
-            <span class="mono">doc/dev/weekly-split-scorecard-template.md</span
-            >.
-          </li>
-          <li>
-            Payment flow and entitlement path validated end-to-end on February
-            19, 2026; required Firestore composite indexes were deployed.
-          </li>
-        </ul>
-      </section>
-
-      <section class="panel">
-        <h2>Active Monitoring (No Code Work Required)</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Item</th>
-              <th>Current state</th>
-              <th>Pass/trigger condition</th>
-              <th>Earliest date</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Bridge Gate 1 (Unassigned share)</td>
-              <td>Feb 20 logged as NO DATA. True Day 1 begins Feb 21 after GA4 recovery.</td>
-              <td>
-                <span class="mono">&lt;= 10%</span> for 7 consecutive days.
-              </td>
-              <td>Feb 27 earliest (sliding if FAIL continues)</td>
-            </tr>
-            <tr>
-              <td>Bridge Gate 3 (Funnel event visibility)</td>
-              <td>
-                Feb 20 is a transition day (pre-redeploy gap + post-fix
-                realtime confirmation). True Day 1 starts Feb 21.
-              </td>
-              <td>
-                All 3 events visible with count &gt; 0 for 7 consecutive days.
-              </td>
-              <td>Feb 27 earliest (sliding if no events)</td>
-            </tr>
-            <tr>
-              <td>v2.3.0 CWS review</td>
-              <td>Submitted February 20, 2026 (run <span class="mono">22238384383</span>).</td>
-              <td>Review approved or rejected.</td>
-              <td>Expected 1-3 business days (roughly Mon Feb 23 to Wed Feb 25)</td>
-            </tr>
-            <tr>
-              <td>India user share watch</td>
-              <td>India tied US at 22% in current baseline.</td>
-              <td>
-                Escalate if tie or overtake holds for 2 weekly scorecards.
-              </td>
-              <td>Weekly cadence</td>
-            </tr>
-            <tr>
-              <td>Product Hunt launch</td>
-              <td>Blocked.</td>
-              <td>Launch only after Gate 1 and Gate 3 both pass.</td>
-              <td>After both gate windows pass</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="panel">
-        <h2>Release Track</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Version</th>
-              <th>Status</th>
-              <th>Date</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>v2.2.0</td>
-              <td>Published on Chrome Web Store</td>
-              <td>February 19, 2026</td>
-              <td>First public CWS release (superseded by v2.2.2).</td>
-            </tr>
-            <tr>
-              <td>v2.2.1 (web-only)</td>
-              <td>Deployed to web</td>
-              <td>February 19, 2026</td>
-              <td>
-                Dependabot patches plus UTM and GA4 bridge instrumentation
-                updates.
-              </td>
-            </tr>
-            <tr>
-              <td>v2.2.2</td>
-              <td>Published on Chrome Web Store</td>
-              <td>February 20, 2026</td>
-              <td>Pricing CTA URL ordering fix. Published via run <span class="mono">22205732502</span>.</td>
-            </tr>
-            <tr>
-              <td>v2.3.0</td>
-              <td>Submitted, pending CWS review</td>
-              <td>February 20, 2026</td>
-              <td>
-                Submitted via run <span class="mono">22238384383</span>. Includes
-                <span class="mono">extension_version</span> UTM param and abandoned
-                checkout recovery (web-side already live on Cloud Run).
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="panel">
-        <h2>90-Day Plan (Condensed)</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Phase</th>
-              <th>Window</th>
-              <th>Goal</th>
-              <th>State</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Phase 1</td>
-              <td>Weeks 1-2 (Feb 16-Mar 1)</td>
-              <td>
-                Offer-policy alignment, payment flow hardening, and extension
-                release gate.
-              </td>
-              <td>Complete</td>
-            </tr>
-            <tr>
-              <td>Phase 2</td>
-              <td>Bridge + Weeks 3-6 (Feb 19-Mar 29)</td>
-              <td>
-                Measurement integrity gate, then one launch channel with split
-                scorecard.
-              </td>
-              <td>Active (gate tracking)</td>
-            </tr>
-            <tr>
-              <td>Phase 3</td>
-              <td>Weeks 7-12 (Mar 30-May 10)</td>
-              <td>
-                Scale proven organic channel; run limited paid test only if gate
-                criteria pass.
-              </td>
-              <td>Planned</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="panel">
-        <h2>Daily Operating Checklist During Gate Window</h2>
-        <ul>
-          <li>
-            Record Gate 1 and Gate 3 daily values in
-            <span class="mono">doc/dev/gate-tracking-log.md</span>.
-          </li>
-          <li>
-            Use weekly scorecard template in
-            <span class="mono">doc/dev/weekly-split-scorecard-template.md</span
-            >.
-          </li>
-          <li>
-            Do not launch Product Hunt until both gates pass for 7 consecutive
-            days.
-          </li>
-          <li>
-            v2.3.0 submitted to CWS Feb 20 (run <span class="mono">22238384383</span>).
-            Monitor review status; expected 1–3 business days.
-          </li>
-        </ul>
-      </section>
-
-      <section class="panel">
-        <h2>Next Steps (Post-Fix Gate Reset)</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Priority</th>
-              <th>Action</th>
-              <th>Rationale</th>
-              <th>Owner</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Continue daily gate pulls (Feb 21+)</td>
-              <td>Feb 20 is NO DATA due to recovery work; begin 7-day observation from Feb 21.</td>
-              <td>Ops</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Verify internal traffic filter is excluding dev sessions</td>
-              <td>Confirm filter behavior on valid post-fix data days before escalating.</td>
-              <td>Growth</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Monitor v2.3.0 CWS review (expected by Feb 23)</td>
-              <td>Pending approval; no action unless rejected.</td>
-              <td>Product</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Assess Gate 3 viability by Feb 24</td>
-              <td>If zero funnel events persist for 3+ valid days (starting Feb 21), reconsider gate criteria. Events require real conversions from consenting users — if traffic is too low, the gate may need a longer window or adjusted criteria.</td>
-              <td>Growth</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>No new code work</td>
-              <td>Payment flow is healthy. Webhook idempotency is robust. No bugs to fix. Resist urge to build during observation window.</td>
-              <td>All</td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <section class="panel">
-        <h2>Reference Files</h2>
-        <ul>
-          <li>
-            <span class="mono">CLAUDE.md</span> (current high-level status and
-            next actions)
-          </li>
-          <li>
-            <span class="mono">doc/dev/utm-audit.md</span> (extension link
-            attribution audit)
-          </li>
-          <li>
-            <span class="mono">docs/ga4-filter-guide.md</span> (GA4 filter
-            activation record)
-          </li>
-          <li>
-            <span class="mono">doc/dev/gate-tracking-log.md</span> (daily gate
-            tracking log)
-          </li>
-          <li>
-            <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>
-            (weekly report template)
-          </li>
-        </ul>
-      </section>
-
-      <div class="footer">
-        ThemeGPT consolidated roadmap updated February 21, 2026 (post-fix gate
-        reset). Focus: daily gate monitoring, no new code during observation
-        window, reassess Gate 3 criteria by Feb 24 if zero events persist.
+<body>
+  <div class="wrap">
+    <header class="panel">
+      <h1>ThemeGPT 90-Day Monetization Roadmap (Consolidated)</h1>
+      <p>
+        Single source of truth for roadmap status. Duplicated status blocks
+        were removed so gate tracking, release status, and next actions stay
+        consistent.
+      </p>
+      <div class="meta">
+        <span>Prepared: February 16, 2026</span>
+        <span>Updated: February 21, 2026 (post-fix gate reset)</span>
+        <span>Published extension: v2.2.2</span>
+        <span>CWS pending review: v2.3.0</span>
       </div>
+    </header>
+
+    <section class="panel">
+      <h2>Executive Status (As of February 21, 2026 — Post-Fix Reset)</h2>
+      <p>
+        All implementation work is complete. Payment infrastructure confirmed
+        healthy via Stripe (1 active sub, 1 trialing sub, 1 succeeded
+        payment). GA4 collection was restored mid-day Feb 20 after Cloud Run
+        build env fixes; true Day 1 for both gates is Feb 21.
+      </p>
+      <div class="grid">
+        <div class="stat ok">
+          <div class="label">Payment flow</div>
+          <div class="value">Healthy (Stripe verified)</div>
+        </div>
+        <div class="stat warn">
+          <div class="label">Gate 1 — Feb 20</div>
+          <div class="value">NO DATA (pre-fix collection gap)</div>
+        </div>
+        <div class="stat warn">
+          <div class="label">Gate 3 — Day 1</div>
+          <div class="value">Starts Feb 21 (full-day data)</div>
+        </div>
+        <div class="stat warn">
+          <div class="label">Product Hunt launch</div>
+          <div class="value">Blocked until gates pass</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>GA4 Recovery Snapshot (February 20, 2026)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Sessions</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Unassigned / (not set)</td>
+            <td>N/A</td>
+            <td>No reliable daily report data before redeploy.</td>
+          </tr>
+          <tr>
+            <td>Direct / (none)</td>
+            <td>N/A</td>
+            <td>Data API lag expected until Feb 21.</td>
+          </tr>
+          <tr>
+            <td><strong>Total</strong></td>
+            <td><strong>N/A</strong></td>
+            <td>Realtime confirmed recovery (1 active user, 25 events).</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Feb 20 is logged as a recovery day, not a valid Day 1 measurement day.
+        Gate tracking starts from Feb 21 using the corrected GA4 property
+        (<span class="mono">516189580</span>) and the first full day of
+        post-fix collection.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Identified Observability Gap</h2>
+      <p>
+        Abandoned checkout recovery emails contain a direct Stripe Checkout
+        URL. Users clicking that link bypass the web app, so
+        <span class="mono">checkout_start</span> never fires for email
+        recovery conversions. The
+        <span class="mono">purchase_success</span> event still fires on the
+        <span class="mono">/success</span> page. This means
+        <span class="mono">checkout_start</span> counts will undercount total
+        conversions. Not a payment bug — a measurement gap only.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Resolved Implementation Work</h2>
+      <ul>
+        <li>
+          UTM attribution remediation completed across core web pages,
+          <span class="mono">auth/extension</span>, and
+          <span class="mono">success</span> install prompts.
+        </li>
+        <li>
+          Extension outbound-link UTM audit completed: all 7 popup links
+          include <span class="mono">utm_source</span>,
+          <span class="mono">utm_medium</span>, and
+          <span class="mono">utm_campaign</span> (plus
+          <span class="mono">extension_version</span> in v2.3.0).
+        </li>
+        <li>
+          No separate <span class="mono">ext_sidebar</span> or
+          <span class="mono">ext_app_menu</span> components exist in the
+          current codebase; popup is the only built extension surface.
+        </li>
+        <li>
+          GA4 funnel events implemented in web flows:
+          <span class="mono">checkout_start</span>,
+          <span class="mono">purchase_success</span>,
+          <span class="mono">trial_start</span>.
+        </li>
+        <li>
+          GA4 analytics are consent-gated via cookie banner and
+          <span class="mono">initAnalyticsIfConsented()</span>.
+        </li>
+        <li>
+          GA4 internal traffic filter was applied, realtime-verified, and
+          activated on February 20, 2026.
+        </li>
+        <li>
+          Split scorecard template exists at
+          <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>.
+        </li>
+        <li>
+          Payment flow and entitlement path validated end-to-end on February
+          19, 2026; required Firestore composite indexes were deployed.
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Active Monitoring (No Code Work Required)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Current state</th>
+            <th>Pass/trigger condition</th>
+            <th>Earliest date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Bridge Gate 1 (Unassigned share)</td>
+            <td>Feb 20 logged as NO DATA. True Day 1 begins Feb 21 after GA4 recovery.</td>
+            <td>
+              <span class="mono">&lt;= 10%</span> for 7 consecutive days.
+            </td>
+            <td>Feb 27 earliest (sliding if FAIL continues)</td>
+          </tr>
+          <tr>
+            <td>Bridge Gate 3 (Funnel event visibility)</td>
+            <td>
+              Feb 20 is a transition day (pre-redeploy gap + post-fix
+              realtime confirmation). True Day 1 starts Feb 21.
+            </td>
+            <td>
+              All 3 events visible with count &gt; 0 for 7 consecutive days.
+            </td>
+            <td>Feb 27 earliest (sliding if no events)</td>
+          </tr>
+          <tr>
+            <td>v2.3.0 CWS review</td>
+            <td>Submitted February 20, 2026 (run <span class="mono">22238384383</span>).</td>
+            <td>Review approved or rejected.</td>
+            <td>Expected 1-3 business days (roughly Mon Feb 23 to Wed Feb 25)</td>
+          </tr>
+          <tr>
+            <td>India user share watch</td>
+            <td>India tied US at 22% in current baseline.</td>
+            <td>
+              Escalate if tie or overtake holds for 2 weekly scorecards.
+            </td>
+            <td>Weekly cadence</td>
+          </tr>
+          <tr>
+            <td>Product Hunt launch</td>
+            <td>Blocked until Gate 1 and Gate 3 both pass for 7 consecutive days.</td>
+            <td>Do not launch until both gates pass.</td>
+            <td>Earliest week of Mar 2, 2026 (if gates pass by Feb 27).</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Release Track</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>v2.2.0</td>
+            <td>Published on Chrome Web Store</td>
+            <td>February 19, 2026</td>
+            <td>First public CWS release (superseded by v2.2.2).</td>
+          </tr>
+          <tr>
+            <td>v2.2.1 (web-only)</td>
+            <td>Deployed to web</td>
+            <td>February 19, 2026</td>
+            <td>
+              Dependabot patches plus UTM and GA4 bridge instrumentation
+              updates.
+            </td>
+          </tr>
+          <tr>
+            <td>v2.2.2</td>
+            <td>Published on Chrome Web Store</td>
+            <td>February 20, 2026</td>
+            <td>Pricing CTA URL ordering fix. Published via run <span class="mono">22205732502</span>.</td>
+          </tr>
+          <tr>
+            <td>v2.3.0</td>
+            <td>Submitted, pending CWS review</td>
+            <td>February 20, 2026</td>
+            <td>
+              Submitted via run <span class="mono">22238384383</span>. Includes
+              <span class="mono">extension_version</span> UTM param and abandoned
+              checkout recovery (web-side already live on Cloud Run).
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>90-Day Plan (Condensed)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Window</th>
+            <th>Goal</th>
+            <th>State</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Phase 1</td>
+            <td>Weeks 1-2 (Feb 16-Mar 1)</td>
+            <td>
+              Offer-policy alignment, payment flow hardening, and extension
+              release gate.
+            </td>
+            <td>Complete</td>
+          </tr>
+          <tr>
+            <td>Phase 2</td>
+            <td>Bridge + Weeks 3-6 (Feb 19-Mar 29)</td>
+            <td>
+              Measurement integrity gate, then one launch channel with split
+              scorecard.
+            </td>
+            <td>Active (gate tracking)</td>
+          </tr>
+          <tr>
+            <td>Phase 3</td>
+            <td>Weeks 7-12 (Mar 30-May 10)</td>
+            <td>
+              Scale proven organic channel; run limited paid test only if gate
+              criteria pass.
+            </td>
+            <td>Planned</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Daily Operating Checklist During Gate Window</h2>
+      <ul>
+        <li>
+          Record Gate 1 and Gate 3 daily values in
+          <span class="mono">doc/dev/gate-tracking-log.md</span>.
+        </li>
+        <li>
+          Use weekly scorecard template in
+          <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>.
+        </li>
+        <li>
+          Do not launch Product Hunt until both gates pass for 7 consecutive
+          days.
+        </li>
+        <li>
+          v2.3.0 submitted to CWS Feb 20 (run <span class="mono">22238384383</span>).
+          Monitor review status; expected 1–3 business days.
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Next Steps (Post-Fix Gate Reset)</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>Action</th>
+            <th>Rationale</th>
+            <th>Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Continue daily gate pulls (Feb 21+)</td>
+            <td>Feb 20 is NO DATA due to recovery work; begin 7-day observation from Feb 21.</td>
+            <td>Ops</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Verify internal traffic filter is excluding dev sessions</td>
+            <td>Confirm filter behavior on valid post-fix data days before escalating.</td>
+            <td>Growth</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Monitor v2.3.0 CWS review (expected by Feb 23)</td>
+            <td>Pending approval; no action unless rejected.</td>
+            <td>Product</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Assess Gate 3 viability by Feb 24</td>
+            <td>If zero funnel events persist for 3+ valid days (starting Feb 21), reconsider gate criteria. Events
+              require real conversions from consenting users — if traffic is too low, the gate may need a longer window
+              or adjusted criteria.</td>
+            <td>Growth</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>No new code work</td>
+            <td>Payment flow is healthy. Webhook idempotency is robust. No bugs to fix. Resist urge to build during
+              observation window.</td>
+            <td>All</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>Reference Files</h2>
+      <ul>
+        <li>
+          <span class="mono">CLAUDE.md</span> (current high-level status and
+          next actions)
+        </li>
+        <li>
+          <span class="mono">doc/dev/utm-audit.md</span> (extension link
+          attribution audit)
+        </li>
+        <li>
+          <span class="mono">docs/ga4-filter-guide.md</span> (GA4 filter
+          activation record)
+        </li>
+        <li>
+          <span class="mono">doc/dev/gate-tracking-log.md</span> (daily gate
+          tracking log)
+        </li>
+        <li>
+          <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>
+          (weekly report template)
+        </li>
+      </ul>
+    </section>
+
+    <div class="footer">
+      ThemeGPT consolidated roadmap updated February 21, 2026 (post-fix gate
+      reset). Focus: daily gate monitoring, no new code during observation
+      window, reassess Gate 3 criteria by Feb 24 if zero events persist.
     </div>
-  </body>
+  </div>
+</body>
+
 </html>

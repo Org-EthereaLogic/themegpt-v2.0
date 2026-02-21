@@ -32,7 +32,7 @@
 
 ## 3) Channel Launch Tasks (This Week)
 
-- [ ] Launch Google Search campaign with distinct UTM campaign name.
+- [x] Launch Google Search campaign with distinct UTM campaign name (`search_launch_v1`, $25/day, published Feb 21).
 - [ ] Launch Reddit paid campaign with distinct UTM campaign name.
 - [ ] Publish week-1 social posts using `doc/dev/launch-asset-pack.md`.
 - [ ] Ensure every outbound campaign URL uses unique `utm_source`, `utm_medium`, `utm_campaign`.

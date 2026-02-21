@@ -21,7 +21,6 @@
     "peacock.color": "#6533cd",
     "python-envs.defaultEnvManager": "ms-python.python:system",
     "python-envs.pythonProjects": [],
-    "snyk.advanced.organization": "199429f2-dad7-493d-9036-a528991502bb",
     "snyk.advanced.autoSelectOrganization": false,
     "chat.tools.terminal.autoApprove": {
         "pnpm": true

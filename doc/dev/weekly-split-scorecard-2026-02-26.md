@@ -1,8 +1,12 @@
 # Weekly Split Scorecard: Week Ending 2026-02-26
 
-**Purpose:** Weekly operating snapshot for launch-readiness monitoring.
+**Purpose:** Historical pre-pivot snapshot from the gate-tracking phase.
 **Cadence:** Weekly
 **Owner:** Growth + Product
+
+> Note: This file is archived context from the pre-pivot operating model.
+> Current execution uses server-side monetization KPIs and the updated
+> template in `doc/dev/weekly-split-scorecard-template.md`.
 
 ---
 

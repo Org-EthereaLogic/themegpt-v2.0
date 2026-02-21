@@ -1,8 +1,8 @@
 # ThemeGPT Launch Asset Pack — Checklist
 
-**Target**: One organic launch channel (Product Hunt recommended)
-**Timeline**: Ready before Phase 2, Week 5 (Mar 16, 2026)
-**Prerequisite**: CWS v2.1.0 approved + 7 days stable
+**Target**: Immediate multi-channel growth (paid + organic)
+**Timeline**: Launch week execution (starting Feb 21, 2026)
+**Prerequisite**: Payment flow healthy + spend guardrails enabled
 
 ---
 
@@ -82,6 +82,9 @@ Alternatives:
 
 ## 4. Product Hunt Specific Assets
 
+Product Hunt is optional and no longer a launch blocker. Run it when messaging
+and social cadence are stable.
+
 | # | Asset | File | Status |
 |---|-------|------|--------|
 | 1 | Thumbnail (240x240) | `ph-thumbnail.png` | [x] Done |
@@ -123,6 +126,18 @@ Alternatives:
 | 2 | Announcement post | LinkedIn | Short post + lead GIF | [x] Finalized |
 | 3 | OG image | All | 1200x630 — already exists at `apps/web/public/og-image.png` | [x] |
 | 4 | Twitter card | Twitter/X | 1200x600 — already exists in `asset/archive/` | [x] |
+
+### Required Campaign URL Format
+
+Use channel-specific UTM links for every post/ad to support attribution:
+
+- Base CWS URL: `https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba`
+- Google Ads: `...?utm_source=google&utm_medium=cpc&utm_campaign=<campaign_name>`
+- Reddit Ads: `...?utm_source=reddit&utm_medium=paid_social&utm_campaign=<campaign_name>`
+- Twitter/X: `...?utm_source=twitter&utm_medium=paid_social&utm_campaign=<campaign_name>`
+- LinkedIn: `...?utm_source=linkedin&utm_medium=organic_social&utm_campaign=<campaign_name>`
+- TikTok: `...?utm_source=tiktok&utm_medium=organic_social&utm_campaign=<campaign_name>`
+- YouTube: `...?utm_source=youtube&utm_medium=video&utm_campaign=<campaign_name>`
 
 ### Twitter/X Post (278 chars)
 

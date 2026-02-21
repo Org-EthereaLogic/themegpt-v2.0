@@ -2,7 +2,7 @@
 
 **Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
 **Updated:** Daily, by checking GA4
-**Blocker:** Product Hunt launch remains blocked until Gate 1 AND Gate 3 both pass (7 consecutive days each).
+**Blocker:** No hard launch blocker. Gate 1 and Gate 3 are tracked as diagnostics while paid acquisition begins.
 
 ---
 
@@ -71,7 +71,7 @@
 
 ---
 
-## Pass/Fail Summary
+## Diagnostic Summary
 
 ```
 Gate 1 result:  [ ] PASS  [ ] FAIL
@@ -83,17 +83,17 @@ Gate 3 result:  [ ] PASS  [ ] FAIL
   Last passing day:  ___________
 
 Product Hunt launch unlocked:
-  [ ] YES — both gates passed 7 consecutive days
-  [ ] NO  — gates still in progress
+  [ ] YES — launch decision no longer gate-bound
+  [ ] NO  — optional tracking-only status
 ```
 
 ---
 
 ## Countdown Note
 
-GA4 was not collecting web app data until the mid-day Feb 20 redeploy (Firebase env vars were missing from the Cloud Run build). True Day 1 of meaningful data collection is **Feb 21, 2026**. The earliest gate pass date is now **Feb 27, 2026** and the earliest Product Hunt launch window is the week of **Mar 2, 2026**. If either gate does not begin passing until later, the launch date slides by the same number of days.
+GA4 was not collecting web app data until the mid-day Feb 20 redeploy (Firebase env vars were missing from the Cloud Run build). True Day 1 of meaningful data collection is **Feb 21, 2026**. Continue logging Gate 1 and Gate 3 daily as quality diagnostics while optimization is driven by server-side monetization metrics.
 
-Gate 1 and Gate 3 are independent — one passing does not affect the other. Both must accumulate 7 consecutive passing days; they need not pass simultaneously.
+Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality, but no longer block acquisition starts.
 
 ---
 

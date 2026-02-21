@@ -211,93 +211,92 @@
     <header class="panel">
       <h1>ThemeGPT 90-Day Monetization Roadmap (Consolidated)</h1>
       <p>
-        Single source of truth for roadmap status. Duplicated status blocks
-        were removed so gate tracking, release status, and next actions stay
-        consistent.
+        Single source of truth for monetization execution. This version reflects
+        the growth pivot: begin advertising immediately, keep spend controlled,
+        and optimize using server-side attribution and revenue metrics.
       </p>
       <div class="meta">
         <span>Prepared: February 16, 2026</span>
-        <span>Updated: February 21, 2026 (post-fix gate reset)</span>
+        <span>Updated: February 21, 2026 (growth pivot)</span>
         <span>Published extension: v2.2.2</span>
         <span>CWS pending review: v2.3.0</span>
       </div>
     </header>
 
     <section class="panel">
-      <h2>Executive Status (As of February 21, 2026 — Post-Fix Reset)</h2>
+      <h2>Executive Status (As of February 21, 2026)</h2>
       <p>
-        All implementation work is complete. Payment infrastructure confirmed
-        healthy via Stripe (1 active sub, 1 trialing sub, 1 succeeded
-        payment). GA4 collection was restored mid-day Feb 20 after Cloud Run
-        build env fixes; true Day 1 for both gates is Feb 21.
+        Payment infrastructure is verified healthy and no longer a blocker.
+        Advertising is unblocked and starts immediately under strict spend
+        guardrails. Attribution now flows from landing URL to Stripe metadata
+        and webhook revenue records for channel-level performance reporting.
       </p>
       <div class="grid">
         <div class="stat ok">
           <div class="label">Payment flow</div>
           <div class="value">Healthy (Stripe verified)</div>
         </div>
-        <div class="stat warn">
-          <div class="label">Gate 1 — Feb 20</div>
-          <div class="value">NO DATA (pre-fix collection gap)</div>
+        <div class="stat active">
+          <div class="label">Launch posture</div>
+          <div class="value">Advertising live (guardrailed)</div>
         </div>
-        <div class="stat warn">
-          <div class="label">Gate 3 — Day 1</div>
-          <div class="value">Starts Feb 21 (full-day data)</div>
+        <div class="stat ok">
+          <div class="label">Attribution</div>
+          <div class="value">UTM to Stripe metadata: live</div>
         </div>
-        <div class="stat warn">
-          <div class="label">Product Hunt launch</div>
-          <div class="value">Blocked until gates pass</div>
+        <div class="stat ok">
+          <div class="label">Revenue source of truth</div>
+          <div class="value">Server-side checkout + invoice events</div>
         </div>
       </div>
     </section>
 
     <section class="panel">
-      <h2>GA4 Recovery Snapshot (February 20, 2026)</h2>
+      <h2>Measurement Snapshot (Last 7 Days)</h2>
       <table>
         <thead>
           <tr>
-            <th>Channel</th>
+            <th>Property</th>
+            <th>Active Users</th>
             <th>Sessions</th>
             <th>Notes</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Unassigned / (not set)</td>
-            <td>N/A</td>
-            <td>No reliable daily report data before redeploy.</td>
+            <td>CWS GA4 (<span class="mono">521095252</span>)</td>
+            <td>21</td>
+            <td>24</td>
+            <td>Top-of-funnel listing traffic only (views/install intent).</td>
           </tr>
           <tr>
-            <td>Direct / (none)</td>
-            <td>N/A</td>
-            <td>Data API lag expected until Feb 21.</td>
+            <td>Web GA4 (<span class="mono">516189580</span>)</td>
+            <td>3</td>
+            <td>6</td>
+            <td>Web app visits; includes consent-gated funnel events.</td>
           </tr>
           <tr>
-            <td><strong>Total</strong></td>
-            <td><strong>N/A</strong></td>
-            <td>Realtime confirmed recovery (1 active user, 25 events).</td>
+            <td>Web funnel events</td>
+            <td colspan="2"><span class="mono">trial_start=0</span>, <span class="mono">checkout_start=0</span>, <span class="mono">purchase_success=0</span></td>
+            <td>Current constraint is conversion volume, not payment reliability.</td>
           </tr>
         </tbody>
       </table>
       <p>
-        Feb 20 is logged as a recovery day, not a valid Day 1 measurement day.
-        Gate tracking starts from Feb 21 using the corrected GA4 property
-        (<span class="mono">516189580</span>) and the first full day of
-        post-fix collection.
+        GA4 and Clarity remain diagnostic tools. Paid-launch decisions now use
+        server-side monetization summaries from checkout and invoice events.
       </p>
     </section>
 
     <section class="panel">
-      <h2>Identified Observability Gap</h2>
+      <h2>Current Observability Limits</h2>
       <p>
-        Abandoned checkout recovery emails contain a direct Stripe Checkout
-        URL. Users clicking that link bypass the web app, so
-        <span class="mono">checkout_start</span> never fires for email
-        recovery conversions. The
-        <span class="mono">purchase_success</span> event still fires on the
-        <span class="mono">/success</span> page. This means
-        <span class="mono">checkout_start</span> counts will undercount total
-        conversions. Not a payment bug — a measurement gap only.
+        GA4 and Clarity are consent-gated, so client-side funnels can undercount
+        true commercial performance. This is expected behavior. Ad efficiency
+        is measured from server-side events:
+        <span class="mono">checkout_sessions</span> and
+        <span class="mono">revenue_events</span>, both populated from Stripe
+        session creation and webhook callbacks.
       </p>
     </section>
 
@@ -305,97 +304,90 @@
       <h2>Resolved Implementation Work</h2>
       <ul>
         <li>
-          UTM attribution remediation completed across core web pages,
-          <span class="mono">auth/extension</span>, and
-          <span class="mono">success</span> install prompts.
+          Checkout regression fixed by removing
+          <span class="mono">consent_collection.promotions</span> from Stripe
+          Checkout session creation.
         </li>
         <li>
-          Extension outbound-link UTM audit completed: all 7 popup links
-          include <span class="mono">utm_source</span>,
-          <span class="mono">utm_medium</span>, and
-          <span class="mono">utm_campaign</span> (plus
-          <span class="mono">extension_version</span> in v2.3.0).
+          First-party attribution capture implemented from URL params:
+          <span class="mono">utm_source</span>,
+          <span class="mono">utm_medium</span>,
+          <span class="mono">utm_campaign</span>,
+          <span class="mono">utm_content</span>,
+          <span class="mono">utm_term</span>,
+          <span class="mono">gclid</span>,
+          <span class="mono">fbclid</span>,
+          <span class="mono">ttclid</span>.
         </li>
         <li>
-          No separate <span class="mono">ext_sidebar</span> or
-          <span class="mono">ext_app_menu</span> components exist in the
-          current codebase; popup is the only built extension surface.
+          Attribution now propagates end-to-end:
+          browser landing params → checkout API payload →
+          Stripe metadata → webhook revenue records.
         </li>
         <li>
-          GA4 funnel events implemented in web flows:
+          GA4 funnel and intent events now include:
+          <span class="mono">pricing_view</span>,
+          <span class="mono">theme_preview</span>,
+          <span class="mono">checkout_abandon</span>,
           <span class="mono">checkout_start</span>,
           <span class="mono">purchase_success</span>,
           <span class="mono">trial_start</span>.
         </li>
         <li>
-          GA4 analytics are consent-gated via cookie banner and
-          <span class="mono">initAnalyticsIfConsented()</span>.
+          Internal monetization endpoint added:
+          <span class="mono">/api/metrics/monetization?days=7</span>
+          (restricted to internal accounts) for server-side KPI tracking.
         </li>
         <li>
-          GA4 internal traffic filter was applied, realtime-verified, and
-          activated on February 20, 2026.
-        </li>
-        <li>
-          Split scorecard template exists at
-          <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>.
-        </li>
-        <li>
-          Payment flow and entitlement path validated end-to-end on February
-          19, 2026; required Firestore composite indexes were deployed.
+          Checkout regression guard added:
+          <span class="mono">apps/web/app/api/checkout/route.test.ts</span>
+          verifies checkout creation does not set
+          <span class="mono">consent_collection.promotions</span>.
         </li>
       </ul>
     </section>
 
     <section class="panel">
-      <h2>Active Monitoring (No Code Work Required)</h2>
+      <h2>Active Guardrails (Paid Launch)</h2>
       <table>
         <thead>
           <tr>
-            <th>Item</th>
+            <th>Control</th>
             <th>Current state</th>
-            <th>Pass/trigger condition</th>
-            <th>Earliest date</th>
+            <th>Trigger / rule</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Bridge Gate 1 (Unassigned share)</td>
-            <td>Feb 20 logged as NO DATA. True Day 1 begins Feb 21 after GA4 recovery.</td>
-            <td>
-              <span class="mono">&lt;= 10%</span> for 7 consecutive days.
-            </td>
-            <td>Feb 27 earliest (sliding if FAIL continues)</td>
+            <td>Channel scope</td>
+            <td>Start with 2 channels only.</td>
+            <td>Google Search + Reddit paid social.</td>
+            <td>Pause adding channels until first attributed revenue event.</td>
           </tr>
           <tr>
-            <td>Bridge Gate 3 (Funnel event visibility)</td>
-            <td>
-              Feb 20 is a transition day (pre-redeploy gap + post-fix
-              realtime confirmation). True Day 1 starts Feb 21.
-            </td>
-            <td>
-              All 3 events visible with count &gt; 0 for 7 consecutive days.
-            </td>
-            <td>Feb 27 earliest (sliding if no events)</td>
+            <td>Daily spend cap</td>
+            <td>Applies from launch day.</td>
+            <td><span class="mono">$25/day/channel</span> hard cap.</td>
+            <td>Do not increase caps during first 7 days.</td>
           </tr>
           <tr>
-            <td>v2.3.0 CWS review</td>
-            <td>Submitted February 20, 2026 (run <span class="mono">22238384383</span>).</td>
-            <td>Review approved or rejected.</td>
-            <td>Expected 1-3 business days (roughly Mon Feb 23 to Wed Feb 25)</td>
+            <td>No-signal kill switch</td>
+            <td>Active.</td>
+            <td><span class="mono">&gt;= $75</span> spend on a channel with zero checkout sessions.</td>
+            <td>Pause the channel immediately and rotate creatives.</td>
           </tr>
           <tr>
-            <td>India user share watch</td>
-            <td>India tied US at 22% in current baseline.</td>
-            <td>
-              Escalate if tie or overtake holds for 2 weekly scorecards.
-            </td>
-            <td>Weekly cadence</td>
+            <td>CAC kill switch</td>
+            <td>Active after first 2 purchases/channel.</td>
+            <td>CAC exceeds <span class="mono">$45</span> for 3 consecutive days.</td>
+            <td>Pause paid traffic for that channel and revise offer/landing.</td>
           </tr>
           <tr>
-            <td>Product Hunt launch</td>
-            <td>Blocked until Gate 1 and Gate 3 both pass for 7 consecutive days.</td>
-            <td>Do not launch until both gates pass.</td>
-            <td>Earliest week of Mar 2, 2026 (if gates pass by Feb 27).</td>
+            <td>Weekly geography watch</td>
+            <td>India and US currently near parity in CWS baseline.</td>
+            <td>India share ties/exceeds US for 2 consecutive weekly scorecards.</td>
+            <td>Shift ad geo targeting toward US/UK/CA/AU and re-check copy.</td>
           </tr>
         </tbody>
       </table>
@@ -473,17 +465,17 @@
             <td>Phase 2</td>
             <td>Bridge + Weeks 3-6 (Feb 19-Mar 29)</td>
             <td>
-              Measurement integrity gate, then one launch channel with split
-              scorecard.
+              Immediate paid launch with guardrails, plus Clarity/GA4 UX
+              diagnostics and channel-level attribution optimization.
             </td>
-            <td>Active (gate tracking)</td>
+            <td>Active (ads + optimization)</td>
           </tr>
           <tr>
             <td>Phase 3</td>
             <td>Weeks 7-12 (Mar 30-May 10)</td>
             <td>
-              Scale proven organic channel; run limited paid test only if gate
-              criteria pass.
+              Scale only channels with validated paid revenue efficiency (CAC
+              and payback thresholds met).
             </td>
             <td>Planned</td>
           </tr>
@@ -492,19 +484,20 @@
     </section>
 
     <section class="panel">
-      <h2>Daily Operating Checklist During Gate Window</h2>
+      <h2>Daily Operating Checklist (Paid Launch Week)</h2>
       <ul>
         <li>
-          Record Gate 1 and Gate 3 daily values in
-          <span class="mono">doc/dev/gate-tracking-log.md</span>.
+          Pull server-side monetization summary from
+          <span class="mono">/api/metrics/monetization?days=7</span> and log
+          checkout + revenue by channel.
         </li>
         <li>
-          Use weekly scorecard template in
-          <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>.
+          Keep GA4 + Clarity as diagnostics: monitor pricing scroll depth, rage
+          clicks, and checkout drop-off behavior.
         </li>
         <li>
-          Do not launch Product Hunt until both gates pass for 7 consecutive
-          days.
+          Enforce spend caps and kill switches; do not increase budgets until
+          first attributed paid revenue appears.
         </li>
         <li>
           v2.3.0 submitted to CWS Feb 20 (run <span class="mono">22238384383</span>).
@@ -514,7 +507,7 @@
     </section>
 
     <section class="panel">
-      <h2>Next Steps (Post-Fix Gate Reset)</h2>
+      <h2>Next Steps (Growth Pivot Execution)</h2>
       <table>
         <thead>
           <tr>
@@ -527,36 +520,39 @@
         <tbody>
           <tr>
             <td>1</td>
-            <td>Continue daily gate pulls (Feb 21+)</td>
-            <td>Feb 20 is NO DATA due to recovery work; begin 7-day observation from Feb 21.</td>
-            <td>Ops</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Verify internal traffic filter is excluding dev sessions</td>
-            <td>Confirm filter behavior on valid post-fix data days before escalating.</td>
+            <td>Launch paid traffic on 2 channels</td>
+            <td>Start Google Search + Reddit campaigns with strict caps to gather first conversion signals fast.</td>
             <td>Growth</td>
           </tr>
           <tr>
+            <td>2</td>
+            <td>Track server-side monetization KPIs daily</td>
+            <td>Use checkout/revenue records as source of truth for CAC and channel efficiency.</td>
+            <td>Ops</td>
+          </tr>
+          <tr>
             <td>3</td>
-            <td>Monitor v2.3.0 CWS review (expected by Feb 23)</td>
-            <td>Pending approval; no action unless rejected.</td>
+            <td>Run weekly Clarity friction review</td>
+            <td>Watch sessions with checkout intent but no purchase and fix highest-friction UI points.</td>
             <td>Product</td>
           </tr>
           <tr>
             <td>4</td>
-            <td>Assess Gate 3 viability by Feb 24</td>
-            <td>If zero funnel events persist for 3+ valid days (starting Feb 21), reconsider gate criteria. Events
-              require real conversions from consenting users — if traffic is too low, the gate may need a longer window
-              or adjusted criteria.</td>
+            <td>Decide scale/pause per channel every 72 hours</td>
+            <td>Apply no-signal and CAC kill rules before changing spend or expanding channels.</td>
             <td>Growth</td>
           </tr>
           <tr>
             <td>5</td>
-            <td>No new code work</td>
-            <td>Payment flow is healthy. Webhook idempotency is robust. No bugs to fix. Resist urge to build during
-              observation window.</td>
-            <td>All</td>
+            <td>Publish week-1 social cadence</td>
+            <td>Run launch posts and tie all outbound links to distinct UTM campaigns for attribution clarity.</td>
+            <td>Marketing</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Complete external console setup</td>
+            <td>Link Clarity to GA4 and opt in to CWS GA4 in Google dashboards (manual UI tasks).</td>
+            <td>Ops</td>
           </tr>
         </tbody>
       </table>
@@ -578,8 +574,16 @@
           activation record)
         </li>
         <li>
-          <span class="mono">doc/dev/gate-tracking-log.md</span> (daily gate
-          tracking log)
+          <span class="mono">ThemeGPT-Monetization-Strategy.docx</span>
+          (growth strategy source)
+        </li>
+        <li>
+          <span class="mono">apps/web/app/api/metrics/monetization/route.ts</span>
+          (server-side KPI endpoint)
+        </li>
+        <li>
+          <span class="mono">doc/dev/monetization-growth-execution-checklist.md</span>
+          (manual + automated launch execution checklist)
         </li>
         <li>
           <span class="mono">doc/dev/weekly-split-scorecard-template.md</span>
@@ -589,9 +593,9 @@
     </section>
 
     <div class="footer">
-      ThemeGPT consolidated roadmap updated February 21, 2026 (post-fix gate
-      reset). Focus: daily gate monitoring, no new code during observation
-      window, reassess Gate 3 criteria by Feb 24 if zero events persist.
+      ThemeGPT consolidated roadmap updated February 21, 2026 (growth pivot).
+      Focus: immediate advertising with spend guardrails, deterministic
+      attribution, and server-side revenue-based optimization.
     </div>
   </div>
 </body>

@@ -278,31 +278,6 @@ These directives represent best practices. No automated enforcement.
 | Popup render | < 100ms |
 | Token calculation | < 50ms for typical message |
 
-## Verification Commands
-
-### Critical Checks (Must Pass)
-
-```bash
-# Check for placeholder content
-grep -rE "TODO|FIXME|lorem ipsum|example\.com" --include="*.tsx" --include="*.ts" apps/ packages/
-
-# Check for non-semantic buttons
-grep -rE "<div.*onClick" --include="*.tsx" apps/ packages/
-
-# Check complexity budget (files over 500 lines)
-find apps packages -name "*.ts" -o -name "*.tsx" | xargs wc -l | awk '$1 > 500 {print}'
-```
-
-### Important Checks (Should Pass)
-
-```bash
-# Check for premature abstractions
-grep -rE "abstract class|interface.*Adapter|Registry|Factory" --include="*.ts" apps/ packages/
-
-# Check config file sizes
-find . -name "*.json" -o -name "*.yaml" | xargs wc -l
-```
-
 ## Relationship to Other Documents
 
 | Document | Purpose |

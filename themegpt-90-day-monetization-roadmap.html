@@ -220,18 +220,19 @@
         </p>
         <div class="meta">
           <span>Prepared: February 16, 2026</span>
-          <span>Updated: February 20, 2026 (Day 1 data)</span>
+          <span>Updated: February 21, 2026 (post-fix gate reset)</span>
           <span>Published extension: v2.2.2</span>
           <span>CWS pending review: v2.3.0</span>
         </div>
       </header>
 
       <section class="panel">
-        <h2>Executive Status (As of February 20, 2026 — Day 1 Actuals)</h2>
+        <h2>Executive Status (As of February 21, 2026 — Post-Fix Reset)</h2>
         <p>
           All implementation work is complete. Payment infrastructure confirmed
           healthy via Stripe (1 active sub, 1 trialing sub, 1 succeeded
-          payment). GA4 gates recording but no conversions on Day 1.
+          payment). GA4 collection was restored mid-day Feb 20 after Cloud Run
+          build env fixes; true Day 1 for both gates is Feb 21.
         </p>
         <div class="grid">
           <div class="stat ok">
@@ -239,12 +240,12 @@
             <div class="value">Healthy (Stripe verified)</div>
           </div>
           <div class="stat warn">
-            <div class="label">Gate 1 — Day 1</div>
-            <div class="value">60% unassigned (5 sessions — noisy)</div>
+            <div class="label">Gate 1 — Feb 20</div>
+            <div class="value">NO DATA (pre-fix collection gap)</div>
           </div>
           <div class="stat warn">
             <div class="label">Gate 3 — Day 1</div>
-            <div class="value">0/3 events (no conversions today)</div>
+            <div class="value">Starts Feb 21 (full-day data)</div>
           </div>
           <div class="stat warn">
             <div class="label">Product Hunt launch</div>
@@ -254,7 +255,7 @@
       </section>
 
       <section class="panel">
-        <h2>Day 1 GA4 Data (February 20, 2026)</h2>
+        <h2>GA4 Recovery Snapshot (February 20, 2026)</h2>
         <table>
           <thead>
             <tr>
@@ -266,27 +267,26 @@
           <tbody>
             <tr>
               <td>Unassigned / (not set)</td>
-              <td>3</td>
-              <td>No UTM, no referrer — likely internal or direct</td>
+              <td>N/A</td>
+              <td>No reliable daily report data before redeploy.</td>
             </tr>
             <tr>
               <td>Direct / (none)</td>
-              <td>2</td>
-              <td>Direct visits</td>
+              <td>N/A</td>
+              <td>Data API lag expected until Feb 21.</td>
             </tr>
             <tr>
               <td><strong>Total</strong></td>
-              <td><strong>5</strong></td>
-              <td>Too low for statistical significance</td>
+              <td><strong>N/A</strong></td>
+              <td>Realtime confirmed recovery (1 active user, 25 events).</td>
             </tr>
           </tbody>
         </table>
         <p>
-          Gate 3 funnel events: zero <span class="mono">trial_start</span>,
-          zero <span class="mono">checkout_start</span>, zero
-          <span class="mono">purchase_success</span>. Expected — no conversion
-          activity occurred on Day 1. Instrumentation is deployed and will fire
-          on the next real conversion from a consenting user.
+          Feb 20 is logged as a recovery day, not a valid Day 1 measurement day.
+          Gate tracking starts from Feb 21 using the corrected GA4 property
+          (<span class="mono">516189580</span>) and the first full day of
+          post-fix collection.
         </p>
       </section>
 
@@ -364,22 +364,22 @@
           <tbody>
             <tr>
               <td>Bridge Gate 1 (Unassigned share)</td>
-              <td>Day 1: 60% (3/5 sessions). Pre-filter baseline: 25%. Sample too small to be meaningful.</td>
+              <td>Feb 20 logged as NO DATA. True Day 1 begins Feb 21 after GA4 recovery.</td>
               <td>
                 <span class="mono">&lt;= 10%</span> for 7 consecutive days.
               </td>
-              <td>Feb 26 earliest (sliding if FAIL continues)</td>
+              <td>Feb 27 earliest (sliding if FAIL continues)</td>
             </tr>
             <tr>
               <td>Bridge Gate 3 (Funnel event visibility)</td>
               <td>
-                Day 1: 0/3 events. No conversion activity today. Instrumentation
-                deployed; needs real user conversion.
+                Feb 20 is a transition day (pre-redeploy gap + post-fix
+                realtime confirmation). True Day 1 starts Feb 21.
               </td>
               <td>
                 All 3 events visible with count &gt; 0 for 7 consecutive days.
               </td>
-              <td>Feb 26 earliest (sliding if no events)</td>
+              <td>Feb 27 earliest (sliding if no events)</td>
             </tr>
             <tr>
               <td>v2.3.0 CWS review</td>
@@ -519,7 +519,7 @@
       </section>
 
       <section class="panel">
-        <h2>Next Steps (Post Day 1 Review)</h2>
+        <h2>Next Steps (Post-Fix Gate Reset)</h2>
         <table>
           <thead>
             <tr>
@@ -533,13 +533,13 @@
             <tr>
               <td>1</td>
               <td>Continue daily gate pulls (Feb 21+)</td>
-              <td>Day 1 data is noise at 5 sessions. Need several days of data before drawing conclusions.</td>
+              <td>Feb 20 is NO DATA due to recovery work; begin 7-day observation from Feb 21.</td>
               <td>Ops</td>
             </tr>
             <tr>
               <td>2</td>
               <td>Verify internal traffic filter is excluding dev sessions</td>
-              <td>60% unassigned may mean the filter isn't applied or dev traffic isn't matching the filter rule.</td>
+              <td>Confirm filter behavior on valid post-fix data days before escalating.</td>
               <td>Growth</td>
             </tr>
             <tr>
@@ -550,8 +550,8 @@
             </tr>
             <tr>
               <td>4</td>
-              <td>Assess Gate 3 viability by Feb 23</td>
-              <td>If zero funnel events persist for 3+ days, reconsider gate criteria. Events require real conversions from consenting users — if traffic is too low, the gate may need a longer window or adjusted criteria.</td>
+              <td>Assess Gate 3 viability by Feb 24</td>
+              <td>If zero funnel events persist for 3+ valid days (starting Feb 21), reconsider gate criteria. Events require real conversions from consenting users — if traffic is too low, the gate may need a longer window or adjusted criteria.</td>
               <td>Growth</td>
             </tr>
             <tr>
@@ -591,9 +591,9 @@
       </section>
 
       <div class="footer">
-        ThemeGPT consolidated roadmap updated February 20, 2026 (Day 1
-        actuals). Focus: daily gate monitoring, no new code during observation
-        window, reassess Gate 3 criteria by Feb 23 if zero events persist.
+        ThemeGPT consolidated roadmap updated February 21, 2026 (post-fix gate
+        reset). Focus: daily gate monitoring, no new code during observation
+        window, reassess Gate 3 criteria by Feb 24 if zero events persist.
       </div>
     </div>
   </body>

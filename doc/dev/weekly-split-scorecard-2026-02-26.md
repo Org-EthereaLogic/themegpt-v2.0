@@ -8,9 +8,9 @@
 
 ## 1) Week Metadata
 
-- **Tracking window start:** `2026-02-20` (Gate tracking Day 1)
-- **Tracking window end:** `2026-02-26` (Earliest 7-day gate checkpoint)
-- **Prepared on:** `2026-02-20`
+- **Tracking window start:** `2026-02-21` (True Gate Day 1 after GA4 recovery)
+- **Tracking window end:** `2026-02-26` (Weekly report cutoff; earliest 7-day gate checkpoint is Feb 27)
+- **Prepared on:** `2026-02-21`
 - **Prepared by:** EthereaLogic Team
 
 ---
@@ -38,7 +38,7 @@ Data source:
 | Organic | 0 | 0 | — |  |
 | Paid | 0 | 0 | — |  |
 | Referral | 0 | 0 | — |  |
-| Direct/Unassigned | 5 | 0 | 0% | 3 Unassigned + 2 Direct (Day 1 only) |
+| Direct/Unassigned | 0 | 0 | — | GA4 was broken until mid-day Feb 20 redeploy. Correct property (516189580) now receiving data; no session data in API yet (processing delay). |
 | Email | 0 | 0 | — |  |
 
 Formula:
@@ -66,15 +66,15 @@ Escalation rule:
 
 | Decision | Owner | Due date | Status |
 |----------|-------|----------|--------|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| Redeploy Cloud Run with Firebase env vars to fix GA4 | Ops | Feb 20 | DONE |
+| Correct pull_ga4.js property ID from 521095252 (CWS) to 516189580 (web app) | Ops | Feb 20 | DONE |
+| Shift gate Day 1 to Feb 21 (first full day of GA4 data collection) | Growth | Feb 20 | DONE |
 
 ---
 
 ## 6) Narrative Summary (3-5 bullets)
 
-- What improved this week: ADC auth + GA4 pull script operational; gate tracking live
-- What regressed this week: Gate 1 at 60% unassigned (tiny sample of 5 sessions); Gate 3 zero funnel events on Day 1
-- Biggest unknown: Whether unassigned % will stabilize once volume grows and internal filter has time to take effect
-- Action for next week: Continue daily gate pulls; investigate if internal filter is actually excluding dev traffic
+- What improved this week: Root-caused and fixed GA4 data collection failure. Firebase env vars were missing from Cloud Run build — redeployed with correct substitutions. GA4 Realtime confirmed working (1 active user, 25 events on correct property 516189580). Corrected pull_ga4.js to query correct property.
+- What regressed this week: Discovered all prior GA4 data assumptions were invalid — pull script was querying CWS listing property (521095252), not web app property (516189580). Gate Day 1 effectively lost; true Day 1 slides to Feb 21.
+- Biggest unknown: Whether GA4 Data API will show processed data by Feb 21 morning, and whether consent-gating will suppress enough traffic to make gate thresholds hard to hit.
+- Action for next week: Pull GA4 data on Feb 21 for first real Day 1 reading; verify data appears in both Realtime and Data API; continue daily gate pulls through Feb 27.

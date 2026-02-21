@@ -2,7 +2,9 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
-## [2.3.0] - 2026-02-19 (Awaiting CWS Submission — Blocked by v2.2.2 Review)
+## [2.3.0] - 2026-02-19
+
+> Submission note: This extension build was submitted to CWS on February 20, 2026. Track current review state in `doc/dev/gate-tracking-log.md`.
 
 ### Added (Extension)
 
@@ -26,7 +28,7 @@ All notable changes to ThemeGPT will be documented in this file.
 
 ---
 
-## [2.2.2] - 2026-02-19 (CWS Submission — Pending Review)
+## [2.2.2] - 2026-02-19 (Published on CWS February 20, 2026)
 
 ### Fixed
 - **Pricing CTA URL Order:** Corrected 3 `window.open()` calls in `apps/extension/src/popup.tsx` (lines 251, 254, 352) from `/#pricing?utm_source=...` to `/?utm_source=...#pricing` so GA4 receives UTM parameters before the SPA hash fragment discards them.

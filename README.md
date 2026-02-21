@@ -15,13 +15,9 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share)**
 
-> **Version 2.2.0** — now live on the Chrome Web Store (February 19, 2026). This release adds in-extension lifecycle messaging (escalating upgrade nudges, trial/canceled/past-due state indicators, and a non-incentivized review prompt), improves premium theme access reliability, strengthens authentication flows, and applies the latest security patches.
+> **Latest published extension: v2.2.2** — released on the Chrome Web Store February 20, 2026.
 >
-> **Web v2.2.1** (February 19, 2026) — web-only maintenance release: Dependabot security patches (svelte, minimatch) and UTM attribution improvements for core marketing pages. Chrome extension version remains 2.2.0.
->
-> **Extension v2.2.2** (submitted February 19, 2026 — pending CWS review) — fixes pricing CTA URL parameter order so GA4 receives UTM params before the hash fragment, and adds missing Firestore composite indexes for subscription and download queries.
->
-> **Extension v2.3.0** (committed February 19, 2026 — awaiting CWS submission) — appends `extension_version` UTM parameter to all 7 outbound links for per-version GA4 tracking; 6 new QA tests covering trialing, canceled, past_due, escalating nudge, review ask, and footer UTM; test suite now 94/94 passing. CWS submission queued pending v2.2.2 review clearance.
+> See [CHANGELOG.md](./CHANGELOG.md) for release notes and [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md) for live submission/review status.
 
 ---
 

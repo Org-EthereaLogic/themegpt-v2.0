@@ -39,6 +39,16 @@
 
 ---
 
+## 3a) Launch Verification Notes (Feb 21, 2026)
+
+- Google Ads evidence: campaign `Website traffic-Search-1` shown as **Enabled** with `$0.00` spend in console screenshot captured Feb 21, 2026.
+- Reddit Ads evidence: campaign `Traffic Campaign` shown as **Active** with `$0.00` spend in console screenshot captured Feb 21, 2026.
+- Evidence scope: campaign live status currently rests on manual console snapshots; ad-platform API/CSV exports are not yet committed in this repository.
+- Deployment correction: commit `dff49c0` push (Feb 21, 2026) auto-triggered Cloud Build and Cloud Run deployment via trigger `deploy-themegpt-on-push` (build `c4216605-4ff6-4c1c-a7c6-547c2e87a69e`, status `SUCCESS`). No manual deploy command was required.
+- Infra cleanup: duplicate failing Cloud Build trigger `themegpt-web-deploy` (`352d347d-7674-4e07-8d9a-03544d9f0698`) removed on Feb 21, 2026. Remaining main-branch deploy trigger: `deploy-themegpt-on-push`.
+
+---
+
 ## 3b) CWS Listing Enhancement (Blocked on v2.3.0 Approval)
 
 - [ ] Upload `asset/launch/demo-30s-source.mp4` to YouTube (title: "ThemeGPT — Custom Themes for ChatGPT").

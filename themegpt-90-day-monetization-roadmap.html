@@ -217,7 +217,7 @@
       </p>
       <div class="meta">
         <span>Prepared: February 16, 2026</span>
-        <span>Updated: February 21, 2026 (console setup complete)</span>
+        <span>Updated: February 21, 2026 (ads launch + deployment audit)</span>
         <span>Published extension: v2.2.2</span>
         <span>CWS pending review: v2.3.0</span>
       </div>
@@ -306,6 +306,37 @@
         <span class="mono">revenue_events</span>, both populated from Stripe
         session creation and webhook callbacks.
       </p>
+    </section>
+
+    <section class="panel">
+      <h2>Launch Verification & Deployment Audit (Feb 21, 2026)</h2>
+      <ul>
+        <li>
+          Ad-console evidence captured on February 21, 2026:
+          <span class="mono">Website traffic-Search-1</span> in Google Ads shown
+          as Enabled with <span class="mono">$0.00</span> spend, and
+          <span class="mono">Traffic Campaign</span> in Reddit Ads shown as Active
+          with <span class="mono">$0.00</span> spend.
+        </li>
+        <li>
+          Evidence scope: campaign live status currently depends on manual
+          console screenshots; API/CSV exports are not committed in this
+          repository yet.
+        </li>
+        <li>
+          Deployment evidence: push of commit
+          <span class="mono">dff49c0</span> auto-triggered Cloud Build and Cloud
+          Run via <span class="mono">deploy-themegpt-on-push</span> (build
+          <span class="mono">c4216605-4ff6-4c1c-a7c6-547c2e87a69e</span>,
+          status <span class="mono">SUCCESS</span>).
+        </li>
+        <li>
+          Infra fix: duplicate failing trigger
+          <span class="mono">themegpt-web-deploy</span> (ID
+          <span class="mono">352d347d-7674-4e07-8d9a-03544d9f0698</span>) removed;
+          one main-branch deploy trigger remains.
+        </li>
+      </ul>
     </section>
 
     <section class="panel">
@@ -626,7 +657,7 @@
     </section>
 
     <div class="footer">
-      ThemeGPT consolidated roadmap updated February 21, 2026 (console setup complete).
+      ThemeGPT consolidated roadmap updated February 21, 2026 (ads launch + deployment audit logged).
       Focus: immediate advertising with spend guardrails, deterministic
       attribution, Clarity session replays, and server-side revenue-based optimization.
     </div>

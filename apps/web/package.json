@@ -7,9 +7,12 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:stripe": "node scripts/verify_stripe.js",
+    "verify:stripe:cloud-run": "node scripts/verify_stripe.js --cloud-run"
   },
   "dependencies": {
+    "@microsoft/clarity": "^1.0.2",
     "@react-email/components": "^1.0.7",
     "@themegpt/shared": "workspace:*",
     "firebase": "^12.9.0",

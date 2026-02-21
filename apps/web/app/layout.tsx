@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { DM_Sans, Fraunces } from "next/font/google";
 import { SessionProvider } from "@/components/SessionProvider";
 import { Analytics } from "@/components/Analytics";
+import { ClarityAnalytics } from "@/components/ClarityAnalytics";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -53,6 +54,7 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <Analytics />
+        <ClarityAnalytics />
         <CookieConsent />
         <SessionProvider>{children}</SessionProvider>
         <Toaster richColors position="top-center" />

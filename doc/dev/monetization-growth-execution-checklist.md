@@ -39,6 +39,15 @@
 
 ---
 
+## 3b) CWS Listing Enhancement (Blocked on v2.3.0 Approval)
+
+- [ ] Upload `asset/launch/demo-30s-source.mp4` to YouTube (title: "ThemeGPT — Custom Themes for ChatGPT").
+- [ ] Add YouTube URL to CWS Store Listing → "Global promo video" field.
+- [ ] Review and refresh CWS screenshots with before/after GIFs from `asset/launch/`.
+- [ ] Submit listing update for review.
+
+---
+
 ## 4) Daily Ops Checklist
 
 - [ ] Pull `GET /api/metrics/monetization?days=7` and log:

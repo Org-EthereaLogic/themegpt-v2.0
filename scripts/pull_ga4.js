@@ -24,7 +24,7 @@ async function main() {
     throw new Error('Unable to acquire Google access token.');
   }
 
-  const propertyId = '521095252';
+  const propertyId = '516189580';
   const url = `https://analyticsdata.googleapis.com/v1beta/properties/${propertyId}:runReport`;
 
   const headers = {

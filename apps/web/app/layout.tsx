@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { DM_Sans, Fraunces } from "next/font/google";
 import { SessionProvider } from "@/components/SessionProvider";
 import { Analytics } from "@/components/Analytics";
 import { ClarityAnalytics } from "@/components/ClarityAnalytics";
+import { AttributionCapture } from "@/components/AttributionCapture";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Toaster } from "sonner";
 import "./globals.css";
@@ -53,6 +55,9 @@ export default function RootLayout({
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
         suppressHydrationWarning
       >
+        <Suspense fallback={null}>
+          <AttributionCapture />
+        </Suspense>
         <Analytics />
         <ClarityAnalytics />
         <CookieConsent />

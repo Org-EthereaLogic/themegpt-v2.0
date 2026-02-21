@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { logEvent } from "firebase/analytics";
 import { initAnalyticsIfConsented } from "@/lib/firebase";
+import { getAttributionEventParams, getStoredAttribution } from "@/lib/attribution";
 import { DEFAULT_THEMES } from "@themegpt/shared";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Navigation } from "@/components/sections/Navigation";
@@ -15,6 +16,8 @@ import { Footer } from "@/components/sections/Footer";
 
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
 const PENDING_CHECKOUT_KEY = "themegpt_pending_checkout_v1";
+const LAST_CHECKOUT_TYPE_KEY = "themegpt_last_checkout_type_v1";
+const CHECKOUT_ABANDON_LOGGED_KEY = "themegpt_checkout_abandon_logged_v1";
 
 type CheckoutType = "yearly" | "monthly" | "single";
 
@@ -38,14 +41,16 @@ export default function Home() {
     // Gate 3: fire checkout_start before the POST so the event is always recorded
     const a = initAnalyticsIfConsented();
     if (a) {
-      logEvent(a, "checkout_start", { plan_type: type });
+      logEvent(a, "checkout_start", { plan_type: type, ...getAttributionEventParams() });
     }
 
     try {
+      window.sessionStorage.removeItem(CHECKOUT_ABANDON_LOGGED_KEY);
+      window.sessionStorage.setItem(LAST_CHECKOUT_TYPE_KEY, type);
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, themeId }),
+        body: JSON.stringify({ type, themeId, attribution: getStoredAttribution() }),
       });
       const data = await res.json();
       if (data.success && data.checkoutUrl) {
@@ -67,6 +72,23 @@ export default function Home() {
       setCheckoutError("Unable to process checkout. Please try again.");
     }
   }, [session]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const isCanceled = params.get("canceled") === "true";
+    if (!isCanceled) return;
+    if (window.sessionStorage.getItem(CHECKOUT_ABANDON_LOGGED_KEY) === "1") return;
+
+    window.sessionStorage.setItem(CHECKOUT_ABANDON_LOGGED_KEY, "1");
+    const planType = window.sessionStorage.getItem(LAST_CHECKOUT_TYPE_KEY) || "unknown";
+    const a = initAnalyticsIfConsented();
+    if (a) {
+      logEvent(a, "checkout_abandon", {
+        plan_type: planType,
+        ...getAttributionEventParams(),
+      });
+    }
+  }, []);
 
   useEffect(() => {
     if (!session) {

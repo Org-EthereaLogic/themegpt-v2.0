@@ -43,6 +43,8 @@ vi.mock('@/lib/db', () => ({
     getThemeName: vi.fn().mockReturnValue('Test Theme'),
     getAbandonedCheckoutBySessionId: vi.fn().mockResolvedValue(null),
     upsertAbandonedCheckout: vi.fn().mockResolvedValue(true),
+    upsertCheckoutSession: vi.fn().mockResolvedValue(true),
+    upsertRevenueEvent: vi.fn().mockResolvedValue(true),
     getUserById: vi.fn().mockResolvedValue(null),
   },
 }));

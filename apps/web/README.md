@@ -79,6 +79,7 @@ apps/web/
 ### Payment API
 - `POST /api/checkout` - Create Stripe checkout session
 - `POST /api/webhooks/stripe` - Handle Stripe webhooks
+- `GET /api/metrics/monetization` - Internal monetization summary (server-side source of truth)
 
 ### User API
 - `GET /api/subscription` - Get subscription details

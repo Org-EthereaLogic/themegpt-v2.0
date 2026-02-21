@@ -6,6 +6,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { logEvent } from "firebase/analytics"
 import { initAnalyticsIfConsented } from "@/lib/firebase"
+import { getAttributionEventParams } from "@/lib/attribution"
 
 // Chrome Web Store extension ID
 const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
@@ -119,14 +120,19 @@ function SuccessContent() {
           if (!sessionStorage.getItem(trackingKey)) {
             const a = initAnalyticsIfConsented();
             if (a) {
+              const attributionParams = getAttributionEventParams();
               logEvent(a, "purchase_success", {
                 plan_type: data.planType ?? "unknown",
                 is_lifetime: data.isLifetime ?? false,
+                ...attributionParams,
               })
               // trial_start gates on actual Stripe subscription status — NOT planType.
               // Monthly plans start trialing; yearly early-adopter pays immediately (active).
               if (data.subscriptionStatus === "trialing") {
-                logEvent(a, "trial_start", { plan_type: data.planType ?? "unknown" })
+                logEvent(a, "trial_start", {
+                  plan_type: data.planType ?? "unknown",
+                  ...attributionParams,
+                })
               }
             }
             sessionStorage.setItem(trackingKey, "1");

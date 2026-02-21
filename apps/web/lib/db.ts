@@ -18,6 +18,8 @@ const DOWNLOADS_COLLECTION = 'downloads';
 const LICENSE_LINKS_COLLECTION = 'license_links';
 const EARLY_ADOPTER_COLLECTION = 'early_adopter_program';
 const ABANDONED_CHECKOUTS_COLLECTION = 'abandoned_checkouts';
+const CHECKOUT_SESSIONS_COLLECTION = 'checkout_sessions';
+const REVENUE_EVENTS_COLLECTION = 'revenue_events';
 const PROCESSED_EVENTS_COLLECTION = 'processed_webhook_events';
 const WEBHOOK_PROCESSING_STALE_MS = 10 * 60 * 1000;
 
@@ -391,6 +393,203 @@ export const db = {
       console.error("Error upserting abandoned checkout:", error);
       return false;
     }
+  },
+
+  async upsertCheckoutSession(sessionId: string, payload: Record<string, unknown>): Promise<boolean> {
+    try {
+      const ref = firestore.collection(CHECKOUT_SESSIONS_COLLECTION).doc(sessionId);
+      const existing = await ref.get();
+
+      if (existing.exists) {
+        await ref.set(
+          {
+            ...payload,
+            updatedAt: new Date(),
+          },
+          { merge: true }
+        );
+      } else {
+        await ref.set({
+          ...payload,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+
+      return true;
+    } catch (error) {
+      console.error("Error upserting checkout session:", error);
+      return false;
+    }
+  },
+
+  async upsertRevenueEvent(eventId: string, payload: Record<string, unknown>): Promise<boolean> {
+    try {
+      await firestore.collection(REVENUE_EVENTS_COLLECTION).doc(eventId).set(
+        {
+          ...payload,
+          updatedAt: new Date(),
+        },
+        { merge: true }
+      );
+      return true;
+    } catch (error) {
+      console.error("Error upserting revenue event:", error);
+      return false;
+    }
+  },
+
+  async getMonetizationSummary(days: number = 7): Promise<{
+    windowDays: number;
+    windowStart: string;
+    windowEnd: string;
+    totals: {
+      checkoutCreated: number;
+      checkoutCompleted: number;
+      checkoutExpired: number;
+      oneTimeRevenueCents: number;
+      subscriptionRevenueCents: number;
+      totalRevenueCents: number;
+      paidEvents: number;
+    };
+    byChannel: Array<{
+      channel: string;
+      utmSource: string;
+      utmMedium: string;
+      utmCampaign: string;
+      checkoutCreated: number;
+      checkoutCompleted: number;
+      checkoutExpired: number;
+      oneTimeRevenueCents: number;
+      subscriptionRevenueCents: number;
+      totalRevenueCents: number;
+      paidEvents: number;
+    }>;
+  }> {
+    const safeDays = Number.isFinite(days) ? Math.min(Math.max(Math.floor(days), 1), 90) : 7;
+    const now = new Date();
+    const since = new Date(now.getTime() - safeDays * 24 * 60 * 60 * 1000);
+
+    const channelIndex = new Map<string, {
+      channel: string;
+      utmSource: string;
+      utmMedium: string;
+      utmCampaign: string;
+      checkoutCreated: number;
+      checkoutCompleted: number;
+      checkoutExpired: number;
+      oneTimeRevenueCents: number;
+      subscriptionRevenueCents: number;
+      totalRevenueCents: number;
+      paidEvents: number;
+    }>();
+
+    const getChannelBucket = (
+      rawSource: unknown,
+      rawMedium: unknown,
+      rawCampaign: unknown
+    ) => {
+      const utmSource = typeof rawSource === 'string' && rawSource ? rawSource : '(direct)';
+      const utmMedium = typeof rawMedium === 'string' && rawMedium ? rawMedium : '(none)';
+      const utmCampaign = typeof rawCampaign === 'string' && rawCampaign ? rawCampaign : '(none)';
+      const channel = `${utmSource} / ${utmMedium} / ${utmCampaign}`;
+
+      if (!channelIndex.has(channel)) {
+        channelIndex.set(channel, {
+          channel,
+          utmSource,
+          utmMedium,
+          utmCampaign,
+          checkoutCreated: 0,
+          checkoutCompleted: 0,
+          checkoutExpired: 0,
+          oneTimeRevenueCents: 0,
+          subscriptionRevenueCents: 0,
+          totalRevenueCents: 0,
+          paidEvents: 0,
+        });
+      }
+
+      return channelIndex.get(channel)!;
+    };
+
+    const totals = {
+      checkoutCreated: 0,
+      checkoutCompleted: 0,
+      checkoutExpired: 0,
+      oneTimeRevenueCents: 0,
+      subscriptionRevenueCents: 0,
+      totalRevenueCents: 0,
+      paidEvents: 0,
+    };
+
+    try {
+      const checkoutSnapshot = await firestore
+        .collection(CHECKOUT_SESSIONS_COLLECTION)
+        .where('checkoutCreatedAt', '>=', since)
+        .get();
+
+      for (const doc of checkoutSnapshot.docs) {
+        const data = doc.data();
+        const sessionStatus = data.sessionStatus;
+        const amount = typeof data.amountTotalCents === 'number' ? data.amountTotalCents : 0;
+        const mode = data.mode;
+
+        totals.checkoutCreated += 1;
+        const bucket = getChannelBucket(data.utmSource, data.utmMedium, data.utmCampaign);
+        bucket.checkoutCreated += 1;
+
+        if (sessionStatus === 'completed') {
+          totals.checkoutCompleted += 1;
+          bucket.checkoutCompleted += 1;
+        } else if (sessionStatus === 'expired') {
+          totals.checkoutExpired += 1;
+          bucket.checkoutExpired += 1;
+        }
+
+        if (sessionStatus === 'completed' && mode === 'payment' && amount > 0) {
+          totals.oneTimeRevenueCents += amount;
+          bucket.oneTimeRevenueCents += amount;
+        }
+      }
+
+      const revenueSnapshot = await firestore
+        .collection(REVENUE_EVENTS_COLLECTION)
+        .where('paidAt', '>=', since)
+        .get();
+
+      for (const doc of revenueSnapshot.docs) {
+        const data = doc.data();
+        const amount = typeof data.amountPaidCents === 'number' ? data.amountPaidCents : 0;
+        if (amount <= 0) continue;
+
+        totals.subscriptionRevenueCents += amount;
+        totals.paidEvents += 1;
+
+        const bucket = getChannelBucket(data.utmSource, data.utmMedium, data.utmCampaign);
+        bucket.subscriptionRevenueCents += amount;
+        bucket.paidEvents += 1;
+      }
+    } catch (error) {
+      console.error("Error fetching monetization summary:", error);
+    }
+
+    totals.totalRevenueCents = totals.oneTimeRevenueCents + totals.subscriptionRevenueCents;
+
+    const byChannel = Array.from(channelIndex.values())
+      .map((item) => ({
+        ...item,
+        totalRevenueCents: item.oneTimeRevenueCents + item.subscriptionRevenueCents,
+      }))
+      .sort((a, b) => b.totalRevenueCents - a.totalRevenueCents);
+
+    return {
+      windowDays: safeDays,
+      windowStart: since.toISOString(),
+      windowEnd: now.toISOString(),
+      totals,
+      byChannel,
+    };
   },
 
   // === Utility Methods ===

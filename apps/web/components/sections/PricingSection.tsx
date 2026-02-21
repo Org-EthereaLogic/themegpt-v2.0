@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { logEvent } from "firebase/analytics";
 import { Button } from "@/components/ui/Button";
+import { initAnalyticsIfConsented } from "@/lib/firebase";
+import { getAttributionEventParams } from "@/lib/attribution";
 import { DEFAULT_THEMES, type Theme } from "@themegpt/shared";
 
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
@@ -31,6 +34,31 @@ export function PricingSection({
   checkoutError,
 }: PricingSectionProps) {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const sectionRef = useRef<HTMLElement | null>(null);
+  const loggedPricingViewRef = useRef(false);
+
+  useEffect(() => {
+    const node = sectionRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (loggedPricingViewRef.current) return;
+        const isVisible = entries.some((entry) => entry.isIntersecting);
+        if (!isVisible) return;
+
+        loggedPricingViewRef.current = true;
+        const analytics = initAnalyticsIfConsented();
+        if (analytics) {
+          logEvent(analytics, "pricing_view", getAttributionEventParams());
+        }
+      },
+      { threshold: 0.45 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
 
   const handleCheckout = async (type: "yearly" | "monthly" | "single", themeId?: string) => {
     setLoadingPlan(type);
@@ -41,9 +69,23 @@ export function PricingSection({
     }
   };
 
+  const handleThemeChange = (themeId: string) => {
+    onThemeChange(themeId);
+
+    const analytics = initAnalyticsIfConsented();
+    if (analytics) {
+      logEvent(analytics, "theme_preview", {
+        theme_id: themeId,
+        plan_type: "single",
+        ...getAttributionEventParams(),
+      });
+    }
+  };
+
   return (
     <section
       id="pricing"
+      ref={sectionRef}
       className="relative py-24 px-8 lg:px-16 overflow-hidden pricing-gradient animate-gradient-shift"
     >
       <div className="relative z-10">
@@ -262,7 +304,7 @@ export function PricingSection({
             <select
               id="theme-select"
               value={selectedTheme}
-              onChange={(e) => onThemeChange(e.target.value)}
+              onChange={(e) => handleThemeChange(e.target.value)}
               className="w-full mb-5 py-2.5 px-3 rounded-lg border focus:outline-none focus:ring-2"
               style={{
                 borderColor: "rgba(74, 55, 40, 0.2)",

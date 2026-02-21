@@ -34,6 +34,82 @@ export async function OPTIONS() {
 }
 
 type CheckoutType = "yearly" | "monthly" | "single" | "subscription"; // subscription is legacy alias for monthly
+type AttributionInput = {
+  utmSource?: unknown;
+  utmMedium?: unknown;
+  utmCampaign?: unknown;
+  utmContent?: unknown;
+  utmTerm?: unknown;
+  gclid?: unknown;
+  fbclid?: unknown;
+  ttclid?: unknown;
+  landingPath?: unknown;
+  firstSeenAt?: unknown;
+  lastSeenAt?: unknown;
+};
+
+type SanitizedAttribution = {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  gclid?: string;
+  fbclid?: string;
+  ttclid?: string;
+  landingPath?: string;
+  firstSeenAt?: string;
+  lastSeenAt?: string;
+};
+
+function sanitizeAttributionValue(input: unknown, maxLength = 120): string | undefined {
+  if (typeof input !== "string") return undefined;
+  const cleaned = input
+    .replace(/[\r\n\t]/g, " ")
+    .replace(/[^\x20-\x7E]/g, "")
+    .trim()
+    .slice(0, maxLength);
+  return cleaned || undefined;
+}
+
+function sanitizeAttribution(input: unknown): SanitizedAttribution {
+  if (!input || typeof input !== "object") return {};
+  const value = input as AttributionInput;
+  return {
+    utmSource: sanitizeAttributionValue(value.utmSource),
+    utmMedium: sanitizeAttributionValue(value.utmMedium),
+    utmCampaign: sanitizeAttributionValue(value.utmCampaign),
+    utmContent: sanitizeAttributionValue(value.utmContent),
+    utmTerm: sanitizeAttributionValue(value.utmTerm),
+    gclid: sanitizeAttributionValue(value.gclid),
+    fbclid: sanitizeAttributionValue(value.fbclid),
+    ttclid: sanitizeAttributionValue(value.ttclid),
+    landingPath: sanitizeAttributionValue(value.landingPath, 240),
+    firstSeenAt: sanitizeAttributionValue(value.firstSeenAt),
+    lastSeenAt: sanitizeAttributionValue(value.lastSeenAt),
+  };
+}
+
+function compactMetadata(values: Record<string, string | undefined>): Record<string, string> {
+  const entries = Object.entries(values).filter((entry): entry is [string, string] => Boolean(entry[1]));
+  return Object.fromEntries(entries);
+}
+
+function attributionToStripeMetadata(attribution: SanitizedAttribution): Record<string, string> {
+  return compactMetadata({
+    utm_source: attribution.utmSource,
+    utm_medium: attribution.utmMedium,
+    utm_campaign: attribution.utmCampaign,
+    utm_content: attribution.utmContent,
+    utm_term: attribution.utmTerm,
+    gclid: attribution.gclid,
+    fbclid: attribution.fbclid,
+    ttclid: attribution.ttclid,
+    landing_path: attribution.landingPath,
+    first_seen_at: attribution.firstSeenAt,
+    last_seen_at: attribution.lastSeenAt,
+  });
+}
 
 export async function POST(request: NextRequest) {
   // Apply rate limiting for payment endpoints
@@ -42,7 +118,13 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { type, themeId } = body as { type: CheckoutType; themeId?: string };
+    const { type, themeId, attribution: rawAttribution } = body as {
+      type: CheckoutType;
+      themeId?: string;
+      attribution?: unknown;
+    };
+    const attribution = sanitizeAttribution(rawAttribution);
+    const attributionMetadata = attributionToStripeMetadata(attribution);
 
     // Require authenticated user for checkout
     const session = await getServerSession(authOptions);
@@ -123,6 +205,7 @@ export async function POST(request: NextRequest) {
         themeId: themeId || "",
         userId: userId || "",
         isEarlyAdopterEligible: isEarlyAdopterEligible ? "true" : "false",
+        ...attributionMetadata,
       },
       customer_email: userEmail || undefined,
       after_expiration: {
@@ -143,6 +226,7 @@ export async function POST(request: NextRequest) {
         metadata: {
           planType: "yearly",
           isEarlyAdopterEligible: isEarlyAdopterEligible ? "true" : "false",
+          ...attributionMetadata,
         },
       };
     } else if (normalizedType === "monthly") {
@@ -151,11 +235,40 @@ export async function POST(request: NextRequest) {
         trial_period_days: TRIAL_DAYS,
         metadata: {
           planType: "monthly",
+          ...attributionMetadata,
         },
       };
     }
 
     const checkoutSession = await getStripe().checkout.sessions.create(checkoutParams);
+    const checkoutCreatedAt = checkoutSession.created
+      ? new Date(checkoutSession.created * 1000)
+      : new Date();
+
+    await db.upsertCheckoutSession(checkoutSession.id, {
+      stripeSessionId: checkoutSession.id,
+      userId,
+      customerEmail: userEmail || null,
+      checkoutType: normalizedType,
+      planType: planType || normalizedType,
+      themeId: themeId || null,
+      sessionStatus: "created",
+      mode,
+      currency: checkoutSession.currency || "usd",
+      amountTotalCents: checkoutSession.amount_total ?? null,
+      utmSource: attribution.utmSource || null,
+      utmMedium: attribution.utmMedium || null,
+      utmCampaign: attribution.utmCampaign || null,
+      utmContent: attribution.utmContent || null,
+      utmTerm: attribution.utmTerm || null,
+      gclid: attribution.gclid || null,
+      fbclid: attribution.fbclid || null,
+      ttclid: attribution.ttclid || null,
+      landingPath: attribution.landingPath || null,
+      firstSeenAt: attribution.firstSeenAt || null,
+      lastSeenAt: attribution.lastSeenAt || null,
+      checkoutCreatedAt,
+    });
 
     return NextResponse.json(
       {

@@ -12,6 +12,46 @@ import { LicenseEntitlement, PlanType } from "@themegpt/shared";
 import { v4 as uuidv4 } from "uuid";
 import Stripe from "stripe";
 
+type AttributionSnapshot = {
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
+  gclid?: string;
+  fbclid?: string;
+  ttclid?: string;
+  landingPath?: string;
+  firstSeenAt?: string;
+  lastSeenAt?: string;
+};
+
+function sanitizeMetadataValue(input: unknown, maxLength = 120): string | undefined {
+  if (typeof input !== "string") return undefined;
+  const cleaned = input
+    .replace(/[\r\n\t]/g, " ")
+    .replace(/[^\x20-\x7E]/g, "")
+    .trim()
+    .slice(0, maxLength);
+  return cleaned || undefined;
+}
+
+function attributionFromMetadata(metadata?: Stripe.Metadata | null): AttributionSnapshot {
+  return {
+    utmSource: sanitizeMetadataValue(metadata?.utm_source),
+    utmMedium: sanitizeMetadataValue(metadata?.utm_medium),
+    utmCampaign: sanitizeMetadataValue(metadata?.utm_campaign),
+    utmContent: sanitizeMetadataValue(metadata?.utm_content),
+    utmTerm: sanitizeMetadataValue(metadata?.utm_term),
+    gclid: sanitizeMetadataValue(metadata?.gclid),
+    fbclid: sanitizeMetadataValue(metadata?.fbclid),
+    ttclid: sanitizeMetadataValue(metadata?.ttclid),
+    landingPath: sanitizeMetadataValue(metadata?.landing_path, 240),
+    firstSeenAt: sanitizeMetadataValue(metadata?.first_seen_at),
+    lastSeenAt: sanitizeMetadataValue(metadata?.last_seen_at),
+  };
+}
+
 export async function POST(request: Request) {
   const body = await request.text();
   const headersList = await headers();
@@ -62,7 +102,7 @@ export async function POST(request: Request) {
       case "invoice.paid":
       case "invoice.payment_succeeded": {
         const invoice = event.data.object as Stripe.Invoice;
-        await handleInvoicePaid(invoice);
+        await handleInvoicePaid(invoice, event.id);
         break;
       }
       case "customer.subscription.updated": {
@@ -95,6 +135,7 @@ export async function POST(request: Request) {
 
 async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
   const { type, themeId, userId, planType } = session.metadata || {};
+  const attribution = attributionFromMetadata(session.metadata);
   const licenseKey = `KEY-${uuidv4().substring(0, 8).toUpperCase()}`;
 
   let entitlement: LicenseEntitlement;
@@ -173,6 +214,60 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
 
   await db.createLicense(licenseKey, entitlement);
 
+  await db.upsertCheckoutSession(session.id, {
+    stripeSessionId: session.id,
+    userId: userId || null,
+    customerId: typeof session.customer === "string" ? session.customer : null,
+    customerEmail: session.customer_email || session.customer_details?.email || null,
+    stripeSubscriptionId: typeof session.subscription === "string" ? session.subscription : null,
+    checkoutType: type || null,
+    planType: planType || null,
+    themeId: themeId || null,
+    sessionStatus: "completed",
+    paymentStatus: session.payment_status || null,
+    mode: session.mode,
+    currency: session.currency || "usd",
+    amountTotalCents: session.amount_total ?? null,
+    checkoutCreatedAt: new Date(session.created * 1000),
+    utmSource: attribution.utmSource || null,
+    utmMedium: attribution.utmMedium || null,
+    utmCampaign: attribution.utmCampaign || null,
+    utmContent: attribution.utmContent || null,
+    utmTerm: attribution.utmTerm || null,
+    gclid: attribution.gclid || null,
+    fbclid: attribution.fbclid || null,
+    ttclid: attribution.ttclid || null,
+    landingPath: attribution.landingPath || null,
+    firstSeenAt: attribution.firstSeenAt || null,
+    lastSeenAt: attribution.lastSeenAt || null,
+    completedAt: new Date(),
+  });
+
+  if (!isSubscription && (session.amount_total ?? 0) > 0 && session.payment_status === "paid") {
+    await db.upsertRevenueEvent(`checkout_${session.id}`, {
+      sourceType: "checkout_session",
+      stripeSessionId: session.id,
+      userId: userId || null,
+      customerId: typeof session.customer === "string" ? session.customer : null,
+      checkoutType: type || "single",
+      planType: planType || "single",
+      amountPaidCents: session.amount_total ?? 0,
+      currency: session.currency || "usd",
+      paidAt: new Date(),
+      utmSource: attribution.utmSource || null,
+      utmMedium: attribution.utmMedium || null,
+      utmCampaign: attribution.utmCampaign || null,
+      utmContent: attribution.utmContent || null,
+      utmTerm: attribution.utmTerm || null,
+      gclid: attribution.gclid || null,
+      fbclid: attribution.fbclid || null,
+      ttclid: attribution.ttclid || null,
+      landingPath: attribution.landingPath || null,
+      firstSeenAt: attribution.firstSeenAt || null,
+      lastSeenAt: attribution.lastSeenAt || null,
+    });
+  }
+
   // Store license key in Stripe customer metadata for retrieval
   if (session.customer) {
     await getStripe().customers.update(session.customer as string, {
@@ -243,6 +338,7 @@ async function resolveCheckoutEmail(session: Stripe.Checkout.Session): Promise<s
 async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
   const sessionId = session.id;
   const checkoutType = getCheckoutRecoveryType(session.metadata?.type);
+  const attribution = attributionFromMetadata(session.metadata);
   const email = await resolveCheckoutEmail(session);
   const promotionsConsent = session.consent?.promotions || null;
   const recoveryUrl = session.after_expiration?.recovery?.url || null;
@@ -275,6 +371,33 @@ async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
     reminderEligible,
   });
 
+  await db.upsertCheckoutSession(sessionId, {
+    stripeSessionId: sessionId,
+    userId: session.metadata?.userId || null,
+    customerId: typeof session.customer === "string" ? session.customer : null,
+    customerEmail: email,
+    checkoutType,
+    planType: session.metadata?.planType || null,
+    sessionStatus: "expired",
+    paymentStatus: session.payment_status || null,
+    mode: session.mode,
+    currency: session.currency || "usd",
+    amountTotalCents: session.amount_total ?? null,
+    utmSource: attribution.utmSource || null,
+    utmMedium: attribution.utmMedium || null,
+    utmCampaign: attribution.utmCampaign || null,
+    utmContent: attribution.utmContent || null,
+    utmTerm: attribution.utmTerm || null,
+    gclid: attribution.gclid || null,
+    fbclid: attribution.fbclid || null,
+    ttclid: attribution.ttclid || null,
+    landingPath: attribution.landingPath || null,
+    firstSeenAt: attribution.firstSeenAt || null,
+    lastSeenAt: attribution.lastSeenAt || null,
+    checkoutCreatedAt: new Date(session.created * 1000),
+    checkoutExpiredAt: session.expires_at ? new Date(session.expires_at * 1000) : new Date(),
+  });
+
   if (!reminderEligible || reminderAlreadyAttempted || !email || !recoveryUrl) {
     return;
   }
@@ -288,7 +411,7 @@ async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
   });
 }
 
-async function handleInvoicePaid(invoice: Stripe.Invoice) {
+async function handleInvoicePaid(invoice: Stripe.Invoice, eventId: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const invoiceAny = invoice as any;
   const subscriptionId = typeof invoiceAny.subscription === 'string'
@@ -299,12 +422,45 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     return;
   }
 
+  const stripeSubscription = await getStripe().subscriptions.retrieve(
+    subscriptionId,
+    { expand: ['items.data'] }
+  ) as Stripe.Subscription;
+
+  const amountPaid = invoice.amount_paid ?? 0;
+  if (amountPaid > 0) {
+    const attribution = attributionFromMetadata(stripeSubscription.metadata);
+    const paidAtUnix = invoice.status_transitions?.paid_at || invoice.created;
+    await db.upsertRevenueEvent(invoice.id || eventId, {
+      sourceType: "invoice",
+      stripeEventId: eventId,
+      stripeInvoiceId: invoice.id,
+      stripeSubscriptionId: subscriptionId,
+      customerId: typeof invoice.customer === "string" ? invoice.customer : null,
+      planType: stripeSubscription.metadata?.planType || null,
+      amountPaidCents: amountPaid,
+      currency: invoice.currency || "usd",
+      paidAt: new Date((paidAtUnix || Math.floor(Date.now() / 1000)) * 1000),
+      utmSource: attribution.utmSource || null,
+      utmMedium: attribution.utmMedium || null,
+      utmCampaign: attribution.utmCampaign || null,
+      utmContent: attribution.utmContent || null,
+      utmTerm: attribution.utmTerm || null,
+      gclid: attribution.gclid || null,
+      fbclid: attribution.fbclid || null,
+      ttclid: attribution.ttclid || null,
+      landingPath: attribution.landingPath || null,
+      firstSeenAt: attribution.firstSeenAt || null,
+      lastSeenAt: attribution.lastSeenAt || null,
+    });
+  }
+
   // Handle first paid invoice for yearly subscriptions — claim early adopter lifetime slot.
   // This ensures lifetime is only granted after a completed payment, not at checkout start.
   if (invoice.billing_reason === 'subscription_create') {
     // Only process if actual payment occurred (not a $0 trial-start invoice)
-    if ((invoice.amount_paid ?? 0) > 0) {
-      await handleFirstYearlyPayment(subscriptionId);
+    if (amountPaid > 0) {
+      await handleFirstYearlyPayment(subscriptionId, stripeSubscription);
     }
     return;
   }
@@ -316,12 +472,6 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
     console.log(`No subscription record found for Stripe ID: ${subscriptionId}`);
     return;
   }
-
-  // Get updated subscription details from Stripe
-  const stripeSubscription = await getStripe().subscriptions.retrieve(
-    subscriptionId,
-    { expand: ['items.data'] }
-  ) as Stripe.Subscription;
 
   // Get billing period from the first subscription item
   const firstItem = stripeSubscription.items?.data?.[0];
@@ -351,8 +501,11 @@ async function handleInvoicePaid(invoice: Stripe.Invoice) {
  * - Failed conversion: If convertToLifetime() fails after slot is claimed,
  *   releases the slot to prevent leaking.
  */
-async function handleFirstYearlyPayment(subscriptionId: string) {
-  const stripeSubscription = await getStripe().subscriptions.retrieve(
+async function handleFirstYearlyPayment(
+  subscriptionId: string,
+  existingSubscription?: Stripe.Subscription
+) {
+  const stripeSubscription = existingSubscription ?? await getStripe().subscriptions.retrieve(
     subscriptionId,
     { expand: ['items.data'] }
   ) as Stripe.Subscription;

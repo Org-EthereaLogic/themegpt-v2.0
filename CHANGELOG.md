@@ -12,6 +12,10 @@ All notable changes to ThemeGPT will be documented in this file.
 - **Added `trial_settings.end_behavior.missing_payment_method: 'cancel'`** — Subscriptions where no card is added before trial expiry now cancel cleanly, triggering our existing `customer.subscription.deleted` webhook handler.
 - Early-adopter yearly checkouts (no trial, immediate payment) are unaffected — they retain full `payment_method_collection: 'always'` behaviour.
 
+### Verified
+
+- Canary purchase confirmed end-to-end (Feb 22, 2026): `adrielletherat@gmail.com` completed monthly trial checkout → `/success` page reached → account shows **Trial | Monthly Plan | Full Access**. No 3DS error, no hCaptcha required. First live trial conversion confirmed.
+
 ---
 
 ## [2.3.0] - 2026-02-19

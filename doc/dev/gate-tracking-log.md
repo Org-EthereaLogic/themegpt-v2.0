@@ -99,6 +99,7 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 
 ## v2.3.0 CWS Approval & Listing Update — Feb 22, 2026
 
+- **v2.3.1 (web) deployed**: Feb 22, 2026 — critical checkout fix. `payment_method_collection: 'if_required'` for trial subscriptions. Root cause of 18 checkouts / 0 conversions resolved. Canary purchase confirmed: `adrielletherat@gmail.com` → Trial | Monthly Plan | Full Access. **First live trial conversion verified.**
 - **v2.3.0 CWS review**: APPROVED (submitted Feb 20, approved Feb 22, 2026)
 - **CWS listing update**: **Submitted for review** Feb 22, 2026. Includes promo video (YouTube), refreshed screenshots (5 total: 3 dark + Frosted Windowpane light + ThemeGPT Light). Metadata-only review — no extension binary change.
 - **Landing page**: Hero video deployed in commit `3d868e9` — autoplay `demo-30s.mp4` inside macOS browser mockup, desktop-only.

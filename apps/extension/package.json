@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
+    "build:edge": "plasmo build --target=edge-mv3",
     "package": "plasmo package",
+    "package:edge": "plasmo package --target=edge-mv3",
     "lint": "tsc --noEmit",
     "test": "vitest run"
   },

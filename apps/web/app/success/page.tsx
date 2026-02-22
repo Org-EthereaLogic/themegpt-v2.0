@@ -11,7 +11,7 @@ import { getAttributionEventParams } from "@/lib/attribution"
 // Chrome Web Store extension ID
 const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
 const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=post_purchase&utm_campaign=install_prompt"
-const GOOGLE_ADS_CONVERSION_SEND_TO = "AW-17968263674/DN9FCKXFlfwbEPrj9_dC"
+const GOOGLE_ADS_CONVERSION_SEND_TO = "AW-17968263674/DN9FCKXF1fwbEPrj9_dC"
 
 interface SessionData {
   success: boolean
@@ -28,16 +28,12 @@ function trackGoogleAdsConversion(sessionId: string) {
   if (typeof window === "undefined") return
   if (localStorage.getItem("themegpt_analytics_consent") !== "accepted") return
 
-  const browserWindow = window as Window & { dataLayer?: unknown[] }
-  browserWindow.dataLayer = browserWindow.dataLayer || []
-  browserWindow.dataLayer.push([
-    "event",
-    "conversion",
-    {
-      send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
-      transaction_id: sessionId,
-    },
-  ])
+  const browserWindow = window as Window & { gtag?: (...args: unknown[]) => void }
+  if (typeof browserWindow.gtag !== "function") return
+  browserWindow.gtag("event", "conversion", {
+    send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
+    transaction_id: sessionId,
+  })
 }
 
 // Check if extension is installed

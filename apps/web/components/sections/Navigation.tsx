@@ -50,6 +50,17 @@ export function Navigation() {
             />
           </a>
         ))}
+        <Link
+            href="/login"
+            className="group relative py-2 text-[0.95rem] font-medium no-underline transition-colors"
+            style={{ color: "#7A6555" }}
+        >
+            <span className="group-hover:text-brown transition-colors">Sign In</span>
+            <span
+              className="absolute bottom-0 left-1/2 h-[3px] w-0 -translate-x-1/2 rounded-sm transition-all duration-300 group-hover:w-full"
+              style={{ background: "#E8A87C" }}
+            />
+        </Link>
         <a
           href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share"
           target="_blank"

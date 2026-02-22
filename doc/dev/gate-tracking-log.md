@@ -97,4 +97,37 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 
 ---
 
+## Deployment Integrity — Feb 22, 2026
+
+**Audit scope:** Verify commit `3d868e9` was built and deployed successfully, and confirm all Cloud Build trigger substitution variables are present.
+
+### Commit 3d868e9 Build Status
+
+| Build ID | Status | Started | Finished |
+|---|---|---|---|
+| `b9263dcf-20f8-463a-9eb6-b7e75ca4f04f` | **SUCCESS** | 2026-02-22T16:50:53Z | 2026-02-22T16:55:19Z |
+
+Active Cloud Run revision: **`themegpt-web-00152-7jn`** (100% traffic), created 2026-02-22T16:55:03Z — timestamp aligns with build completion. Deployment confirmed.
+
+### Trigger Substitution Variables (trigger `a34788f2`)
+
+All 8 build-time `NEXT_PUBLIC_*` vars confirmed present and non-empty:
+
+| Variable | Status |
+|---|---|
+| `_FIREBASE_API_KEY` | ✓ Present |
+| `_FIREBASE_AUTH_DOMAIN` | ✓ Present |
+| `_FIREBASE_PROJECT_ID` | ✓ Present |
+| `_FIREBASE_STORAGE_BUCKET` | ✓ Present |
+| `_FIREBASE_MESSAGING_SENDER_ID` | ✓ Present |
+| `_FIREBASE_APP_ID` | ✓ Present |
+| `_FIREBASE_MEASUREMENT_ID` | ✓ Present |
+| `_STRIPE_PUBLISHABLE_KEY` | ✓ Present |
+
+Also present (bonus): `_STRIPE_SUBSCRIPTION_PRICE_ID`, `_STRIPE_YEARLY_PRICE_ID`, `_STRIPE_SINGLE_THEME_PRICE_ID`.
+
+**Mechanism clarification:** These are Cloud Build *substitution variables*, NOT Secret Manager secrets. They are passed as `--build-arg` at Docker build time and baked into the Next.js bundle. Runtime-only secrets (`NEXTAUTH_SECRET`, `STRIPE_SECRET_KEY`, etc.) are set directly on the Cloud Run service and are not managed via `cloudbuild.yaml`.
+
+---
+
 *Track daily. Record numbers each morning for the prior day. Update the summary block when a gate resolves.*

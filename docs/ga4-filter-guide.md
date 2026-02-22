@@ -23,7 +23,7 @@ To fulfill **Priority 3** of the Bridge Week roadmap (v2.2.2), follow these step
 2. Under **Data collection and modification**, click on **Data Filters**.
 3. Click **Create filter**.
 4. Select **Internal Traffic**.
-5. **Data Filter Name:** `Exclude Internal Traffic`
+5. **Data Filter Name:** `Internal Traffic`
 6. **Filter Operation:** `Exclude`
 7. **Filter State:** `Testing` (Recommended: keeps the data but marks it so you can verify before permanent exclusion).
 8. Click **Create**.
@@ -31,7 +31,7 @@ To fulfill **Priority 3** of the Bridge Week roadmap (v2.2.2), follow these step
 ## Step 3: Verify and Activate
 
 1. Go to the **Realtime** report.
-2. Add a comparison: **Test data filter name** exactly matches `Exclude Internal Traffic`.
+2. Add a comparison: **Test data filter name** exactly matches `Internal Traffic`.
 3. Perform actions on the staging site: `https://themegpt-web-dufb63uofq-uc.a.run.app`
 4. Once verified that your staging traffic is being caught by the filter, go back to **Data Filters** and change the state from `Testing` to `Active`.
 

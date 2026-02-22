@@ -343,9 +343,11 @@ pnpm lint   # ESLint validation
 ### IN PROGRESS
 
 - CWS listing review (submitted Feb 22, 2026; metadata-only — expected faster review than full extension)
-- Bridge Gate 1: unassigned traffic reduction (filter active; 7-day observation window Feb 21–27)
-- Gate 3: GA4 visibility validation (7-day observation window Feb 21–27; earliest pass date Feb 27)
-- Product Hunt launch (blocked until measurement gates pass; earliest Feb 27)
+- Gate 1 / Gate 3: running as **diagnostic indicators only** — no longer block any launch activity
+- Google Search ads ($25/day) + Reddit ads ($50/day) — live since Feb 21, 2026
+- Week-1 social posts (Twitter/X + LinkedIn) — copy finalized, pending publish
+- Product Hunt launch — assets complete, **no gate dependency**, execute when ready
+- **Primary focus: monetization** — scale channels with attributed server-side revenue
 
 ### NOT STARTED
 

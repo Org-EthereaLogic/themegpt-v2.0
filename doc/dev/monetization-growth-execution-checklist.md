@@ -40,7 +40,7 @@
 
 - [x] Launch Google Search campaign with distinct UTM campaign name (`search_launch_v1`, $25/day, published Feb 21).
 - [x] Launch Reddit paid campaign with distinct UTM campaign name (`reddit_launch_v1`, $50/day — approved exception for $500 ad credit, published Feb 21).
-- [ ] Publish week-1 social posts using `doc/dev/launch-asset-pack.md`.
+- [x] Publish week-1 social posts — Twitter/X (@ThemeGPT) + LinkedIn published Feb 22, 2026 with Aurora Borealis GIF and `launch_week_v1` UTM campaign.
 - [ ] Ensure every outbound campaign URL uses unique `utm_source`, `utm_medium`, `utm_campaign`.
 
 ---

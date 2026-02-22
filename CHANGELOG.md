@@ -2,6 +2,18 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
+## [2.3.1] - 2026-02-22
+
+> **Web-only release.** No extension code changed; no CWS submission required.
+
+### Fixed
+
+- **Critical: Checkout 3DS authentication blocking all trial conversions** — Trial subscriptions (monthly always; yearly when not early-adopter eligible) now set `payment_method_collection: 'if_required'`, removing the upfront `SetupIntent` 3DS verification that was causing "We are unable to authenticate your payment method" failures for all users. Card details are collected before trial end via Stripe's trial-ending email flow.
+- **Added `trial_settings.end_behavior.missing_payment_method: 'cancel'`** — Subscriptions where no card is added before trial expiry now cancel cleanly, triggering our existing `customer.subscription.deleted` webhook handler.
+- Early-adopter yearly checkouts (no trial, immediate payment) are unaffected — they retain full `payment_method_collection: 'always'` behaviour.
+
+---
+
 ## [2.3.0] - 2026-02-19
 
 > Submission note: This extension build was submitted to CWS on February 20, 2026. Track current review state in `doc/dev/gate-tracking-log.md`.

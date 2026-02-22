@@ -84,7 +84,7 @@ export function Hero() {
           style={{ animation: "slideInLeft 0.6s ease-out 0.3s both" }}
         >
           <a
-            href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share"
+            href="/install-extension?utm_source=cws&utm_medium=share&utm_campaign=item-share"
             target="_blank"
             rel="noopener noreferrer"
             className="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"

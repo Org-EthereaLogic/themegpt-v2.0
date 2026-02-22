@@ -217,28 +217,30 @@
       </p>
       <div class="meta">
         <span>Prepared: February 16, 2026</span>
-        <span>Updated: February 21, 2026 (ads launch + deployment audit)</span>
+        <span>Updated: February 22, 2026 (Google Ads fully optimized)</span>
         <span>Published extension: v2.2.2</span>
         <span>CWS pending review: v2.3.0</span>
       </div>
     </header>
 
     <section class="panel">
-      <h2>Executive Status (As of February 21, 2026)</h2>
+      <h2>Executive Status (As of February 22, 2026)</h2>
       <p>
         Payment infrastructure is verified healthy and no longer a blocker.
-        Advertising is unblocked and starts immediately under strict spend
-        guardrails. Attribution now flows from landing URL to Stripe metadata
-        and webhook revenue records for channel-level performance reporting.
+        Both advertising channels (Google Search + Reddit) are live and actively
+        serving. Google Ads campaign has been fully optimized: missing tag fixed
+        via Consent Mode v2, 9 keywords added, 4 callouts + 4 sitelinks applied,
+        headlines improved (ad strength: Average → Good), and Display Expansion
+        enabled for unspent budget utilization.
       </p>
       <div class="grid">
         <div class="stat ok">
           <div class="label">Payment flow</div>
           <div class="value">Healthy (Stripe verified)</div>
         </div>
-        <div class="stat active">
+        <div class="stat ok">
           <div class="label">Launch posture</div>
-          <div class="value">Advertising live (guardrailed)</div>
+          <div class="value">Advertising live + optimized</div>
         </div>
         <div class="stat ok">
           <div class="label">Attribution</div>
@@ -340,6 +342,56 @@
     </section>
 
     <section class="panel">
+      <h2>Google Ads Campaign Optimization (Feb 22, 2026)</h2>
+      <ul>
+        <li>
+          <strong>Missing Google tag fixed:</strong> Implemented Google
+          Consent Mode v2 in
+          <span class="mono">GoogleAdsAnalytics.tsx</span>. The
+          <span class="mono">gtag.js</span> script now loads immediately
+          (satisfying Google's crawler verification) while tracking consent
+          defaults to <span class="mono">denied</span> and updates to
+          <span class="mono">granted</span> only after cookie acceptance.
+          Deployed via Cloud Build + Cloud Run.
+        </li>
+        <li>
+          <strong>9 keywords added:</strong>
+          <span class="mono">chatgpt themes</span>,
+          <span class="mono">customizing chatgpt</span>,
+          <span class="mono">chatgpt appearance</span>,
+          <span class="mono">chatgpt custom</span>,
+          <span class="mono">customize chatgpt</span>,
+          <span class="mono">chatgpt dark mode</span>,
+          <span class="mono">custom chatgpt</span>,
+          <span class="mono">custom chat gpt</span>,
+          <span class="mono">customize chat gpt</span>.
+          All broad match in Ad group 1.
+        </li>
+        <li>
+          <strong>4 callouts added:</strong> One-Click Themes · No Coding
+          Required · Beautiful Dark Modes · Instant Customization.
+        </li>
+        <li>
+          <strong>Responsive search ads improved:</strong> Added headlines
+          (ChatGPT Dark Mode, Customize ChatGPT UI, etc.). Ad strength
+          increased from <em>Average</em> to <em>Good</em>.
+        </li>
+        <li>
+          <strong>4 sitelinks added:</strong> Support Center
+          (<span class="mono">themegpt.ai/support</span>), Install Free
+          Extension (Chrome Web Store), Browse All Themes
+          (<span class="mono">themegpt.ai</span>), Privacy Policy
+          (<span class="mono">themegpt.ai/privacy</span>).
+        </li>
+        <li>
+          <strong>Display Expansion enabled:</strong> Uses unspent Search
+          budget for Display Network impressions at similar CPA. Search
+          traffic takes priority; overall budget cap preserved.
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel">
       <h2>Resolved Implementation Work</h2>
       <ul>
         <li>
@@ -422,8 +474,8 @@
           <tr>
             <td>Daily spend cap</td>
             <td>Applies from launch day.</td>
-            <td>Google Search: <span class="mono">$25/day</span>. Reddit: <span class="mono">$50/day</span> (approved exception for $500 ad credit).</td>
-            <td>Do not increase caps during first 7 days.</td>
+            <td>Google Search: <span class="mono">$80/day</span> (increased from $25 during optimization). Reddit: <span class="mono">$50/day</span> (approved exception for $500 ad credit).</td>
+            <td>Do not increase caps during first 7 days. Monitor actual spend versus budget.</td>
           </tr>
           <tr>
             <td>No-signal kill switch</td>
@@ -575,7 +627,13 @@
           <tr class="ok">
             <td>1</td>
             <td>Launch paid traffic on 2 channels ✓</td>
-            <td>Google Search live ($25/day, <span class="mono">search_launch_v1</span>). Reddit live ($50/day for $500 credit, <span class="mono">reddit_launch_v1</span>). Both published Feb 21.</td>
+            <td>Google Search live ($80/day, <span class="mono">search_launch_v1</span>). Reddit live ($50/day for $500 credit, <span class="mono">reddit_launch_v1</span>). Both published Feb 21.</td>
+            <td>Growth</td>
+          </tr>
+          <tr class="ok">
+            <td>1b</td>
+            <td>Optimize Google Ads campaign ✓</td>
+            <td>Consent Mode v2 deployed, 9 keywords + 4 callouts + 4 sitelinks + Display Expansion applied. Ad strength: Good. All recommendations addressed Feb 22.</td>
             <td>Growth</td>
           </tr>
           <tr>
@@ -657,8 +715,8 @@
     </section>
 
     <div class="footer">
-      ThemeGPT consolidated roadmap updated February 21, 2026 (ads launch + deployment audit logged).
-      Focus: immediate advertising with spend guardrails, deterministic
+      ThemeGPT consolidated roadmap updated February 22, 2026 (Google Ads fully optimized).
+      Focus: advertising optimized with spend guardrails, deterministic
       attribution, Clarity session replays, and server-side revenue-based optimization.
     </div>
   </div>

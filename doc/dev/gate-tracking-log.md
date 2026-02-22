@@ -43,7 +43,7 @@
 |------|-------------|----------------|--------|-------|
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
-| 2026-02-22 | TBD | Y | TRACKING | GA4 historical not yet processed (24–48h window). Clarity: 13 sessions / 7 users across Feb 21–22. Reddit UTM traffic confirmed landing (`reddit_launch_v1`). Multiple `/?canceled=true` returns from Stripe — real users reaching checkout, not yet converting. |
+| 2026-02-22 | TBD | Y | TRACKING | GA4 historical not yet processed (24–48h window). Clarity: 13 sessions / 7 users across Feb 21–22. Reddit UTM traffic confirmed landing (`reddit_launch_v1`). Multiple `/?canceled=true` returns from Stripe — real users reaching checkout, not yet converting. IP block added for `50.53.12.179` (EthereaLogic Dev). Clarity `NODE_ENV` production guard deployed to prevent localhost contamination. |
 | 2026-02-23 | | | | |
 | 2026-02-24 | | | | |
 | 2026-02-25 | | | | |

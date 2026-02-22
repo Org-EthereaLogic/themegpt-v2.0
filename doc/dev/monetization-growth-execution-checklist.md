@@ -30,6 +30,9 @@
 - [x] Mark CWS `install` event as key event in the CWS GA4 property.
 - [x] Create Clarity funnel 1: `Marketing → Purchase` (Landing → Purchase Success).
 - [x] Create Clarity funnel 2: `Extension → Purchase` (Extension Auth → Account → Purchase Success).
+- [x] Add Clarity IP block for `50.53.12.179` (EthereaLogic Dev) in Clarity project settings (Feb 22, 2026).
+- [x] Add GA4 internal traffic rule `EthereaLogic Dev` (`50.53.12.179`) on property `516189580` / stream `G-41BZB7X7H7` (Feb 22, 2026).
+- [x] Activate GA4 `Internal Traffic` data filter on property `516189580` — previously in Testing state (Feb 22, 2026).
 
 ---
 

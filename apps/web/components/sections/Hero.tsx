@@ -122,49 +122,32 @@ export function Hero() {
         </div>
       </div>
 
-      {/* Floating Cards - Hidden on mobile */}
+      {/* Video Demo - Hidden on mobile, shown on desktop */}
       <div
-        className="relative h-[500px] hidden lg:block"
+        className="relative hidden lg:block rounded-xl overflow-hidden shadow-2xl border border-white/10"
         style={{ animation: "slideInRight 0.8s ease-out 0.2s both" }}
       >
-        <FloatingCard
-          gradient="linear-gradient(135deg, #0A1628 0%, #164E63 100%)"
-          label="Aurora Borealis"
-          dotColors={["#00E5CC", "#80DEEA", "#164E63"]}
-          lineColor="#00E5CC"
-          labelBgColor="rgba(0, 229, 204, 0.2)"
-          labelTextColor="#00E5CC"
-          rotation={-8}
-          animationName="float1"
-          position={{ top: "20px", left: "0" }}
-          size={{ width: 260, height: 180 }}
-        />
-        <FloatingCard
-          gradient="linear-gradient(135deg, #282A36 0%, #44475A 100%)"
-          label="Dracula"
-          dotColors={["#FF79C6", "#BD93F9", "#50FA7B"]}
-          lineColor="#BD93F9"
-          labelBgColor="rgba(189, 147, 249, 0.2)"
-          labelTextColor="#BD93F9"
-          rotation={6}
-          animationName="float2"
-          animationDelay="-2s"
-          position={{ top: "80px", right: "20px" }}
-          size={{ width: 240, height: 170 }}
-        />
-        <FloatingCard
-          gradient="linear-gradient(135deg, #262335 0%, #4a2c7a 100%)"
-          label="Synth Wave"
-          dotColors={["#FF6AC1", "#FAD000", "#36F9F6"]}
-          lineColor="#FF6AC1"
-          labelBgColor="rgba(255, 106, 193, 0.2)"
-          labelTextColor="#FF6AC1"
-          rotation={4}
-          animationName="float3"
-          animationDelay="-4s"
-          position={{ bottom: "60px", left: "40px" }}
-          size={{ width: 280, height: 190 }}
-        />
+        {/* Browser Mockup Top Bar */}
+        <div className="bg-[#2D2D2D] px-4 py-3 flex items-center gap-2 border-b border-black/20">
+          <div className="flex gap-1.5">
+            <div className="w-3 h-3 rounded-full bg-[#FF5F56]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#FFBD2E]"></div>
+            <div className="w-3 h-3 rounded-full bg-[#27C93F]"></div>
+          </div>
+          <div className="bg-[#1e1e1e] rounded-md text-xs text-center text-white/50 w-full py-1">
+            chatgpt.com
+          </div>
+        </div>
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="w-full h-auto object-cover bg-black"
+        >
+          <source src="/media/demo-30s.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
     </section>
   );

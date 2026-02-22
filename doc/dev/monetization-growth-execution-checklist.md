@@ -17,6 +17,9 @@
 - [x] Persisted checkout + revenue events server-side for source-of-truth reporting.
 - [x] Added internal endpoint: `GET /api/metrics/monetization?days=7`.
 - [x] Added checkout API regression tests for payment session creation.
+- [x] Fixed Cloud Build trigger: added all 7 Firebase `NEXT_PUBLIC_*` vars and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` as substitution variables (were missing since Jan 13 trigger creation — GA4/Firebase was silently broken in all prior production builds).
+- [x] Added Sign In nav link to navigation bar (`/login`). Verified live.
+- [x] Verified checkout flow end-to-end on production: pricing → `POST /api/checkout` → live Stripe session created → `checkout.stripe.com` redirect confirmed (Feb 22, 2026).
 
 ---
 

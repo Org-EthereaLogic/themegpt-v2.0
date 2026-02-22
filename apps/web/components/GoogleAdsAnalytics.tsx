@@ -5,6 +5,7 @@ import Script from "next/script";
 
 const CONSENT_KEY = "themegpt_analytics_consent";
 const GOOGLE_ADS_ID = "AW-17968263674";
+const CONVERSION_LABEL = "DN9FCKXF1fwbEPrj9_dC";
 
 let initialized = false;
 
@@ -26,6 +27,12 @@ function initGoogleAds() {
   });
   gtag("js", new Date());
   gtag("config", GOOGLE_ADS_ID);
+  // Fire "Page view" conversion so Google Ads can verify and track it
+  gtag("event", "conversion", {
+    send_to: `${GOOGLE_ADS_ID}/${CONVERSION_LABEL}`,
+    value: 1.0,
+    currency: "USD",
+  });
   initialized = true;
 }
 

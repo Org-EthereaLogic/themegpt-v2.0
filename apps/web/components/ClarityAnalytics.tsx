@@ -10,6 +10,7 @@ let initialized = false;
 
 function initClarityIfConsented() {
   if (typeof window === "undefined") return;
+  if (process.env.NODE_ENV !== "production") return;
   if (localStorage.getItem(CONSENT_KEY) !== "accepted") return;
   if (initialized) return;
 

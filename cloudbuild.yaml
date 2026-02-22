@@ -10,6 +10,8 @@ steps:
       - '-f'
       - 'apps/web/Dockerfile'
       - '--build-arg'
+      - 'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=${_STRIPE_PUBLISHABLE_KEY}'
+      - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_API_KEY=${_FIREBASE_API_KEY}'
       - '--build-arg'
       - 'NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${_FIREBASE_AUTH_DOMAIN}'

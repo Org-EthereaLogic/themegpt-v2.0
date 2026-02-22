@@ -18,6 +18,14 @@ All notable changes to ThemeGPT will be documented in this file.
 
 ---
 
+## [2.3.1] - 2026-02-22 (Extension)
+
+### Security
+
+- **Harden `externally_connectable`:** Replaced `https://*.a.run.app/*` wildcard (any Cloud Run deployment globally could `sendMessage` to the extension) with the specific production URL `https://themegpt-web-dufb63uofq-uc.a.run.app/*`. Production (`themegpt.ai`) and staging URLs are unaffected.
+
+---
+
 ## [2.3.0] - 2026-02-19
 
 > Submission note: This extension build was submitted to CWS on February 20, 2026. Track current review state in `doc/dev/gate-tracking-log.md`.

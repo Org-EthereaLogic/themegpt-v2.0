@@ -77,6 +77,7 @@
   - Pause a channel if CAC `> $45` for 3 consecutive days.
   - Do not increase daily caps during first 7 days.
   - **Budget exception:** Reddit approved at `$50/day` (vs standard `$25/day`) to qualify for `$500` ad credit. Google Search remains at `$25/day`.
+  - **Guardrail reset note (Feb 22, 2026):** Reddit campaign reached $75+ spend with 0 conversions but was NOT paused — the 0-conversion period was caused by a broken Stripe checkout (3DS authentication failure blocking all channels equally, not Reddit-specific). Checkout fixed in v2.3.1. Guardrail evaluation resets from Feb 22 with a functional payment system.
 
 ---
 

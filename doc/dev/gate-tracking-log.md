@@ -97,6 +97,14 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 
 ---
 
+## v2.3.0 CWS Approval & Listing Update — Feb 22, 2026
+
+- **v2.3.0 CWS review**: APPROVED (submitted Feb 20, approved Feb 22, 2026)
+- **CWS listing update**: **Submitted for review** Feb 22, 2026. Includes promo video (YouTube), refreshed screenshots (5 total: 3 dark + Frosted Windowpane light + ThemeGPT Light). Metadata-only review — no extension binary change.
+- **Landing page**: Hero video deployed in commit `3d868e9` — autoplay `demo-30s.mp4` inside macOS browser mockup, desktop-only.
+
+---
+
 ## Deployment Integrity — Feb 22, 2026
 
 **Audit scope:** Verify commit `3d868e9` was built and deployed successfully, and confirm all Cloud Build trigger substitution variables are present.

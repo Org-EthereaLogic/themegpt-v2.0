@@ -331,13 +331,21 @@ pnpm lint   # ESLint validation
 - QA test suite: 94/94 passing across 5 test files (6 new tests: trialing, canceled, past_due, escalating nudge, review ask, footer UTM)
 - Abandoned checkout recovery (web, deployed Feb 19, 2026): `checkout.session.expired` webhook, `abandoned_checkouts` Firestore collection, `sendCheckoutRecoveryEmail` with promotions opt-in gating
 - `invoice.payment_succeeded` alias added alongside `invoice.paid` for Stripe event compatibility
+- **v2.3.0 CWS review: APPROVED** (Feb 22, 2026)
+
+### COMPLETE (CWS Listing Update — Feb 22, 2026)
+
+- Promo video added to CWS listing (YouTube URL: `https://www.youtube.com/watch?v=8Cbpy...`)
+- Landing page Hero updated with autoplay `demo-30s.mp4` inside macOS browser mockup (commit `3d868e9`)
+- CWS screenshots refreshed: 5 total (3 dark themes + Frosted Windowpane light + ThemeGPT Light)
+- **CWS listing update submitted for review** (Feb 22, 2026)
 
 ### IN PROGRESS
 
-- v2.3.0 CWS review (submitted Feb 20, 2026 — run `22238384383`; expected 1–3 business days)
-- Bridge Gate 1: unassigned traffic reduction (pre-filter baseline 25% on Feb 19; filter active; 7-day observation window in progress Feb 20-26)
-- Gate 3: GA4 visibility validation (7-day observation window in progress Feb 20-26; earliest pass date Feb 26)
-- Product Hunt launch (blocked until all 3 measurement gates pass)
+- CWS listing review (submitted Feb 22, 2026; metadata-only — expected faster review than full extension)
+- Bridge Gate 1: unassigned traffic reduction (filter active; 7-day observation window Feb 21–27)
+- Gate 3: GA4 visibility validation (7-day observation window Feb 21–27; earliest pass date Feb 27)
+- Product Hunt launch (blocked until measurement gates pass; earliest Feb 27)
 
 ### NOT STARTED
 

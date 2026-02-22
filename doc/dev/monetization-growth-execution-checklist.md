@@ -55,12 +55,13 @@
 
 ---
 
-## 3b) CWS Listing Enhancement (Blocked on v2.3.0 Approval)
+## 3b) CWS Listing Enhancement (v2.3.0 APPROVED — unblocked Feb 22, 2026)
 
-- [ ] Upload `asset/launch/demo-30s-source.mp4` to YouTube (title: "ThemeGPT — Custom Themes for ChatGPT").
-- [ ] Add YouTube URL to CWS Store Listing → "Global promo video" field.
-- [ ] Review and refresh CWS screenshots with before/after GIFs from `asset/launch/`.
-- [ ] Submit listing update for review.
+- [x] Upload `asset/launch/demo-30s-source.mp4` to YouTube (title: "ThemeGPT — Custom Themes for ChatGPT").
+- [x] Add YouTube URL to CWS Store Listing → "Global promo video" field. (saved as draft Feb 22, 2026)
+- [x] Updated landing page Hero with autoplay video demo (`apps/web/components/sections/Hero.tsx`, deployed commit `3d868e9`).
+- [x] Refresh CWS screenshots: added Frosted Windowpane (light) + ThemeGPT Light; all 5 slots filled (Feb 22, 2026).
+- [x] Submit listing draft for CWS review (Feb 22, 2026). Pending CWS metadata review.
 
 ---
 

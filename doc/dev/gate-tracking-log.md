@@ -44,7 +44,7 @@
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
 | 2026-02-22 | 32% | Y | FAIL | GA4 API confirmed: 25 total sessions. Unassigned: 8 (32%). Paid channels active: Cross-network 9, Paid Search 5, Paid Social 1. US #1 country (6 users), India absent from top 8 — no India concern this day. checkout_start ×5, pricing_view ×3 confirmed. |
-| 2026-02-23 | TBD | Y | TRACKING | GA4 processing delay (24–48h). v2.3.1 submitted to CWS + Edge today. Dependabot vuln dismissed. CI/CD pipeline repaired (broken lockfile + Tailwind v3 pin). Web deploy: commit 6aab968 → revision themegpt-web-00170-rbc (subscription state patch + trial funnel fixes). |
+| 2026-02-23 | 47% (est) | Y | FAIL | GA4 + Clarity audit completed. 17 GA4 sessions / 21 Clarity sessions. Paid Search: 5 GA4 / 12 Clarity (campaign "Website traffic-Search-1"). "Unassigned" 8 sessions = 47%. All paid channels 100% bounce — 0 checkout_start events from ads (vs 5 on Feb 21 organic). Reddit campaign "reddit_launch_v1" confirmed live (1 session). High bounce diagnostic: ad-to-page message mismatch. Action: Stripe integration hardened, portal live. |
 | 2026-02-24 | | | | |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
@@ -61,7 +61,7 @@
 | 2026-02-20 | N | N | N | N | GA4 SDK was not loading pre-redeploy. Post-fix: GA4 confirmed working via Realtime. No conversion activity today (expected — funnel events require real user purchases). |
 | 2026-02-21 | N | Y (×3) | N | N | GA4 Data API confirmed. checkout_start firing (3 events). pricing_view firing (2 events). trial_start and purchase_success absent — expected, no completed purchases yet. |
 | 2026-02-22 | N | Y (×5) | N | N | GA4 API confirmed: checkout_start ×5, pricing_view ×3. trial_start and purchase_success absent — no completed purchases this day. checkout_abandon not firing (users may not be returning via canceled param consistently). |
-| 2026-02-23 | N | TBD | N | N | GA4 processing delay. Session data not yet available for Feb 23. Web deploy 6aab968 live — recovery emails unblocked (11/15 abandoned checkouts now eligible), checkout duplicate guard active. |
+| 2026-02-23 | N | N | N | N | GA4 + Clarity audit confirmed: 0 checkout_start, 0 pricing_view from 17 sessions on Feb 23. All paid search sessions bounced (100% bounce rate, avg 2.4s). Feb 21 organic was higher quality (5 checkout_start in 4 sessions). No conversions today. Stripe portal deployed — self-serve subscription management now live. |
 | 2026-02-24 | | | | | |
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |
@@ -117,7 +117,51 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 
 ---
 
-## Deployment Integrity — Feb 23, 2026
+## Deployment Integrity — Feb 23, 2026 (commit b48a056)
+
+**Scope:** Stripe integration hardening — Customer Portal, payment failure handling, checkout improvements.
+
+### Analytics Findings (Feb 22 Audit)
+
+- **Sessions:** 21 (Clarity) / 17 (GA4). Campaigns confirmed live: Google Ads "Website traffic-Search-1" + Reddit "reddit_launch_v1"
+- **Critical finding:** 0 `checkout_start` events from 17 paid ad sessions (100% bounce, avg 2.4s). Feb 21 organic (4 sessions) generated 5 `checkout_start` + 3 `pricing_view` — organic intent > paid click quality
+- **Diagnosis:** Ad creative/landing page message mismatch. Paid traffic not reaching pricing section. Mobile = 57% of paid sessions
+- **Stripe referrals (Clarity):** 3 sessions returned from `checkout.stripe.com` — likely internal testing carry-over from prior day
+
+### Changes Deployed
+
+| Area | Change |
+|---|---|
+| `app/api/portal/route.ts` | **New** — Stripe Billing Portal session endpoint (authenticated POST, returns `billing.stripe.com` URL) |
+| `app/account/page.tsx` | "Manage Subscription" button — visible for non-lifetime subscribers, triggers portal redirect |
+| `app/api/webhooks/stripe/route.ts` | `invoice.payment_failed` handler: sets `past_due` status + sends payment failure email |
+| `app/api/webhooks/stripe/route.ts` | `handleSubscriptionUpdated` now syncs `past_due` ↔ `active` transitions (was only `cancel_at_period_end`) |
+| `app/api/checkout/route.ts` | `allow_promotion_codes: true` — promo code field now visible at checkout |
+| `lib/email.ts` | `sendPaymentFailedEmail` — branded dunning email prompting card update |
+
+### Stripe Customer Portal — Live Configuration
+
+Configured at `dashboard.stripe.com/settings/billing/portal` (live mode):
+- Payment methods: enabled | Cancellations: end-of-period, collect reason | Invoice history: enabled
+- Redirect URL: `https://themegpt.ai/account` | Terms + Privacy: set via Public Business Information
+- EIN/tax ID verification submitted — Stripe review in progress (2–3 days)
+
+### Build & Revision
+
+| Build ID | Status | Commit |
+|---|---|---|
+| `e5892d01-8a5a-4c58-807c-8071850ffb63` | **SUCCESS** | `b48a056` |
+
+Active Cloud Run revision: **`themegpt-web-00173-xb7`** (100% traffic).
+
+### Verification
+
+- TypeScript: clean (`tsc --noEmit`)
+- Live test: `asap@beatsbyasap.com` (Expired/Yearly) → "Manage Subscription" button visible → `billing.stripe.com/p/session/live_...` — **portal confirmed working end-to-end in production**
+
+---
+
+## Deployment Integrity — Feb 23, 2026 (commit 6aab968)
 
 **Scope:** Subscription state correctness patch + trial funnel conversion improvements (commit `6aab968`).
 

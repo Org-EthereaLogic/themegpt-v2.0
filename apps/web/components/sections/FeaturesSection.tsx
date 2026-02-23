@@ -349,7 +349,7 @@ export function FeaturesSection() {
             Ready to transform your ChatGPT?
           </p>
           <a
-            href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share"
+            href="/install-extension?utm_source=cws&utm_medium=share&utm_campaign=item-share"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 hover:-translate-y-1"

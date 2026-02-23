@@ -4,14 +4,16 @@ import { useSession, signIn } from "next-auth/react"
 import { useEffect, useState, useCallback } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import {
+  getClientExtensionBrowser,
+  getExtensionIdsForBrowser
+} from "@/lib/extension-distribution"
 
-// Chrome Web Store extension ID
-const PRODUCTION_EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
-const LOCAL_EXTENSION_ID = process.env.NEXT_PUBLIC_EXTENSION_ID
+const EXTENSION_AUTH_INSTALL_QUERY =
+  "utm_source=web&utm_medium=referral&utm_campaign=extension_auth"
 
-const EXTENSION_IDS = [PRODUCTION_EXTENSION_ID]
-if (LOCAL_EXTENSION_ID && LOCAL_EXTENSION_ID !== PRODUCTION_EXTENSION_ID) {
-  EXTENSION_IDS.push(LOCAL_EXTENSION_ID)
+function getExtensionIds(): string[] {
+  return getExtensionIdsForBrowser(getClientExtensionBrowser())
 }
 
 // Check if we can communicate with the extension
@@ -23,11 +25,17 @@ async function pingExtension(): Promise<boolean> {
       return
     }
 
+    const extensionIds = getExtensionIds()
+    if (extensionIds.length === 0) {
+      resolve(false)
+      return
+    }
+
     // Try all configured extension IDs
     let checkedCount = 0
     let detected = false
 
-    EXTENSION_IDS.forEach((id) => {
+    extensionIds.forEach((id) => {
       try {
         chrome.runtime.sendMessage(
           id,
@@ -39,14 +47,14 @@ async function pingExtension(): Promise<boolean> {
               // Store the working ID for subsequent calls
               sessionStorage.setItem("connected_extension_id", id)
               resolve(true)
-            } else if (checkedCount === EXTENSION_IDS.length && !detected) {
+            } else if (checkedCount === extensionIds.length && !detected) {
               resolve(false)
             }
           }
         )
       } catch {
         checkedCount++
-        if (checkedCount === EXTENSION_IDS.length && !detected) {
+        if (checkedCount === extensionIds.length && !detected) {
           resolve(false)
         }
       }
@@ -67,7 +75,14 @@ async function sendTokenToExtension(token: string): Promise<boolean> {
       return
     }
 
-    const targetId = sessionStorage.getItem("connected_extension_id") || EXTENSION_IDS[0]
+    const extensionIds = getExtensionIds()
+    if (extensionIds.length === 0) {
+      resolve(false)
+      return
+    }
+
+    const targetId =
+      sessionStorage.getItem("connected_extension_id") || extensionIds[0]
 
     try {
       chrome.runtime.sendMessage(
@@ -90,6 +105,7 @@ async function sendTokenToExtension(token: string): Promise<boolean> {
 
 export default function ExtensionAuthPage() {
   const { data: session, status } = useSession()
+  const installStoreUrl = `/install-extension?${EXTENSION_AUTH_INSTALL_QUERY}`
   const [token, setToken] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [copied, setCopied] = useState(false)
@@ -206,7 +222,7 @@ export default function ExtensionAuthPage() {
                 <span>
                   Extension not detected.{" "}
                   <Link
-                    href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=web&utm_medium=referral&utm_campaign=extension_auth"
+                    href={installStoreUrl}
                     target="_blank"
                     className="underline font-medium"
                   >
@@ -342,7 +358,7 @@ export default function ExtensionAuthPage() {
               Install the ThemeGPT extension to unlock premium themes.
             </p>
             <Link
-              href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=web&utm_medium=referral&utm_campaign=extension_auth"
+              href={installStoreUrl}
               target="_blank"
               className="inline-block bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-amber-600 transition-colors"
             >

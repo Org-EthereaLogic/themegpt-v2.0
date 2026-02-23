@@ -84,9 +84,10 @@ export function Hero() {
           style={{ animation: "slideInLeft 0.6s ease-out 0.3s both" }}
         >
           <a
-            href="https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/pcdagibkmoehioajofmngkkpdnncnmjb"
+            href="https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/dlphknialdlpmcgoknkcmapmclgckhba"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Add ThemeGPT to Chrome for free (opens Chrome Web Store)"
             className="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
             style={{
               background: "#E8A87C",

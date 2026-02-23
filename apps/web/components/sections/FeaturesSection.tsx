@@ -349,9 +349,10 @@ export function FeaturesSection() {
             Ready to transform your ChatGPT?
           </p>
           <a
-            href="https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/pcdagibkmoehioajofmngkkpdnncnmjb"
+            href="https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/dlphknialdlpmcgoknkcmapmclgckhba"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Add ThemeGPT to Chrome for free (opens Chrome Web Store)"
             className="inline-block px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 hover:-translate-y-1"
             style={{
               background: "#5BB5A2",

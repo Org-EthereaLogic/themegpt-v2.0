@@ -17,6 +17,7 @@ export function Navigation() {
 
   return (
     <nav
+      aria-label="Main navigation"
       className={`fixed top-0 left-0 right-0 z-[1000] flex items-center justify-between px-6 py-5 transition-all duration-400 md:px-12 ${
         isScrolled
           ? "bg-cream/90 backdrop-blur-[20px] shadow-[0_4px_30px_rgba(74,55,40,0.06)]"
@@ -62,9 +63,10 @@ export function Navigation() {
             />
         </Link>
         <a
-          href="https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/pcdagibkmoehioajofmngkkpdnncnmjb"
+          href="https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/dlphknialdlpmcgoknkcmapmclgckhba"
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="Add ThemeGPT to Chrome for free (opens Chrome Web Store)"
           className="whitespace-nowrap rounded-full px-4 py-2.5 text-[0.9rem] font-semibold text-white no-underline transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(91,181,162,0.35)] lg:px-6 lg:py-3 lg:text-base"
           style={{
             background: "#5BB5A2",

@@ -31,8 +31,8 @@ importers:
         specifier: ^10.5.0
         version: 10.5.0
       puppeteer:
-        specifier: ^24.37.3
-        version: 24.37.3(typescript@5.9.3)
+        specifier: ^24.37.5
+        version: 24.37.5(typescript@5.9.3)
       sharp:
         specifier: ^0.34.5
         version: 0.34.5
@@ -2080,8 +2080,8 @@ packages:
   '@protobufjs/utf8@1.1.0':
     resolution: {integrity: sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==}
 
-  '@puppeteer/browsers@2.12.1':
-    resolution: {integrity: sha512-fXa6uXLxfslBlus3MEpW8S6S9fe5RwmAE5Gd8u3krqOwnkZJV3/lQJiY3LaFdTctLLqJtyMgEUGkbDnRNf6vbQ==}
+  '@puppeteer/browsers@2.13.0':
+    resolution: {integrity: sha512-46BZJYJjc/WwmKjsvDFykHtXrtomsCIrwYQPOP7VfMJoZY2bsDF9oROBABR3paDjDcmkUye1Pb1BqdcdiipaWA==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -2917,6 +2917,9 @@ packages:
   '@types/node@25.3.0':
     resolution: {integrity: sha512-4K3bqJpXpqfg2XKGK9bpDTc6xO/xoUP/RBWS7AtRMug6zZFaRekiLzjVtAoZMquxoAbzBvy5nxQ7veS5eYzf8A==}
 
+  '@types/node@25.3.0':
+    resolution: {integrity: sha512-4K3bqJpXpqfg2XKGK9bpDTc6xO/xoUP/RBWS7AtRMug6zZFaRekiLzjVtAoZMquxoAbzBvy5nxQ7veS5eYzf8A==}
+
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
@@ -3344,8 +3347,8 @@ packages:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
 
-  b4a@1.7.4:
-    resolution: {integrity: sha512-u20zJLDaSWpxaZ+zaAkEIB2dZZ1o+DF4T/MRbmsvGp9nletHOyiai19OzX1fF8xUBYsO1bPXxODvcd0978pnug==}
+  b4a@1.8.0:
+    resolution: {integrity: sha512-qRuSmNSkGQaHwNbM7J78Wwy+ghLEYF1zNrSeMxj4Kgw6y33O3mXcQ6Ie9fRvfU/YnxWkOchPXbaLb73TkIsfdg==}
     peerDependencies:
       react-native-b4a: '*'
     peerDependenciesMeta:
@@ -3380,8 +3383,8 @@ packages:
   bare-path@3.0.0:
     resolution: {integrity: sha512-tyfW2cQcB5NN8Saijrhqn0Zh7AnFNsnczRcuWODH0eYAXBsJ5gVxAUuNr7tsHSC6IZ77cA0SitzT+s47kot8Mw==}
 
-  bare-stream@2.7.0:
-    resolution: {integrity: sha512-oyXQNicV1y8nc2aKffH+BUHFRXmx6VrPzlnaEvMhram0nPBrKcEdcyBg5r08D0i8VxngHFAiVyn1QKXpSG0B8A==}
+  bare-stream@2.8.0:
+    resolution: {integrity: sha512-reUN0M2sHRqCdG4lUK3Fw8w98eeUIZHL5c3H7Mbhk2yVBL+oofgaIp0ieLfD5QXwPCypBpmEEKU2WZKzbAk8GA==}
     peerDependencies:
       bare-buffer: '*'
       bare-events: '*'
@@ -5576,12 +5579,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  puppeteer-core@24.37.3:
-    resolution: {integrity: sha512-fokQ8gv+hNgsRWqVuP5rUjGp+wzV5aMTP3fcm8ekNabmLGlJdFHas1OdMscAH9Gzq4Qcf7cfI/Pe6wEcAqQhqg==}
+  puppeteer-core@24.37.5:
+    resolution: {integrity: sha512-ybL7iE78YPN4T6J+sPLO7r0lSByp/0NN6PvfBEql219cOnttoTFzCWKiBOjstXSqi/OKpwae623DWAsL7cn2MQ==}
     engines: {node: '>=18'}
 
-  puppeteer@24.37.3:
-    resolution: {integrity: sha512-AUGGWq0BhPM+IOS2U9A+ZREH3HDFkV1Y5HERYGDg5cbGXjoGsTCT7/A6VZRfNU0UJJdCclyEimZICkZW6pqJyw==}
+  puppeteer@24.37.5:
+    resolution: {integrity: sha512-3PAOIQLceyEmn1Fi76GkGO2EVxztv5OtdlB1m8hMUZL3f8KDHnlvXbvCXv+Ls7KzF1R0KdKBqLuT/Hhrok12hQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -6047,6 +6050,9 @@ packages:
     resolution: {integrity: sha512-resvxdc6Mgb7YEThw6G6bExlXKkv6+YbuzGg9xuXxSgxJF7Ozs+o8Y9+2R3sArdWdW8nOokoQb1yrpFB0pQK2g==}
     engines: {node: '>=14'}
 
+  teex@1.0.1:
+    resolution: {integrity: sha512-eYE6iEI62Ni1H8oIa7KlDU6uQBtqr4Eajni3wX7rpfXD8ysFx8z0+dri+KWEPWpBsxXfxu58x/0jvTVT1ekOSg==}
+
   temp-dir@3.0.0:
     resolution: {integrity: sha512-nHc6S/bwIilKHNRgK/3jlhDoIHcp45YgyiwcAk46Tr0LfEqGBVpmiAyuiuxeVE44m3mXnEeVhaipLOEWmH+Njw==}
     engines: {node: '>=14.16'}
@@ -6225,6 +6231,9 @@ packages:
 
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
+
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
@@ -8833,7 +8842,7 @@ snapshots:
 
   '@protobufjs/utf8@1.1.0': {}
 
-  '@puppeteer/browsers@2.12.1':
+  '@puppeteer/browsers@2.13.0':
     dependencies:
       debug: 4.4.3
       extract-zip: 2.0.1
@@ -9488,6 +9497,11 @@ snapshots:
     dependencies:
       undici-types: 7.18.2
 
+  '@types/node@25.3.0':
+    dependencies:
+      undici-types: 7.18.2
+    optional: true
+
   '@types/parse-json@4.0.2': {}
 
   '@types/react-dom@19.2.3(@types/react@19.2.14)':
@@ -9994,7 +10008,7 @@ snapshots:
 
   axobject-query@4.1.0: {}
 
-  b4a@1.7.4: {}
+  b4a@1.8.0: {}
 
   balanced-match@4.0.4: {}
 
@@ -10004,7 +10018,7 @@ snapshots:
     dependencies:
       bare-events: 2.8.2
       bare-path: 3.0.0
-      bare-stream: 2.7.0(bare-events@2.8.2)
+      bare-stream: 2.8.0(bare-events@2.8.2)
       bare-url: 2.3.2
       fast-fifo: 1.3.2
     transitivePeerDependencies:
@@ -10020,9 +10034,10 @@ snapshots:
       bare-os: 3.6.2
     optional: true
 
-  bare-stream@2.7.0(bare-events@2.8.2):
+  bare-stream@2.8.0(bare-events@2.8.2):
     dependencies:
       streamx: 2.23.0
+      teex: 1.0.1
     optionalDependencies:
       bare-events: 2.8.2
     transitivePeerDependencies:
@@ -12586,9 +12601,9 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  puppeteer-core@24.37.3:
+  puppeteer-core@24.37.5:
     dependencies:
-      '@puppeteer/browsers': 2.12.1
+      '@puppeteer/browsers': 2.13.0
       chromium-bidi: 14.0.0(devtools-protocol@0.0.1566079)
       debug: 4.4.3
       devtools-protocol: 0.0.1566079
@@ -12603,13 +12618,13 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  puppeteer@24.37.3(typescript@5.9.3):
+  puppeteer@24.37.5(typescript@5.9.3):
     dependencies:
-      '@puppeteer/browsers': 2.12.1
+      '@puppeteer/browsers': 2.13.0
       chromium-bidi: 14.0.0(devtools-protocol@0.0.1566079)
       cosmiconfig: 9.0.0(typescript@5.9.3)
       devtools-protocol: 0.0.1566079
-      puppeteer-core: 24.37.3
+      puppeteer-core: 24.37.5
       typed-query-selector: 2.12.0
     transitivePeerDependencies:
       - bare-abort-controller
@@ -13231,7 +13246,7 @@ snapshots:
 
   tar-stream@3.1.7:
     dependencies:
-      b4a: 1.7.4
+      b4a: 1.8.0
       fast-fifo: 1.3.2
       streamx: 2.23.0
     transitivePeerDependencies:
@@ -13250,6 +13265,14 @@ snapshots:
       - supports-color
     optional: true
 
+  teex@1.0.1:
+    dependencies:
+      streamx: 2.23.0
+    transitivePeerDependencies:
+      - bare-abort-controller
+      - react-native-b4a
+    optional: true
+
   temp-dir@3.0.0: {}
 
   tempy@3.1.0:
@@ -13261,7 +13284,7 @@ snapshots:
 
   text-decoder@1.2.7:
     dependencies:
-      b4a: 1.7.4
+      b4a: 1.8.0
     transitivePeerDependencies:
       - react-native-b4a
 
@@ -13439,6 +13462,9 @@ snapshots:
   undici-types@6.21.0: {}
 
   undici-types@7.18.2: {}
+
+  undici-types@7.18.2:
+    optional: true
 
   undici@7.22.0: {}
 

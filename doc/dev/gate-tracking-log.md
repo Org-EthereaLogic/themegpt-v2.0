@@ -97,6 +97,17 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 
 ---
 
+## v2.3.1 Extension Submission — Feb 23, 2026
+
+- **v2.3.1 Chrome Web Store**: Submitted for review Feb 23, 2026. Status: **Pending review**. Draft v2.3.1 uploaded; Published still at v2.3.0.
+- **v2.3.1 Edge Add-ons**: Submitted for review Feb 23, 2026. Status: **Pending review** (separate submission from the earlier manual upload of v2.3.1 on Feb 22).
+- **CI/CD pipeline fixed**: Two blocking issues resolved before submission landed:
+  1. `pnpm-lock.yaml` had duplicate `@types/node@25.3.0` entries (Dependabot merge artifact) — regenerated to fix `ERR_PNPM_BROKEN_LOCKFILE`.
+  2. Dependabot bumped extension's `tailwindcss` from v3 to v4 — pinned back to `^3.4.19` since extension PostCSS/Tailwind config is v3-format.
+- **Automated submission**: `submit-extension.yml` now triggers automatically on `v*.*.*` tags in addition to `workflow_dispatch`. Future releases: bump version → `git tag vX.X.X && git push origin vX.X.X`.
+
+---
+
 ## v2.3.0 CWS Approval & Listing Update — Feb 22, 2026
 
 - **v2.3.1 (web) deployed**: Feb 22, 2026 — critical checkout fix. `payment_method_collection: 'if_required'` for trial subscriptions. Root cause of 18 checkouts / 0 conversions resolved. Canary purchase confirmed: `adrielletherat@gmail.com` → Trial | Monthly Plan | Full Access. **First live trial conversion verified.**

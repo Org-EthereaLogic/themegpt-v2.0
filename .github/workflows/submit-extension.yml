@@ -1,6 +1,9 @@
 name: "Submit Extension to Web Store"
 on:
   workflow_dispatch:
+  push:
+    tags:
+      - "v*.*.*"
 
 permissions:
   contents: read

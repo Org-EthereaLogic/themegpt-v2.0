@@ -84,7 +84,7 @@ export function Hero() {
           style={{ animation: "slideInLeft 0.6s ease-out 0.3s both" }}
         >
           <a
-            href="/?utm_source=web&utm_medium=hero&utm_campaign=trial_start#pricing"
+            href="https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/pcdagibkmoehioajofmngkkpdnncnmjb"
             target="_blank"
             rel="noopener noreferrer"
             className="group relative inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-semibold text-white transition-all duration-300 hover:-translate-y-0.5 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
@@ -95,7 +95,7 @@ export function Hero() {
             onClick={createRipple}
           >
             <RippleContainer ripples={ripples} />
-            Start Free 30-Day Trial
+            Add to Chrome — It's Free
             <svg
               width="16"
               height="16"

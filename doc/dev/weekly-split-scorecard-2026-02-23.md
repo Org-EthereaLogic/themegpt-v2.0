@@ -23,7 +23,7 @@
 | CWS listing views | — | — | Pull from CWS dashboard |
 | CWS installs | — | — | Pull from CWS dashboard |
 | CWS uninstall rate % | — | — | Pull from CWS dashboard |
-| Web sessions (GA4, Feb 21–23) | 46 | N/A (Days 2–4) | GA4 property `516189580`. Consent-gated diagnostic only. Feb 23: 17 sessions (0 checkout_start — all paid traffic bounced). |
+| Web sessions (GA4, Feb 21–23) | 55 | N/A (Days 2–4) | GA4 property `516189580`. Consent-gated diagnostic only. Feb 23 midday: 26 sessions (0 checkout_start — all paid traffic bounced). |
 | Paid traffic share % | 54% | N/A | Cross-network (9) + Paid Search (5) + Paid Social (1) + Reddit (1) = ~35% of Feb 22+23 combined |
 
 **Session channel breakdown (Feb 21–23 combined):**
@@ -31,8 +31,8 @@
 | Channel | Sessions | Notes |
 |---------|----------|-------|
 | Cross-network | 9 | Google Performance Max / multi-channel |
-| Unassigned | 16 | 47% of Feb 23 total — Gate 1 FAIL (3 consecutive days) |
-| Paid Search | 10 | Google Search "Website traffic-Search-1" — 100% bounce, avg 2.4s |
+| Unassigned | 17 | 31% of Feb 23 midday total — Gate 1 FAIL |
+| Paid Search | 10 | Google Search "Website traffic-Search-1" — 100% bounce, avg 0.0s in GA4 |
 | Direct | 7 | |
 | Paid Social | 1 | Reddit `reddit_launch_v1` |
 | Referral | 3 | `checkout.stripe.com` returns (portal/testing) |
@@ -88,7 +88,7 @@ Clarity weekly review:
 | Guardrail | Current value | Threshold | Status | Action |
 |-----------|---------------|-----------|--------|--------|
 | Daily spend per channel | Reddit: $50/day | `Google: $25/day, Reddit: $50/day` | TRACKING | Google API auth insufficient. Reddit campaign manually set to $50/day to hit promo requirements. |
-| No-signal kill switch | — | `>= $75 with 0 checkouts` | UNKNOWN | 5 checkout_start events recorded Feb 22 — suggests signal exists |
+| No-signal kill switch | — | `>= $75 with 0 checkouts` | UNKNOWN | 5 checkout_start events (Feb 21) are test data, not real signal |
 | CAC kill switch | — | `> $45 for 3 consecutive days` | UNKNOWN | Pull from Google Ads |
 | Channel expansion gate | NOT MET | `first attributed revenue required` | HOLD | Server-side conversion on Feb 22 not yet attributed to paid channel |
 
@@ -137,6 +137,6 @@ Escalation rule: India share 0% vs US 35% — no escalation. Good signal.
 ## 8) Narrative Summary
 
 - **What improved this week:** First live trial conversion on Feb 22 (`adrielletherat@gmail.com` — Monthly Trial). Root cause of 18 checkouts / 0 conversions resolved (`payment_method_collection: 'if_required'`). Full payment system audit completed — 3 conversion blockers patched (infinite spinner for single-theme buyers, `trialing→active` DB sync gap, `session.customer` null cast). Abandoned checkout recovery pipeline confirmed live via 3 received recovery emails. Stripe Customer Portal shipped and live-tested end-to-end with real subscriber. `allow_promotion_codes: true` added to checkout. Google Ads and Reddit Ads pivoted to desktop-only targeting. Reddit campaign launched at $50/day for $500 credit promo. EIN/tax ID submitted to Stripe. Two deploys: revisions `00173-xb7` and `00176-5ts`.
-- **What regressed this week:** Gate 1 (unassigned traffic) FAIL for 3 consecutive days (50% → 32% → 47%). Paid ad traffic generating 0 `checkout_start` events — 100% bounce, avg 2.4s. GA4 client-side events not reflecting the server-confirmed trial conversion (consent gap). Google Ads API auth insufficient for automated spend tracking.
-- **Biggest unknown:** Whether pivoting ads to desktop-only will improve bounce rate and funnel entry. No `purchase_success` GA4 event yet — unclear if consent was given or event is missing for the known trial conversion.
-- **Next week action:** Monitor daily for bounce rate improvement after desktop-only targeting kicks in. Pull Google Ads spend manually to verify guardrails. Track whether Reddit $50/day spend generates qualified desktop clicks. Watch for trial-to-paid conversions as first cohort of 30-day trials approaches end.
+- **What regressed this week:** Gate 1 (unassigned traffic) FAIL for 3 consecutive days. Paid ad traffic generating 0 funnel events (day 3) — 100% bounce. Device engagement inversion: mobile traffic averaged 21.9s vs PC 0.8s on Clarity. Desktop targeting shift is intentional (extension not usable on mobile), but emphasizes the poor PC performance. GA4 events missing for known conversion (consent gap).
+- **Biggest unknown:** What is causing desktop users to exit the landing page before converting. The ad-to-landing-page messaging might be a factor, or there may be other undiscovered friction points on the page.
+- **Next week action:** Investigate landing page friction factors. Address the message match for the search campaign to prevent immediate bouncing. Pull Google Ads spend manually to verify guardrails.

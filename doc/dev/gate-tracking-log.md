@@ -44,7 +44,7 @@
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
 | 2026-02-22 | 32% | Y | FAIL | GA4 API confirmed: 25 total sessions. Unassigned: 8 (32%). Paid channels active: Cross-network 9, Paid Search 5, Paid Social 1. US #1 country (6 users), India absent from top 8 — no India concern this day. checkout_start ×5, pricing_view ×3 confirmed. |
-| 2026-02-23 | 47% (est) | Y | FAIL | GA4 + Clarity audit completed. 17 GA4 sessions / 21 Clarity sessions. Paid Search: 5 GA4 / 12 Clarity (campaign "Website traffic-Search-1"). "Unassigned" 8 sessions = 47%. All paid channels 100% bounce — 0 checkout_start events from ads (vs 5 on Feb 21 organic). Reddit campaign "reddit_launch_v1" confirmed live (1 session). High bounce diagnostic: ad-to-page message mismatch + mobile traffic (57%). Action: Google Ads set to -100% mobile/tablet. Reddit 'Traffic Campaign 2026-02-21 13:48:14 PST' activated at $50/day. |
+| 2026-02-23 | 31% (mid) | Y | FAIL | Midday GA4/Clarity snapshot: 26 GA4 sessions / 19 Clarity sessions. Unassigned: 8 sessions (31%). Paid Search (Clarity) up to 16 (+33% over yesterday). 100% bounce from ads continues (0 checkout_start). Critical device inversion observed: Mobile avg duration 21.9s vs PC 0.8s. However, desktop-only targeting is required since the Chrome extension is not usable on mobile. Action: Focus shifts to landing page messaging and conversion friction. Reddit campaign stable at 1 session/day. |
 | 2026-02-24 | | | | |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
@@ -61,7 +61,7 @@
 | 2026-02-20 | N | N | N | N | GA4 SDK was not loading pre-redeploy. Post-fix: GA4 confirmed working via Realtime. No conversion activity today (expected — funnel events require real user purchases). |
 | 2026-02-21 | N | Y (×3) | N | N | GA4 Data API confirmed. checkout_start firing (3 events). pricing_view firing (2 events). trial_start and purchase_success absent — expected, no completed purchases yet. |
 | 2026-02-22 | N | Y (×5) | N | N | GA4 API confirmed: checkout_start ×5, pricing_view ×3. trial_start and purchase_success absent — no completed purchases this day. checkout_abandon not firing (users may not be returning via canceled param consistently). |
-| 2026-02-23 | N | N | N | N | GA4 + Clarity audit confirmed: 0 checkout_start, 0 pricing_view from 17 sessions on Feb 23. All paid search sessions bounced (100% bounce rate, avg 2.4s). Feb 21 organic was higher quality (5 checkout_start in 4 sessions). No conversions today. Stripe portal deployed — self-serve subscription management now live. |
+| 2026-02-23 | N | N | N | N | Midday audit: 0 checkout_start, 0 pricing_view from 26 GA4 sessions. Zero funnel events from paid traffic for the third straight day. Clicks bounce before a single event fires (0.0s avg duration in GA4). Note: the 5 organic checkouts from Feb 21 were canary testing. Funnel is solid, but not being reached by landing page traffic. Stripe portal deployed — self-serve subscription management now live. |
 | 2026-02-24 | | | | | |
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |

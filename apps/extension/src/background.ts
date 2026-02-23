@@ -17,7 +17,7 @@ chrome.runtime.onMessageExternal.addListener(
     const allowedOrigins = [
       "https://themegpt.ai",
       "https://www.themegpt.ai",
-      "https://theme-gpt-web-dufb63uofq-uc.a.run.app"
+      "https://themegpt-web-dufb63uofq-uc.a.run.app"
     ]
     const senderOrigin = sender.url ? new URL(sender.url).origin : ""
     if (!allowedOrigins.includes(senderOrigin)) {

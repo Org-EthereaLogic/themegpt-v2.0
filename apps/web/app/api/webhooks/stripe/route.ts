@@ -207,7 +207,7 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
       const subscriptionPayload = {
         userId,
         stripeSubscriptionId: stripeSubscription.id,
-        stripeCustomerId: session.customer as string,
+        stripeCustomerId: typeof session.customer === 'string' ? session.customer : '',
         status: normalizedStatus,
         planType: normalizedPlanType,
         currentPeriodStart,
@@ -634,14 +634,15 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     return;
   }
 
-  // Sync status changes for past_due / active transitions
+  // Sync status changes for past_due / active / trialing transitions
   const stripeStatus = subscription.status;
   if (stripeStatus === 'past_due' && dbSubscription.status !== 'past_due') {
     await db.updateSubscription(dbSubscription.id, { status: 'past_due' });
     console.log(`Subscription marked past_due: ${dbSubscription.id}`);
-  } else if (stripeStatus === 'active' && dbSubscription.status === 'past_due') {
+  } else if (stripeStatus === 'active' && dbSubscription.status !== 'active') {
+    // Covers trialing → active (trial converted to paid) and past_due → active (payment recovered)
     await db.updateSubscription(dbSubscription.id, { status: 'active' });
-    console.log(`Subscription recovered from past_due: ${dbSubscription.id}`);
+    console.log(`Subscription activated: ${dbSubscription.id} (was: ${dbSubscription.status})`);
   }
 }
 

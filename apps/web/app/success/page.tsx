@@ -170,6 +170,10 @@ function SuccessContent() {
         } else if (!data.success) {
           setError(data.message || "Failed to process payment")
           setLoading(false)
+        } else {
+          // pending still true after maxAttempts — webhook took too long
+          setError("Your purchase is taking longer than expected to activate. Please check your email for confirmation or contact support@themegpt.ai.")
+          setLoading(false)
         }
       } catch {
         setError("Failed to connect to server")

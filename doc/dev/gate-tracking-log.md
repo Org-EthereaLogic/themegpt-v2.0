@@ -44,7 +44,7 @@
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
 | 2026-02-22 | 32% | Y | FAIL | GA4 API confirmed: 25 total sessions. Unassigned: 8 (32%). Paid channels active: Cross-network 9, Paid Search 5, Paid Social 1. US #1 country (6 users), India absent from top 8 — no India concern this day. checkout_start ×5, pricing_view ×3 confirmed. |
-| 2026-02-23 | TBD | Y | TRACKING | GA4 processing delay (24–48h). v2.3.1 submitted to CWS + Edge today. Dependabot vuln dismissed. CI/CD pipeline repaired (broken lockfile + Tailwind v3 pin). |
+| 2026-02-23 | TBD | Y | TRACKING | GA4 processing delay (24–48h). v2.3.1 submitted to CWS + Edge today. Dependabot vuln dismissed. CI/CD pipeline repaired (broken lockfile + Tailwind v3 pin). Web deploy: commit 6aab968 → revision themegpt-web-00170-rbc (subscription state patch + trial funnel fixes). |
 | 2026-02-24 | | | | |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
@@ -61,7 +61,7 @@
 | 2026-02-20 | N | N | N | N | GA4 SDK was not loading pre-redeploy. Post-fix: GA4 confirmed working via Realtime. No conversion activity today (expected — funnel events require real user purchases). |
 | 2026-02-21 | N | Y (×3) | N | N | GA4 Data API confirmed. checkout_start firing (3 events). pricing_view firing (2 events). trial_start and purchase_success absent — expected, no completed purchases yet. |
 | 2026-02-22 | N | Y (×5) | N | N | GA4 API confirmed: checkout_start ×5, pricing_view ×3. trial_start and purchase_success absent — no completed purchases this day. checkout_abandon not firing (users may not be returning via canceled param consistently). |
-| 2026-02-23 | N | TBD | N | N | GA4 processing delay. Session data not yet available for Feb 23. |
+| 2026-02-23 | N | TBD | N | N | GA4 processing delay. Session data not yet available for Feb 23. Web deploy 6aab968 live — recovery emails unblocked (11/15 abandoned checkouts now eligible), checkout duplicate guard active. |
 | 2026-02-24 | | | | | |
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |
@@ -114,6 +114,38 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 - **v2.3.0 CWS review**: APPROVED (submitted Feb 20, approved Feb 22, 2026)
 - **CWS listing update**: **Submitted for review** Feb 22, 2026. Includes promo video (YouTube), refreshed screenshots (5 total: 3 dark + Frosted Windowpane light + ThemeGPT Light). Metadata-only review — no extension binary change.
 - **Landing page**: Hero video deployed in commit `3d868e9` — autoplay `demo-30s.mp4` inside macOS browser mockup, desktop-only.
+
+---
+
+## Deployment Integrity — Feb 23, 2026
+
+**Scope:** Subscription state correctness patch + trial funnel conversion improvements (commit `6aab968`).
+
+### Changes Deployed
+
+| Area | Fix |
+|---|---|
+| `db.ts` | Priority-based subscription selection (active > trialing > canceled-in-grace > expired); `upsertSubscriptionByStripeId` prevents duplicate records on webhook retries |
+| `webhooks/stripe/route.ts` | `trialEndsAt` now persisted for monthly trials (was yearly-only); status normalization; upsert replaces insert |
+| `checkout/route.ts` | 409 guard blocks duplicate checkouts for active/trialing users |
+| `webhooks/stripe/route.ts` | Abandoned checkout recovery unblocked — `reminderEligible` no longer requires `promotions=opt_in`; 11/15 historical abandoned checkouts now eligible |
+| `extension/auth/route.ts` | Stripe-link flow uses upsert + full status normalization |
+| `Hero`, `Navigation`, `FeaturesSection` | Primary CTAs route to `#pricing` trial entry (was CWS install page) |
+| `popup.tsx` | Locked-theme click opens trial/pricing on first interaction (was second) |
+
+### Build & Revision
+
+| Build ID | Status | Commit |
+|---|---|---|
+| `43f0a24e-975d-4c14-9266-b2d0b8648520` | **SUCCESS** | `6aab968` |
+
+Active Cloud Run revision: **`themegpt-web-00170-rbc`** (100% traffic). Service traffic updated to `LATEST` — future deploys go live automatically.
+
+### Test Results (pre-deploy)
+
+- Web: **36/36 passed**
+- Extension: **94/94 passed**
+- TypeScript: clean (`tsc --noEmit`)
 
 ---
 

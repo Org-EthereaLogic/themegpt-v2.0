@@ -23,20 +23,20 @@
 | CWS listing views | — | — | Pull from CWS dashboard |
 | CWS installs | — | — | Pull from CWS dashboard |
 | CWS uninstall rate % | — | — | Pull from CWS dashboard |
-| Web sessions (GA4, Feb 21–22) | 29 | N/A (Day 2–3) | GA4 property `516189580`. Consent-gated diagnostic only. |
-| Paid traffic share % | 51.7% | N/A | Cross-network (9) + Paid Search (5) + Paid Social (1) = 15 of 29 sessions |
+| Web sessions (GA4, Feb 21–23) | 46 | N/A (Days 2–4) | GA4 property `516189580`. Consent-gated diagnostic only. Feb 23: 17 sessions (0 checkout_start — all paid traffic bounced). |
+| Paid traffic share % | 54% | N/A | Cross-network (9) + Paid Search (5) + Paid Social (1) + Reddit (1) = ~35% of Feb 22+23 combined |
 
-**Session channel breakdown (Feb 21–22 combined):**
+**Session channel breakdown (Feb 21–23 combined):**
 
 | Channel | Sessions | Notes |
 |---------|----------|-------|
 | Cross-network | 9 | Google Performance Max / multi-channel |
-| Unassigned | 8 | 32% of Feb 22 total — Gate 1 FAIL |
-| Paid Search | 5 | Google Search ads active |
-| Direct | 5 | 3 on Feb 21, 2 on Feb 22 |
-| Paid Social | 1 | |
-| Referral | 1 | Reddit `reddit_launch_v1` UTM from Feb 21 |
-| **Total** | **29** | |
+| Unassigned | 16 | 47% of Feb 23 total — Gate 1 FAIL (3 consecutive days) |
+| Paid Search | 10 | Google Search "Website traffic-Search-1" — 100% bounce, avg 2.4s |
+| Direct | 7 | |
+| Paid Social | 1 | Reddit `reddit_launch_v1` |
+| Referral | 3 | `checkout.stripe.com` returns (portal/testing) |
+| **Total** | **46** | |
 
 ---
 
@@ -125,12 +125,18 @@ Escalation rule: India share 0% vs US 35% — no escalation. Good signal.
 | Pull server-side monetization API for revenue totals | Growth | Feb 23 | OPEN |
 | Optimize Google/Reddit Ads for Desktop-Only | Growth | Feb 23 | DONE |
 | Launch Reddit Campaign at $50/day for Credit Promo | Growth | Feb 23 | DONE |
+| Configure Stripe Customer Portal (live mode) | Eng | Feb 23 | DONE — payment methods, cancellations, legal links, redirect URL |
+| Add Manage Subscription button to /account | Eng | Feb 23 | DONE — commit b48a056, revision 00173-xb7 |
+| Handle invoice.payment_failed webhook + dunning email | Eng | Feb 23 | DONE |
+| Fix trialing→active DB transition (HIGH audit finding) | Eng | Feb 23 | DONE — commit 540f9e7, revision 00176-5ts |
+| Fix single-theme infinite spinner (HIGH audit finding) | Eng | Feb 23 | DONE |
+| Submit EIN/tax ID to Stripe for account verification | Ops | Feb 23 | DONE — review in progress (2–3 days) |
 
 ---
 
 ## 8) Narrative Summary
 
-- **What improved this week:** First live trial conversion on Feb 22 (<adrielletherat@gmail.com> — Monthly Trial). Root cause of 18 checkouts / 0 conversions resolved (`payment_method_collection: 'if_required'`). Paid channels active: Cross-network (9 sessions), Paid Search (5 sessions). v2.3.1 submitted to both CWS and Edge. CI/CD pipeline fully automated — future releases via `git tag vX.X.X`. Google Ads and Reddit Ads configured exclusively for Desktop traffic to solve 100% mobile bounce rate. Reddit campaign fully launched at $50/day to claim the $500 free credit promo.
-- **What regressed this week:** Gate 1 (unassigned traffic) still at 32% on Feb 22 — FAIL threshold. GA4 client-side events not reflecting the server-confirmed trial conversion (consent gap or event gap). Google Ads API auth insufficient for automated spend tracking.
-- **Biggest unknown:** Whether the Feb 22 trial conversion was a one-off or the start of a conversion pattern now that the payment flow is fixed. No `purchase_success` GA4 event yet — unclear if consent was given or event is missing.
-- **Next week action:** Monitor daily for additional trial conversions post-payment-fix. Pull Google Ads spend manually to verify guardrails. Investigate why `trial_start` / `purchase_success` GA4 events absent despite server-confirmed conversion.
+- **What improved this week:** First live trial conversion on Feb 22 (`adrielletherat@gmail.com` — Monthly Trial). Root cause of 18 checkouts / 0 conversions resolved (`payment_method_collection: 'if_required'`). Full payment system audit completed — 3 conversion blockers patched (infinite spinner for single-theme buyers, `trialing→active` DB sync gap, `session.customer` null cast). Abandoned checkout recovery pipeline confirmed live via 3 received recovery emails. Stripe Customer Portal shipped and live-tested end-to-end with real subscriber. `allow_promotion_codes: true` added to checkout. Google Ads and Reddit Ads pivoted to desktop-only targeting. Reddit campaign launched at $50/day for $500 credit promo. EIN/tax ID submitted to Stripe. Two deploys: revisions `00173-xb7` and `00176-5ts`.
+- **What regressed this week:** Gate 1 (unassigned traffic) FAIL for 3 consecutive days (50% → 32% → 47%). Paid ad traffic generating 0 `checkout_start` events — 100% bounce, avg 2.4s. GA4 client-side events not reflecting the server-confirmed trial conversion (consent gap). Google Ads API auth insufficient for automated spend tracking.
+- **Biggest unknown:** Whether pivoting ads to desktop-only will improve bounce rate and funnel entry. No `purchase_success` GA4 event yet — unclear if consent was given or event is missing for the known trial conversion.
+- **Next week action:** Monitor daily for bounce rate improvement after desktop-only targeting kicks in. Pull Google Ads spend manually to verify guardrails. Track whether Reddit $50/day spend generates qualified desktop clicks. Watch for trial-to-paid conversions as first cohort of 30-day trials approaches end.

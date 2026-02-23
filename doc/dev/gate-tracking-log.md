@@ -117,6 +117,39 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 
 ---
 
+## Deployment Integrity — Feb 23, 2026 (commit 540f9e7)
+
+**Scope:** Payment funnel hardening and edge-case bug fixes (commit `540f9e7`).
+
+### Audit Results & Fixes Applied
+
+- **Abandoned checkout recovery emails:** System working as intended. 3 legitimate recovery triggers successfully caught from test account sessions that expired without completing payment.
+
+### Bugs Patched
+
+| Area | Issue & Fix | Severity |
+|---|---|---|
+| `success/page.tsx` | **Issue:** Single-theme buyers hit an infinite spinner after 20s if webhook is slow.<br>**Fix:** Added fallback branch to show a support message and clear loading state. | HIGH |
+| `webhooks/stripe/route.ts` | **Issue:** `trialing` → `active` transition never written to DB when a user adds a payment method.<br>**Fix:** Broadened `handleSubscriptionUpdated` to catch any `active` transition. | HIGH |
+| `webhooks/stripe/route.ts` | **Issue:** `session.customer` cast without null guard could write `"null"` as `stripeCustomerId` in Firestore, breaking portal access.<br>**Fix:** Added `typeof session.customer === 'string'` guard. | MEDIUM |
+
+### Confirmed Clean Flows
+
+The following items were audited and confirmed cleanly working:
+
+- Trial subscription success page polling ✅
+- Pending checkout resume after auth redirect ✅
+- 409 duplicate subscription guard for trialing users ✅
+- `allow_promotion_codes: true` — no conflicts ✅
+- `hasFullAccess` logic for trialing/active/grace period ✅
+- Trial cancellation on no payment method (handled via `subscription.deleted`) ✅
+
+### Build & Revision
+
+Deploy **`9923844c`** is building to deploy these changes.
+
+---
+
 ## Deployment Integrity — Feb 23, 2026 (commit b48a056)
 
 **Scope:** Stripe integration hardening — Customer Portal, payment failure handling, checkout improvements.
@@ -239,6 +272,40 @@ Also present (bonus): `_STRIPE_SUBSCRIPTION_PRICE_ID`, `_STRIPE_YEARLY_PRICE_ID`
   - Fixed ad-to-page message mismatch with a new headline: *"Tired of ChatGPT's boring look? Get premium themes, dark modes, and token tracking with one click."*
   - Explicitly set device targeting to Desktop only (iOS and Android unchecked).
   - Set Daily Budget to **$50.00** to qualify for the Reddit $500 ad credit promotion. Status: Active.
+
+---
+
+## Deployment Integrity — Feb 23, 2026 (commit 540f9e7)
+
+**Scope:** Payment system audit — three conversion blockers patched.
+
+### Audit Trigger
+
+Full payment system audit initiated after receiving 3 abandoned checkout recovery emails at test accounts confirming `sendCheckoutRecoveryEmail` is firing live in production (monthly ×2, yearly ×1 from `hello@notification.themegpt.ai`). Audit revealed three confirmed bugs.
+
+### Bugs Found and Fixed
+
+| ID | Severity | File | Issue |
+|----|----------|------|-------|
+| HIGH-1 | HIGH | `app/success/page.tsx` | Infinite spinner for single-theme buyers when polling exhausts `maxAttempts` with `pending: true` — missing `else` branch left loading state permanently set |
+| HIGH-2 | HIGH | `app/api/webhooks/stripe/route.ts` | `trialing → active` transition never synced to DB when trial user adds payment method — downstream cancellation handling silently broken for converted trial subscribers |
+| MEDIUM-1 | MEDIUM | `app/api/webhooks/stripe/route.ts` | `session.customer as string` cast without null guard could write string `"null"` as `stripeCustomerId`, permanently breaking portal access |
+
+### Confirmed Clean (no action needed)
+
+- Trial success page polling handles `no_payment_required` correctly ✅
+- Pending checkout resume after auth redirect — no race condition ✅
+- 409 duplicate subscription guard for trialing/active users ✅
+- `allow_promotion_codes: true` — no conflicts ✅
+- `hasFullAccess` logic for all subscription states ✅
+
+### Build & Revision
+
+| Build ID | Status | Commit |
+|---|---|---|
+| `9923844c-fb9b-46e1-af17-081629aec749` | **SUCCESS** | `540f9e7` |
+
+Active Cloud Run revision: **`themegpt-web-00176-5ts`** (100% traffic). Two deploys on Feb 23: `00173-xb7` (commit `b48a056`) → `00176-5ts` (commit `540f9e7`).
 
 ---
 

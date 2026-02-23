@@ -7,10 +7,13 @@ import Image from "next/image"
 import { logEvent } from "firebase/analytics"
 import { initAnalyticsIfConsented } from "@/lib/firebase"
 import { getAttributionEventParams } from "@/lib/attribution"
+import {
+  getClientExtensionBrowser,
+  getExtensionIdsForBrowser
+} from "@/lib/extension-distribution"
 
-// Chrome Web Store extension ID
-const EXTENSION_ID = "dlphknialdlpmcgoknkcmapmclgckhba"
-const CHROME_STORE_URL = "https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=post_purchase&utm_campaign=install_prompt"
+const POST_PURCHASE_INSTALL_QUERY =
+  "utm_source=cws&utm_medium=post_purchase&utm_campaign=install_prompt"
 const GOOGLE_ADS_CONVERSION_SEND_TO = "AW-17968263674/DN9FCKXF1fwbEPrj9_dC"
 
 interface SessionData {
@@ -36,17 +39,23 @@ function trackGoogleAdsConversion(sessionId: string) {
   })
 }
 
+function getPrimaryExtensionId(): string | null {
+  const extensionIds = getExtensionIdsForBrowser(getClientExtensionBrowser())
+  return extensionIds[0] || null
+}
+
 // Check if extension is installed
 async function checkExtensionInstalled(): Promise<boolean> {
   return new Promise((resolve) => {
-    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
+    const extensionId = getPrimaryExtensionId()
+    if (!extensionId || typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
       resolve(false)
       return
     }
 
     try {
       chrome.runtime.sendMessage(
-        EXTENSION_ID,
+        extensionId,
         { type: "themegpt-ping" },
         (response) => {
           if (chrome.runtime.lastError) {
@@ -66,14 +75,15 @@ async function checkExtensionInstalled(): Promise<boolean> {
 // Check if extension already has an auth token
 async function checkExtensionAuthStatus(): Promise<boolean> {
   return new Promise((resolve) => {
-    if (typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
+    const extensionId = getPrimaryExtensionId()
+    if (!extensionId || typeof chrome === "undefined" || !chrome.runtime?.sendMessage) {
       resolve(false)
       return
     }
 
     try {
       chrome.runtime.sendMessage(
-        EXTENSION_ID,
+        extensionId,
         { type: "themegpt-check-status" },
         (response) => {
           if (chrome.runtime.lastError) {
@@ -92,6 +102,7 @@ async function checkExtensionAuthStatus(): Promise<boolean> {
 
 function SuccessContent() {
   const searchParams = useSearchParams()
+  const installStoreUrl = `/install-extension?${POST_PURCHASE_INSTALL_QUERY}`
   const sessionId = searchParams.get("session_id")
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
   const [loading, setLoading] = useState(true)
@@ -225,10 +236,10 @@ function SuccessContent() {
             <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
               <h3 className="font-semibold text-amber-700 mb-2">Get the Extension</h3>
               <p className="text-sm text-amber-600 mb-3">
-                Install the ThemeGPT Chrome extension to use your theme.
+                Install the ThemeGPT extension to use your theme.
               </p>
               <Link
-                href={CHROME_STORE_URL}
+                href={installStoreUrl}
                 target="_blank"
                 className="inline-block bg-amber-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-amber-600 transition-colors"
               >
@@ -309,10 +320,10 @@ function SuccessContent() {
               <h3 className="font-bold text-brown text-lg">Install the Extension</h3>
             </div>
             <p className="text-sm text-brown/70 mb-4">
-              Get the ThemeGPT Chrome extension to start using your premium themes.
+              Get the ThemeGPT extension to start using your premium themes.
             </p>
             <Link
-              href={CHROME_STORE_URL}
+              href={installStoreUrl}
               target="_blank"
               className="inline-flex items-center gap-2 bg-coral text-white px-5 py-2.5 rounded-full font-semibold hover:opacity-90 transition-opacity shadow-md"
             >
@@ -357,7 +368,7 @@ function SuccessContent() {
             <ol className="text-sm text-left space-y-2 text-brown-900/80">
               <li className="flex items-start gap-2">
                 <span className="bg-coral text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">1</span>
-                <span>Install the <Link href={CHROME_STORE_URL} target="_blank" className="text-teal underline">ThemeGPT extension</Link></span>
+                <span>Install the <Link href={installStoreUrl} target="_blank" className="text-teal underline">ThemeGPT extension</Link></span>
               </li>
               <li className="flex items-start gap-2">
                 <span className="bg-coral text-white w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold">2</span>

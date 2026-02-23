@@ -15,7 +15,9 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share)**
 
-> **Latest published extension: v2.2.2** — released on the Chrome Web Store February 20, 2026.
+> **Latest published extension: v2.3.0** — approved by the Chrome Web Store February 22, 2026.
+>
+> CWS store listing update (promo video + refreshed screenshots) submitted for review February 22, 2026.
 >
 > See [CHANGELOG.md](./CHANGELOG.md) for release notes and [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md) for live submission/review status.
 

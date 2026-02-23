@@ -49,6 +49,7 @@ export default function AccountPage() {
   const [error, setError] = useState<string | null>(null);
   const [redownloadingTheme, setRedownloadingTheme] = useState<string | null>(null);
   const [generatingLinkCode, setGeneratingLinkCode] = useState(false);
+  const [openingPortal, setOpeningPortal] = useState(false);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -227,6 +228,21 @@ export default function AccountPage() {
                   </p>
                 </div>
               )}
+
+              {/* Subscription management */}
+              {!subscription.isLifetime && (
+                <div className="pt-2">
+                  <button
+                    onClick={handleManageSubscription}
+                    disabled={openingPortal}
+                    aria-busy={openingPortal}
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#7D5A4A] border border-[#D4C4B8] rounded-lg hover:bg-[#FAF6F0] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {openingPortal && <Spinner />}
+                    {openingPortal ? "Opening..." : "Manage Subscription"}
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="text-center py-6">
@@ -308,6 +324,23 @@ export default function AccountPage() {
       </div>
     </div>
   );
+
+  async function handleManageSubscription() {
+    setOpeningPortal(true);
+    try {
+      const response = await fetch("/api/portal", { method: "POST" });
+      if (response.ok) {
+        const data = await response.json();
+        window.location.href = data.url;
+      } else {
+        toast.error("Failed to open subscription portal");
+      }
+    } catch {
+      toast.error("An error occurred");
+    } finally {
+      setOpeningPortal(false);
+    }
+  }
 
   async function handleRedownload(themeId: string) {
     setRedownloadingTheme(themeId);

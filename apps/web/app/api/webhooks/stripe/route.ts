@@ -7,6 +7,7 @@ import {
   sendCheckoutRecoveryEmail,
   sendThemePurchaseConfirmationEmail,
   sendTrialEndingEmail,
+  sendPaymentFailedEmail,
 } from "@/lib/email";
 import { LicenseEntitlement, PlanType, SubscriptionStatus } from "@themegpt/shared";
 import { v4 as uuidv4 } from "uuid";
@@ -118,6 +119,11 @@ export async function POST(request: Request) {
       case "customer.subscription.trial_will_end": {
         const subscription = event.data.object as Stripe.Subscription;
         await handleTrialWillEnd(subscription);
+        break;
+      }
+      case "invoice.payment_failed": {
+        const invoice = event.data.object as Stripe.Invoice;
+        await handleInvoicePaymentFailed(invoice);
         break;
       }
     }
@@ -614,8 +620,8 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       status: 'canceled',
       canceledAt: new Date(),
     });
-
     console.log(`Subscription entering grace period: ${dbSubscription.id}`);
+    return;
   }
 
   // Check if cancellation was reversed
@@ -624,8 +630,54 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
       status: 'active',
       canceledAt: null,
     });
-
     console.log(`Subscription cancellation reversed: ${dbSubscription.id}`);
+    return;
+  }
+
+  // Sync status changes for past_due / active transitions
+  const stripeStatus = subscription.status;
+  if (stripeStatus === 'past_due' && dbSubscription.status !== 'past_due') {
+    await db.updateSubscription(dbSubscription.id, { status: 'past_due' });
+    console.log(`Subscription marked past_due: ${dbSubscription.id}`);
+  } else if (stripeStatus === 'active' && dbSubscription.status === 'past_due') {
+    await db.updateSubscription(dbSubscription.id, { status: 'active' });
+    console.log(`Subscription recovered from past_due: ${dbSubscription.id}`);
+  }
+}
+
+async function handleInvoicePaymentFailed(invoice: Stripe.Invoice) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const invoiceAny = invoice as any;
+  const subscriptionId = typeof invoiceAny.subscription === 'string'
+    ? invoiceAny.subscription
+    : invoiceAny.subscription?.id;
+
+  if (!subscriptionId) {
+    return;
+  }
+
+  const dbSubscription = await db.getSubscriptionByStripeId(subscriptionId);
+  if (dbSubscription) {
+    await db.updateSubscription(dbSubscription.id, { status: 'past_due' });
+    console.log(`Subscription set to past_due after payment failure: ${dbSubscription.id}`);
+  }
+
+  // Notify the customer to update their payment method
+  const customerEmail = typeof invoice.customer_email === 'string'
+    ? invoice.customer_email
+    : null;
+
+  if (customerEmail) {
+    await sendPaymentFailedEmail(customerEmail);
+  } else if (typeof invoice.customer === 'string') {
+    try {
+      const customer = await getStripe().customers.retrieve(invoice.customer);
+      if (!customer.deleted && customer.email) {
+        await sendPaymentFailedEmail(customer.email);
+      }
+    } catch (error) {
+      console.error(`Failed to retrieve customer for payment failed email:`, error);
+    }
   }
 }
 

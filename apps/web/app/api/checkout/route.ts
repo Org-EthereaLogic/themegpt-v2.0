@@ -232,6 +232,7 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
+      allow_promotion_codes: true,
       metadata: {
         type: normalizedType,
         planType: planType || "",

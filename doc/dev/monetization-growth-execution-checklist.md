@@ -30,6 +30,9 @@
 - [x] Mark CWS `install` event as key event in the CWS GA4 property.
 - [x] Create Clarity funnel 1: `Marketing → Purchase` (Landing → Purchase Success).
 - [x] Create Clarity funnel 2: `Extension → Purchase` (Extension Auth → Account → Purchase Success).
+- [x] Add Clarity IP block for `50.53.12.179` (EthereaLogic Dev) in Clarity project settings (Feb 22, 2026).
+- [x] Add GA4 internal traffic rule `EthereaLogic Dev` (`50.53.12.179`) on property `516189580` / stream `G-41BZB7X7H7` (Feb 22, 2026).
+- [x] Activate GA4 `Internal Traffic` data filter on property `516189580` — previously in Testing state (Feb 22, 2026).
 
 ---
 
@@ -37,7 +40,7 @@
 
 - [x] Launch Google Search campaign with distinct UTM campaign name (`search_launch_v1`, $25/day, published Feb 21).
 - [x] Launch Reddit paid campaign with distinct UTM campaign name (`reddit_launch_v1`, $50/day — approved exception for $500 ad credit, published Feb 21).
-- [ ] Publish week-1 social posts using `doc/dev/launch-asset-pack.md`.
+- [x] Publish week-1 social posts — Twitter/X (@ThemeGPT) + LinkedIn published Feb 22, 2026 with Aurora Borealis GIF and `launch_week_v1` UTM campaign.
 - [ ] Ensure every outbound campaign URL uses unique `utm_source`, `utm_medium`, `utm_campaign`.
 
 ---
@@ -52,12 +55,13 @@
 
 ---
 
-## 3b) CWS Listing Enhancement (Blocked on v2.3.0 Approval)
+## 3b) CWS Listing Enhancement (v2.3.0 APPROVED — unblocked Feb 22, 2026)
 
-- [ ] Upload `asset/launch/demo-30s-source.mp4` to YouTube (title: "ThemeGPT — Custom Themes for ChatGPT").
-- [ ] Add YouTube URL to CWS Store Listing → "Global promo video" field.
-- [ ] Review and refresh CWS screenshots with before/after GIFs from `asset/launch/`.
-- [ ] Submit listing update for review.
+- [x] Upload `asset/launch/demo-30s-source.mp4` to YouTube (title: "ThemeGPT — Custom Themes for ChatGPT").
+- [x] Add YouTube URL to CWS Store Listing → "Global promo video" field. (saved as draft Feb 22, 2026)
+- [x] Updated landing page Hero with autoplay video demo (`apps/web/components/sections/Hero.tsx`, deployed commit `3d868e9`).
+- [x] Refresh CWS screenshots: added Frosted Windowpane (light) + ThemeGPT Light; all 5 slots filled (Feb 22, 2026).
+- [x] Submit listing draft for CWS review (Feb 22, 2026). Pending CWS metadata review.
 
 ---
 
@@ -73,6 +77,7 @@
   - Pause a channel if CAC `> $45` for 3 consecutive days.
   - Do not increase daily caps during first 7 days.
   - **Budget exception:** Reddit approved at `$50/day` (vs standard `$25/day`) to qualify for `$500` ad credit. Google Search remains at `$25/day`.
+  - **Guardrail reset note (Feb 22, 2026):** Reddit campaign reached $75+ spend with 0 conversions but was NOT paused — the 0-conversion period was caused by a broken Stripe checkout (3DS authentication failure blocking all channels equally, not Reddit-specific). Checkout fixed in v2.3.1. Guardrail evaluation resets from Feb 22 with a functional payment system.
 
 ---
 

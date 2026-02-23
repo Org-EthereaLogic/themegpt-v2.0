@@ -43,8 +43,8 @@
 |------|-------------|----------------|--------|-------|
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
-| 2026-02-22 | TBD | Y | TRACKING | GA4 historical not yet processed (24–48h window). Clarity: 13 sessions / 7 users across Feb 21–22. Reddit UTM traffic confirmed landing (`reddit_launch_v1`). Multiple `/?canceled=true` returns from Stripe — real users reaching checkout, not yet converting. Data integrity fully locked: Clarity IP block (`50.53.12.179`), GA4 internal traffic rule (`EthereaLogic Dev`, property `516189580`, stream `G-41BZB7X7H7`) + GA4 data filter `Internal Traffic` set to **Active**. Clarity `NODE_ENV` guard deployed. |
-| 2026-02-23 | | | | |
+| 2026-02-22 | 32% | Y | FAIL | GA4 API confirmed: 25 total sessions. Unassigned: 8 (32%). Paid channels active: Cross-network 9, Paid Search 5, Paid Social 1. US #1 country (6 users), India absent from top 8 — no India concern this day. checkout_start ×5, pricing_view ×3 confirmed. |
+| 2026-02-23 | TBD | Y | TRACKING | GA4 processing delay (24–48h). v2.3.1 submitted to CWS + Edge today. Dependabot vuln dismissed. CI/CD pipeline repaired (broken lockfile + Tailwind v3 pin). |
 | 2026-02-24 | | | | |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
@@ -60,8 +60,8 @@
 |------|--------------|-----------------|-------------------|----------------|-------|
 | 2026-02-20 | N | N | N | N | GA4 SDK was not loading pre-redeploy. Post-fix: GA4 confirmed working via Realtime. No conversion activity today (expected — funnel events require real user purchases). |
 | 2026-02-21 | N | Y (×3) | N | N | GA4 Data API confirmed. checkout_start firing (3 events). pricing_view firing (2 events). trial_start and purchase_success absent — expected, no completed purchases yet. |
-| 2026-02-22 | N | Y (realtime) | N | N | GA4 historical processing. Clarity confirms checkout_start firing for real users. Multiple sessions show `/?canceled=true` return from Stripe — funnel drop-off at payment step. No completed purchases yet. |
-| 2026-02-23 | | | | | |
+| 2026-02-22 | N | Y (×5) | N | N | GA4 API confirmed: checkout_start ×5, pricing_view ×3. trial_start and purchase_success absent — no completed purchases this day. checkout_abandon not firing (users may not be returning via canceled param consistently). |
+| 2026-02-23 | N | TBD | N | N | GA4 processing delay. Session data not yet available for Feb 23. |
 | 2026-02-24 | | | | | |
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |

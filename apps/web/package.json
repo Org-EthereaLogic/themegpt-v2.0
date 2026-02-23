@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@microsoft/clarity": "^1.0.2",
-    "@react-email/components": "^1.0.7",
+    "@react-email/components": "^1.0.8",
     "@themegpt/shared": "workspace:*",
     "firebase": "^12.9.0",
     "firebase-admin": "^13.6.1",

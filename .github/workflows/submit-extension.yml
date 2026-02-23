@@ -44,5 +44,5 @@ jobs:
         uses: PlasmoHQ/bpp@c15984c0a74f452851c605cab46f34d9fd6cb158 # v3.8.0
         with:
           keys: ${{ secrets.SUBMIT_KEYS }}
-          chrome-artifact: apps/extension/build/chrome-mv3-prod.zip
-          edge-artifact: apps/extension/build/edge-mv3-prod.zip
+          chrome-file: apps/extension/build/chrome-mv3-prod.zip
+          edge-file: apps/extension/build/edge-mv3-prod.zip

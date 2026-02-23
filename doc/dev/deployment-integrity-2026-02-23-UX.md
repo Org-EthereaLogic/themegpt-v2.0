@@ -19,4 +19,5 @@ We anticipate a significant drop in the 100% bounce rate from desktop "traffic" 
 
 ### Build & Revision
 
-Awaiting next `gcloud builds list` trigger to finalize the Cloud Run revision status.
+- Cloud Build trigger `deploy-themegpt-on-push` ran for commit `64c0d7d` (build `de0e8048-295e-4b04-8814-ae9de287d651`) and completed with `SUCCESS`.
+- Cloud Run deployed revision `themegpt-web-00179-jr6` and shifted traffic to `100%` latest.

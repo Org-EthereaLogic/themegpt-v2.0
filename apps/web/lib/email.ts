@@ -432,7 +432,7 @@ export async function sendCheckoutRecoveryEmail(
           <tr>
             <td style="padding: 24px 40px; background-color: #f9f9f9; border-radius: 0 0 12px 12px; text-align: center;">
               <p style="margin: 0; color: #999; font-size: 12px;">
-                You&apos;re receiving this because you opted in to promotional emails during checkout.
+                You&apos;re receiving this because you started a checkout on ThemeGPT.
               </p>
               <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
                 <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.ai</a>

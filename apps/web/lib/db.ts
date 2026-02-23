@@ -38,6 +38,63 @@ function toMillis(value: unknown): number | null {
   return null;
 }
 
+function toDate(value: unknown): Date | null {
+  const millis = toMillis(value);
+  if (millis !== null) return new Date(millis);
+
+  if (value && typeof value === 'object' && 'toDate' in value) {
+    const candidate = value as { toDate: () => Date };
+    return candidate.toDate();
+  }
+
+  return null;
+}
+
+function mapSubscriptionRecord(
+  doc: { id: string; data: () => Record<string, unknown> }
+): (Subscription & { id: string }) | null {
+  const data = doc.data();
+  const currentPeriodStart = toDate(data.currentPeriodStart);
+  const currentPeriodEnd = toDate(data.currentPeriodEnd);
+  const createdAt = toDate(data.createdAt);
+
+  if (!currentPeriodStart || !currentPeriodEnd || !createdAt) {
+    return null;
+  }
+
+  return {
+    id: doc.id,
+    userId: String(data.userId || ''),
+    stripeSubscriptionId: String(data.stripeSubscriptionId || ''),
+    stripeCustomerId: String(data.stripeCustomerId || ''),
+    status: (data.status as SubscriptionStatus) || 'expired',
+    planType: (data.planType as PlanType) || 'monthly',
+    currentPeriodStart,
+    currentPeriodEnd,
+    canceledAt: toDate(data.canceledAt),
+    createdAt,
+    trialEndsAt: toDate(data.trialEndsAt),
+    commitmentEndsAt: toDate(data.commitmentEndsAt),
+    isLifetime: Boolean(data.isLifetime),
+    earlyAdopterConvertedAt: toDate(data.earlyAdopterConvertedAt),
+  };
+}
+
+function getSubscriptionPriority(
+  subscription: Subscription & { id: string },
+  nowMs: number
+): number {
+  if (subscription.isLifetime) return 1000;
+  if (subscription.status === 'active') return 900;
+  if (subscription.status === 'trialing') return 850;
+  if (subscription.status === 'canceled' && subscription.currentPeriodEnd.getTime() > nowMs) {
+    return 800;
+  }
+  if (subscription.status === 'past_due') return 300;
+  if (subscription.status === 'canceled') return 250;
+  return 100; // expired and fallback statuses
+}
+
 // Database Interface
 export const db = {
   // === Legacy License Methods ===
@@ -88,32 +145,31 @@ export const db = {
       const snapshot = await firestore
         .collection(SUBSCRIPTIONS_COLLECTION)
         .where('userId', '==', userId)
-        .orderBy('createdAt', 'desc')
-        .limit(1)
         .get();
 
       if (snapshot.empty) {
         return null;
       }
+      const subscriptions = snapshot.docs
+        .map((doc) => mapSubscriptionRecord(doc))
+        .filter((item): item is Subscription & { id: string } => item !== null);
 
-      const doc = snapshot.docs[0];
-      const data = doc.data();
-      return {
-        id: doc.id,
-        userId: data.userId,
-        stripeSubscriptionId: data.stripeSubscriptionId,
-        stripeCustomerId: data.stripeCustomerId,
-        status: data.status as SubscriptionStatus,
-        planType: (data.planType as PlanType) || 'monthly',
-        currentPeriodStart: data.currentPeriodStart.toDate(),
-        currentPeriodEnd: data.currentPeriodEnd.toDate(),
-        canceledAt: data.canceledAt?.toDate() || null,
-        createdAt: data.createdAt.toDate(),
-        trialEndsAt: data.trialEndsAt?.toDate() || null,
-        commitmentEndsAt: data.commitmentEndsAt?.toDate() || null,
-        isLifetime: data.isLifetime || false,
-        earlyAdopterConvertedAt: data.earlyAdopterConvertedAt?.toDate() || null,
-      };
+      if (!subscriptions.length) {
+        return null;
+      }
+
+      const nowMs = Date.now();
+      subscriptions.sort((a, b) => {
+        const priorityDiff = getSubscriptionPriority(b, nowMs) - getSubscriptionPriority(a, nowMs);
+        if (priorityDiff !== 0) return priorityDiff;
+
+        const periodEndDiff = b.currentPeriodEnd.getTime() - a.currentPeriodEnd.getTime();
+        if (periodEndDiff !== 0) return periodEndDiff;
+
+        return b.createdAt.getTime() - a.createdAt.getTime();
+      });
+
+      return subscriptions[0];
     } catch (error) {
       console.error("Error fetching subscription:", error);
       return null;
@@ -132,24 +188,8 @@ export const db = {
         return null;
       }
 
-      const doc = snapshot.docs[0];
-      const data = doc.data();
-      return {
-        id: doc.id,
-        userId: data.userId,
-        stripeSubscriptionId: data.stripeSubscriptionId,
-        stripeCustomerId: data.stripeCustomerId,
-        status: data.status as SubscriptionStatus,
-        planType: (data.planType as PlanType) || 'monthly',
-        currentPeriodStart: data.currentPeriodStart.toDate(),
-        currentPeriodEnd: data.currentPeriodEnd.toDate(),
-        canceledAt: data.canceledAt?.toDate() || null,
-        createdAt: data.createdAt.toDate(),
-        trialEndsAt: data.trialEndsAt?.toDate() || null,
-        commitmentEndsAt: data.commitmentEndsAt?.toDate() || null,
-        isLifetime: data.isLifetime || false,
-        earlyAdopterConvertedAt: data.earlyAdopterConvertedAt?.toDate() || null,
-      };
+      const mapped = mapSubscriptionRecord(snapshot.docs[0]);
+      return mapped;
     } catch (error) {
       console.error("Error fetching subscription by Stripe ID:", error);
       return null;
@@ -168,6 +208,47 @@ export const db = {
       return docRef.id;
     } catch (error) {
       console.error("Error creating subscription:", error);
+      throw error;
+    }
+  },
+
+  async upsertSubscriptionByStripeId(
+    subscription: Omit<Subscription, 'canceledAt' | 'createdAt' | 'isLifetime' | 'earlyAdopterConvertedAt'> & { isLifetime?: boolean }
+  ): Promise<string> {
+    try {
+      const snapshot = await firestore
+        .collection(SUBSCRIPTIONS_COLLECTION)
+        .where('stripeSubscriptionId', '==', subscription.stripeSubscriptionId)
+        .limit(1)
+        .get();
+
+      const now = new Date();
+      if (snapshot.empty) {
+        const docRef = await firestore.collection(SUBSCRIPTIONS_COLLECTION).add({
+          ...subscription,
+          canceledAt: null,
+          createdAt: now,
+          updatedAt: now,
+          isLifetime: subscription.isLifetime || false,
+          earlyAdopterConvertedAt: null,
+        });
+        return docRef.id;
+      }
+
+      const existingDoc = snapshot.docs[0];
+      const existingData = existingDoc.data();
+      await existingDoc.ref.set({
+        ...subscription,
+        canceledAt: existingData.canceledAt ?? null,
+        createdAt: existingData.createdAt || now,
+        updatedAt: now,
+        isLifetime: Boolean(subscription.isLifetime || existingData.isLifetime),
+        earlyAdopterConvertedAt: existingData.earlyAdopterConvertedAt ?? null,
+      }, { merge: true });
+
+      return existingDoc.id;
+    } catch (error) {
+      console.error("Error upserting subscription by Stripe ID:", error);
       throw error;
     }
   },

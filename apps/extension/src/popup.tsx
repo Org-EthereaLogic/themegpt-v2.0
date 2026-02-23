@@ -253,14 +253,16 @@ export default function Popup() {
     // Not subscribed - escalating lifecycle nudge
     const clickCount = ((await storage.get<number>("premiumClickCount")) ?? 0) + 1
     await storage.set("premiumClickCount", clickCount)
+    const trialUrl = `${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`
     if (clickCount === 1) {
       setSlotError("This is a premium theme — start your free 30-day trial.")
+      window.open(trialUrl, '_blank')
     } else if (clickCount === 2) {
       setSlotError("Unlock all 8 premium themes with a free 30-day trial.")
-      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`, '_blank')
+      window.open(trialUrl, '_blank')
     } else {
       setSlotError("You keep coming back to premium themes. Unlock them all free for 30 days.")
-      window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`, '_blank')
+      window.open(trialUrl, '_blank')
     }
   }
 

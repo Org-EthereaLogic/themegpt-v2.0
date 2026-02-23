@@ -23,6 +23,7 @@ vi.mock("@/lib/rate-limit", () => ({
 vi.mock("@/lib/db", () => ({
   db: {
     isEarlyAdopterEligible: vi.fn().mockResolvedValue(false),
+    getSubscriptionByUserId: vi.fn().mockResolvedValue(null),
     upsertCheckoutSession: vi.fn().mockResolvedValue(true),
   },
 }));
@@ -69,6 +70,7 @@ describe("Checkout API Route", () => {
       amount_total: 699,
     });
     vi.mocked(db.isEarlyAdopterEligible).mockResolvedValue(false);
+    vi.mocked(db.getSubscriptionByUserId).mockResolvedValue(null);
     vi.mocked(db.upsertCheckoutSession).mockResolvedValue(true);
   });
 
@@ -91,7 +93,7 @@ describe("Checkout API Route", () => {
 
     const checkoutParams = mockCheckoutCreate.mock.calls[0]?.[0];
     expect(checkoutParams).toBeTruthy();
-    expect(checkoutParams.consent_collection).toBeUndefined();
+    expect(checkoutParams.consent_collection).toEqual({ promotions: "auto" });
     expect(checkoutParams.metadata.utm_source).toBe("extension");
     expect(checkoutParams.metadata.utm_medium).toBe("popup");
     expect(checkoutParams.metadata.utm_campaign).toBe("launch");
@@ -129,6 +131,33 @@ describe("Checkout API Route", () => {
     expect(response.status).toBe(400);
     expect(body.success).toBe(false);
     expect(body.message).toBe("Invalid checkout type");
+    expect(mockCheckoutCreate).not.toHaveBeenCalled();
+  });
+
+  it("returns 409 when user already has full subscription access", async () => {
+    vi.mocked(db.getSubscriptionByUserId).mockResolvedValueOnce({
+      id: "sub_123",
+      userId: "user_123",
+      stripeSubscriptionId: "stripe_sub_123",
+      stripeCustomerId: "stripe_cus_123",
+      status: "active",
+      planType: "monthly",
+      currentPeriodStart: new Date("2026-02-01T00:00:00.000Z"),
+      currentPeriodEnd: new Date("2026-03-01T00:00:00.000Z"),
+      canceledAt: null,
+      createdAt: new Date("2026-02-01T00:00:00.000Z"),
+      trialEndsAt: null,
+      commitmentEndsAt: null,
+      isLifetime: false,
+      earlyAdopterConvertedAt: null,
+    } as Awaited<ReturnType<typeof db.getSubscriptionByUserId>>);
+
+    const response = await POST(makeRequest({ type: "monthly" }));
+    const body = await response.json();
+
+    expect(response.status).toBe(409);
+    expect(body.success).toBe(false);
+    expect(body.message).toContain("already have an active subscription");
     expect(mockCheckoutCreate).not.toHaveBeenCalled();
   });
 });

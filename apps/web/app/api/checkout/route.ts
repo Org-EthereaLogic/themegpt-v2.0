@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { getStripe, STRIPE_PRICES, TRIAL_DAYS } from "@/lib/stripe";
 import { db } from "@/lib/db";
+import { hasFullAccess } from "@/lib/credits";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
 import type { PlanType } from "@themegpt/shared";
 import Stripe from "stripe";
@@ -142,6 +143,18 @@ export async function POST(request: NextRequest) {
     // Normalize type (subscription is legacy alias for monthly)
     const normalizedType: CheckoutType = type === "subscription" ? "monthly" : type;
 
+    // Guard: block checkout if user already has an active or trialing subscription.
+    // Prevents duplicate sessions from users who click the pricing CTA multiple times.
+    if (normalizedType === "yearly" || normalizedType === "monthly") {
+      const existingSub = await db.getSubscriptionByUserId(userId);
+      if (existingSub && (existingSub.status === "active" || existingSub.status === "trialing")) {
+        return NextResponse.json(
+          { success: false, message: "You already have an active subscription.", alreadySubscribed: true },
+          { status: 409, headers: corsHeaders }
+        );
+      }
+    }
+
     // Determine price ID based on type
     let priceId: string;
     let mode: "subscription" | "payment";
@@ -172,6 +185,20 @@ export async function POST(request: NextRequest) {
           { success: false, message: "Invalid checkout type" },
           { status: 400, headers: corsHeaders }
         );
+    }
+
+    if (normalizedType !== "single") {
+      const existingSubscription = await db.getSubscriptionByUserId(userId);
+      if (existingSubscription && hasFullAccess(existingSubscription)) {
+        return NextResponse.json(
+          {
+            success: false,
+            message: "You already have an active subscription. Manage your plan from your account.",
+            code: "ALREADY_SUBSCRIBED",
+          },
+          { status: 409, headers: corsHeaders }
+        );
+      }
     }
 
     if (!priceId) {
@@ -208,6 +235,11 @@ export async function POST(request: NextRequest) {
         ...attributionMetadata,
       },
       customer_email: userEmail || undefined,
+      // Collect marketing consent so expired sessions are eligible for recovery emails.
+      // Without this field, session.consent.promotions is always null → reminderEligible is always false.
+      consent_collection: {
+        promotions: "auto",
+      },
       after_expiration: {
         recovery: {
           enabled: true,

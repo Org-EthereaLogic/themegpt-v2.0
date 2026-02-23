@@ -5,6 +5,7 @@ import { SignJWT } from "jose";
 import { getStripe } from "@/lib/stripe";
 import { db } from "@/lib/db";
 import { checkRateLimit, RATE_LIMITS } from "@/lib/rate-limit";
+import type { SubscriptionStatus } from "@themegpt/shared";
 
 const getAllowedOrigin = () => {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://themegpt.ai";
@@ -109,17 +110,7 @@ async function linkStripeSubscription(userId: string, email: string) {
       return;
     }
 
-    // Check if this subscription already exists in our DB
-    const existingDbSub = await db.getSubscriptionByStripeId(activeSubscription.id);
-    if (existingDbSub) {
-      // Already linked, update with this user if different
-      if (existingDbSub.userId !== userId) {
-        await db.updateSubscription(existingDbSub.id, { userId });
-      }
-      return;
-    }
-
-    // Create new subscription record
+    // Create or update subscription record
     const firstItem = activeSubscription.items?.data?.[0];
     const currentPeriodStart = firstItem?.current_period_start
       ? new Date(firstItem.current_period_start * 1000)
@@ -138,11 +129,22 @@ async function linkStripeSubscription(userId: string, email: string) {
     // Lifetime must be explicitly marked; eligibility at checkout is not lifetime.
     const isLifetime = metadata.isLifetime === "true";
 
-    await db.createSubscription({
+    const normalizedStatus: SubscriptionStatus =
+      activeSubscription.status === "trialing"
+        ? "trialing"
+        : activeSubscription.status === "active"
+          ? "active"
+          : activeSubscription.status === "past_due"
+            ? "past_due"
+            : activeSubscription.status === "canceled"
+              ? "canceled"
+              : "expired";
+
+    await db.upsertSubscriptionByStripeId({
       userId,
       stripeSubscriptionId: activeSubscription.id,
       stripeCustomerId: customer.id,
-      status: activeSubscription.status === "trialing" ? "trialing" : "active",
+      status: normalizedStatus,
       planType: isLifetime ? "lifetime" : planType,
       currentPeriodStart,
       currentPeriodEnd,

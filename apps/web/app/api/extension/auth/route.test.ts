@@ -30,9 +30,7 @@ vi.mock('next/server', async () => {
 vi.mock('@/lib/db', () => ({
     db: {
         getSubscriptionByUserId: vi.fn(),
-        getSubscriptionByStripeId: vi.fn(),
-        updateSubscription: vi.fn(),
-        createSubscription: vi.fn(),
+        upsertSubscriptionByStripeId: vi.fn(),
     },
 }));
 
@@ -75,7 +73,6 @@ vi.mock('jose', () => ({
 
 const mockGetServerSession = vi.mocked(getServerSession);
 const mockGetSubscriptionByUserId = vi.mocked(db.getSubscriptionByUserId);
-const mockGetSubscriptionByStripeId = vi.mocked(db.getSubscriptionByStripeId);
 
 describe('Extension Auth Route', () => {
     beforeEach(() => {
@@ -146,9 +143,6 @@ describe('Extension Auth Route', () => {
             }],
         });
 
-        // No existing DB sub by Stripe ID either
-        mockGetSubscriptionByStripeId.mockResolvedValue(null);
-
         const req = createRequest();
         const res = await POST(req);
         const body = await res.json();
@@ -156,8 +150,8 @@ describe('Extension Auth Route', () => {
         expect(body.success).toBe(true);
         expect(body.token).toBe('mock.jwt.token');
 
-        // Verify createSubscription was called with isLifetime: true
-        expect(db.createSubscription).toHaveBeenCalledWith(expect.objectContaining({
+        // Verify upsertSubscriptionByStripeId was called with isLifetime: true
+        expect(db.upsertSubscriptionByStripeId).toHaveBeenCalledWith(expect.objectContaining({
             userId: 'user-life',
             stripeSubscriptionId: 'sub_stripe_life',
             isLifetime: true,
@@ -191,13 +185,11 @@ describe('Extension Auth Route', () => {
             }],
         });
 
-        mockGetSubscriptionByStripeId.mockResolvedValue(null);
-
         const req = createRequest();
         await POST(req);
 
-        // Verify createSubscription was called WITHOUT isLifetime
-        expect(db.createSubscription).toHaveBeenCalledWith(expect.objectContaining({
+        // Verify upsertSubscriptionByStripeId was called WITHOUT isLifetime
+        expect(db.upsertSubscriptionByStripeId).toHaveBeenCalledWith(expect.objectContaining({
             userId: 'user-year',
             stripeSubscriptionId: 'sub_stripe_year',
             isLifetime: false,

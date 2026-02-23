@@ -332,7 +332,7 @@ describe('Popup', () => {
       })
     })
 
-    it('opens pricing page for locked premium theme when not subscribed', async () => {
+    it('opens pricing page on first locked premium click when not subscribed', async () => {
       render(<Popup />)
 
       const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
@@ -340,10 +340,6 @@ describe('Popup', () => {
       fireEvent.click(themeCard)
       await waitFor(() => {
         expect(mockSet).toHaveBeenCalledWith('premiumClickCount', 1)
-      })
-      fireEvent.click(themeCard)
-
-      await waitFor(() => {
         expect(window.open).toHaveBeenCalledWith(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=unknown#pricing`, '_blank')
       })
     })

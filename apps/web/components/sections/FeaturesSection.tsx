@@ -349,7 +349,7 @@ export function FeaturesSection() {
             Ready to transform your ChatGPT?
           </p>
           <a
-            href="/install-extension?utm_source=cws&utm_medium=share&utm_campaign=item-share"
+            href="/?utm_source=web&utm_medium=features&utm_campaign=trial_start#pricing"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 rounded-full font-semibold text-white transition-all duration-300 hover:-translate-y-1"
@@ -358,7 +358,7 @@ export function FeaturesSection() {
               boxShadow: "0 8px 24px rgba(91, 181, 162, 0.3)",
             }}
           >
-            Add to Chrome — It&apos;s Free
+            Start Free 30-Day Trial
           </a>
         </motion.div>
       </div>

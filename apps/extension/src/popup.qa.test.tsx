@@ -292,17 +292,21 @@ describe('QA: Extension Popup UI', () => {
         const premiumTheme = DEFAULT_THEMES.find(t => t.isPremium)!
         const themeCard = screen.getByLabelText(`${premiumTheme.name} - Premium, click to unlock`)
 
-        // Click 1: soft CTA, no redirect
+        // Click 1: soft CTA + redirect to pricing
         fireEvent.click(themeCard)
         await waitFor(() => {
             expect(screen.getByText(/premium theme/i)).toBeInTheDocument()
+            expect(window.open).toHaveBeenCalledTimes(1)
+            expect(window.open).toHaveBeenCalledWith(
+                expect.stringContaining('utm_campaign=trial_teaser'),
+                '_blank'
+            )
         })
-        expect(window.open).not.toHaveBeenCalled()
 
         // Click 2: stronger CTA + redirect to pricing
         fireEvent.click(themeCard)
         await waitFor(() => {
-            expect(window.open).toHaveBeenCalledTimes(1)
+            expect(window.open).toHaveBeenCalledTimes(2)
             expect(window.open).toHaveBeenCalledWith(
                 expect.stringContaining('utm_campaign=trial_teaser'),
                 '_blank'
@@ -313,7 +317,7 @@ describe('QA: Extension Popup UI', () => {
         fireEvent.click(themeCard)
         await waitFor(() => {
             expect(screen.getByText(/keep coming back/i)).toBeInTheDocument()
-            expect(window.open).toHaveBeenCalledTimes(2)
+            expect(window.open).toHaveBeenCalledTimes(3)
         })
     })
 

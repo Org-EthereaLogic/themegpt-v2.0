@@ -8,7 +8,7 @@ import {
   sendThemePurchaseConfirmationEmail,
   sendTrialEndingEmail,
 } from "@/lib/email";
-import { LicenseEntitlement, PlanType } from "@themegpt/shared";
+import { LicenseEntitlement, PlanType, SubscriptionStatus } from "@themegpt/shared";
 import { v4 as uuidv4 } from "uuid";
 import Stripe from "stripe";
 
@@ -173,8 +173,9 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
       const normalizedPlanType: PlanType =
         (planType === "yearly" ? "yearly" : "monthly");
 
-      // Calculate trial end date for yearly plans
-      const trialEndsAt = normalizedPlanType === "yearly" && stripeSubscription.trial_end
+      // Calculate trial end date — applies to both monthly and yearly trials.
+      // Previously gated on yearly only, which dropped trial countdown for monthly users.
+      const trialEndsAt = stripeSubscription.trial_end
         ? new Date(stripeSubscription.trial_end * 1000)
         : null;
 
@@ -186,20 +187,31 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
       // NOTE: Early adopter lifetime access is NOT claimed here.
       // Lifetime slots are claimed in handleInvoicePaid after the first
       // paid yearly charge completes, preventing claims before payment.
-      await db.createSubscription({
+      const normalizedStatus: SubscriptionStatus =
+        stripeSubscription.status === 'trialing'
+          ? 'trialing'
+          : stripeSubscription.status === 'active'
+            ? 'active'
+            : stripeSubscription.status === 'past_due'
+              ? 'past_due'
+              : stripeSubscription.status === 'canceled'
+                ? 'canceled'
+                : 'expired';
+
+      const subscriptionPayload = {
         userId,
         stripeSubscriptionId: stripeSubscription.id,
         stripeCustomerId: session.customer as string,
-        status: stripeSubscription.status === 'trialing' ? 'trialing' : 'active',
+        status: normalizedStatus,
         planType: normalizedPlanType,
         currentPeriodStart,
         currentPeriodEnd,
         trialEndsAt,
         commitmentEndsAt,
         isLifetime: false,
-      });
-
-      console.log(`Subscription record created for user: ${userId} (plan: ${normalizedPlanType})`);
+      } as const;
+      const recordId = await db.upsertSubscriptionByStripeId(subscriptionPayload);
+      console.log(`Subscription record upserted for user: ${userId} (plan: ${normalizedPlanType}, id: ${recordId})`);
     }
   } else {
     // Single theme purchase
@@ -345,7 +357,8 @@ async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
   const recoveryExpiresAt = session.after_expiration?.recovery?.expires_at
     ? new Date(session.after_expiration.recovery.expires_at * 1000)
     : null;
-  const reminderEligible = Boolean(email && recoveryUrl && promotionsConsent === "opt_in");
+  // Treat checkout recovery as transactional lifecycle messaging.
+  const reminderEligible = Boolean(email && recoveryUrl);
 
   const existingRecord = await db.getAbandonedCheckoutBySessionId(sessionId);
   const reminderAlreadyAttempted = Boolean(

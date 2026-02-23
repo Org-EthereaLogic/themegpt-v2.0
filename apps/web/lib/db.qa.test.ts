@@ -18,6 +18,7 @@ const mocks = vi.hoisted(() => {
         })),
         add: vi.fn(),
         where: vi.fn(() => ({
+            get,
             limit: vi.fn(() => ({
                 get,
             })),
@@ -208,6 +209,59 @@ describe('QA: Monetization Logic', () => {
                 planType: 'lifetime',
                 earlyAdopterConvertedAt: expect.any(Date),
             }));
+        });
+    });
+
+    describe('Subscription Selection', () => {
+        it('getSubscriptionByUserId prioritizes active record over newer expired record', async () => {
+            const now = new Date();
+            const plusDays = (days: number) => new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+
+            mocks.get.mockResolvedValue({
+                empty: false,
+                docs: [
+                    {
+                        id: 'new-expired',
+                        data: () => ({
+                            userId: 'user-1',
+                            stripeSubscriptionId: 'sub_new_expired',
+                            stripeCustomerId: 'cus_new_expired',
+                            status: 'expired',
+                            planType: 'monthly',
+                            currentPeriodStart: plusDays(-2),
+                            currentPeriodEnd: plusDays(28),
+                            createdAt: plusDays(1), // Newer doc
+                            canceledAt: null,
+                            trialEndsAt: null,
+                            commitmentEndsAt: null,
+                            isLifetime: false,
+                            earlyAdopterConvertedAt: null,
+                        }),
+                    },
+                    {
+                        id: 'older-active',
+                        data: () => ({
+                            userId: 'user-1',
+                            stripeSubscriptionId: 'sub_older_active',
+                            stripeCustomerId: 'cus_older_active',
+                            status: 'active',
+                            planType: 'monthly',
+                            currentPeriodStart: plusDays(-5),
+                            currentPeriodEnd: plusDays(30),
+                            createdAt: plusDays(-5), // Older doc
+                            canceledAt: null,
+                            trialEndsAt: null,
+                            commitmentEndsAt: null,
+                            isLifetime: false,
+                            earlyAdopterConvertedAt: null,
+                        }),
+                    },
+                ],
+            });
+
+            const result = await db.getSubscriptionByUserId('user-1');
+            expect(result?.id).toBe('older-active');
+            expect(result?.status).toBe('active');
         });
     });
 });

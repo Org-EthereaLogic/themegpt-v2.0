@@ -37,7 +37,7 @@ vi.mock('@/lib/db', () => ({
     completeWebhookEventProcessing: vi.fn().mockResolvedValue(undefined),
     abandonWebhookEventProcessing: vi.fn().mockResolvedValue(undefined),
     createLicense: vi.fn().mockResolvedValue(undefined),
-    createSubscription: vi.fn().mockResolvedValue('sub-doc-id'),
+    upsertSubscriptionByStripeId: vi.fn().mockResolvedValue('sub-doc-id'),
     getSubscriptionByStripeId: vi.fn().mockResolvedValue(null),
     isEarlyAdopterEligible: vi.fn().mockResolvedValue(false),
     getThemeName: vi.fn().mockReturnValue('Test Theme'),
@@ -127,7 +127,7 @@ describe('Stripe Webhook Route', () => {
 
     expect(res.status).toBe(200);
     expect(body.received).toBe(true);
-    expect(db.createSubscription).not.toHaveBeenCalled();
+    expect(db.upsertSubscriptionByStripeId).not.toHaveBeenCalled();
     expect(db.createLicense).not.toHaveBeenCalled();
     expect(db.completeWebhookEventProcessing).not.toHaveBeenCalled();
   });
@@ -145,7 +145,7 @@ describe('Stripe Webhook Route', () => {
 
     expect(res.status).toBe(409);
     expect(body.error).toBe('Event processing already in progress');
-    expect(db.createSubscription).not.toHaveBeenCalled();
+    expect(db.upsertSubscriptionByStripeId).not.toHaveBeenCalled();
     expect(db.createLicense).not.toHaveBeenCalled();
     expect(db.completeWebhookEventProcessing).not.toHaveBeenCalled();
   });
@@ -163,7 +163,7 @@ describe('Stripe Webhook Route', () => {
 
     expect(res.status).toBe(500);
     expect(body.error).toBe('Failed to acquire webhook processing lock');
-    expect(db.createSubscription).not.toHaveBeenCalled();
+    expect(db.upsertSubscriptionByStripeId).not.toHaveBeenCalled();
     expect(db.createLicense).not.toHaveBeenCalled();
     expect(db.completeWebhookEventProcessing).not.toHaveBeenCalled();
   });
@@ -194,9 +194,9 @@ describe('Stripe Webhook Route', () => {
   it('creates subscription for checkout.session.completed and marks event processed', async () => {
     const mockStripeSubscription = {
       id: 'sub_test123',
-      status: 'active',
+      status: 'trialing',
       items: { data: [{ current_period_start: 1700000000, current_period_end: 1702592000 }] },
-      trial_end: null,
+      trial_end: 1700500000,
       metadata: {},
     };
     mockSubscriptionsRetrieve.mockResolvedValueOnce(mockStripeSubscription);
@@ -219,11 +219,13 @@ describe('Stripe Webhook Route', () => {
 
     expect(res.status).toBe(200);
     expect(body.received).toBe(true);
-    expect(db.createSubscription).toHaveBeenCalledWith(
+    expect(db.upsertSubscriptionByStripeId).toHaveBeenCalledWith(
       expect.objectContaining({
         userId: 'user-1',
         stripeSubscriptionId: 'sub_test123',
         planType: 'monthly',
+        status: 'trialing',
+        trialEndsAt: expect.any(Date),
       })
     );
     expect(db.createLicense).toHaveBeenCalled();
@@ -255,7 +257,7 @@ describe('Stripe Webhook Route', () => {
         permanentlyUnlocked: ['dracula'],
       })
     );
-    expect(db.createSubscription).not.toHaveBeenCalled();
+    expect(db.upsertSubscriptionByStripeId).not.toHaveBeenCalled();
     expect(db.completeWebhookEventProcessing).toHaveBeenCalledWith('evt_single', 'checkout.session.completed');
   });
 

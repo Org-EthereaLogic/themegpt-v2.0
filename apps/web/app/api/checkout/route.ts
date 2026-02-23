@@ -222,22 +222,36 @@ export async function POST(request: NextRequest) {
       // Yearly early adopters (slots available): No trial — pay immediately to qualify for lifetime.
       // Yearly post-early-adopter (slots exhausted): 30-day free trial, then annual billing.
       checkoutParams.subscription_data = {
-        ...(isEarlyAdopterEligible ? {} : { trial_period_days: TRIAL_DAYS }),
+        ...(isEarlyAdopterEligible ? {} : {
+          trial_period_days: TRIAL_DAYS,
+          trial_settings: {
+            end_behavior: { missing_payment_method: "cancel" },
+          },
+        }),
         metadata: {
           planType: "yearly",
           isEarlyAdopterEligible: isEarlyAdopterEligible ? "true" : "false",
           ...attributionMetadata,
         },
       };
+      // Skip upfront card collection for trial checkouts — 3DS on setup_intent
+      // was blocking all conversions. Card is collected before trial ends via email.
+      if (!isEarlyAdopterEligible) {
+        checkoutParams.payment_method_collection = "if_required";
+      }
     } else if (normalizedType === "monthly") {
-      // Monthly: First month free trial
+      // Monthly: First month free trial — no upfront card required (avoids 3DS friction).
       checkoutParams.subscription_data = {
         trial_period_days: TRIAL_DAYS,
+        trial_settings: {
+          end_behavior: { missing_payment_method: "cancel" },
+        },
         metadata: {
           planType: "monthly",
           ...attributionMetadata,
         },
       };
+      checkoutParams.payment_method_collection = "if_required";
     }
 
     const checkoutSession = await getStripe().checkout.sessions.create(checkoutParams);

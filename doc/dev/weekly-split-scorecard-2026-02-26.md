@@ -73,6 +73,10 @@ Escalation rule:
 | Redeploy Cloud Run with Firebase env vars to fix GA4 | Ops | Feb 20 | DONE |
 | Correct pull_ga4.js property ID from 521095252 (CWS) to 516189580 (web app) | Ops | Feb 20 | DONE |
 | Shift gate Day 1 to Feb 21 (first full day of GA4 data collection) | Growth | Feb 20 | DONE |
+| Fix Cloud Build trigger: add all Firebase + Stripe NEXT_PUBLIC_* vars as substitutions | Ops | Feb 22 | DONE |
+| Gate Clarity SDK behind NODE_ENV=production to prevent localhost contamination | Eng | Feb 22 | DONE |
+| Add IP block 50.53.12.179 in Clarity + GA4 internal traffic filter | Ops | Feb 22 | DONE |
+| Activate GA4 Internal Traffic data filter on correct property (516189580) | Ops | Feb 22 | DONE |
 
 ---
 

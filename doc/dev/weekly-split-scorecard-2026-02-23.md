@@ -76,6 +76,7 @@ Pull from: `GET /api/metrics/monetization?days=7` (requires auth — pull manual
 > Note: First live trial conversion confirmed server-side on Feb 22 (`adrielletherat@gmail.com`). GA4 client-side event not yet reflected — either consent not given or event timing gap.
 
 Clarity weekly review:
+
 - Top friction point observed: Users reaching Stripe checkout then abandoning (multiple `/?canceled=true` returns observed Feb 21–22)
 - Replay evidence: Clarity project `vky4a128au` — filter for `checkout_start` sessions
 - UI/content fix shipped: `payment_method_collection: 'if_required'` deployed Feb 22 (v2.3.1 web)
@@ -86,7 +87,7 @@ Clarity weekly review:
 
 | Guardrail | Current value | Threshold | Status | Action |
 |-----------|---------------|-----------|--------|--------|
-| Daily spend per channel | — | `$25/day/channel` | UNKNOWN | Pull from Google Ads dashboard — API auth insufficient |
+| Daily spend per channel | Reddit: $50/day | `Google: $25/day, Reddit: $50/day` | TRACKING | Google API auth insufficient. Reddit campaign manually set to $50/day to hit promo requirements. |
 | No-signal kill switch | — | `>= $75 with 0 checkouts` | UNKNOWN | 5 checkout_start events recorded Feb 22 — suggests signal exists |
 | CAC kill switch | — | `> $45 for 3 consecutive days` | UNKNOWN | Pull from Google Ads |
 | Channel expansion gate | NOT MET | `first attributed revenue required` | HOLD | Server-side conversion on Feb 22 not yet attributed to paid channel |
@@ -122,12 +123,14 @@ Escalation rule: India share 0% vs US 35% — no escalation. Good signal.
 | Dismiss CVE-2025-56648 Dependabot alert (already patched) | Sec | Feb 23 | DONE |
 | Pull Google Ads spend manually for guardrail check | Growth | Feb 23 | OPEN |
 | Pull server-side monetization API for revenue totals | Growth | Feb 23 | OPEN |
+| Optimize Google/Reddit Ads for Desktop-Only | Growth | Feb 23 | DONE |
+| Launch Reddit Campaign at $50/day for Credit Promo | Growth | Feb 23 | DONE |
 
 ---
 
 ## 8) Narrative Summary
 
-- **What improved this week:** First live trial conversion on Feb 22 (adrielletherat@gmail.com — Monthly Trial). Root cause of 18 checkouts / 0 conversions resolved (`payment_method_collection: 'if_required'`). Paid channels active: Cross-network (9 sessions), Paid Search (5 sessions). v2.3.1 submitted to both CWS and Edge. CI/CD pipeline fully automated — future releases via `git tag vX.X.X`.
+- **What improved this week:** First live trial conversion on Feb 22 (<adrielletherat@gmail.com> — Monthly Trial). Root cause of 18 checkouts / 0 conversions resolved (`payment_method_collection: 'if_required'`). Paid channels active: Cross-network (9 sessions), Paid Search (5 sessions). v2.3.1 submitted to both CWS and Edge. CI/CD pipeline fully automated — future releases via `git tag vX.X.X`. Google Ads and Reddit Ads configured exclusively for Desktop traffic to solve 100% mobile bounce rate. Reddit campaign fully launched at $50/day to claim the $500 free credit promo.
 - **What regressed this week:** Gate 1 (unassigned traffic) still at 32% on Feb 22 — FAIL threshold. GA4 client-side events not reflecting the server-confirmed trial conversion (consent gap or event gap). Google Ads API auth insufficient for automated spend tracking.
 - **Biggest unknown:** Whether the Feb 22 trial conversion was a one-off or the start of a conversion pattern now that the payment flow is fixed. No `purchase_success` GA4 event yet — unclear if consent was given or event is missing.
 - **Next week action:** Monitor daily for additional trial conversions post-payment-fix. Pull Google Ads spend manually to verify guardrails. Investigate why `trial_start` / `purchase_success` GA4 events absent despite server-confirmed conversion.

@@ -44,7 +44,7 @@
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
 | 2026-02-22 | 32% | Y | FAIL | GA4 API confirmed: 25 total sessions. Unassigned: 8 (32%). Paid channels active: Cross-network 9, Paid Search 5, Paid Social 1. US #1 country (6 users), India absent from top 8 — no India concern this day. checkout_start ×5, pricing_view ×3 confirmed. |
-| 2026-02-23 | 47% (est) | Y | FAIL | GA4 + Clarity audit completed. 17 GA4 sessions / 21 Clarity sessions. Paid Search: 5 GA4 / 12 Clarity (campaign "Website traffic-Search-1"). "Unassigned" 8 sessions = 47%. All paid channels 100% bounce — 0 checkout_start events from ads (vs 5 on Feb 21 organic). Reddit campaign "reddit_launch_v1" confirmed live (1 session). High bounce diagnostic: ad-to-page message mismatch. Action: Stripe integration hardened, portal live. |
+| 2026-02-23 | 47% (est) | Y | FAIL | GA4 + Clarity audit completed. 17 GA4 sessions / 21 Clarity sessions. Paid Search: 5 GA4 / 12 Clarity (campaign "Website traffic-Search-1"). "Unassigned" 8 sessions = 47%. All paid channels 100% bounce — 0 checkout_start events from ads (vs 5 on Feb 21 organic). Reddit campaign "reddit_launch_v1" confirmed live (1 session). High bounce diagnostic: ad-to-page message mismatch + mobile traffic (57%). Action: Google Ads set to -100% mobile/tablet. Reddit 'Traffic Campaign 2026-02-21 13:48:14 PST' activated at $50/day. |
 | 2026-02-24 | | | | |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
@@ -142,6 +142,7 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 ### Stripe Customer Portal — Live Configuration
 
 Configured at `dashboard.stripe.com/settings/billing/portal` (live mode):
+
 - Payment methods: enabled | Cancellations: end-of-period, collect reason | Invoice history: enabled
 - Redirect URL: `https://themegpt.ai/account` | Terms + Privacy: set via Public Business Information
 - EIN/tax ID verification submitted — Stripe review in progress (2–3 days)
@@ -223,6 +224,21 @@ All 8 build-time `NEXT_PUBLIC_*` vars confirmed present and non-empty:
 Also present (bonus): `_STRIPE_SUBSCRIPTION_PRICE_ID`, `_STRIPE_YEARLY_PRICE_ID`, `_STRIPE_SINGLE_THEME_PRICE_ID`.
 
 **Mechanism clarification:** These are Cloud Build *substitution variables*, NOT Secret Manager secrets. They are passed as `--build-arg` at Docker build time and baked into the Next.js bundle. Runtime-only secrets (`NEXTAUTH_SECRET`, `STRIPE_SECRET_KEY`, etc.) are set directly on the Cloud Run service and are not managed via `cloudbuild.yaml`.
+
+---
+
+## Campaign Optimization Integrity — Feb 23, 2026
+
+**Scope:** Desktop-only targeting enforcement and Reddit promo activation to address the 100% bounce rate for paid mobile traffic.
+
+### Actions Taken
+
+- **Google Ads:** Applied -100% bid adjustment to Mobile phones and Tablets for the "Website traffic-Search-1" campaign. Paid search traffic is now forced to 100% desktop.
+- **Reddit Ads:**
+  - Activated "Traffic Campaign 2026-02-21 13:48:14 PST"
+  - Fixed ad-to-page message mismatch with a new headline: *"Tired of ChatGPT's boring look? Get premium themes, dark modes, and token tracking with one click."*
+  - Explicitly set device targeting to Desktop only (iOS and Android unchecked).
+  - Set Daily Budget to **$50.00** to qualify for the Reddit $500 ad credit promotion. Status: Active.
 
 ---
 

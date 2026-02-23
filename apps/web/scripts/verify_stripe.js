@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
-const { execSync } = require("node:child_process");
+const { execFileSync } = require("node:child_process");
 const dotenv = require("dotenv");
 const Stripe = require("stripe");
 
@@ -19,8 +19,20 @@ function isCloudRunMode() {
 }
 
 function getServiceEnv(project, region, service) {
-  const raw = execSync(
-    `gcloud run services describe ${service} --platform=managed --project=${project} --region=${region} --format=json`,
+  const raw = execFileSync(
+    "gcloud",
+    [
+      "run",
+      "services",
+      "describe",
+      service,
+      "--platform=managed",
+      "--project",
+      project,
+      "--region",
+      region,
+      "--format=json",
+    ],
     { encoding: "utf8" }
   );
   const svc = JSON.parse(raw);
@@ -29,8 +41,18 @@ function getServiceEnv(project, region, service) {
 
 function accessSecret(project, secretName, version) {
   const key = version || "latest";
-  return execSync(
-    `gcloud secrets versions access ${key} --secret=${secretName} --project=${project}`,
+  return execFileSync(
+    "gcloud",
+    [
+      "secrets",
+      "versions",
+      "access",
+      key,
+      "--secret",
+      secretName,
+      "--project",
+      project,
+    ],
     { encoding: "utf8" }
   );
 }

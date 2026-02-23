@@ -158,6 +158,8 @@ describe("Checkout API Route", () => {
     expect(response.status).toBe(409);
     expect(body.success).toBe(false);
     expect(body.message).toContain("already have an active subscription");
+    expect(body.code).toBe("ALREADY_SUBSCRIBED");
+    expect(body.alreadySubscribed).toBe(true);
     expect(mockCheckoutCreate).not.toHaveBeenCalled();
   });
 });

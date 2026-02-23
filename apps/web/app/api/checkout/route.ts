@@ -149,7 +149,12 @@ export async function POST(request: NextRequest) {
       const existingSub = await db.getSubscriptionByUserId(userId);
       if (existingSub && (existingSub.status === "active" || existingSub.status === "trialing")) {
         return NextResponse.json(
-          { success: false, message: "You already have an active subscription.", alreadySubscribed: true },
+          {
+            success: false,
+            message: "You already have an active subscription.",
+            code: "ALREADY_SUBSCRIBED",
+            alreadySubscribed: true,
+          },
           { status: 409, headers: corsHeaders }
         );
       }
@@ -195,6 +200,7 @@ export async function POST(request: NextRequest) {
             success: false,
             message: "You already have an active subscription. Manage your plan from your account.",
             code: "ALREADY_SUBSCRIBED",
+            alreadySubscribed: true,
           },
           { status: 409, headers: corsHeaders }
         );

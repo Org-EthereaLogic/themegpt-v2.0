@@ -27,6 +27,7 @@ async function runQA() {
             await firestore.collection('subscriptions').doc(TEST_SUB_ID).delete();
         } catch { }
 
+        // deepcode ignore HardcodedNonCryptoSecret: test stub values only, never used in production
         await firestore.collection('subscriptions').doc(TEST_SUB_ID).set({
             userId: 'test-user',
             stripeSubscriptionId: 'sub_test123',

@@ -24,5 +24,11 @@
     "snyk.advanced.autoSelectOrganization": false,
     "chat.tools.terminal.autoApprove": {
         "pnpm": true
+    },
+    "files.exclude": {
+        "**/.next": true
+    },
+    "search.exclude": {
+        "**/.next": true
     }
 }

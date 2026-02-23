@@ -56,11 +56,17 @@ export default function Home() {
       if (data.success && data.checkoutUrl) {
         // Validate checkout URL to prevent open redirect attacks
         const url = String(data.checkoutUrl);
-        if (url.startsWith("https://checkout.stripe.com/") || url.startsWith("https://billing.stripe.com/")) {
-          window.location.href = url;
-        } else {
-          console.error("Untrusted checkout URL:", url);
-          setCheckoutError("Security error: Untrusted redirection target");
+        try {
+          const parsed = new URL(url);
+          if (parsed.protocol === "https:" && (parsed.hostname === "checkout.stripe.com" || parsed.hostname === "billing.stripe.com")) {
+            window.location.href = url;
+          } else {
+            console.error("Untrusted checkout URL:", url);
+            setCheckoutError("Security error: Untrusted redirection target");
+          }
+        } catch {
+          console.error("Invalid checkout URL:", url);
+          setCheckoutError("Security error: Invalid redirection target");
         }
       } else {
         setCheckoutError(

@@ -13,6 +13,7 @@ import { ThemesSection } from "@/components/sections/ThemesSection";
 import { FeaturesSection } from "@/components/sections/FeaturesSection";
 import { PricingSection } from "@/components/sections/PricingSection";
 import { Footer } from "@/components/sections/Footer";
+import Link from "next/link";
 
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
 const PENDING_CHECKOUT_KEY = "themegpt_pending_checkout_v1";
@@ -26,7 +27,7 @@ export default function Home() {
   const [selectedTheme, setSelectedTheme] = useState<string>(
     PREMIUM_THEMES[0]?.id || ""
   );
-  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<React.ReactNode | null>(null);
 
   const handleCheckout = useCallback(async (type: CheckoutType, themeId?: string) => {
     // Enforce login before checkout; persist intent so purchase resumes immediately after auth.
@@ -71,9 +72,20 @@ export default function Home() {
           setCheckoutError("Security error: Invalid redirection target");
         }
       } else {
-        setCheckoutError(
-          "Checkout failed: " + (data.message || "Unknown error")
-        );
+        if (data.code === "ALREADY_SUBSCRIBED") {
+          setCheckoutError(
+            <span>
+              You already have an active subscription. Manage your plan from{" "}
+              <Link href="/account" className="underline font-semibold hover:text-red-800">
+                your account
+              </Link>.
+            </span>
+          );
+        } else {
+          setCheckoutError(
+            "Checkout failed: " + (data.message || "Unknown error")
+          );
+        }
       }
     } catch (error) {
       console.error("Checkout error", error);

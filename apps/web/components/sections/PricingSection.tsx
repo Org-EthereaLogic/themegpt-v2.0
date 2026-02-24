@@ -24,7 +24,7 @@ interface PricingSectionProps {
   selectedTheme: string;
   onThemeChange: (themeId: string) => void;
   onCheckout: (type: "yearly" | "monthly" | "single", themeId?: string) => void;
-  checkoutError?: string | null;
+  checkoutError?: React.ReactNode | null;
 }
 
 export function PricingSection({

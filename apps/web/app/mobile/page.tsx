@@ -10,10 +10,19 @@ import { trackFunnelEvent } from "@/lib/funnel-events"
 import { captureAttributionFromLocation } from "@/lib/attribution"
 import { getStoredAttribution } from "@/lib/attribution"
 
-const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium).slice(0, 4)
+const MOBILE_PREVIEW_THEME_IDS = [
+  "themegpt-light",
+  "electric-dreams",
+  "woodland-retreat",
+  "frosted-windowpane",
+]
+const MOBILE_PREVIEW_THEMES = MOBILE_PREVIEW_THEME_IDS
+  .map((themeId) => DEFAULT_THEMES.find((theme) => theme.id === themeId))
+  .filter((theme): theme is (typeof DEFAULT_THEMES)[number] => theme !== undefined)
 const MAIN_THEME_GALLERY_HREF = "/?skip_mobile=1#themes"
-const FALLBACK_PREMIUM_SCREENSHOT = "/themes/aurora_borealis_1.webp"
-const PREMIUM_THEME_SCREENSHOT_BY_ID: Record<string, string> = {
+const FALLBACK_PREVIEW_SCREENSHOT = "/themes/themegpt_light_1.webp"
+const PREVIEW_THEME_SCREENSHOT_BY_ID: Record<string, string> = {
+  "themegpt-light": "/themes/themegpt_light_1.webp",
   "aurora-borealis": "/themes/aurora_borealis_1.webp",
   "sunset-blaze": "/themes/sunset_blaze_1.webp",
   "electric-dreams": "/themes/electric_dreams_1.webp",
@@ -24,8 +33,8 @@ const PREMIUM_THEME_SCREENSHOT_BY_ID: Record<string, string> = {
   "shades-of-purple": "/themes/shades_of_purple_1.webp",
 }
 
-function getPremiumThemeScreenshot(themeId: string): string {
-  return PREMIUM_THEME_SCREENSHOT_BY_ID[themeId] ?? FALLBACK_PREMIUM_SCREENSHOT
+function getPreviewThemeScreenshot(themeId: string): string {
+  return PREVIEW_THEME_SCREENSHOT_BY_ID[themeId] ?? FALLBACK_PREVIEW_SCREENSHOT
 }
 
 function MobileContent() {
@@ -189,10 +198,10 @@ function MobileContent() {
           className="block text-[0.75rem] font-semibold uppercase tracking-[0.15em] mb-3 transition-opacity active:opacity-80 hover:opacity-80"
           style={{ color: "#5BB5A2" }}
         >
-          Preview Premium Themes
+          Preview Free + Premium Themes
         </Link>
         <div className="grid grid-cols-2 gap-2 mb-6">
-          {PREMIUM_THEMES.map((theme) => (
+          {MOBILE_PREVIEW_THEMES.map((theme) => (
             <Link
               key={theme.id}
               href={MAIN_THEME_GALLERY_HREF}
@@ -204,7 +213,7 @@ function MobileContent() {
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={getPremiumThemeScreenshot(theme.id)}
+                src={getPreviewThemeScreenshot(theme.id)}
                 alt={`${theme.name} theme preview`}
                 loading="lazy"
                 decoding="async"

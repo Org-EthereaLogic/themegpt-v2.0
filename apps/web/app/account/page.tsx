@@ -187,14 +187,6 @@ export default function AccountPage() {
                 </div>
               )}
 
-              {/* Commitment Info for Yearly (non-lifetime) */}
-              {subscription.planType === "yearly" && !subscription.isLifetime && subscription.commitmentEndsAt && (
-                <div className="text-sm text-[#7D5A4A]">
-                  Commitment period ends:{" "}
-                  <strong>{new Date(subscription.commitmentEndsAt).toLocaleDateString()}</strong>
-                </div>
-              )}
-
               {/* Access Display */}
               <div className={`rounded-lg p-4 ${
                 subscription.isLifetime

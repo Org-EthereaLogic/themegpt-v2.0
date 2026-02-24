@@ -23,6 +23,11 @@ export function hasFullAccess(subscription: Subscription): boolean {
     return true;
   }
 
+  // Past-due subscriptions retain access during Stripe's Smart Retry window
+  if (subscription.status === 'past_due' && now < subscription.currentPeriodEnd) {
+    return true;
+  }
+
   return false;
 }
 

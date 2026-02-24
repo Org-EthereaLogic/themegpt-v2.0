@@ -36,6 +36,7 @@ vi.mock('@/lib/db', () => ({
     beginWebhookEventProcessing: vi.fn().mockResolvedValue('acquired'),
     completeWebhookEventProcessing: vi.fn().mockResolvedValue(undefined),
     abandonWebhookEventProcessing: vi.fn().mockResolvedValue(undefined),
+    updateSubscription: vi.fn().mockResolvedValue(undefined),
     createLicense: vi.fn().mockResolvedValue(undefined),
     upsertSubscriptionByStripeId: vi.fn().mockResolvedValue('sub-doc-id'),
     getSubscriptionByStripeId: vi.fn().mockResolvedValue(null),
@@ -289,5 +290,39 @@ describe('Stripe Webhook Route', () => {
     expect(res.status).toBe(200);
     expect(db.isEarlyAdopterEligible).toHaveBeenCalled();
     expect(db.completeWebhookEventProcessing).toHaveBeenCalledWith('evt_invoice', 'invoice.paid');
+  });
+
+  it('restores trialing status when cancellation is reversed during trial', async () => {
+    vi.mocked(db.getSubscriptionByStripeId).mockResolvedValueOnce({
+      id: 'sub-doc-id',
+      status: 'canceled',
+    });
+
+    mockConstructEvent.mockReturnValueOnce({
+      id: 'evt_sub_reversed',
+      type: 'customer.subscription.updated',
+      data: {
+        object: {
+          id: 'sub_test123',
+          status: 'trialing',
+          cancel_at_period_end: false,
+        },
+      },
+    });
+
+    const res = await POST(makeRequest());
+    const body = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(body.received).toBe(true);
+    expect(db.getSubscriptionByStripeId).toHaveBeenCalledWith('sub_test123');
+    expect(db.updateSubscription).toHaveBeenCalledWith('sub-doc-id', {
+      status: 'trialing',
+      canceledAt: null,
+    });
+    expect(db.completeWebhookEventProcessing).toHaveBeenCalledWith(
+      'evt_sub_reversed',
+      'customer.subscription.updated'
+    );
   });
 });

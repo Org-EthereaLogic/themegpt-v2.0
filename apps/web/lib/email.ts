@@ -267,8 +267,58 @@ export async function sendThemePurchaseConfirmationEmail(
  */
 export async function sendTrialEndingEmail(
   to: string,
-  daysRemaining: number = 3
+  daysRemaining: number = 3,
+  hasCard: boolean = true
 ): Promise<EmailResult> {
+  const bodyContent = hasCard
+    ? `<p style="margin: 0 0 24px; color: #666; font-size: 16px; line-height: 1.6;">
+        Your free trial of ThemeGPT Premium will end in <strong>${daysRemaining} days</strong>.
+        After that, your subscription will automatically continue at the regular price.
+      </p>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: ${BRAND_COLORS.cream}; border-radius: 8px; margin-bottom: 24px;">
+        <tr>
+          <td style="padding: 20px;">
+            <p style="margin: 0; color: ${BRAND_COLORS.brown}; font-size: 14px; line-height: 1.6;">
+              No action needed — your subscription will automatically renew.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <p style="margin: 0 0 24px; color: #666; font-size: 14px; line-height: 1.6;">
+        If you'd like to cancel or make changes, you can do so from your account page.
+      </p>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="center">
+            <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+              Manage Subscription
+            </a>
+          </td>
+        </tr>
+      </table>`
+    : `<p style="margin: 0 0 24px; color: #666; font-size: 16px; line-height: 1.6;">
+        Your free trial of ThemeGPT Premium will end in <strong>${daysRemaining} days</strong>.
+        To keep access after the trial, add a payment method before it expires.
+      </p>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: ${BRAND_COLORS.cream}; border-radius: 8px; margin-bottom: 24px;">
+        <tr>
+          <td style="padding: 20px;">
+            <p style="margin: 0; color: ${BRAND_COLORS.brown}; font-size: 14px; line-height: 1.6;">
+              Without a payment method on file, your subscription will be cancelled automatically when the trial ends.
+            </p>
+          </td>
+        </tr>
+      </table>
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+        <tr>
+          <td align="center">
+            <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+              Add Payment Method
+            </a>
+          </td>
+        </tr>
+      </table>`;
+
   try {
     const { data, error } = await getResend().emails.send({
       from: EMAIL_FROM,
@@ -299,37 +349,7 @@ export async function sendTrialEndingEmail(
           <tr>
             <td style="padding: 40px;">
               <h2 style="margin: 0 0 16px; color: ${BRAND_COLORS.brown}; font-size: 24px;">Your trial is ending soon</h2>
-              <p style="margin: 0 0 24px; color: #666; font-size: 16px; line-height: 1.6;">
-                Your free trial of ThemeGPT Premium will end in <strong>${daysRemaining} days</strong>.
-                After that, your subscription will automatically continue at the regular price.
-              </p>
-
-              <!-- Reminder Box -->
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: ${BRAND_COLORS.cream}; border-radius: 8px; margin-bottom: 24px;">
-                <tr>
-                  <td style="padding: 20px;">
-                    <p style="margin: 0; color: ${BRAND_COLORS.brown}; font-size: 14px; line-height: 1.6;">
-                      If you'd like to continue enjoying premium themes, no action is needed.
-                      Your subscription will automatically renew.
-                    </p>
-                  </td>
-                </tr>
-              </table>
-
-              <p style="margin: 0 0 24px; color: #666; font-size: 14px; line-height: 1.6;">
-                If you'd like to cancel or make changes to your subscription, you can do so from your account page.
-              </p>
-
-              <!-- CTA -->
-              <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
-                <tr>
-                  <td align="center">
-                    <a href="https://themegpt.ai/account" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.coral}; color: ${BRAND_COLORS.brown}; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
-                      Manage Subscription
-                    </a>
-                  </td>
-                </tr>
-              </table>
+              ${bodyContent}
             </td>
           </tr>
 

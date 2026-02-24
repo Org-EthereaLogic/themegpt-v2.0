@@ -79,7 +79,7 @@ function wrapHandler(handler: (req: Request, ctx: unknown) => Promise<Response>)
     if (hasChanges && Object.keys(packed).length > 0) {
       newHeaders.append(
         "Set-Cookie",
-        `__session=${encodeURIComponent(JSON.stringify(packed))}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=900`,
+        `__session=${encodeURIComponent(JSON.stringify(packed))}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=2592000`,
       );
     } else if (hasChanges && Object.keys(packed).length === 0) {
       newHeaders.append(

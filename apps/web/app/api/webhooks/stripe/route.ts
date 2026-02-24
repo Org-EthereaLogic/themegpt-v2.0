@@ -614,8 +614,10 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     return;
   }
 
+  const stripeStatus = subscription.status;
+
   // Check if subscription was canceled (entering grace period)
-  if (subscription.cancel_at_period_end && dbSubscription.status === 'active') {
+  if (subscription.cancel_at_period_end && (dbSubscription.status === 'active' || dbSubscription.status === 'trialing')) {
     await db.updateSubscription(dbSubscription.id, {
       status: 'canceled',
       canceledAt: new Date(),
@@ -626,16 +628,21 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
   // Check if cancellation was reversed
   if (!subscription.cancel_at_period_end && dbSubscription.status === 'canceled') {
+    const resumedStatus = stripeStatus === 'trialing'
+      ? 'trialing'
+      : stripeStatus === 'past_due'
+        ? 'past_due'
+        : 'active';
+
     await db.updateSubscription(dbSubscription.id, {
-      status: 'active',
+      status: resumedStatus,
       canceledAt: null,
     });
-    console.log(`Subscription cancellation reversed: ${dbSubscription.id}`);
+    console.log(`Subscription cancellation reversed: ${dbSubscription.id} (status: ${resumedStatus})`);
     return;
   }
 
   // Sync status changes for past_due / active / trialing transitions
-  const stripeStatus = subscription.status;
   if (stripeStatus === 'past_due' && dbSubscription.status !== 'past_due') {
     await db.updateSubscription(dbSubscription.id, { status: 'past_due' });
     console.log(`Subscription marked past_due: ${dbSubscription.id}`);
@@ -701,7 +708,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 
     const licenseKey = customer.metadata?.licenseKey;
     if (!licenseKey) {
-      console.error("No license key found for customer:", customerId);
+      console.log("No legacy license key for customer (subscription-only):", customerId);
       return;
     }
 
@@ -731,7 +738,8 @@ async function handleTrialWillEnd(subscription: Stripe.Subscription) {
   try {
     const customer = await getStripe().customers.retrieve(subscription.customer as string);
     if (!customer.deleted && customer.email) {
-      await sendTrialEndingEmail(customer.email, 3);
+      const hasCard = !!subscription.default_payment_method;
+      await sendTrialEndingEmail(customer.email, 3, hasCard);
     }
   } catch (error) {
     console.error("Error sending trial ending email:", error);

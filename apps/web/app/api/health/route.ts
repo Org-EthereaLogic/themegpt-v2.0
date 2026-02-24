@@ -1,10 +1,15 @@
 import { NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { getDb } from '@/lib/firebase-admin';
 import { getAuthLogs } from '@/lib/auth';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  if (request.headers.get('x-health-key') !== process.env.HEALTH_SECRET) {
+    return NextResponse.json({ ok: true });
+  }
+
   const envVars = [
     'GOOGLE_CLIENT_ID',
     'GOOGLE_CLIENT_SECRET',

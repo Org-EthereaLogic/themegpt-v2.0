@@ -54,7 +54,8 @@ jobs:
         uses: codacy/codacy-analysis-cli-action@30783d03e758713bb5ed7b79292cfb14b9dd9a4a # master
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
-          upload: ${{ secrets.CODACY_PROJECT_TOKEN != '' }}
+          api-token: ${{ secrets.CODACY_API_TOKEN }}
+          upload: ${{ secrets.CODACY_PROJECT_TOKEN != '' || secrets.CODACY_API_TOKEN != '' }}
           max-allowed-issues: 2147483647
 
   test-coverage:
@@ -81,7 +82,24 @@ jobs:
         run: pnpm test:coverage
 
       - name: Upload coverage to Codacy
-        if: ${{ secrets.CODACY_PROJECT_TOKEN != '' && hashFiles('coverage/lcov.info') != '' }}
+        if: ${{ (secrets.CODACY_PROJECT_TOKEN != '' || secrets.CODACY_API_TOKEN != '') && hashFiles('apps/**/coverage/lcov.info') != '' }}
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
-        run: bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage/lcov.info
+          CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
+          CODACY_ORGANIZATION_PROVIDER: gh
+          CODACY_USERNAME: Org-EthereaLogic
+          CODACY_PROJECT_NAME: themegpt-v2.0
+        run: |
+          reports=()
+          for report in apps/*/coverage/lcov.info; do
+            if [ -f "$report" ]; then
+              reports+=("-r" "$report")
+            fi
+          done
+
+          if [ "${#reports[@]}" -eq 0 ]; then
+            echo "No coverage reports found to upload."
+            exit 1
+          fi
+
+          bash <(curl -Ls https://coverage.codacy.com/get.sh) report "${reports[@]}"

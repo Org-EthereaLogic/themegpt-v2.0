@@ -11,7 +11,7 @@
     "lint:extension": "pnpm --filter extension lint",
     "lint:web": "pnpm --filter web lint",
     "test": "pnpm -r test",
-    "test:coverage": "vitest run --coverage",
+    "test:coverage": "pnpm --filter web test -- --coverage --coverage.reporter=lcov --coverage.reporter=text && pnpm --filter extension test -- --coverage --coverage.reporter=lcov --coverage.reporter=text",
     "clean": "pnpm -r clean",
     "preview:sync": "node apps/extension/tools/theme-preview/sync-themes.js"
   },

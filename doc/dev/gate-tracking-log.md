@@ -43,9 +43,9 @@
 |------|-------------|----------------|--------|-------|
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
-| 2026-02-22 | 32% | Y | FAIL | GA4 API confirmed: 25 total sessions. Unassigned: 8 (32%). Paid channels active: Cross-network 9, Paid Search 5, Paid Social 1. US #1 country (6 users), India absent from top 8 — no India concern this day. checkout_start ×5, pricing_view ×3 confirmed. |
-| 2026-02-23 | 31% (mid) | Y | FAIL | Midday GA4/Clarity snapshot: 26 GA4 sessions / 19 Clarity sessions. Unassigned: 8 sessions (31%). Paid Search (Clarity) up to 16 (+33% over yesterday). 100% bounce from ads continues (0 checkout_start). Critical device inversion observed: Mobile avg duration 21.9s vs PC 0.8s. However, desktop-only targeting is required since the Chrome extension is not usable on mobile. Action: Focus shifts to landing page messaging and conversion friction. Reddit campaign stable at 1 session/day. |
-| 2026-02-24 (eve) | — | Y | — | Evening analytics review. Clarity 3-day: 50 sessions, 40 unique users. Google = 49% of traffic. CWS users 8→22 (+175%). Full Gate 1 daily pull deferred to morning (GA4 24–48h delay). |
+| 2026-02-22 | 0% | Y | PASS | **First PASS day.** GA4 full-day: 17 total sessions (Paid Search 11, Cross-network 3, Direct 2, Paid Social 1, Unassigned 0). Zero unassigned traffic — all sessions attributed. Note: earlier midday snapshot showed 32% from 25 sessions; full-day reprocessing corrected the count. |
+| 2026-02-23 | 30% | Y | FAIL | GA4 full-day: 27 total sessions (Cross-network 13, Unassigned 8, Paid Search 5, Direct 1). Unassigned = 8/27 = 30%. Cross-network dominated (48%). 100% bounce from ads continues (0 checkout_start). Desktop-only targeting applied mid-day for Google Ads. Reddit campaign stable at 1 session/day. |
+| 2026-02-24 (eve) | — | Y | — | Evening analytics pull via Clarity MCP + re-authed GA4 Data API. Clarity 3-day snapshot: 42 sessions, 38 users, Google 69% of traffic, mobile 76%. Desktop avg active time 212s vs mobile 9s. GA4 daily pull for Feb 24 still pending (24–48h processing delay). GA4 OAuth token re-authed this session. |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
 | 2026-02-27 | | | | |
@@ -62,7 +62,7 @@
 | 2026-02-21 | N | Y (×3) | N | N | GA4 Data API confirmed. checkout_start firing (3 events). pricing_view firing (2 events). trial_start and purchase_success absent — expected, no completed purchases yet. |
 | 2026-02-22 | N | Y (×5) | N | N | GA4 API confirmed: checkout_start ×5, pricing_view ×3. trial_start and purchase_success absent — no completed purchases this day. checkout_abandon not firing (users may not be returning via canceled param consistently). |
 | 2026-02-23 | N | N | N | N | Midday audit: 0 checkout_start, 0 pricing_view from 26 GA4 sessions. Zero funnel events from paid traffic for the third straight day. Clicks bounce before a single event fires (0.0s avg duration in GA4). Note: the 5 organic checkouts from Feb 21 were canary testing. Funnel is solid, but not being reached by landing page traffic. Stripe portal deployed — self-serve subscription management now live. |
-| 2026-02-24 (eve) | N | N | N | N | Evening review: 0 new funnel events from paid traffic. Checkout flow UX fixes deployed (callbackUrl, login context, extension auth race). GA4 daily pull deferred to morning. |
+| 2026-02-24 (eve) | N | N | N | N | GA4 token re-authed. MCP cumulative Feb 21–23 confirms checkout_start=5, pricing_view=3 — all nonzero funnel events from Feb 21 organic traffic only. trial_start and purchase_success remain at zero. Zero funnel events from paid traffic across all 4 days (Feb 21–24). Checkout UX fixes deployed but no new conversions yet. |
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |
 | 2026-02-27 | | | | | |

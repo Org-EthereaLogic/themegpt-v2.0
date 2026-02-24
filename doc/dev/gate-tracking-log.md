@@ -3,6 +3,7 @@
 **Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
 **Updated:** Daily, by checking GA4
 **Blocker:** No hard launch blocker. Gate 1 and Gate 3 are tracked as diagnostics while paid acquisition begins.
+**Latest deployment snapshot:** Feb 24, 2026 — commit `2ce4adb` deployed via trigger `deploy-themegpt-on-push` (build `f08d5ef3-51ab-42fb-9cee-d52d154677e1`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00202-kkv` (100% traffic).
 
 ---
 
@@ -114,6 +115,20 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
 - **v2.3.0 CWS review**: APPROVED (submitted Feb 20, approved Feb 22, 2026)
 - **CWS listing update**: **Submitted for review** Feb 22, 2026. Includes promo video (YouTube), refreshed screenshots (5 total: 3 dark + Frosted Windowpane light + ThemeGPT Light). Metadata-only review — no extension binary change.
 - **Landing page**: Hero video deployed in commit `3d868e9` — autoplay `demo-30s.mp4` inside macOS browser mockup, desktop-only.
+
+---
+
+## Mobile Onboarding Theme Preview Refresh — Feb 24, 2026
+
+- **Scope:** Improve mobile expectation-setting by replacing abstract swatch cards with real theme screenshots and direct gallery links.
+- **Shipped behavior (`/mobile`):**
+  - Screenshot cards now show a mixed set of free + premium themes:
+    - ThemeGPT Light
+    - Frosted Windowpane
+    - Electric Dreams
+    - Woodland Retreat
+  - Section heading and each card deep-link to `/?skip_mobile=1#themes`.
+- **Deploy evidence:** commit `2ce4adb` auto-triggered Cloud Build build `f08d5ef3-51ab-42fb-9cee-d52d154677e1` (SUCCESS) and rolled out Cloud Run revision `themegpt-web-00202-kkv` at 100% traffic.
 
 ---
 

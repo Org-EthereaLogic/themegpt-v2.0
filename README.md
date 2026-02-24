@@ -15,9 +15,11 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share)**
 
-> **Latest published extension: v2.3.0** — approved by the Chrome Web Store February 22, 2026.
+> **Latest published extension: v2.3.0** — approved by the Chrome Web Store on February 22, 2026.
 >
-> CWS store listing update (promo video + refreshed screenshots) submitted for review February 22, 2026.
+> **Current extension source version in this repo: v2.3.1** — submission pending store review as of February 24, 2026.
+>
+> **Latest production web deployment:** commit `2ce4adb` auto-deployed via Cloud Build trigger `deploy-themegpt-on-push` to Cloud Run revision `themegpt-web-00202-kkv` on February 24, 2026.
 >
 > See [CHANGELOG.md](./CHANGELOG.md) for release notes and [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md) for live submission/review status.
 
@@ -39,6 +41,7 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 - **Custom Themes** — Personalize ChatGPT's look and feel
 - **Token Counter** — Track your input/output token usage in real-time
 - **Local-First** — Everything runs in your browser, nothing is sent externally
+- **Mobile-Aware Web Onboarding** — `/mobile` route captures desktop install reminder email and previews mixed free + premium theme screenshots with direct links to the main `#themes` gallery
 
 ---
 
@@ -92,21 +95,25 @@ themegpt-v2.0/
 
 ## Quick Start
 
-**Prerequisites:** [Node.js](https://nodejs.org) 18+ and [pnpm](https://pnpm.io) 9+
+**Prerequisites:** [Node.js](https://nodejs.org) 20+ and [pnpm](https://pnpm.io) 9+
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/themegpt-v2.0.git
+git clone https://github.com/Org-EthereaLogic/themegpt-v2.0.git
 cd themegpt-v2.0
 
 # Install dependencies
 pnpm install
 
-# Run both apps in development mode
+# Run the extension (default)
 pnpm dev
 
-# Or run just the extension
-cd apps/extension && pnpm dev
+# Run the web app
+pnpm dev:web
+
+# Run quality checks
+pnpm lint
+pnpm test
 ```
 
 ### Loading the Extension in Chrome
@@ -127,6 +134,15 @@ cd apps/extension && pnpm dev
 | **Web App** | Next.js 16, React 19, Tailwind CSS 4, TypeScript |
 | **Shared** | TypeScript |
 | **Tooling** | pnpm workspaces, Prettier, ESLint |
+
+---
+
+## Roadmap and Governance
+
+- Product/growth roadmap: [themegpt-90-day-monetization-roadmap.html](./themegpt-90-day-monetization-roadmap.html)
+- Daily gate and deployment integrity log: [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md)
+- Engineering execution checklist: [doc/dev/monetization-growth-execution-checklist.md](./doc/dev/monetization-growth-execution-checklist.md)
+- Governance and standards: [CONSTITUTION.md](./CONSTITUTION.md), [DIRECTIVES.md](./DIRECTIVES.md), [AGENTS.md](./AGENTS.md)
 
 ---
 

@@ -1,16 +1,17 @@
 # Constitution for ThemeGPT v2.0 Development
 
-This constitution defines the philosophical foundation for all development work on ThemeGPT v2.0 — a privacy-first Chrome extension for customizing ChatGPT appearance and tracking token usage.
+This constitution defines the philosophical foundation for all development work on ThemeGPT v2.0 — a privacy-first Chrome extension plus companion web platform for onboarding, authentication, billing, and support.
 
 ## Scope
 
 Governs all development for ThemeGPT v2.0, including:
 
 - Chrome extension development (Plasmo, React 19)
+- Web application development (Next.js, API routes, Cloud Run deployment)
 - TypeScript implementation
 - UI/UX with the Cream & Chocolate design system
-- Token counting and analytics features
-- Privacy-preserving architecture (all data stays in browser)
+- Token counting, subscription, and monetization flows
+- Privacy-preserving architecture with surface-specific data boundaries
 
 ## Historical Context
 
@@ -70,18 +71,22 @@ All visual elements must align with the Cream & Chocolate design system, reflect
 
 **Why this matters:** Brand consistency creates recognition and trust. The extension should feel native to ChatGPT while maintaining its own identity.
 
-### 4. Privacy First
+### 4. Privacy First (With Explicit Surface Boundaries)
 
-All data processing occurs locally in the browser. No telemetry, no external analytics, no data leaves the user's machine unless they explicitly choose to export it.
+ThemeGPT privacy guarantees differ by product surface and must remain explicit:
+
+- **Extension:** local-first by default. Theme state and token counting stay on-device; no extension telemetry.
+- **Web app:** only collect data required for auth, billing, and support flows; analytics remain consent-gated.
 
 **Application:**
 
-- Token counts stored in browser local storage only
-- Theme preferences stored locally
-- No network requests for analytics
-- Export features produce local files only
+- Token counts and extension theme preferences are stored locally
+- Extension does not emit analytics events
+- Web analytics (GA4/Clarity) run only after user consent
+- Server-side monetization events are limited to checkout and subscription operations
+- Secrets are kept in runtime secret stores, never committed to the repo
 
-**Why this matters:** Privacy is the core value proposition. Users choose ThemeGPT because they trust it won't surveil their ChatGPT usage.
+**Why this matters:** Privacy is the core value proposition. Clear boundaries prevent accidental scope drift and preserve trust across both extension and web surfaces.
 
 ### 5. Accessibility First
 
@@ -132,7 +137,7 @@ When principles or directives conflict, apply this hierarchy:
 3. **Accessibility** — Never exclude users
 4. **Brand integrity** — Maintain visual consistency
 5. **Completeness** — No placeholders or incomplete features
-6. **Performance** — Fast, responsive extension
+6. **Performance** — Fast, responsive extension and web experiences
 
 **Complexity Gate:** Before implementing any solution, answer: "Is this the simplest approach that solves the actual problem?" If the answer involves phrases like "we might need," "for flexibility," or "in case of," reconsider.
 

@@ -1,7 +1,7 @@
 # Monetization & Growth Execution Checklist
 
-**Date:** 2026-02-21  
-**Mode:** Advertising live with guardrails  
+**Date:** 2026-02-24
+**Mode:** Advertising live with guardrails + mobile onboarding refinement
 **Source strategy:** `ThemeGPT-Monetization-Strategy.docx`
 
 ---
@@ -20,6 +20,9 @@
 - [x] Fixed Cloud Build trigger: added all 7 Firebase `NEXT_PUBLIC_*` vars and `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` as substitution variables (were missing since Jan 13 trigger creation — GA4/Firebase was silently broken in all prior production builds).
 - [x] Added Sign In nav link to navigation bar (`/login`). Verified live.
 - [x] Verified checkout flow end-to-end on production: pricing → `POST /api/checkout` → live Stripe session created → `checkout.stripe.com` redirect confirmed (Feb 22, 2026).
+- [x] Replaced `/mobile` theme swatch previews with real screenshot cards that deep-link to `/?skip_mobile=1#themes`.
+- [x] Rebalanced mobile theme preview sequence to alternate light/dark by row using a mixed free + premium set.
+- [x] Verified deployment of mobile preview refresh: commit `2ce4adb` → Cloud Build `f08d5ef3-51ab-42fb-9cee-d52d154677e1` (`SUCCESS`) → Cloud Run revision `themegpt-web-00202-kkv` at 100% traffic.
 
 ---
 
@@ -38,7 +41,7 @@
 
 ## 3) Channel Launch Tasks (This Week)
 
-- [x] Launch Google Search campaign with distinct UTM campaign name (`search_launch_v1`, $25/day, published Feb 21).
+- [x] Launch Google Search campaign with distinct UTM campaign name (`search_launch_v1`, currently $80/day after optimization; launched Feb 21).
 - [x] Launch Reddit paid campaign with distinct UTM campaign name (`reddit_launch_v1`, $50/day — approved exception for $500 ad credit, published Feb 21).
 - [x] Publish week-1 social posts — Twitter/X (@ThemeGPT) + LinkedIn published Feb 22, 2026 with Aurora Borealis GIF and `launch_week_v1` UTM campaign.
 - [ ] Ensure every outbound campaign URL uses unique `utm_source`, `utm_medium`, `utm_campaign`.
@@ -46,6 +49,7 @@
 - [x] Investigate Reddit Ads mobile waste — confirmed 97% of spend going to iOS/Android with no platform-level device exclusion. Decision pending on pause/continue.
 - [x] Fix checkout double-login friction (callbackUrl #pricing anchor + login page context messaging) — commit `9537d36`, deployed Feb 23.
 - [x] Fix extension auth race condition (decoupled token generation from ping timeout) — commit `9537d36`, deployed Feb 23.
+- [x] Ship mobile onboarding theme-mix refresh (ThemeGPT Light, Frosted Windowpane, Electric Dreams, Woodland Retreat) — commit `2ce4adb`, deployed Feb 24.
 
 ---
 
@@ -80,7 +84,7 @@
   - Pause a channel at `>= $75` spend with zero checkout sessions.
   - Pause a channel if CAC `> $45` for 3 consecutive days.
   - Do not increase daily caps during first 7 days.
-  - **Budget exception:** Reddit approved at `$50/day` (vs standard `$25/day`) to qualify for `$500` ad credit. Google Search remains at `$25/day`.
+  - **Current caps:** Google Search `$80/day` (optimized from launch baseline), Reddit `$50/day` (approved exception for $500 ad credit).
   - **Guardrail reset note (Feb 22, 2026):** Reddit campaign reached $75+ spend with 0 conversions but was NOT paused — the 0-conversion period was caused by a broken Stripe checkout (3DS authentication failure blocking all channels equally, not Reddit-specific). Checkout fixed in v2.3.1. Guardrail evaluation resets from Feb 22 with a functional payment system.
 
 ---

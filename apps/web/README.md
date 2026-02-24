@@ -1,16 +1,27 @@
 # ThemeGPT Web App
 
-Marketing website and API backend for ThemeGPT - the Chrome extension for customizing ChatGPT's appearance.
+Marketing website plus API backend for ThemeGPT, including authentication, checkout, subscriptions, install reminder email, and theme preview gallery.
+
+## Current Status (As of February 24, 2026)
+
+- Production deploy is automated from `main` via Cloud Build trigger `deploy-themegpt-on-push`.
+- Latest deployed commit: `2ce4adb` (Cloud Run revision `themegpt-web-00202-kkv`, 100% traffic).
+- Mobile onboarding route (`/mobile`) is live with:
+  - Desktop install reminder email capture (`/api/mobile-reminder`)
+  - Mixed free + premium screenshot previews
+  - Direct link to full theme gallery (`/?skip_mobile=1#themes`)
+- Web package version: `2.3.1` (`apps/web/package.json`).
 
 ## Tech Stack
 
-- **Framework:** Next.js 16 (App Router)
-- **Styling:** Tailwind CSS 4
-- **Authentication:** NextAuth.js (Google, GitHub OAuth)
-- **Database:** Firebase Firestore
-- **Payments:** Stripe (subscriptions + one-time purchases)
-- **Email:** Resend
-- **Deployment:** Google Cloud Run
+- Framework: Next.js 16 (App Router)
+- Styling: Tailwind CSS 4
+- Authentication: NextAuth.js (Google + GitHub OAuth)
+- Data: Firebase Firestore
+- Billing: Stripe (subscriptions + one-time purchases)
+- Email: Resend
+- Analytics: Consent-gated GA4 + Microsoft Clarity
+- Deployment: Google Cloud Build + Cloud Run
 
 ## Getting Started
 
@@ -24,13 +35,11 @@ Marketing website and API backend for ThemeGPT - the Chrome extension for custom
 
 ### Environment Setup
 
-Copy the example environment file and fill in your values:
-
 ```bash
 cp .env.example .env.local
 ```
 
-See `.env.example` for all required environment variables.
+Fill all required values in `.env.local`.
 
 ### Development
 
@@ -42,67 +51,77 @@ pnpm dev:web
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) to view the site.
+Open `http://localhost:3000`.
 
-## Project Structure
+## Key Routes
 
-```
-apps/web/
-├── app/                    # Next.js App Router pages
-│   ├── api/               # API routes
-│   │   ├── checkout/      # Stripe checkout
-│   │   ├── extension/     # Extension API endpoints
-│   │   ├── webhooks/      # Stripe webhooks
-│   │   └── ...
-│   ├── account/           # User account page
-│   ├── auth/              # Auth pages
-│   └── ...
-├── components/            # React components
-│   ├── sections/          # Page sections (Hero, Features, etc.)
-│   └── ui/                # UI components (ThemeCard, etc.)
-├── lib/                   # Utilities
-│   ├── auth.ts           # NextAuth configuration
-│   ├── db.ts             # Firestore operations
-│   ├── stripe.ts         # Stripe configuration
-│   └── email.ts          # Email templates
-└── public/               # Static assets
-    └── themes/           # Theme preview images
-```
+- `/` — Marketing landing page
+- `/#themes` — Theme gallery section
+- `/mobile` — Mobile onboarding/desktop install reminder page
+- `/auth/extension` — Extension auth handoff flow
+- `/account` — Subscription and billing surface
+- `/success` — Checkout completion state
 
 ## API Endpoints
 
 ### Extension API
-- `GET /api/extension/status` - Check subscription status
-- `POST /api/extension/auth` - Authenticate extension
-- `POST /api/extension/download` - Download premium theme
 
-### Payment API
-- `POST /api/checkout` - Create Stripe checkout session
-- `POST /api/webhooks/stripe` - Handle Stripe webhooks
-- `GET /api/metrics/monetization` - Internal monetization summary (server-side source of truth)
+- `GET /api/extension/status` — Subscription status for extension
+- `POST /api/extension/auth` — Extension authentication
+- `POST /api/extension/download` — Premium theme download
 
-### User API
-- `GET /api/subscription` - Get subscription details
-- `POST /api/verify` - Verify license key
+### Billing API
 
-## Deployment
+- `POST /api/checkout` — Create Stripe Checkout session
+- `POST /api/webhooks/stripe` — Stripe webhook handler
+- `POST /api/portal` — Stripe customer portal session
+- `GET /api/metrics/monetization` — Internal server-side monetization summary
 
-### Build
+### User and Lifecycle API
+
+- `GET /api/subscription` — Subscription details
+- `POST /api/verify` — License key verification
+- `POST /api/mobile-reminder` — Send desktop install reminder from mobile flow
+
+## Testing and Quality
 
 ```bash
+pnpm lint
+pnpm test
 pnpm build
 ```
 
-### Docker
+## Deployment
 
-```bash
-docker build -t themegpt-web .
-docker run -p 3000:3000 themegpt-web
-```
+### Automated Production Deploy
 
-### Cloud Run
+Push to `main` triggers Cloud Build using root `cloudbuild.yaml`.
 
-Deployed automatically via Cloud Build on push to main. See `cloudbuild.yaml` in the repository root.
+Pipeline shape:
+
+1. Validate required Firebase/Stripe build substitutions
+2. Build and push image to Artifact Registry
+3. Deploy to Cloud Run (`themegpt-web`)
+4. Inject runtime Firebase private key from Secret Manager
+
+### Build-Time Substitutions (Cloud Build trigger)
+
+- `_FIREBASE_API_KEY`
+- `_FIREBASE_AUTH_DOMAIN`
+- `_FIREBASE_PROJECT_ID`
+- `_FIREBASE_STORAGE_BUCKET`
+- `_FIREBASE_MESSAGING_SENDER_ID`
+- `_FIREBASE_APP_ID`
+- `_FIREBASE_MEASUREMENT_ID`
+- `_STRIPE_PUBLISHABLE_KEY`
+
+### Runtime Secrets (Cloud Run)
+
+- `FIREBASE_PRIVATE_KEY` (secret: `firebase-private-key`)
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+- `NEXTAUTH_SECRET`
+- OAuth and Resend secrets
 
 ## Scripts
 
@@ -110,9 +129,16 @@ Deployed automatically via Cloud Build on push to main. See `cloudbuild.yaml` in
 # Test email templates
 pnpm tsx scripts/test-email.ts all your@email.com
 
-# Manage Resend domain
-pnpm tsx scripts/resend-domain.ts status
+# Verify Stripe configuration
+pnpm verify:stripe
+pnpm verify:stripe:cloud-run
 
 # Verify Cloud Run deployment
-pnpm tsx scripts/verify-cloud-run.ts https://themegpt.app
+pnpm tsx scripts/verify-cloud-run.ts https://themegpt.ai
 ```
+
+## Notes
+
+- Extension privacy promise remains strict: no extension telemetry.
+- Web analytics are consent-gated and used for funnel diagnostics.
+- Server-side Stripe + Firestore records are the source of truth for monetization reporting.

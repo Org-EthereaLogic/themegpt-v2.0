@@ -217,21 +217,23 @@
       </p>
       <div class="meta">
         <span>Prepared: February 16, 2026</span>
-        <span>Updated: February 24, 2026 (Mobile Performance & GA4 Standardization)</span>
-        <span>Published extension: v2.2.2</span>
-        <span>CWS pending review: v2.3.0</span>
+        <span>Updated: February 24, 2026 (Mobile Onboarding Theme Mix + Deploy Integrity)</span>
+        <span>Published extension: v2.3.0</span>
+        <span>Extension candidate pending review: v2.3.1</span>
       </div>
     </header>
 
     <section class="panel">
-      <h2>Executive Status (As of February 22, 2026)</h2>
+      <h2>Executive Status (As of February 24, 2026)</h2>
       <p>
         Payment infrastructure is verified healthy and no longer a blocker.
         Both advertising channels (Google Search + Reddit) are live and actively
         serving. Google Ads campaign has been fully optimized: missing tag fixed
         via Consent Mode v2, 9 keywords added, 4 callouts + 4 sitelinks applied,
         headlines improved (ad strength: Average → Good), and Display Expansion
-        enabled for unspent budget utilization.
+        enabled for unspent budget utilization. Mobile onboarding now uses real
+        screenshot previews with mixed free + premium themes and direct deep-links
+        to the main theme gallery to improve expectation-setting before desktop install.
       </p>
       <div class="grid">
         <div class="stat ok">
@@ -262,7 +264,7 @@
     </section>
 
     <section class="panel">
-      <h2>Measurement Snapshot (Last 7 Days)</h2>
+      <h2>Measurement Snapshot (Latest Validated Window)</h2>
       <table>
         <thead>
           <tr>
@@ -287,8 +289,8 @@
           </tr>
           <tr>
             <td>Web funnel events</td>
-            <td colspan="2"><span class="mono">trial_start=0</span>, <span class="mono">checkout_start=0</span>, <span class="mono">purchase_success=0</span></td>
-            <td>Current constraint is conversion volume, not payment reliability.</td>
+            <td colspan="2"><span class="mono">trial_start=0</span>, <span class="mono">checkout_start=5</span>, <span class="mono">purchase_success=0</span></td>
+            <td>Nonzero checkout intent confirmed; current constraint remains paid conversion volume.</td>
           </tr>
         </tbody>
       </table>
@@ -311,7 +313,7 @@
     </section>
 
     <section class="panel">
-      <h2>Launch Verification & Deployment Audit (Feb 21, 2026)</h2>
+      <h2>Launch Verification & Deployment Audit (Feb 21-24, 2026)</h2>
       <ul>
         <li>
           Ad-console evidence captured on February 21, 2026:
@@ -337,6 +339,13 @@
           <span class="mono">themegpt-web-deploy</span> (ID
           <span class="mono">352d347d-7674-4e07-8d9a-03544d9f0698</span>) removed;
           one main-branch deploy trigger remains.
+        </li>
+        <li>
+          Latest deployment evidence: commit <span class="mono">2ce4adb</span>
+          auto-triggered Cloud Build (build
+          <span class="mono">f08d5ef3-51ab-42fb-9cee-d52d154677e1</span>,
+          status <span class="mono">SUCCESS</span>) and rolled out Cloud Run revision
+          <span class="mono">themegpt-web-00202-kkv</span> at 100% traffic.
         </li>
       </ul>
     </section>
@@ -451,9 +460,9 @@
           event with $1 proxy value for ROAS calculations.
         </li>
         <li>
-          Standardized GA4 conversion event to <span class="mono">purchase</span> 
-          with transaction metadata (value, currency, items) for automatic conversion tracking, 
-          replacing the old <span class="mono">purchase_success</span> event.
+          Mobile onboarding page now uses real screenshot cards (mixed free + premium themes)
+          that link directly to <span class="mono">/?skip_mobile=1#themes</span>, replacing
+          abstract color-swatch previews.
         </li>
       </ul>
     </section>
@@ -539,13 +548,26 @@
           </tr>
           <tr>
             <td>v2.3.0</td>
-            <td>Submitted, pending CWS review</td>
+            <td>Published on Chrome Web Store</td>
             <td>February 20, 2026</td>
             <td>
-              Submitted via run <span class="mono">22238384383</span>. Includes
+              Submitted via run <span class="mono">22238384383</span>; approved
+              February 22, 2026. Includes
               <span class="mono">extension_version</span> UTM param and abandoned
               checkout recovery (web-side already live on Cloud Run).
             </td>
+          </tr>
+          <tr>
+            <td>v2.3.1 (extension)</td>
+            <td>Submitted, pending store review</td>
+            <td>February 23, 2026</td>
+            <td>Security hardening + QA updates; CWS and Edge reviews still pending.</td>
+          </tr>
+          <tr>
+            <td>main@2ce4adb (web)</td>
+            <td>Deployed to production</td>
+            <td>February 24, 2026</td>
+            <td>Mobile onboarding preview cards rebalanced (free + premium) and linked to full theme gallery.</td>
           </tr>
         </tbody>
       </table>
@@ -611,8 +633,8 @@
           first attributed paid revenue appears.
         </li>
         <li>
-          v2.3.0 submitted to CWS Feb 20 (run <span class="mono">22238384383</span>).
-          Monitor review status; expected 1–3 business days.
+          Store status check: v2.3.0 is published; v2.3.1 extension submission
+          is still pending review.
         </li>
       </ul>
     </section>
@@ -644,7 +666,7 @@
           <tr class="ok">
             <td>1c</td>
             <td>Optimize Mobile Traffic & GA4 ✓</td>
-            <td>Standardized GA4 'purchase' conversion event. Mobile bid modifier set to -70% on search_launch_v1 to control CAC. Mobile LCP (Hero video) optimized.</td>
+            <td>Mobile bid modifier set to -70% on search_launch_v1 to control CAC. Mobile LCP (Hero video) optimized. `/mobile` onboarding now shows screenshot-based mixed theme previews with direct desktop gallery link.</td>
             <td>Growth / Ops</td>
           </tr>
           <tr>
@@ -726,7 +748,7 @@
     </section>
 
     <div class="footer">
-      ThemeGPT consolidated roadmap updated February 24, 2026 (Mobile Performance & GA4 Standardization).
+      ThemeGPT consolidated roadmap updated February 24, 2026 (Mobile Onboarding Theme Mix + Deploy Integrity).
       Focus: advertising optimized with spend guardrails, deterministic
       attribution, Clarity session replays, and server-side revenue-based optimization.
     </div>

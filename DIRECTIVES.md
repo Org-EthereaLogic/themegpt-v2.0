@@ -2,6 +2,10 @@
 
 Enforcement rules for AI coding agents working on ThemeGPT v2.0. Rules derive from CONSTITUTION.md principles and lessons from `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md`.
 
+**Scope note:** These directives apply to both product surfaces:
+- Chrome extension (strict local-only telemetry policy)
+- Web app and APIs (consent-gated analytics + server-side billing events)
+
 **Enforcement Model:**
 
 - **Critical**: Must pass before deployment (hook-enforced, blocks operations)
@@ -21,6 +25,7 @@ Enforcement rules for AI coding agents working on ThemeGPT v2.0. Rules derive fr
 | Framework Separation | Important | Architecture | Utility code |
 | Responsive Implementation | Important | Layout | *.css,*.tsx |
 | Component Architecture | Important | Structure | components/**/* |
+| Documentation Currency | Important | Documentation | README.md, doc/**, roadmap files |
 | Performance Budgets | Recommended | Optimization | All files |
 
 ## Critical Directives
@@ -261,6 +266,25 @@ apps/extension/src/
 │   ├── features/     # Feature-specific components
 │   └── layout/       # Layout components
 ```
+
+### Documentation Currency
+
+**Principle:** Complete Implementation + Investigation Before Action (CONSTITUTION Sections 6 and 7)
+
+**Why this matters:** Stale docs create operational drift and cause incorrect release/deploy decisions.
+
+**ALWAYS when behavior/status changes:**
+
+- Update the relevant README files for affected surfaces
+- Update roadmap and gate-tracking records with concrete dates and commit/deploy references
+- Ensure release/submission status in docs matches actual branch, tag, and deployment state
+
+**Minimum docs to review per release-impacting change:**
+
+- `README.md` (root)
+- `apps/web/README.md` and/or `apps/extension/README.md`
+- `doc/dev/gate-tracking-log.md`
+- `themegpt-90-day-monetization-roadmap.html` (when growth/launch status changes)
 
 ## Recommended Directives
 

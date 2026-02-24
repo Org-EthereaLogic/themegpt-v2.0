@@ -143,15 +143,15 @@ export async function POST(request: NextRequest) {
     // Normalize type (subscription is legacy alias for monthly)
     const normalizedType: CheckoutType = type === "subscription" ? "monthly" : type;
 
-    // Guard: block checkout if user already has an active or trialing subscription.
+    // Guard: block checkout if user already has full access (active, trialing, or grace period).
     // Prevents duplicate sessions from users who click the pricing CTA multiple times.
     if (normalizedType === "yearly" || normalizedType === "monthly") {
       const existingSub = await db.getSubscriptionByUserId(userId);
-      if (existingSub && (existingSub.status === "active" || existingSub.status === "trialing")) {
+      if (existingSub && hasFullAccess(existingSub)) {
         return NextResponse.json(
           {
             success: false,
-            message: "You already have an active subscription.",
+            message: "You already have an active subscription. Manage your plan from your account.",
             code: "ALREADY_SUBSCRIBED",
             alreadySubscribed: true,
           },
@@ -190,21 +190,6 @@ export async function POST(request: NextRequest) {
           { success: false, message: "Invalid checkout type" },
           { status: 400, headers: corsHeaders }
         );
-    }
-
-    if (normalizedType !== "single") {
-      const existingSubscription = await db.getSubscriptionByUserId(userId);
-      if (existingSubscription && hasFullAccess(existingSubscription)) {
-        return NextResponse.json(
-          {
-            success: false,
-            message: "You already have an active subscription. Manage your plan from your account.",
-            code: "ALREADY_SUBSCRIBED",
-            alreadySubscribed: true,
-          },
-          { status: 409, headers: corsHeaders }
-        );
-      }
     }
 
     if (!priceId) {

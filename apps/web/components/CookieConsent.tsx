@@ -39,7 +39,7 @@ export function CookieConsent() {
       <div className="flex gap-2 shrink-0">
         <button
           onClick={() => respond("accepted")}
-          className="bg-[#F4A988] text-[#4B2E1E] font-semibold px-4 py-1.5 rounded-full hover:opacity-90 transition-opacity"
+          className="bg-[#E8A87C] text-[#4B2E1E] font-semibold px-4 py-1.5 rounded-full hover:opacity-90 transition-opacity"
         >
           Accept
         </button>

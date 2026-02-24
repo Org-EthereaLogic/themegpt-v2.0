@@ -36,8 +36,8 @@ themegpt-v2.0/
 |-------|-----|-------|
 | Cream | `#FAF6F0` | Primary background |
 | Chocolate | `#4B2E1E` | Primary text, dark accents |
-| Peach | `#F4A988` | CTAs, highlights |
-| Teal | `#7ECEC5` | Secondary accent, success |
+| Peach | `#E8A87C` | CTAs, highlights |
+| Teal | `#5BB5A2` | Secondary accent, success |
 
 | Element | Font |
 |---------|------|

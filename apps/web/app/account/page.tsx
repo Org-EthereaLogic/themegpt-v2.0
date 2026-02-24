@@ -206,7 +206,7 @@ export default function AccountPage() {
                     Premium Theme Access
                   </span>
                   <span className={`font-bold text-lg ${
-                    subscription.isLifetime ? "text-purple-600" : "text-[#7ECEC5]"
+                    subscription.isLifetime ? "text-purple-600" : "text-[#5BB5A2]"
                   }`}>
                     {subscription.hasFullAccess ? "Full Access" : "Restricted"}
                   </span>
@@ -251,7 +251,7 @@ export default function AccountPage() {
               </p>
               <Link
                 href="/#pricing"
-                className="inline-block px-6 py-3 bg-[#7ECEC5] text-white font-medium rounded-lg hover:bg-[#6ABEB5] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2]"
+                className="inline-block px-6 py-3 bg-[#5BB5A2] text-white font-medium rounded-lg hover:bg-[#4DA593] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2]"
               >
                 Subscribe Now
               </Link>
@@ -286,7 +286,7 @@ export default function AccountPage() {
                       onClick={() => handleRedownload(item.themeId)}
                       disabled={redownloadingTheme !== null}
                       aria-busy={redownloadingTheme === item.themeId}
-                      className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#7ECEC5] border border-[#7ECEC5] rounded-lg hover:bg-[#7ECEC5] hover:text-white transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#7ECEC5]"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-sm text-[#5BB5A2] border border-[#5BB5A2] rounded-lg hover:bg-[#5BB5A2] hover:text-white transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-[#5BB5A2]"
                     >
                       {redownloadingTheme === item.themeId && <Spinner />}
                       {redownloadingTheme === item.themeId ? "Downloading..." : "Re-download"}

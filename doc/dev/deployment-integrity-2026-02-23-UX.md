@@ -10,9 +10,9 @@ To address the immediate 0.8s drop-off from search intent, we removed the high-f
 
 | Area | Change |
 |---|---|
-| `components/sections/Navigation.tsx` | Main top nav CTA: "Start Free Trial" → "Add to Chrome — It's Free" (linking to CWS) |
-| `components/sections/Hero.tsx` | Primary Hero CTA: "Start Free Trial" → "Add to Chrome — It's Free" (linking to CWS) |
-| `components/sections/FeaturesSection.tsx` | Bottom CTA: "Start Free Trial" → "Add to Chrome — It's Free" (linking to CWS) |
+| `apps/web/components/sections/Navigation.tsx` | Main top nav CTA: "Start Free Trial" → "Add to Chrome — It's Free" (linking to CWS) |
+| `apps/web/components/sections/Hero.tsx` | Primary Hero CTA: "Start Free Trial" → "Add to Chrome — It's Free" (linking to CWS) |
+| `apps/web/components/sections/FeaturesSection.tsx` | Bottom CTA: "Start Free Trial" → "Add to Chrome — It's Free" (linking to CWS) |
 
 **Expected Outcome:** 
 We anticipate a significant drop in the 100% bounce rate from desktop "traffic" campaigns as users follow the natural acquisition motion to the Web Store rather than being forced into a trial-signup gate.

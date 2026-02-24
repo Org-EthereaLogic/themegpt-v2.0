@@ -82,7 +82,7 @@ jobs:
         run: pnpm test:coverage
 
       - name: Upload coverage to Codacy
-        if: ${{ (secrets.CODACY_PROJECT_TOKEN != '' || secrets.CODACY_API_TOKEN != '') && hashFiles('apps/**/coverage/lcov.info') != '' }}
+        if: ${{ hashFiles('apps/**/coverage/lcov.info') != '' }}
         env:
           CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
           CODACY_API_TOKEN: ${{ secrets.CODACY_API_TOKEN }}
@@ -90,6 +90,11 @@ jobs:
           CODACY_USERNAME: Org-EthereaLogic
           CODACY_PROJECT_NAME: themegpt-v2.0
         run: |
+          if [ -z "$CODACY_PROJECT_TOKEN" ] && [ -z "$CODACY_API_TOKEN" ]; then
+            echo "No Codacy token configured. Skipping coverage upload."
+            exit 0
+          fi
+
           reports=()
           for report in apps/*/coverage/lcov.info; do
             if [ -f "$report" ]; then

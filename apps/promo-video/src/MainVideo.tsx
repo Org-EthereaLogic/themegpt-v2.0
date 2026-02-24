@@ -38,23 +38,14 @@ const Title: React.FC<{ text: string }> = ({ text }) => {
 
 const PlainChat: React.FC = () => {
   const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 15], [0, 1], { extrapolateRight: "clamp" });
+  const { fps } = useVideoConfig();
+
+  const scale = spring({ fps, frame, from: 0.95, to: 1, config: { damping: 100 } });
+  const opacity = interpolate(frame, [0, 10], [0, 1], { extrapolateRight: "clamp" });
+
   return (
     <AbsoluteFill style={{ backgroundColor: BRAND.cream, justifyContent: "center", alignItems: "center", opacity }}>
-      <div style={{ padding: 40, border: "2px solid #e5e5e5", backgroundColor: "#ffffff", borderRadius: 20, width: "60%", boxShadow: "0 10px 30px rgba(75, 46, 30, 0.05)" }}>
-        <div style={{ display: "flex", gap: 20, marginBottom: 20 }}>
-          <div style={{ width: 50, height: 50, borderRadius: "50%", backgroundColor: "#eee" }} />
-          <div style={{ flex: 1, height: 20, backgroundColor: "#eee", marginTop: 15, borderRadius: 10 }} />
-        </div>
-        <div style={{ display: "flex", gap: 20 }}>
-          <div style={{ width: 50, height: 50, borderRadius: "50%", backgroundColor: "#10a37f" }} />
-          <div style={{ flex: 1 }}>
-             <div style={{ height: 20, backgroundColor: "#f3f3f3", marginBottom: 10, borderRadius: 10, width: "90%" }} />
-             <div style={{ height: 20, backgroundColor: "#f3f3f3", marginBottom: 10, borderRadius: 10, width: "80%" }} />
-             <div style={{ height: 20, backgroundColor: "#f3f3f3", borderRadius: 10, width: "60%" }} />
-          </div>
-        </div>
-      </div>
+      <Img src={staticFile("before.png")} style={{ width: "95%", height: "95%", objectFit: "contain", transform: `scale(${scale})`, borderRadius: 20, boxShadow: "0 20px 50px rgba(75, 46, 30, 0.2)" }} />
     </AbsoluteFill>
   );
 };

@@ -636,6 +636,107 @@ export async function sendMagicLinkEmail(
 }
 
 /**
+ * Send a desktop install reminder email to a mobile visitor
+ */
+export async function sendDesktopReminderEmail(
+  to: string
+): Promise<EmailResult> {
+  const cwsUrl =
+    "https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=mobile_reminder&utm_medium=email&utm_campaign=desktop_install";
+
+  try {
+    const { data, error } = await getResend().emails.send({
+      from: EMAIL_FROM,
+      to,
+      subject: "Your ThemeGPT install link",
+      html: `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: ${BRAND_COLORS.cream};">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: ${BRAND_COLORS.cream};">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <tr>
+            <td style="padding: 40px 40px 20px; text-align: center; background-color: ${BRAND_COLORS.brown}; border-radius: 12px 12px 0 0;">
+              <img src="https://themegpt.ai/mascot-transparent.png" alt="ThemeGPT" width="60" height="60" style="margin-bottom: 12px; display: block; margin-left: auto; margin-right: auto;" />
+              <h1 style="margin: 0; color: ${BRAND_COLORS.cream}; font-size: 28px; font-weight: 700;">ThemeGPT</h1>
+              <p style="margin: 8px 0 0; color: ${BRAND_COLORS.coral}; font-size: 14px;">Premium Themes for ChatGPT</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 40px;">
+              <h2 style="margin: 0 0 16px; color: ${BRAND_COLORS.brown}; font-size: 24px;">Here's your desktop install link</h2>
+              <p style="margin: 0 0 24px; color: #666; font-size: 16px; line-height: 1.6;">
+                You found ThemeGPT on your phone — open this email on your computer and click the button below to install it.
+              </p>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color: ${BRAND_COLORS.cream}; border-radius: 8px; margin-bottom: 24px;">
+                <tr>
+                  <td style="padding: 20px;">
+                    <p style="margin: 0 0 4px; color: #999; font-size: 12px; text-transform: uppercase; letter-spacing: 1px;">What you get</p>
+                    <ul style="margin: 8px 0 0; padding-left: 18px; color: #666; font-size: 14px; line-height: 1.8;">
+                      <li>7 free themes included</li>
+                      <li>One-click setup, no coding required</li>
+                      <li>Privacy-first — your data stays local</li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-bottom: 24px;">
+                <tr>
+                  <td align="center">
+                    <a href="${cwsUrl}" style="display: inline-block; padding: 14px 32px; background-color: ${BRAND_COLORS.teal}; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px;">
+                      Add to Chrome — It's Free
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin: 0; color: #999; font-size: 13px; line-height: 1.6;">
+                ThemeGPT is a Chrome extension and works on desktop browsers (Chrome, Edge, and Brave).
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 24px 40px; background-color: #f9f9f9; border-radius: 0 0 12px 12px; text-align: center;">
+              <p style="margin: 0; color: #999; font-size: 12px;">
+                You requested this email from themegpt.ai on your mobile device.
+              </p>
+              <p style="margin: 8px 0 0; color: #999; font-size: 12px;">
+                <a href="https://themegpt.ai" style="color: ${BRAND_COLORS.brown}; text-decoration: none;">themegpt.ai</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+      `.trim(),
+    });
+
+    if (error) {
+      console.error("Failed to send desktop reminder email:", error);
+      return { success: false, error: error.message };
+    }
+
+    console.log(`Desktop reminder email sent, messageId: ${data?.id}`);
+    return { success: true, messageId: data?.id };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unknown error";
+    console.error("Error sending desktop reminder email:", message);
+    return { success: false, error: message };
+  }
+}
+
+/**
  * Send a multilingual structured content test email
  */
 export async function sendStructuredContentTestEmail(

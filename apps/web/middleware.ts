@@ -57,6 +57,35 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+  // 4. Mobile traffic redirect
+  // Chrome extensions don't work on mobile — redirect mobile visitors to a
+  // dedicated landing page with email capture instead of the dead-end CWS CTAs.
+  // Skip: API routes, the /mobile page itself, auth callbacks, static assets,
+  // and users who explicitly chose to browse the full site (?skip_mobile=1).
+  const userAgent = request.headers.get('user-agent') || ''
+  const isMobile = /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)
+  const skipMobile = url.searchParams.get('skip_mobile') === '1'
+  const isAssetPath = /\.[a-zA-Z0-9]+$/.test(url.pathname)
+
+  if (
+    isMobile &&
+    !skipMobile &&
+    !isAssetPath &&
+    !url.pathname.startsWith('/mobile') &&
+    !url.pathname.startsWith('/api/') &&
+    !url.pathname.startsWith('/auth/') &&
+    !url.pathname.startsWith('/success') &&
+    !url.pathname.startsWith('/login') &&
+    !url.pathname.startsWith('/account') &&
+    !url.pathname.startsWith('/privacy') &&
+    !url.pathname.startsWith('/terms') &&
+    !url.pathname.startsWith('/support')
+  ) {
+    url.pathname = '/mobile'
+    // Preserve UTM params for attribution tracking
+    return NextResponse.redirect(url)
+  }
+
   return modifiedHeaders
     ? NextResponse.next({ request: { headers: modifiedHeaders } })
     : NextResponse.next()

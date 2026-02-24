@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation"
 import { Suspense, useEffect, useState } from "react"
+import { useSession } from "next-auth/react"
 import Link from "next/link"
 import Image from "next/image"
 import { logEvent } from "firebase/analytics"
@@ -102,6 +103,7 @@ async function checkExtensionAuthStatus(): Promise<boolean> {
 
 function SuccessContent() {
   const searchParams = useSearchParams()
+  const { data: authSession } = useSession()
   const installStoreUrl = `/install-extension?${POST_PURCHASE_INSTALL_QUERY}`
   const sessionId = searchParams.get("session_id")
   const [sessionData, setSessionData] = useState<SessionData | null>(null)
@@ -109,8 +111,47 @@ function SuccessContent() {
   const [error, setError] = useState<string | null>(null)
   const [extensionInstalled, setExtensionInstalled] = useState<boolean | null>(null)
   const [extensionConnected, setExtensionConnected] = useState<boolean>(false)
+  const [isMobile] = useState(() =>
+    typeof navigator !== "undefined" &&
+    /Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+  )
+  const [mobileReminderStatus, setMobileReminderStatus] = useState<"idle" | "loading" | "sent">("idle")
+  const [mobileReminderError, setMobileReminderError] = useState<string | null>(null)
+
+  async function sendMobileReminder() {
+    const email = authSession?.user?.email?.trim()
+    if (!email) {
+      setMobileReminderError("Sign in to send the install link.")
+      return
+    }
+
+    setMobileReminderStatus("loading")
+    setMobileReminderError(null)
+    try {
+      const response = await fetch("/api/mobile-reminder", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}))
+        throw new Error(typeof data.message === "string" ? data.message : "Failed to send install link")
+      }
+
+      setMobileReminderStatus("sent")
+    } catch (err) {
+      setMobileReminderStatus("idle")
+      setMobileReminderError(err instanceof Error ? err.message : "Failed to send install link")
+    }
+  }
 
   useEffect(() => {
+    // Skip extension detection on mobile — chrome.runtime doesn't exist
+    if (isMobile) {
+      setExtensionInstalled(false)
+      return
+    }
     // Check extension status on mount
     checkExtensionInstalled().then((installed) => {
       setExtensionInstalled(installed)
@@ -118,7 +159,7 @@ function SuccessContent() {
         checkExtensionAuthStatus().then(setExtensionConnected)
       }
     })
-  }, [])
+  }, [isMobile])
 
   useEffect(() => {
     if (!sessionId) {
@@ -235,8 +276,34 @@ function SuccessContent() {
             You now own <strong>{sessionData.themeName || 'your theme'}</strong> forever.
           </p>
 
-          {/* Extension status - single theme */}
-          {extensionInstalled === false && (
+          {/* Extension status - single theme (mobile) */}
+          {extensionInstalled === false && isMobile && (
+            <div className="bg-teal/10 p-4 rounded-xl border border-teal/30 mb-6">
+              <h3 className="font-semibold text-brown mb-2">Install on Desktop</h3>
+              <p className="text-sm text-brown/70 mb-3">
+                ThemeGPT works on desktop browsers. Open your email on your computer to install it.
+              </p>
+              {mobileReminderStatus === "sent" ? (
+                <p className="text-sm text-teal font-semibold">Install link sent!</p>
+              ) : (
+                <>
+                  <button
+                    onClick={sendMobileReminder}
+                    disabled={mobileReminderStatus === "loading"}
+                    className="inline-block bg-coral text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
+                  >
+                    {mobileReminderStatus === "loading" ? "Sending..." : "Email Me the Install Link"}
+                  </button>
+                  {mobileReminderError && (
+                    <p className="mt-2 text-sm text-red-600">{mobileReminderError}</p>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Extension status - single theme (desktop) */}
+          {extensionInstalled === false && !isMobile && (
             <div className="bg-amber-50 p-4 rounded-xl border border-amber-200 mb-6">
               <h3 className="font-semibold text-amber-700 mb-2">Get the Extension</h3>
               <p className="text-sm text-amber-600 mb-3">
@@ -314,8 +381,41 @@ function SuccessContent() {
             : "Your monthly subscription is now active. Your first month is free!"}
         </p>
 
-        {/* Extension not installed - prominent download CTA */}
-        {extensionInstalled === false && (
+        {/* Extension not installed - mobile-aware CTA */}
+        {extensionInstalled === false && isMobile && (
+          <div className="bg-gradient-to-br from-teal/10 to-coral/10 p-5 rounded-xl border-2 border-teal/30 mb-6">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#5BB5A2" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              <h3 className="font-bold text-brown text-lg">Install on Desktop</h3>
+            </div>
+            <p className="text-sm text-brown/70 mb-4">
+              ThemeGPT is a desktop browser extension. We&apos;ll email you the install link to use on your computer.
+            </p>
+            {mobileReminderStatus === "sent" ? (
+              <p className="text-sm text-teal font-semibold">Install link sent! Check your inbox.</p>
+            ) : (
+              <>
+                <button
+                  onClick={sendMobileReminder}
+                  disabled={mobileReminderStatus === "loading"}
+                  className="inline-flex items-center gap-2 bg-coral text-white px-5 py-2.5 rounded-full font-semibold hover:opacity-90 transition-opacity shadow-md disabled:opacity-50"
+                >
+                  {mobileReminderStatus === "loading" ? "Sending..." : "Email Me the Install Link"}
+                </button>
+                {mobileReminderError && (
+                  <p className="mt-2 text-sm text-red-600">{mobileReminderError}</p>
+                )}
+              </>
+            )}
+          </div>
+        )}
+
+        {/* Extension not installed - desktop CTA */}
+        {extensionInstalled === false && !isMobile && (
           <div className="bg-gradient-to-br from-teal/10 to-coral/10 p-5 rounded-xl border-2 border-teal/30 mb-6">
             <div className="flex items-center justify-center gap-3 mb-3">
               <svg className="w-8 h-8 text-teal" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -11,6 +11,22 @@ import { captureAttributionFromLocation } from "@/lib/attribution"
 import { getStoredAttribution } from "@/lib/attribution"
 
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium).slice(0, 4)
+const MAIN_THEME_GALLERY_HREF = "/?skip_mobile=1#themes"
+const FALLBACK_PREMIUM_SCREENSHOT = "/themes/aurora_borealis_1.webp"
+const PREMIUM_THEME_SCREENSHOT_BY_ID: Record<string, string> = {
+  "aurora-borealis": "/themes/aurora_borealis_1.webp",
+  "sunset-blaze": "/themes/sunset_blaze_1.webp",
+  "electric-dreams": "/themes/electric_dreams_1.webp",
+  "woodland-retreat": "/themes/woodland_retreat_1.webp",
+  "frosted-windowpane": "/themes/frosted_windowpane_1.webp",
+  "silent-night-starfield": "/themes/silent_night_1.webp",
+  "synth-wave": "/themes/synth_wave_1.webp",
+  "shades-of-purple": "/themes/shades_of_purple_1.webp",
+}
+
+function getPremiumThemeScreenshot(themeId: string): string {
+  return PREMIUM_THEME_SCREENSHOT_BY_ID[themeId] ?? FALLBACK_PREMIUM_SCREENSHOT
+}
 
 function MobileContent() {
   const searchParams = useSearchParams()
@@ -168,40 +184,50 @@ function MobileContent() {
         )}
 
         {/* Theme Preview */}
-        <p
-          className="text-[0.75rem] font-semibold uppercase tracking-[0.15em] mb-3"
+        <Link
+          href={MAIN_THEME_GALLERY_HREF}
+          className="block text-[0.75rem] font-semibold uppercase tracking-[0.15em] mb-3 transition-opacity active:opacity-80 hover:opacity-80"
           style={{ color: "#5BB5A2" }}
         >
           Preview Premium Themes
-        </p>
+        </Link>
         <div className="grid grid-cols-2 gap-2 mb-6">
           {PREMIUM_THEMES.map((theme) => (
-            <div
+            <Link
               key={theme.id}
-              className="rounded-lg p-3 text-left"
+              href={MAIN_THEME_GALLERY_HREF}
+              className="group relative block overflow-hidden rounded-lg border text-left"
+              aria-label={`View ${theme.name} in the full theme gallery`}
               style={{
-                background: theme.colors["--cgpt-bg"],
                 border: "1px solid rgba(74, 55, 40, 0.08)",
               }}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={getPremiumThemeScreenshot(theme.id)}
+                alt={`${theme.name} theme preview`}
+                loading="lazy"
+                decoding="async"
+                className="h-24 w-full object-cover transition-transform duration-300 group-active:scale-[0.98] group-hover:scale-[1.03]"
+                style={{ background: theme.colors["--cgpt-bg"] }}
+              />
               <div
-                className="text-[0.7rem] font-semibold mb-1"
-                style={{ color: theme.colors["--cgpt-text"] }}
+                className="absolute inset-x-0 bottom-0 px-2 py-1.5"
+                style={{
+                  background: "linear-gradient(to top, rgba(0,0,0,0.75), rgba(0,0,0,0.2), transparent)",
+                }}
               >
-                {theme.name}
+                <div
+                  className="text-[0.72rem] font-semibold leading-tight"
+                  style={{
+                    color: "#F5F0EB",
+                    textShadow: "0 1px 2px rgba(0,0,0,0.35)",
+                  }}
+                >
+                  {theme.name}
+                </div>
               </div>
-              <div className="flex gap-1">
-                {[theme.colors["--cgpt-accent"], theme.colors["--cgpt-surface"], theme.colors["--cgpt-border"]].map(
-                  (color, i) => (
-                    <div
-                      key={i}
-                      className="w-3 h-3 rounded-full"
-                      style={{ background: color }}
-                    />
-                  )
-                )}
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
 

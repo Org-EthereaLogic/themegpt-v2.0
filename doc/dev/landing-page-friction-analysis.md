@@ -41,3 +41,37 @@ To fix the 100% desktop bounce rate, we must reduce the initial friction and ali
 3. **Clarify the Hero Copy:**
    - Make it immediately obvious that this is a browser extension.
    - Example: "The easiest way to theme ChatGPT. Install the free Chrome extension in seconds."
+
+---
+
+## Evening Update — Feb 23, 2026
+
+### Additional Friction Points Identified (Clarity Session Replays)
+
+Deep analysis of Clarity session recordings revealed three additional friction points beyond the ad-to-message mismatch:
+
+#### 4. Checkout Double-Login Bug (FIXED — commit `9537d36`)
+A user clicked "Start Free Month" → redirected to `/login` → logged in → came back → clicked "Buy Theme" → redirected to `/login` AGAIN → gave up and went to `/support` asking "How do I unlock premium themes?"
+
+**Root cause:** `callbackUrl` was set to `window.location.href` (just `/`), so after OAuth the user returned to the page top, not the pricing section. If the auto-resume POST to `/api/checkout` hit a 401 (server-side session not ready), the error message had no retry action, forcing the user to click the CTA again which triggered another `signIn()` call.
+
+**Fix:** Changed `callbackUrl` to include `#pricing` anchor. Added contextual messaging on `/login` page: "One more step! Sign in to complete your checkout."
+
+#### 5. Extension Auth Race Condition (FIXED — commit `9537d36`)
+A user hit `/auth/extension` for 3 seconds with 0 clicks and left.
+
+**Root cause:** `generateToken` callback captured `extensionDetected` (from `pingExtension` with 2s timeout) in its closure. If the API responded faster than the ping, `extensionDetected` was still `null`, so auto-send was skipped. User landed on confusing manual token copy screen.
+
+**Fix:** Decoupled token generation from extension send. New `useEffect` watches both `token` and `extensionDetected` independently.
+
+#### 6. Reddit Ads — 97% Mobile Spend Waste (NO FIX AVAILABLE)
+Reddit Ads device breakdown: iOS 88 clicks, Android 34 clicks, macOS 1 click, Windows 3 clicks. Only 4 desktop clicks out of 126 total ($115 spend). Reddit Ads has no device exclusion feature at the ad group level — only Feed/Conversations placement controls.
+
+**Status:** Campaign kept running while evaluating pause decision. No platform-level mitigation available.
+
+### Analytics Snapshot (Clarity — Last 3 Days)
+- 50 sessions, 40 unique users, 1.68 pages/session
+- Performance: LCP 3.8s, INP 460ms (desktop likely better — mobile inflates averages)
+- Quick backs: 10% (5 sessions)
+- Google = 49% of traffic, Direct = 28%
+- CWS users: 8 → 22 (+175%)

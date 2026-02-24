@@ -45,7 +45,7 @@
 | 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
 | 2026-02-22 | 32% | Y | FAIL | GA4 API confirmed: 25 total sessions. Unassigned: 8 (32%). Paid channels active: Cross-network 9, Paid Search 5, Paid Social 1. US #1 country (6 users), India absent from top 8 — no India concern this day. checkout_start ×5, pricing_view ×3 confirmed. |
 | 2026-02-23 | 31% (mid) | Y | FAIL | Midday GA4/Clarity snapshot: 26 GA4 sessions / 19 Clarity sessions. Unassigned: 8 sessions (31%). Paid Search (Clarity) up to 16 (+33% over yesterday). 100% bounce from ads continues (0 checkout_start). Critical device inversion observed: Mobile avg duration 21.9s vs PC 0.8s. However, desktop-only targeting is required since the Chrome extension is not usable on mobile. Action: Focus shifts to landing page messaging and conversion friction. Reddit campaign stable at 1 session/day. |
-| 2026-02-24 | | | | |
+| 2026-02-24 (eve) | — | Y | — | Evening analytics review. Clarity 3-day: 50 sessions, 40 unique users. Google = 49% of traffic. CWS users 8→22 (+175%). Full Gate 1 daily pull deferred to morning (GA4 24–48h delay). |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
 | 2026-02-27 | | | | |
@@ -62,7 +62,7 @@
 | 2026-02-21 | N | Y (×3) | N | N | GA4 Data API confirmed. checkout_start firing (3 events). pricing_view firing (2 events). trial_start and purchase_success absent — expected, no completed purchases yet. |
 | 2026-02-22 | N | Y (×5) | N | N | GA4 API confirmed: checkout_start ×5, pricing_view ×3. trial_start and purchase_success absent — no completed purchases this day. checkout_abandon not firing (users may not be returning via canceled param consistently). |
 | 2026-02-23 | N | N | N | N | Midday audit: 0 checkout_start, 0 pricing_view from 26 GA4 sessions. Zero funnel events from paid traffic for the third straight day. Clicks bounce before a single event fires (0.0s avg duration in GA4). Note: the 5 organic checkouts from Feb 21 were canary testing. Funnel is solid, but not being reached by landing page traffic. Stripe portal deployed — self-serve subscription management now live. |
-| 2026-02-24 | | | | | |
+| 2026-02-24 (eve) | N | N | N | N | Evening review: 0 new funnel events from paid traffic. Checkout flow UX fixes deployed (callbackUrl, login context, extension auth race). GA4 daily pull deferred to morning. |
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |
 | 2026-02-27 | | | | | |
@@ -306,6 +306,105 @@ Full payment system audit initiated after receiving 3 abandoned checkout recover
 | `9923844c-fb9b-46e1-af17-081629aec749` | **SUCCESS** | `540f9e7` |
 
 Active Cloud Run revision: **`themegpt-web-00176-5ts`** (100% traffic). Two deploys on Feb 23: `00173-xb7` (commit `b48a056`) → `00176-5ts` (commit `540f9e7`).
+
+---
+
+## Deployment Integrity — Feb 23, 2026 (commit 9537d36)
+
+**Scope:** Checkout UX friction fixes and extension auth race condition resolution.
+
+### Audit Trigger
+
+Clarity session replay analysis revealed:
+1. A user clicked "Start Free Month" → login → "Buy Theme" → login AGAIN → ended on `/support` asking "How do I unlock premium themes?" (double-login bug)
+2. A user hit `/auth/extension` for 3 seconds with 0 clicks (extension auth race condition)
+3. 4 out of 5 Stripe checkout sessions abandoned (`?canceled=true`)
+
+### Root Cause Analysis
+
+| Issue | Root Cause | Fix |
+|---|---|---|
+| Double login redirect | `callbackUrl` was `window.location.href` (just `/`), losing scroll position. If server-side `getServerSession` failed on the auto-resume POST to `/api/checkout` (cookie timing), user saw "Checkout failed: Authentication required" with no retry action. Clicking CTA again triggered `signIn()` a second time. | Changed `callbackUrl` to include `#pricing` anchor. User returns to pricing section after login. |
+| Login page confusion | No context on `/login` about pending checkout. User didn't know their trial would resume after auth. | Added `isCheckoutFlow` detection: shows "One more step!" heading and "Your selection will be waiting for you." copy when arriving from checkout. |
+| Extension auth 3s bounce | `generateToken` captured `extensionDetected` in its `useCallback` closure. If `/api/extension/auth` responded before the 2s `pingExtension` timeout, `extensionDetected` was still `null`, so `sendTokenToExtension` was never called. User landed on confusing manual copy screen. | Decoupled token generation from extension send. New `useEffect` watches both `token` and `extensionDetected` independently — auto-sends once both are ready, regardless of timing. |
+
+### Changes Deployed
+
+| File | Change |
+|---|---|
+| `apps/web/app/page.tsx` | `callbackUrl` now uses `window.location.origin + pathname + "#pricing"` instead of `window.location.href` |
+| `apps/web/app/login/page.tsx` | Added `isCheckoutFlow` detection with contextual heading/copy |
+| `apps/web/app/auth/extension/page.tsx` | Decoupled `generateToken` from `extensionDetected`. New `useEffect` for auto-send. |
+
+### Build & Revision
+
+| Build ID | Status | Commit |
+|---|---|---|
+| `df4378ef-83c8-44cc-ac90-6a434c6d68dc` | **SUCCESS** | `9537d36` |
+
+Build time: 5m 03s. Deployed to Cloud Run production (`themegpt-web`).
+
+---
+
+## Agent Infrastructure — Feb 23, 2026 (commit f6e35a7)
+
+**Scope:** Added 8 specialized agents to `.claude/agents/` and updated CLAUDE.md + AGENTS.md with routing and activation rules.
+
+### Agents Added
+
+**Tier 1 (address current gaps):**
+- `payment-integration` (sonnet) — Stripe checkout, subscriptions, webhooks, trial flows
+- `frontend-security-coder` (opus) — XSS, CSP, OAuth redirects, JWT security
+- `seo-keyword-strategist` (haiku) — Keyword analysis for ChatGPT customization niche
+- `nextjs-developer` (sonnet) — Next.js 16, App Router, performance, Cloud Run deploy
+
+**Tier 2 (growth enablers):**
+- `seo-content-writer` (sonnet) — Landing pages, blog posts, CWS listing copy
+- `deployment-engineer` (sonnet) — Cloud Build, Docker, CWS/Edge store submissions
+- `security-auditor` (opus) — OAuth audit, JWT review, OWASP compliance
+- `content-marketer` (sonnet) — Google Ads copy, Reddit strategy, CWS optimization
+
+### Documentation Updates
+- CLAUDE.md: Added Specialized Agents section with 15-agent roster by category
+- AGENTS.md: Added agent routing table, proactive activation rules, cost-aware model selection, coordination examples
+
+No Cloud Build deployment — docs-only change.
+
+---
+
+## Evening Analytics Snapshot — Feb 23, 2026
+
+**Scope:** Cross-platform analytics review (Google Ads, Clarity, Reddit Ads).
+
+### Google Ads (Feb 21–22)
+- 83 clicks, 1,255 impressions, **6.61% CTR**, $1.45 avg CPC, $120 total spend
+- Top keyword: "custom chatgpt" ($76, 53 clicks, 7.55% CTR)
+- Sleeper keyword: "customizing chatgpt" (22.22% CTR on $5.68 spend)
+- Device: Mobile -100% bid adj already in place, but $108 still leaked to mobile (smart bidding override during learning phase)
+- Structured snippets applied: Styles — Aurora Borealis, Synth Wave, Midnight Dark (+2.7% est. CTR lift)
+
+### Clarity (Last 3 Days)
+- 50 sessions, 40 unique users, 1.68 pages/session, 1.1 min active time
+- 98% new users, 2% returning
+- Quick backs: 10% (5 sessions) — worth monitoring
+- Performance: LCP 3.8s (needs improvement), INP 460ms (needs improvement), CLS 0 (good)
+- Funnel: Marketing→Purchase — 16 sessions entered, 0% conversion
+
+### Reddit Ads (Feb 17–23)
+- $115.31 spend, 37,569 impressions, 126 clicks, $0.92 CPC, 0.335% CTR
+- **Critical finding:** 97% of clicks (122/126) went to mobile (iOS: 88, Android: 34, macOS: 1, Windows: 3)
+- Reddit Ads has no device exclusion feature — platform limitation
+- Only 2 Reddit sessions detected in Clarity (matching ~4 desktop clicks)
+
+### CWS Growth
+- Users grew from 8 to **22** (+175%) over a few days
+
+### Checkout Funnel (Clarity Session Recordings)
+- 5 users reached Stripe checkout in last 7 days
+- 4 returned with `?canceled=true` (abandoned)
+- 1 returned without cancel param but Stripe confirms 0 new subscribers
+- 1 user attempted extension auth flow (3s, 0 clicks — race condition)
+- Session #2 notable: user clicked login twice, ended on support page — fixed in commit 9537d36
 
 ---
 

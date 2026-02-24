@@ -131,6 +131,15 @@ Escalation rule: India share 0% vs US 35% — no escalation. Good signal.
 | Fix trialing→active DB transition (HIGH audit finding) | Eng | Feb 23 | DONE — commit 540f9e7, revision 00176-5ts |
 | Fix single-theme infinite spinner (HIGH audit finding) | Eng | Feb 23 | DONE |
 | Submit EIN/tax ID to Stripe for account verification | Ops | Feb 23 | DONE — review in progress (2–3 days) |
+| Apply Google Ads structured snippets (Styles) | Growth | Feb 23 | DONE — Aurora Borealis, Synth Wave, Midnight Dark |
+| Fix checkout double-login UX (callbackUrl + login context) | Eng | Feb 23 | DONE — commit 9537d36, deployed |
+| Fix extension auth race condition (ping vs token timing) | Eng | Feb 23 | DONE — commit 9537d36, deployed |
+| Investigate Reddit Ads mobile spend waste | Growth | Feb 23 | DONE — 97% mobile, no platform fix available |
+| Evaluate Reddit Ads pause decision | Growth | Feb 24 | OPEN — keeping running while evaluating |
+| Add 8 specialized agents to .claude/agents/ | Eng | Feb 23 | DONE — commit f6e35a7 |
+| Update CLAUDE.md + AGENTS.md with agent routing | Eng | Feb 23 | DONE — commit f6e35a7 |
+| Monitor post-fix checkout completion rate | Growth | Feb 24+ | OPEN |
+| Test extension auth flow end-to-end in production | QA | Feb 24 | OPEN |
 
 ---
 
@@ -138,5 +147,6 @@ Escalation rule: India share 0% vs US 35% — no escalation. Good signal.
 
 - **What improved this week:** First live trial conversion on Feb 22 (`adrielletherat@gmail.com` — Monthly Trial). Root cause of 18 checkouts / 0 conversions resolved (`payment_method_collection: 'if_required'`). Full payment system audit completed — 3 conversion blockers patched (infinite spinner for single-theme buyers, `trialing→active` DB sync gap, `session.customer` null cast). Abandoned checkout recovery pipeline confirmed live via 3 received recovery emails. Stripe Customer Portal shipped and live-tested end-to-end with real subscriber. `allow_promotion_codes: true` added to checkout. Google Ads and Reddit Ads pivoted to desktop-only targeting. Reddit campaign launched at $50/day for $500 credit promo. EIN/tax ID submitted to Stripe. Two deploys: revisions `00173-xb7` and `00176-5ts`.
 - **What regressed this week:** Gate 1 (unassigned traffic) FAIL for 3 consecutive days. Paid ad traffic generating 0 funnel events (day 3) — 100% bounce. Device engagement inversion: mobile traffic averaged 21.9s vs PC 0.8s on Clarity. Desktop targeting shift is intentional (extension not usable on mobile), but emphasizes the poor PC performance. GA4 events missing for known conversion (consent gap).
-- **Biggest unknown:** What is causing desktop users to exit the landing page before converting. The ad-to-landing-page messaging might be a factor, or there may be other undiscovered friction points on the page.
-- **Next week action:** Investigate landing page friction factors. Address the message match for the search campaign to prevent immediate bouncing. Pull Google Ads spend manually to verify guardrails.
+- **Evening session (Feb 23):** Deep Clarity session replay analysis identified three UX friction points: (1) checkout double-login caused by `callbackUrl` losing scroll position + silent 401 on auto-resume, (2) login page giving no context about pending checkout, (3) extension auth race condition where fast API beat 2s ping timeout. All three fixed and deployed (commit `9537d36`, build `df4378ef`). Google Ads structured snippets applied (Styles: Aurora Borealis, Synth Wave, Midnight Dark). Reddit Ads investigation revealed 97% mobile spend waste ($112/$115) with no platform-level device exclusion available. 8 specialized agents added to `.claude/agents/` with routing rules in CLAUDE.md and AGENTS.md.
+- **Biggest unknown:** Whether the checkout UX fixes will reduce the double-login friction and improve checkout completion rate. Reddit Ads ROI remains questionable given inability to target desktop-only.
+- **Next week action:** Monitor checkout completion rate post-UX-fix. Evaluate Reddit Ads pause/continue decision based on desktop conversion data. Pull Google Ads spend manually for guardrail verification. Test extension auth flow end-to-end to confirm race condition fix works in production.

@@ -42,6 +42,10 @@
 - [x] Launch Reddit paid campaign with distinct UTM campaign name (`reddit_launch_v1`, $50/day — approved exception for $500 ad credit, published Feb 21).
 - [x] Publish week-1 social posts — Twitter/X (@ThemeGPT) + LinkedIn published Feb 22, 2026 with Aurora Borealis GIF and `launch_week_v1` UTM campaign.
 - [ ] Ensure every outbound campaign URL uses unique `utm_source`, `utm_medium`, `utm_campaign`.
+- [x] Apply structured snippets to Google Ads (Styles: Aurora Borealis, Synth Wave, Midnight Dark) — Feb 23, 2026.
+- [x] Investigate Reddit Ads mobile waste — confirmed 97% of spend going to iOS/Android with no platform-level device exclusion. Decision pending on pause/continue.
+- [x] Fix checkout double-login friction (callbackUrl #pricing anchor + login page context messaging) — commit `9537d36`, deployed Feb 23.
+- [x] Fix extension auth race condition (decoupled token generation from ping timeout) — commit `9537d36`, deployed Feb 23.
 
 ---
 

@@ -11,6 +11,8 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 
 ---
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ab47f04628b54fd8a67c2f6261135582)](https://app.codacy.com/gh/Org-EthereaLogic/themegpt-v2.0?utm_source=github.com&utm_medium=referral&utm_content=Org-EthereaLogic/themegpt-v2.0&utm_campaign=Badge_Grade)
+
 ## Get ThemeGPT
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share)**

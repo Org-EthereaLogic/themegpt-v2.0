@@ -124,8 +124,12 @@ export function Hero() {
       </div>
 
       {/* Video Demo - Hidden on mobile, shown on desktop */}
-      <div
-        className="relative hidden lg:block rounded-xl overflow-hidden shadow-2xl border border-white/10"
+      <a
+        href="https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Get ThemeGPT on the Chrome Web Store"
+        className="group relative hidden lg:block rounded-xl overflow-hidden shadow-2xl border border-white/10 transition-transform duration-300 hover:scale-[1.02]"
         style={{ animation: "slideInRight 0.8s ease-out 0.2s both" }}
       >
         {/* Browser Mockup Top Bar */}
@@ -149,7 +153,17 @@ export function Hero() {
           <source src="/media/demo-30s.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-      </div>
+
+        {/* Hover Overlay Hint */}
+        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="bg-[#E8A87C] text-white px-6 py-3 rounded-full font-semibold shadow-lg flex items-center gap-2">
+            Get it on Chrome
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </span>
+        </div>
+      </a>
     </section>
   );
 }

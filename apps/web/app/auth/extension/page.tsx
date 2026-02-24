@@ -1,9 +1,10 @@
 "use client"
 
 import { useSession, signIn } from "next-auth/react"
-import { useEffect, useState, useCallback } from "react"
+import { useEffect, useState, useCallback, type FormEvent } from "react"
 import Image from "next/image"
 import Link from "next/link"
+import { trackFunnelEvent } from "@/lib/funnel-events"
 import {
   getClientExtensionBrowser,
   getExtensionIdsForBrowser
@@ -103,6 +104,84 @@ async function sendTokenToExtension(token: string): Promise<boolean> {
   })
 }
 
+function TokenSentSuccess({ email }: { email: string }) {
+  const [startingTrial, setStartingTrial] = useState(false)
+  const [trialError, setTrialError] = useState<string | null>(null)
+
+  useEffect(() => {
+    trackFunnelEvent("account_connected", { source: "extension_auth" })
+  }, [])
+
+  async function handleStartTrial() {
+    setStartingTrial(true)
+    setTrialError(null)
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ type: "monthly" }),
+      })
+      const data = await res.json()
+      if (data.success && data.checkoutUrl) {
+        trackFunnelEvent("trial_started", { source: "post_auth_prompt" })
+        window.location.href = data.checkoutUrl
+      } else if (data.alreadySubscribed) {
+        setTrialError("You already have an active subscription.")
+      } else {
+        setTrialError(data.message || "Failed to start trial")
+      }
+    } catch {
+      setTrialError("Failed to connect. Please try again.")
+    } finally {
+      setStartingTrial(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-cream font-sans text-brown-900 flex flex-col items-center justify-center p-8">
+      <div className="bg-white p-8 rounded-[30px] shadow-[0_8px_32px_rgba(75,46,30,0.1)] max-w-md w-full text-center">
+        <div className="mb-6 flex justify-center">
+          <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center">
+            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+          </div>
+        </div>
+
+        <h1 className="text-2xl font-bold mb-2 text-teal-600">Extension Connected!</h1>
+        <p className="text-sm opacity-70 mb-4">
+          Signed in as <strong>{email}</strong>
+        </p>
+
+        {/* Trial offer */}
+        <div className="bg-cream p-5 rounded-xl border border-brown-900/10 mb-6">
+          <h2 className="font-bold text-lg mb-1">Start your free 30-day trial?</h2>
+          <p className="text-sm opacity-70 mb-4">
+            Unlock all 8 animated premium themes. No credit card required.
+          </p>
+          <button
+            onClick={handleStartTrial}
+            disabled={startingTrial}
+            className="w-full py-3 rounded-xl font-semibold bg-coral text-brown-900 hover:bg-coral/90 transition-colors disabled:opacity-50"
+          >
+            {startingTrial ? "Loading..." : "Start Free Trial"}
+          </button>
+          {trialError && (
+            <p className="text-xs text-red-600 mt-2">{trialError}</p>
+          )}
+        </div>
+
+        <button
+          onClick={() => window.close()}
+          className="w-full py-3 rounded-xl font-semibold border border-brown-900/20 text-brown-900/70 hover:bg-cream transition-colors"
+        >
+          Maybe Later
+        </button>
+      </div>
+    </div>
+  )
+}
+
 export default function ExtensionAuthPage() {
   const { data: session, status } = useSession()
   const installStoreUrl = `/install-extension?${EXTENSION_AUTH_INSTALL_QUERY}`
@@ -112,6 +191,37 @@ export default function ExtensionAuthPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [extensionDetected, setExtensionDetected] = useState<boolean | null>(null)
   const [tokenSent, setTokenSent] = useState(false)
+  const [magicLinkEmail, setMagicLinkEmail] = useState("")
+  const [magicLinkSending, setMagicLinkSending] = useState(false)
+  const [magicLinkSent, setMagicLinkSent] = useState(false)
+  const [magicLinkError, setMagicLinkError] = useState<string | null>(null)
+
+  async function handleMagicLinkSubmit(e: FormEvent) {
+    e.preventDefault()
+    if (!magicLinkEmail.trim()) return
+    setMagicLinkSending(true)
+    setMagicLinkError(null)
+    try {
+      const res = await fetch("/api/auth/magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: magicLinkEmail.trim(),
+          callbackUrl: "/auth/extension",
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setMagicLinkSent(true)
+      } else {
+        setMagicLinkError(data.message || "Failed to send link")
+      }
+    } catch {
+      setMagicLinkError("Failed to send link")
+    } finally {
+      setMagicLinkSending(false)
+    }
+  }
 
   // Check for extension on mount
   useEffect(() => {
@@ -268,6 +378,42 @@ export default function ExtensionAuthPage() {
               </svg>
               <span className="font-medium">Continue with GitHub</span>
             </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3">
+              <div className="flex-1 h-px bg-brown-900/10" />
+              <span className="text-xs text-brown-900/40">or</span>
+              <div className="flex-1 h-px bg-brown-900/10" />
+            </div>
+
+            {/* Email Magic Link */}
+            {magicLinkSent ? (
+              <div className="p-4 bg-teal-50 rounded-xl border border-teal-200 text-sm text-teal-700">
+                Check your email for a sign-in link. It expires in 15 minutes.
+              </div>
+            ) : (
+              <form onSubmit={handleMagicLinkSubmit} className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="you@example.com"
+                  value={magicLinkEmail}
+                  onChange={(e) => setMagicLinkEmail(e.target.value)}
+                  required
+                  aria-label="Email address"
+                  className="flex-1 py-3 px-4 border border-brown-900/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-teal-400 bg-white"
+                />
+                <button
+                  type="submit"
+                  disabled={magicLinkSending}
+                  className="py-3 px-4 bg-teal-500 text-white rounded-xl text-sm font-medium hover:bg-teal-600 transition-colors disabled:opacity-50 whitespace-nowrap"
+                >
+                  {magicLinkSending ? "Sending..." : "Send Link"}
+                </button>
+              </form>
+            )}
+            {magicLinkError && (
+              <p className="text-xs text-red-600">{magicLinkError}</p>
+            )}
           </div>
 
           <p className="text-xs text-brown-900/50 mt-6">
@@ -301,35 +447,9 @@ export default function ExtensionAuthPage() {
   // Successfully sent token to extension
   if (tokenSent) {
     return (
-      <div className="min-h-screen bg-cream font-sans text-brown-900 flex flex-col items-center justify-center p-8">
-        <div className="bg-white p-8 rounded-[30px] shadow-[0_8px_32px_rgba(75,46,30,0.1)] max-w-md w-full text-center">
-          <div className="mb-6 flex justify-center">
-            <div className="w-16 h-16 bg-teal-500 rounded-full flex items-center justify-center">
-              <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </div>
-          </div>
-
-          <h1 className="text-2xl font-bold mb-2 text-teal-600">Extension Connected!</h1>
-          <p className="text-sm opacity-70 mb-6">
-            Signed in as <strong>{session.user?.email}</strong>
-          </p>
-
-          <div className="bg-teal-50 p-4 rounded-xl border border-teal-200 mb-6">
-            <p className="text-sm text-teal-700">
-              Your extension is now connected to your account. You can close this page and start using ThemeGPT!
-            </p>
-          </div>
-
-          <button
-            onClick={() => window.close()}
-            className="w-full py-3 rounded-xl font-semibold bg-brown-900 text-white hover:bg-brown-900/90 transition-colors"
-          >
-            Close This Page
-          </button>
-        </div>
-      </div>
+      <TokenSentSuccess
+        email={session.user?.email ?? ""}
+      />
     )
   }
 

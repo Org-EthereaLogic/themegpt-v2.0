@@ -1,6 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { db as firestore } from "./firebase-admin";
 
 // In-memory log ring buffer for diagnostics (readable via /api/health)
@@ -81,6 +82,48 @@ export const authOptions: NextAuthOptions = {
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
     }),
+    CredentialsProvider({
+      id: "email",
+      name: "Email",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        token: { label: "Token", type: "text" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.token) return null;
+        const normalizedEmail = credentials.email.toLowerCase().trim();
+
+        const tokenDoc = await firestore
+          .collection("verificationTokens")
+          .doc(credentials.token)
+          .get();
+
+        if (!tokenDoc.exists) return null;
+
+        const data = tokenDoc.data();
+        if (!data) return null;
+
+        // Check expiry
+        const expiresAt = data.expiresAt?.toDate?.() ?? new Date(data.expiresAt);
+        if (expiresAt < new Date()) {
+          await tokenDoc.ref.delete();
+          return null;
+        }
+
+        // Check email match
+        if (data.email !== normalizedEmail) return null;
+
+        // Token valid — delete it (single use)
+        await tokenDoc.ref.delete();
+
+        return {
+          id: normalizedEmail,
+          email: normalizedEmail,
+          name: null,
+          image: null,
+        };
+      },
+    }),
   ],
   session: {
     strategy: "jwt",
@@ -104,7 +147,7 @@ export const authOptions: NextAuthOptions = {
           await newUserRef.set({
             email: user.email,
             provider: account.provider,
-            providerId: account.providerAccountId,
+            providerId: account.providerAccountId || user.email,
             name: user.name || null,
             image: user.image || null,
             createdAt: new Date(),

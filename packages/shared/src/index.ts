@@ -461,7 +461,7 @@ export type SubscriptionStatus = 'active' | 'trialing' | 'canceled' | 'past_due'
 
 export interface User {
   email: string;
-  provider: 'google' | 'github';
+  provider: 'google' | 'github' | 'email';
   providerId: string;
   name?: string | null;
   image?: string | null;

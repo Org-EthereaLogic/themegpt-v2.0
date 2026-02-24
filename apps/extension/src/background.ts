@@ -6,8 +6,18 @@
  */
 
 import { Storage } from "@plasmohq/storage"
+import { API_BASE_URL } from "@themegpt/shared"
 
 const storage = new Storage({ area: "local" })
+
+// Open welcome page on first install
+chrome.runtime.onInstalled.addListener((details) => {
+  if (details.reason === "install") {
+    chrome.tabs.create({
+      url: `${API_BASE_URL}/welcome?utm_source=extension&utm_medium=oninstall`
+    })
+  }
+})
 
 // Handle external messages from themegpt.ai
 chrome.runtime.onMessageExternal.addListener(

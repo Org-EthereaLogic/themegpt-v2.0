@@ -26,17 +26,34 @@ interface SessionData {
   hasLicense?: boolean
   message?: string
   subscriptionStatus?: string
+  value?: number
+  currency?: string
 }
 
-function trackGoogleAdsConversion(sessionId: string) {
+function trackGoogleAdsConversion(sessionId: string, value?: number, currency?: string) {
   if (typeof window === "undefined") return
   if (localStorage.getItem("themegpt_analytics_consent") !== "accepted") return
 
   const browserWindow = window as Window & { gtag?: (...args: unknown[]) => void }
   if (typeof browserWindow.gtag !== "function") return
+
+  // 1. Google Ads Conversion
   browserWindow.gtag("event", "conversion", {
     send_to: GOOGLE_ADS_CONVERSION_SEND_TO,
     transaction_id: sessionId,
+    value,
+    currency,
+  })
+
+  // 2. GA4 Standard Purchase Event
+  browserWindow.gtag("event", "purchase", {
+    transaction_id: sessionId,
+    value,
+    currency,
+    items: [{
+      item_id: sessionId,
+      item_name: "ThemeGPT Subscription/License",
+    }]
   })
 }
 
@@ -201,7 +218,7 @@ function SuccessContent() {
               }
             }
             if (sessionId) {
-              trackGoogleAdsConversion(sessionId)
+              trackGoogleAdsConversion(sessionId, data.value, data.currency)
             }
             sessionStorage.setItem(trackingKey, "1");
           }

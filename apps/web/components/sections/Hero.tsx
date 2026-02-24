@@ -147,6 +147,7 @@ export function Hero() {
           loop
           muted
           playsInline
+          preload="none"
           className="w-full h-auto object-cover bg-black"
         >
           <source src="/media/demo-30s.mp4" type="video/mp4" />

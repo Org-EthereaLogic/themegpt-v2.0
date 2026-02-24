@@ -47,6 +47,8 @@ export async function GET(request: Request) {
           planType,
           isLifetime,
           subscriptionStatus: subscription.status,
+          value: (session.amount_total || 0) / 100,
+          currency: session.currency || "USD",
         });
       }
     }
@@ -61,6 +63,8 @@ export async function GET(request: Request) {
           planType: "single",
           themeId: session.metadata?.themeId,
           themeName: session.metadata?.themeName,
+          value: (session.amount_total || 0) / 100,
+          currency: session.currency || "USD",
         });
       }
     }

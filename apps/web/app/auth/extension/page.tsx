@@ -172,7 +172,12 @@ function TokenSentSuccess({ email }: { email: string }) {
         </div>
 
         <button
-          onClick={() => window.close()}
+          onClick={() => {
+            // window.close() only works on tabs opened via window.open()
+            // Fall back to navigating to homepage if close fails
+            window.close()
+            window.location.href = "/"
+          }}
           className="w-full py-3 rounded-xl font-semibold border border-brown-900/20 text-brown-900/70 hover:bg-cream transition-colors"
         >
           Maybe Later

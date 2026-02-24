@@ -73,8 +73,8 @@ export function Hero() {
             animation: "slideInLeft 0.6s ease-out 0.2s both",
           }}
         >
-          Beautiful themes that match your personality. Transform your ChatGPT
-          interface with one click—no tech skills needed.
+          Choose from 15 ChatGPT themes — including dark mode, animated aurora
+          effects, and more. Customize your ChatGPT interface with one click.
         </p>
 
         {/* Buttons */}

@@ -24,23 +24,23 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://themegpt.ai"),
-  title: "ThemeGPT - Custom Themes for ChatGPT",
-  description: "Personalize your ChatGPT experience with beautiful, one-click themes. No coding required.",
+  title: "ChatGPT Themes & Dark Mode — ThemeGPT",
+  description: "Customize ChatGPT with 15 handcrafted themes — including dark mode and animated effects. Free Chrome extension, one-click install.",
   manifest: "/site.webmanifest",
   icons: {
     icon: "/favicon.ico",
     apple: "/apple-touch-icon.png",
   },
   openGraph: {
-    title: "ThemeGPT - Custom Themes for ChatGPT",
-    description: "Personalize your ChatGPT experience with beautiful, one-click themes. No coding required.",
+    title: "Give ChatGPT a Dark Mode (and 14 Other Themes) — ThemeGPT",
+    description: "Customize ChatGPT with 15 handcrafted themes — including dark mode and animated effects. Free Chrome extension, one-click install.",
     images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ThemeGPT - Custom Themes for ChatGPT",
-    description: "Personalize your ChatGPT experience with beautiful, one-click themes. No coding required.",
+    title: "Give ChatGPT a Dark Mode (and 14 Other Themes) — ThemeGPT",
+    description: "Customize ChatGPT with 15 handcrafted themes — including dark mode and animated effects. Free Chrome extension, one-click install.",
     images: ["/twitter-card.png"],
   },
 };

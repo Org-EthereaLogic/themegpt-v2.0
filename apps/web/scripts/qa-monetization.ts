@@ -91,7 +91,7 @@ async function runQA() {
         const converted = await db.convertToLifetime(TEST_SUB_ID);
         if (converted) {
             console.log("✅ PASS: convertToLifetime returned true.");
-            const sub = await db.getSubscriptionByStripeId('sub_test123'); // Helper uses stripe ID
+            await db.getSubscriptionByStripeId('sub_test123'); // Helper uses stripe ID
             // Or get by stored ID since we know it
             const subDoc = await firestore.collection('subscriptions').doc(TEST_SUB_ID).get();
             const subData = subDoc.data();

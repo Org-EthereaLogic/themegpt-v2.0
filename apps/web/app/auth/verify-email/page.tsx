@@ -1,7 +1,7 @@
 "use client"
 
 import { useSearchParams } from "next/navigation"
-import { useEffect, useState, Suspense } from "react"
+import { useEffect, Suspense } from "react"
 import { signIn } from "next-auth/react"
 import Image from "next/image"
 
@@ -10,21 +10,21 @@ function VerifyEmailContent() {
   const token = searchParams.get("token")
   const email = searchParams.get("email")
   const callbackUrl = searchParams.get("callbackUrl") || "/auth/extension"
-  const [status, setStatus] = useState<"verifying" | "error">("verifying")
+  const hasRequiredParams = Boolean(token && email)
+  const status: "verifying" | "error" = hasRequiredParams ? "verifying" : "error"
 
   useEffect(() => {
-    if (!token || !email) {
-      setStatus("error")
+    if (!hasRequiredParams) {
       return
     }
 
     signIn("email", {
-      email,
-      token,
+      email: email!,
+      token: token!,
       callbackUrl,
       redirect: true,
     })
-  }, [token, email, callbackUrl])
+  }, [hasRequiredParams, email, token, callbackUrl])
 
   return (
     <div className="min-h-screen bg-cream font-sans text-brown flex flex-col items-center justify-center p-8">

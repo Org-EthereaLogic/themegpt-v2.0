@@ -1,7 +1,6 @@
 "use client";
 
 import { OrganicBlob } from "@/components/ui/OrganicBlob";
-import { FloatingCard } from "@/components/ui/FloatingCard";
 import { useRipple, RippleContainer } from "@/components/ui/ButtonRipple";
 
 export function Hero() {
@@ -96,7 +95,7 @@ export function Hero() {
             onClick={createRipple}
           >
             <RippleContainer ripples={ripples} />
-            Add to Chrome — It's Free
+            Add to Chrome — It&apos;s Free
             <svg
               width="16"
               height="16"

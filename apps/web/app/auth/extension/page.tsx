@@ -238,12 +238,6 @@ export default function ExtensionAuthPage() {
 
       if (data.success) {
         setToken(data.token)
-
-        // Try to send token directly to extension
-        if (extensionDetected) {
-          const sent = await sendTokenToExtension(data.token)
-          setTokenSent(sent)
-        }
       } else {
         setError(data.message || "Failed to generate token")
       }
@@ -252,13 +246,20 @@ export default function ExtensionAuthPage() {
     } finally {
       setIsGenerating(false)
     }
-  }, [extensionDetected])
+  }, [])
 
   useEffect(() => {
     if (session?.user && !token && !isGenerating) {
       generateToken()
     }
   }, [session, token, isGenerating, generateToken])
+
+  // Auto-send token to extension once both token and ping result are ready
+  useEffect(() => {
+    if (token && extensionDetected && !tokenSent) {
+      sendTokenToExtension(token).then(setTokenSent)
+    }
+  }, [token, extensionDetected, tokenSent])
 
   async function handleCopy() {
     if (!token) return

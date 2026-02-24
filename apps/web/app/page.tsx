@@ -32,7 +32,9 @@ export default function Home() {
     // Enforce login before checkout; persist intent so purchase resumes immediately after auth.
     if (!session) {
       window.sessionStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify({ type, themeId }));
-      signIn(undefined, { callbackUrl: window.location.href });
+      // Include #pricing anchor so user returns to the pricing section after login
+      const callbackUrl = window.location.origin + window.location.pathname + "#pricing";
+      signIn(undefined, { callbackUrl });
       return;
     }
 

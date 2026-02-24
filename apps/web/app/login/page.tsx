@@ -36,6 +36,7 @@ function LoginContent() {
   const callbackUrl = searchParams.get("callbackUrl") || "/account";
   const error = searchParams.get("error");
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
+  const isCheckoutFlow = callbackUrl.includes("#pricing");
 
   const handleSignIn = async (provider: "google" | "github") => {
     setLoadingProvider(provider);
@@ -48,10 +49,12 @@ function LoginContent() {
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-[#4B2E1E] mb-2">
-            Sign in to ThemeGPT
+            {isCheckoutFlow ? "One more step!" : "Sign in to ThemeGPT"}
           </h1>
           <p className="text-[#7D5A4A]">
-            Access your account to manage subscriptions and download themes
+            {isCheckoutFlow
+              ? "Sign in to complete your checkout. Your selection will be waiting for you."
+              : "Access your account to manage subscriptions and download themes"}
           </p>
         </div>
 

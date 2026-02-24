@@ -146,6 +146,64 @@ PR descriptions should include:
 - No telemetry in the extension
 - Sanitize any user input before display
 
+## Specialized Agent Roster
+
+ThemeGPT maintains 15 specialized agents in `.claude/agents/`. Engage them proactively when tasks match their domain — don't wait to be asked.
+
+### Agent Routing: When to Activate Which Agent
+
+| Task Domain | Primary Agent | Support Agent |
+|-------------|--------------|---------------|
+| Stripe checkout, subscriptions, webhooks | `payment-integration` | `security-auditor` |
+| OAuth, JWT, redirect validation | `frontend-security-coder` | `security-auditor` |
+| Next.js pages, App Router, SSR | `nextjs-developer` | `typescript-expert` |
+| API routes, server-side logic | `nodejs-expert` | `typescript-expert` |
+| Keyword research, content optimization | `seo-keyword-strategist` | `seo-content-writer` |
+| Landing pages, CWS listing, blog posts | `seo-content-writer` | `content-marketer` |
+| Google Ads copy, Reddit strategy | `content-marketer` | `seo-keyword-strategist` |
+| Cloud Build, Docker, Cloud Run deploy | `deployment-engineer` | `bash-expert` |
+| Security audit, OWASP review | `security-auditor` | `frontend-security-coder` |
+| Theme creation, preview testing | `theme-designer` | `ux-delight-specialist` |
+| UI polish, micro-interactions | `ux-delight-specialist` | `nextjs-developer` |
+| Shell scripts, CI automation | `bash-expert` | `deployment-engineer` |
+| Technical documentation | `tech-docs-specialist` | — |
+| Workspace cleanup | `cleanup_workspace` | — |
+
+### Proactive Activation Rules
+
+These agents should be engaged **automatically** (without user request) when their domain is touched:
+
+1. **`payment-integration`** — Any change to `/api/checkout`, `/api/webhooks/stripe`, or Stripe-related code
+2. **`frontend-security-coder`** — Any change to auth flows, redirect handling, token storage, or CSP
+3. **`security-auditor`** — Any new API endpoint, auth change, or sensitive data handling
+4. **`seo-keyword-strategist`** — Any content change to public-facing pages (homepage, pricing, CWS listing)
+5. **`deployment-engineer`** — Any change to `cloudbuild.yaml`, `Dockerfile`, or deployment workflows
+
+### Cost-Aware Model Selection
+
+| Model | Cost | Use For |
+|-------|------|---------|
+| `haiku` | Lowest | Quick analysis: keyword checks, density calculations |
+| `sonnet` | Medium | Implementation: code generation, content writing, deployments |
+| `opus` | Highest | Critical reviews: security audits, complex architectural decisions |
+
+### Agent Coordination Example
+
+When implementing a new pricing tier:
+1. `payment-integration` — Implement Stripe checkout session for new tier
+2. `frontend-security-coder` — Review checkout URL validation and auth flow
+3. `nextjs-developer` — Build the pricing UI component
+4. `seo-keyword-strategist` — Optimize pricing page content for search
+5. `content-marketer` — Write ad copy for the new tier
+6. `deployment-engineer` — Deploy and validate
+
+### Important: Agents Are Subject to Complexity Rules
+
+Agent suggestions must still pass the **Complexity Gate**:
+- An agent recommending an enterprise pattern for a simple feature should be overridden
+- Agent output is a starting point, not final — apply the same simplicity-first review as human-written code
+- If an agent suggests > 200 lines for a feature, pause and reassess per the Complexity Budget
+
 ## Key Resources
 
 | Resource | Purpose |
@@ -153,4 +211,4 @@ PR descriptions should include:
 | `CONSTITUTION.md` | Philosophical principles |
 | `DIRECTIVES.md` | Enforcement rules |
 | `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md` | Historical lessons (required reading) |
-| `.claude/agents/*.md` | Specialized agent definitions |
+| `.claude/agents/*.md` | Specialized agent definitions (15 agents) |

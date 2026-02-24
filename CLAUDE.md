@@ -109,6 +109,50 @@ pnpm lint       # Lint code
 - **Weekly snapshot**: Use the latest scorecard in `doc/dev/` (for example: `doc/dev/weekly-split-scorecard-2026-02-26.md`)
 - **Rule**: Treat tracking docs as source of truth; do not duplicate dated status in this file
 
+## Specialized Agents
+
+ThemeGPT has 15 specialized agents in `.claude/agents/`. Use them proactively when tasks match their domain.
+
+### Development Agents
+| Agent | Model | When to Use |
+|-------|-------|-------------|
+| `typescript-expert` | — | Writing/reviewing TypeScript, complex type definitions |
+| `nodejs-expert` | — | Node.js server code, API routes, async patterns |
+| `nextjs-developer` | sonnet | Next.js App Router, performance (LCP/INP), SSR, SEO metadata |
+| `bash-expert` | — | Shell scripts, CI/CD automation, deployment scripts |
+
+### Security & Payments
+| Agent | Model | When to Use |
+|-------|-------|-------------|
+| `payment-integration` | sonnet | Stripe checkout, subscriptions, webhooks, trial flows |
+| `frontend-security-coder` | opus | XSS prevention, CSP, OAuth redirect validation, JWT security |
+| `security-auditor` | opus | Security audits, OWASP compliance, auth flow reviews |
+
+### Marketing & SEO
+| Agent | Model | When to Use |
+|-------|-------|-------------|
+| `seo-keyword-strategist` | haiku | Keyword analysis, density checks, LSI keywords for ChatGPT niche |
+| `seo-content-writer` | sonnet | Landing pages, blog posts, CWS listing copy |
+| `content-marketer` | sonnet | Google Ads copy, Reddit strategy, CWS optimization, email campaigns |
+
+### Design & UX
+| Agent | Model | When to Use |
+|-------|-------|-------------|
+| `theme-designer` | — | Creating/modifying ThemeGPT themes via browser automation |
+| `ux-delight-specialist` | — | Micro-interactions, hover effects, loading states, celebrations |
+
+### Operations
+| Agent | Model | When to Use |
+|-------|-------|-------------|
+| `deployment-engineer` | sonnet | Cloud Build, Docker, Cloud Run, CWS/Edge store submissions |
+| `tech-docs-specialist` | — | API docs, README files, user guides, technical writing |
+| `cleanup_workspace` | — | Removing build artifacts, cleaning caches, organizing files |
+
+### Agent Usage Rules
+- **Proactive activation**: Security, payment, and SEO agents should be engaged automatically when touching their domains
+- **Cost awareness**: Use `haiku` agents for lightweight analysis; reserve `opus` for security-critical reviews
+- **Simplicity check**: Agent recommendations are still subject to the Complexity Budget — don't over-engineer because an agent suggested it
+
 ## Key Resources
 
 | Resource | Purpose |
@@ -117,7 +161,7 @@ pnpm lint       # Lint code
 | `DIRECTIVES.md` | Enforcement rules for AI coding agents |
 | `AGENTS.md` | Operational procedures and guidelines |
 | `doc/guard/SYNTHAI_PROJECT_ARCHAEOLOGY.md` | **Required reading** — Historical lessons on avoiding over-engineering |
-| `.claude/agents/*.md` | Specialized agent definitions |
+| `.claude/agents/*.md` | Specialized agent definitions (15 agents) |
 
 ## Complexity Gate
 

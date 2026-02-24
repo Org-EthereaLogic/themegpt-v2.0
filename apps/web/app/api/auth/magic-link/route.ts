@@ -24,8 +24,16 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Basic email format validation
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    // Basic email format validation (linear-time, avoids ReDoS)
+    const atIdx = email.indexOf("@")
+    const domainPart = atIdx > 0 ? email.slice(atIdx + 1) : ""
+    const dotIdx = domainPart.lastIndexOf(".")
+    if (
+      atIdx <= 0 ||
+      email.lastIndexOf("@") !== atIdx ||
+      dotIdx <= 0 ||
+      dotIdx === domainPart.length - 1
+    ) {
       return NextResponse.json(
         { success: false, message: "Invalid email format" },
         { status: 400 }

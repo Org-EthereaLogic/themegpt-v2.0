@@ -36,12 +36,42 @@ function LoginContent() {
   const callbackUrl = searchParams.get("callbackUrl") || "/account";
   const error = searchParams.get("error");
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [emailError, setEmailError] = useState<string | null>(null);
   const isCheckoutFlow = callbackUrl.includes("#pricing");
 
   const handleSignIn = async (provider: "google" | "github") => {
     setLoadingProvider(provider);
     await signIn(provider, { callbackUrl });
-    // Note: signIn redirects, so state reset is not needed
+  };
+
+  const handleEmailSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const trimmed = email.trim();
+    if (!trimmed) return;
+
+    setEmailStatus("sending");
+    setEmailError(null);
+
+    try {
+      const res = await fetch("/api/auth/magic-link", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed, callbackUrl }),
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        setEmailStatus("sent");
+      } else {
+        setEmailStatus("error");
+        setEmailError(data.message || "Failed to send sign-in link");
+      }
+    } catch {
+      setEmailStatus("error");
+      setEmailError("Failed to send sign-in link. Please try again.");
+    }
   };
 
   return (
@@ -117,6 +147,59 @@ function LoginContent() {
               {loadingProvider === "github" ? "Signing in..." : "Continue with GitHub"}
             </span>
           </button>
+
+          {/* Divider */}
+          <div className="relative py-2">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-[#E5DDD5]" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-3 text-[#7D5A4A]">or</span>
+            </div>
+          </div>
+
+          {/* Email sign-in */}
+          {emailStatus === "sent" ? (
+            <div className="text-center py-3">
+              <p className="text-[#5BB5A2] font-semibold mb-1">Check your email</p>
+              <p className="text-sm text-[#7D5A4A]">
+                We sent a sign-in link to <strong>{email}</strong>
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleEmailSignIn} className="space-y-3">
+              <label htmlFor="email-input" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email-input"
+                type="email"
+                required
+                placeholder="your@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={emailStatus === "sending"}
+                className="w-full px-4 py-3 border border-[#E5DDD5] rounded-lg text-[#4B2E1E] placeholder-[#B5A89E] focus:outline-none focus:ring-2 focus:ring-[#5BB5A2] focus:border-transparent disabled:opacity-50"
+              />
+              <button
+                type="submit"
+                disabled={emailStatus === "sending" || !email.trim()}
+                className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#4B2E1E] text-white rounded-lg font-medium hover:bg-[#3a2317] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {emailStatus === "sending" ? (
+                  <>
+                    <Spinner className="text-white" />
+                    <span>Sending link...</span>
+                  </>
+                ) : (
+                  <span>Continue with Email</span>
+                )}
+              </button>
+              {emailError && (
+                <p className="text-sm text-red-600 text-center">{emailError}</p>
+              )}
+            </form>
+          )}
         </div>
 
         <p className="text-center text-sm text-[#7D5A4A] mt-6">

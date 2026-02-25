@@ -2,7 +2,6 @@
 
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { SubscriptionResponse } from "@themegpt/shared";
@@ -42,7 +41,6 @@ function Spinner({ className = "" }: { className?: string }) {
 
 export default function AccountPage() {
   const { data: session, status } = useSession();
-  const router = useRouter();
   const [subscription, setSubscription] = useState<SubscriptionResponse | null>(null);
   const [history, setHistory] = useState<DownloadHistoryItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -50,12 +48,6 @@ export default function AccountPage() {
   const [redownloadingTheme, setRedownloadingTheme] = useState<string | null>(null);
   const [generatingLinkCode, setGeneratingLinkCode] = useState(false);
   const [openingPortal, setOpeningPortal] = useState(false);
-
-  useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/login?callbackUrl=/account");
-    }
-  }, [status, router]);
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -98,6 +90,9 @@ export default function AccountPage() {
   }
 
   if (!session) {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/login?callbackUrl=/account';
+    }
     return null;
   }
 

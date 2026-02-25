@@ -1,6 +1,36 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
+// Routes that require authentication — unauthenticated users redirect to /login
+const PROTECTED_PATHS = ['/account', '/success']
+
+function isProtectedPath(pathname: string): boolean {
+  return PROTECTED_PATHS.some(
+    (p) => pathname === p || pathname.startsWith(p + '/')
+  )
+}
+
+function hasSessionToken(
+  request: NextRequest,
+  packed: Record<string, string> | null
+): boolean {
+  const secureName = '__Secure-next-auth.session-token'
+  const devName = 'next-auth.session-token'
+
+  if (packed && (packed[secureName] || packed[devName])) {
+    return true
+  }
+
+  if (
+    request.cookies.get(secureName)?.value ||
+    request.cookies.get(devName)?.value
+  ) {
+    return true
+  }
+
+  return false
+}
+
 export function middleware(request: NextRequest) {
   const host = request.headers.get('host') || ''
   const url = request.nextUrl.clone()
@@ -11,13 +41,14 @@ export function middleware(request: NextRequest) {
   // Here we unpack them so NextAuth can read individual cookies.
   const sessionCookie = request.cookies.get('__session')
   let modifiedHeaders: Headers | null = null
+  let packed: Record<string, string> | null = null
 
   if (sessionCookie?.value) {
     try {
-      const packed: Record<string, string> = JSON.parse(
+      packed = JSON.parse(
         decodeURIComponent(sessionCookie.value)
       )
-      if (Object.keys(packed).length > 0) {
+      if (packed && Object.keys(packed).length > 0) {
         modifiedHeaders = new Headers(request.headers)
         const existingCookies = request.headers.get('cookie') || ''
         const unpackedParts = Object.entries(packed)
@@ -84,6 +115,13 @@ export function middleware(request: NextRequest) {
     url.pathname = '/mobile'
     // Preserve UTM params for attribution tracking
     return NextResponse.redirect(url)
+  }
+
+  // 5. Auth gate for protected routes
+  if (isProtectedPath(url.pathname) && !hasSessionToken(request, packed)) {
+    const loginUrl = new URL('/login', request.url)
+    loginUrl.searchParams.set('callbackUrl', url.pathname + url.search)
+    return NextResponse.redirect(loginUrl)
   }
 
   return modifiedHeaders

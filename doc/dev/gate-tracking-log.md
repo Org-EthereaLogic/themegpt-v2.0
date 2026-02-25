@@ -345,6 +345,7 @@ Active Cloud Run revision: **`themegpt-web-00176-5ts`** (100% traffic). Two depl
 ### Audit Trigger
 
 Clarity session replay analysis revealed:
+
 1. A user clicked "Start Free Month" → login → "Buy Theme" → login AGAIN → ended on `/support` asking "How do I unlock premium themes?" (double-login bug)
 2. A user hit `/auth/extension` for 3 seconds with 0 clicks (extension auth race condition)
 3. 4 out of 5 Stripe checkout sessions abandoned (`?canceled=true`)
@@ -382,18 +383,21 @@ Build time: 5m 03s. Deployed to Cloud Run production (`themegpt-web`).
 ### Agents Added
 
 **Tier 1 (address current gaps):**
+
 - `payment-integration` (sonnet) — Stripe checkout, subscriptions, webhooks, trial flows
 - `frontend-security-coder` (opus) — XSS, CSP, OAuth redirects, JWT security
 - `seo-keyword-strategist` (haiku) — Keyword analysis for ChatGPT customization niche
 - `nextjs-developer` (sonnet) — Next.js 16, App Router, performance, Cloud Run deploy
 
 **Tier 2 (growth enablers):**
+
 - `seo-content-writer` (sonnet) — Landing pages, blog posts, CWS listing copy
 - `deployment-engineer` (sonnet) — Cloud Build, Docker, CWS/Edge store submissions
 - `security-auditor` (opus) — OAuth audit, JWT review, OWASP compliance
 - `content-marketer` (sonnet) — Google Ads copy, Reddit strategy, CWS optimization
 
 ### Documentation Updates
+
 - CLAUDE.md: Added Specialized Agents section with 15-agent roster by category
 - AGENTS.md: Added agent routing table, proactive activation rules, cost-aware model selection, coordination examples
 
@@ -406,6 +410,7 @@ No Cloud Build deployment — docs-only change.
 **Scope:** Cross-platform analytics review (Google Ads, Clarity, Reddit Ads).
 
 ### Google Ads (Feb 21–22)
+
 - 83 clicks, 1,255 impressions, **6.61% CTR**, $1.45 avg CPC, $120 total spend
 - Top keyword: "custom chatgpt" ($76, 53 clicks, 7.55% CTR)
 - Sleeper keyword: "customizing chatgpt" (22.22% CTR on $5.68 spend)
@@ -413,6 +418,7 @@ No Cloud Build deployment — docs-only change.
 - Structured snippets applied: Styles — Aurora Borealis, Synth Wave, Midnight Dark (+2.7% est. CTR lift)
 
 ### Clarity (Last 3 Days)
+
 - 50 sessions, 40 unique users, 1.68 pages/session, 1.1 min active time
 - 98% new users, 2% returning
 - Quick backs: 10% (5 sessions) — worth monitoring
@@ -420,15 +426,18 @@ No Cloud Build deployment — docs-only change.
 - Funnel: Marketing→Purchase — 16 sessions entered, 0% conversion
 
 ### Reddit Ads (Feb 17–23)
+
 - $115.31 spend, 37,569 impressions, 126 clicks, $0.92 CPC, 0.335% CTR
 - **Critical finding:** 97% of clicks (122/126) went to mobile (iOS: 88, Android: 34, macOS: 1, Windows: 3)
 - Reddit Ads has no device exclusion feature — platform limitation
 - Only 2 Reddit sessions detected in Clarity (matching ~4 desktop clicks)
 
 ### CWS Growth
+
 - Users grew from 8 to **22** (+175%) over a few days
 
 ### Checkout Funnel (Clarity Session Recordings)
+
 - 5 users reached Stripe checkout in last 7 days
 - 4 returned with `?canceled=true` (abandoned)
 - 1 returned without cancel param but Stripe confirms 0 new subscribers
@@ -462,10 +471,10 @@ No Cloud Build deployment — docs-only change.
 
 ### Manual Actions Required (Google Ads)
 
-- [ ] Exclude mobile devices or set -90% bid adjustment
-- [ ] Fix disapproved sitelinks
-- [ ] Reduce daily budget from $130 to $50–75 until first conversion
-- [ ] Add negative keywords: "chatgpt login", "chatgpt free", "download chatgpt"
+- [x] Exclude mobile devices or set -90% bid adjustment (-100% bid adj on Mobile + Tablets set Feb 23)
+- [x] Fix disapproved sitelinks ("Install Chrome Extension" sitelink removed)
+- [x] Reduce daily budget from $130 to $50–75 until first conversion (Reduced to $65/day)
+- [x] Add negative keywords: "chatgpt login", "chatgpt free", "download chatgpt" (15 intent-mismatched keywords added)
 - [ ] Consider keyword-specific ad groups: "chatgpt themes", "chatgpt dark mode", "customize chatgpt"
 
 ### Metrics to Track (7-day targets)

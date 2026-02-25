@@ -13,7 +13,11 @@
     "test": "pnpm -r test",
     "test:coverage": "pnpm --filter web test -- --coverage --coverage.reporter=lcov --coverage.reporter=text && pnpm --filter extension test -- --coverage --coverage.reporter=lcov --coverage.reporter=text",
     "clean": "pnpm -r clean",
-    "preview:sync": "node apps/extension/tools/theme-preview/sync-themes.js"
+    "preview:sync": "node apps/extension/tools/theme-preview/sync-themes.js",
+    "audit:themes": "node scripts/audit-theme-catalog.mjs",
+    "audit:popup": "node scripts/audit-popup-integration.mjs",
+    "audit:cws": "node scripts/audit-cws-listing.mjs",
+    "audit:full": "node scripts/generate-extension-theme-thumbs.mjs && node scripts/audit-theme-catalog.mjs && node scripts/audit-popup-integration.mjs && node scripts/audit-cws-listing.mjs"
   },
   "pnpm": {
     "overrides": {

@@ -1,220 +1,148 @@
 /**
  * Theme Verification Script for ThemeGPT Preview
+ * Production-15 audit mode
+ *
  * Run this in the browser console at http://localhost:8889/index.html
  */
 
-const VERIFICATION_TESTS = [
-  {
-    id: 'vscode-dark-plus',
-    name: 'VS Code Dark+',
-    expectedFeatures: {
-      pattern: 'dots',
-      overlay: 'noise',
-      isPremium: false
-    }
-  },
-  {
-    id: 'dracula',
-    name: 'Dracula',
-    expectedFeatures: {
-      pattern: 'dots',
-      overlay: 'glow',
-      isPremium: false
-    }
-  },
-  {
-    id: 'aurora-borealis',
-    name: 'Aurora Borealis',
-    expectedFeatures: {
-      pattern: 'stars',
-      overlay: 'glow',
-      isPremium: false
-    }
-  },
-  {
-    id: 'cozy-cabin-christmas',
-    name: 'Cozy Cabin Christmas',
-    expectedFeatures: {
-      isPremium: true,
-      effects: ['treeSilhouettes', 'animatedSnowfall'],
-      overlay: 'noise'
-    }
-  },
-  {
-    id: 'frosted-windowpane',
-    name: 'Frosted Windowpane',
-    expectedFeatures: {
-      isPremium: true,
-      effects: ['animatedSnowfall', 'seasonalDecorations'],
-      frostedGlass: true
-    }
-  },
-  {
-    id: 'purple-twilight',
-    name: 'Purple Twilight',
-    expectedFeatures: {
-      isPremium: true,
-      effects: ['twinklingStars', 'ambientEffects', 'seasonalDecorations'],
-      overlay: 'noise', // noise takes priority over glow
-      candleGlow: true
-    }
-  }
-];
+const PRODUCTION_THEME_IDS = [
+  'themegpt-dark',
+  'themegpt-light',
+  'solarized-dark',
+  'dracula',
+  'monokai-pro',
+  'high-contrast',
+  'one-dark',
+  'aurora-borealis',
+  'sunset-blaze',
+  'electric-dreams',
+  'woodland-retreat',
+  'frosted-windowpane',
+  'silent-night-starfield',
+  'synth-wave',
+  'shades-of-purple'
+]
 
-function verifyTheme(testSpec) {
-  console.group(`\n🎨 Verifying: ${testSpec.name}`);
+function verifyThemeById(themeId) {
+  const availableThemes = ThemeGPT.list()
+  const themeExists = availableThemes.some((theme) => theme.id === themeId)
 
-  // Apply the theme
-  const result = ThemeGPT.apply(testSpec.id);
-  if (!result.success) {
-    console.error(`❌ Failed to load theme: ${testSpec.id}`);
-    console.groupEnd();
-    return false;
-  }
+  console.group(`\n🎨 Verifying: ${themeId}`)
 
-  // Get current state
-  const state = ThemeGPT.getState();
-  const theme = state.theme;
-
-  if (!theme) {
-    console.error('❌ No theme loaded');
-    console.groupEnd();
-    return false;
-  }
-
-  console.log('✅ Theme loaded:', theme.name);
-
-  // Verify premium status
-  if (theme.isPremium !== testSpec.expectedFeatures.isPremium) {
-    console.error(`❌ Premium status mismatch: expected ${testSpec.expectedFeatures.isPremium}, got ${theme.isPremium}`);
-  } else {
-    console.log(`✅ Premium status: ${theme.isPremium}`);
-  }
-
-  // Verify pattern
-  if (testSpec.expectedFeatures.pattern) {
-    if (theme.pattern?.type === testSpec.expectedFeatures.pattern) {
-      console.log(`✅ Pattern: ${theme.pattern.type} (opacity: ${theme.pattern.opacity})`);
-    } else {
-      console.error(`❌ Pattern mismatch: expected ${testSpec.expectedFeatures.pattern}, got ${theme.pattern?.type}`);
+  if (!themeExists) {
+    console.warn(`⚠️  Missing in preview catalog: ${themeId}`)
+    console.groupEnd()
+    return {
+      themeId,
+      status: 'missing',
+      checks: [],
+      allPass: false
     }
   }
 
-  // Verify overlay
-  if (testSpec.expectedFeatures.overlay === 'noise') {
-    if (theme.noiseOverlay) {
-      console.log('✅ Noise overlay present');
-    } else {
-      console.error('❌ Noise overlay missing');
-    }
-  } else if (testSpec.expectedFeatures.overlay === 'glow') {
-    if (theme.glowOverlay) {
-      console.log('✅ Glow overlay present');
-    } else {
-      console.error('❌ Glow overlay missing');
-    }
-  } else if (testSpec.expectedFeatures.overlay === 'both') {
-    if (theme.noiseOverlay && theme.glowOverlay) {
-      console.log('✅ Both overlay flags set (noise takes priority over glow)');
-    } else {
-      console.error(`❌ Overlays missing: noise=${theme.noiseOverlay}, glow=${theme.glowOverlay}`);
+  const applyResult = ThemeGPT.apply(themeId)
+  if (!applyResult.success) {
+    console.error(`❌ Failed to apply theme: ${themeId}`)
+    console.groupEnd()
+    return {
+      themeId,
+      status: 'apply-failed',
+      checks: [],
+      allPass: false
     }
   }
 
-  // Verify effects
-  if (testSpec.expectedFeatures.effects) {
-    if (!theme.effects) {
-      console.error('❌ No effects defined');
-    } else {
-      console.log('✅ Effects object present');
+  const state = ThemeGPT.getState()
+  const validation = ThemeGPT.validate()
 
-      // Check specific effects
-      testSpec.expectedFeatures.effects.forEach(effectType => {
-        if (effectType === 'treeSilhouettes' && theme.effects.treeSilhouettes?.enabled) {
-          console.log(`  ✅ Tree silhouettes: ${theme.effects.treeSilhouettes.style}, density: ${theme.effects.treeSilhouettes.density}`);
-        } else if (effectType === 'animatedSnowfall' && theme.effects.animatedSnowfall?.enabled) {
-          console.log(`  ✅ Snowfall: ${theme.effects.animatedSnowfall.style}, density: ${theme.effects.animatedSnowfall.density}`);
-        } else if (effectType === 'twinklingStars' && theme.effects.twinklingStars?.enabled) {
-          console.log(`  ✅ Twinkling stars: count=${theme.effects.twinklingStars.count}`);
-        } else if (effectType === 'ambientEffects' && theme.effects.ambientEffects) {
-          const ambient = Object.keys(theme.effects.ambientEffects).filter(k => theme.effects.ambientEffects[k]);
-          console.log(`  ✅ Ambient effects: ${ambient.join(', ')}`);
-        } else if (effectType === 'seasonalDecorations' && theme.effects.seasonalDecorations) {
-          const seasonal = Object.keys(theme.effects.seasonalDecorations).filter(k => theme.effects.seasonalDecorations[k]);
-          console.log(`  ✅ Seasonal decorations: ${seasonal.join(', ')}`);
-        } else {
-          console.warn(`  ⚠️  Effect not found or disabled: ${effectType}`);
-        }
-      });
+  console.log(`✅ Applied: ${state.theme?.name || themeId}`)
 
-      // Check for frosted glass specifically
-      if (testSpec.expectedFeatures.frostedGlass) {
-        if (theme.effects.seasonalDecorations?.frostedGlass) {
-          console.log('  ✅ Frosted glass effect present');
-        } else {
-          console.error('  ❌ Frosted glass effect missing');
-        }
-      }
-
-      // Check for candle glow specifically
-      if (testSpec.expectedFeatures.candleGlow) {
-        if (theme.effects.ambientEffects?.candleGlow) {
-          console.log('  ✅ Candle glow effect present');
-        } else {
-          console.error('  ❌ Candle glow effect missing');
-        }
-      }
-    }
-  }
-
-  // Run quality validation
-  const validation = ThemeGPT.validate();
   if (validation.allPass) {
-    console.log('✅ All quality checks passed');
+    console.log('✅ Quality checks passed')
   } else {
-    console.warn('⚠️  Some quality checks failed:');
-    validation.checks.filter(c => !c.pass).forEach(check => {
-      console.warn(`  - ${check.name}: ${check.value} (target: ${check.target})`);
-    });
+    console.warn('⚠️  Quality check warnings:')
+    validation.checks
+      .filter((check) => !check.pass)
+      .forEach((check) => {
+        console.warn(`  - ${check.name}: ${check.value} (target: ${check.target})`)
+      })
   }
 
-  // Check console for errors
-  console.log('\n📋 Check for visual rendering:');
-  console.log('  - Background patterns should be visible and properly positioned');
-  console.log('  - Overlays should be subtle but present');
-  console.log('  - Effects should animate smoothly');
-  console.log('  - No console errors should appear');
+  console.groupEnd()
+  return {
+    themeId,
+    status: 'verified',
+    checks: validation.checks,
+    allPass: validation.allPass
+  }
+}
 
-  console.groupEnd();
-  return true;
+function verifyProductionCoverage() {
+  const available = ThemeGPT.list().map((theme) => theme.id)
+  const missing = PRODUCTION_THEME_IDS.filter((id) => !available.includes(id))
+  const extra = available.filter((id) => !PRODUCTION_THEME_IDS.includes(id))
+
+  console.group('\n📋 Production Coverage Audit')
+  console.log(`Production IDs expected: ${PRODUCTION_THEME_IDS.length}`)
+  console.log(`Preview IDs available: ${available.length}`)
+
+  if (missing.length === 0) {
+    console.log('✅ All production IDs are present in preview tool')
+  } else {
+    console.warn(`⚠️  Missing production IDs in preview: ${missing.join(', ')}`)
+  }
+
+  if (extra.length === 0) {
+    console.log('✅ No preview-only extra IDs detected')
+  } else {
+    console.warn(`ℹ️  Preview-only IDs (non-blocking drift): ${extra.join(', ')}`)
+  }
+
+  console.groupEnd()
+  return { missing, extra, available }
 }
 
 function runAllVerifications() {
-  console.clear();
-  console.log('🚀 ThemeGPT Verification Suite\n');
-  console.log('Testing themes for visual parity and feature completeness...\n');
+  console.clear()
+  console.log('🚀 ThemeGPT Production-15 Verification\n')
 
-  VERIFICATION_TESTS.forEach((test, index) => {
+  const coverage = verifyProductionCoverage()
+  const results = []
+
+  PRODUCTION_THEME_IDS.forEach((themeId, index) => {
     setTimeout(() => {
-      verifyTheme(test);
+      results.push(verifyThemeById(themeId))
 
-      // Final summary after last test
-      if (index === VERIFICATION_TESTS.length - 1) {
+      if (index === PRODUCTION_THEME_IDS.length - 1) {
         setTimeout(() => {
-          console.log('\n\n✨ Verification Complete!');
-          console.log('\nNext steps:');
-          console.log('1. Visually inspect each theme using the theme panel');
-          console.log('2. Verify animations are smooth and effects render correctly');
-          console.log('3. Take screenshots for documentation if needed');
-          console.log('\nUse ThemeGPT.list() to see all available themes');
-          console.log('Use ThemeGPT.apply("theme-id") to switch themes');
-        }, 1000);
+          const verified = results.filter((result) => result.status === 'verified')
+          const missing = results.filter((result) => result.status === 'missing')
+          const applyFailed = results.filter((result) => result.status === 'apply-failed')
+          const qualityWarnings = verified.filter((result) => !result.allPass)
+
+          console.log('\n\n✨ Verification Complete')
+          console.log(`- Verified themes: ${verified.length}`)
+          console.log(`- Missing themes: ${missing.length}`)
+          console.log(`- Apply failures: ${applyFailed.length}`)
+          console.log(`- Quality warnings: ${qualityWarnings.length}`)
+
+          if (coverage.missing.length > 0) {
+            console.log('\n⚠️ Preview drift detected. Missing production IDs:')
+            console.log(`  ${coverage.missing.join(', ')}`)
+          }
+
+          if (coverage.extra.length > 0) {
+            console.log('\nℹ️ Preview includes additional non-production IDs:')
+            console.log(`  ${coverage.extra.join(', ')}`)
+          }
+
+          console.log('\nUse ThemeGPT.apply("theme-id") for targeted manual inspection.')
+        }, 500)
       }
-    }, index * 2000); // Stagger tests by 2 seconds
-  });
+    }, index * 600)
+  })
 }
 
-// Auto-run when script is executed
-console.log('Theme verification script loaded!');
-console.log('Run: runAllVerifications() to start testing');
-console.log('Or verify individual themes: verifyTheme(VERIFICATION_TESTS[0])');
+console.log('Theme verification script loaded!')
+console.log('Run: runAllVerifications()')
+console.log('Run single theme: verifyThemeById("aurora-borealis")')

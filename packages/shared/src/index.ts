@@ -8,7 +8,15 @@ export const BRAND = {
 
 export const MSG_GET_TOKENS = "GET_TOKENS";
 export const MSG_TOKEN_UPDATE = "TOKEN_UPDATE";
+export const MSG_TOKEN_SETTINGS_UPDATE = "TOKEN_SETTINGS_UPDATE";
 export const STORAGE_TOKEN_ENABLED = "token_counter_enabled";
+// Legacy key kept for backward compatibility with existing installs.
+export const STORAGE_TOKEN_DISPLAY_MODE = "token_counter_display_mode";
+export const STORAGE_TOKEN_CANVAS_PLACEMENT = "token_counter_canvas_placement";
+
+// Legacy type kept for read-only migration from older token counter display settings.
+export type TokenDisplayMode = "popup" | "canvas" | "both";
+export type TokenCanvasPlacement = "sidebar-top" | "composer-right";
 
 export interface TokenStats {
   user: number;

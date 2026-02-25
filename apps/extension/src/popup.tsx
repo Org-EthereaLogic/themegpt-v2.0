@@ -7,6 +7,21 @@ import "../style.css"
 
 // ThemeGPT mascot logo
 import mascotUrl from "url:../assets/mascot-32.png"
+import auroraBorealisScreenshotUrl from "url:../assets/themes/aurora-borealis.png"
+import draculaScreenshotUrl from "url:../assets/themes/dracula.png"
+import electricDreamsScreenshotUrl from "url:../assets/themes/electric-dreams.png"
+import frostedWindowpaneScreenshotUrl from "url:../assets/themes/frosted-windowpane.png"
+import highContrastScreenshotUrl from "url:../assets/themes/high-contrast.png"
+import monokaiProScreenshotUrl from "url:../assets/themes/monokai-pro.png"
+import oneDarkScreenshotUrl from "url:../assets/themes/one-dark.png"
+import shadesOfPurpleScreenshotUrl from "url:../assets/themes/shades-of-purple.png"
+import silentNightStarfieldScreenshotUrl from "url:../assets/themes/silent-night-starfield.png"
+import solarizedDarkScreenshotUrl from "url:../assets/themes/solarized-dark.png"
+import sunsetBlazeScreenshotUrl from "url:../assets/themes/sunset-blaze.png"
+import synthWaveScreenshotUrl from "url:../assets/themes/synth-wave.png"
+import themegptDarkScreenshotUrl from "url:../assets/themes/themegpt-dark.png"
+import themegptLightScreenshotUrl from "url:../assets/themes/themegpt-light.png"
+import woodlandRetreatScreenshotUrl from "url:../assets/themes/woodland-retreat.png"
 
 const storage = new Storage({ area: "local" })
 
@@ -541,12 +556,26 @@ export default function Popup() {
  * If screenshots are not available, the ThemeCard will show a ChatGPT-style preview
  * mockup with animated effect indicators.
  */
+const THEME_SCREENSHOT_URLS: Record<string, string> = {
+  "themegpt-dark": themegptDarkScreenshotUrl,
+  "themegpt-light": themegptLightScreenshotUrl,
+  "solarized-dark": solarizedDarkScreenshotUrl,
+  dracula: draculaScreenshotUrl,
+  "monokai-pro": monokaiProScreenshotUrl,
+  "high-contrast": highContrastScreenshotUrl,
+  "one-dark": oneDarkScreenshotUrl,
+  "aurora-borealis": auroraBorealisScreenshotUrl,
+  "sunset-blaze": sunsetBlazeScreenshotUrl,
+  "electric-dreams": electricDreamsScreenshotUrl,
+  "woodland-retreat": woodlandRetreatScreenshotUrl,
+  "frosted-windowpane": frostedWindowpaneScreenshotUrl,
+  "silent-night-starfield": silentNightStarfieldScreenshotUrl,
+  "synth-wave": synthWaveScreenshotUrl,
+  "shades-of-purple": shadesOfPurpleScreenshotUrl
+}
+
 function getThemeScreenshotUrl(themeId: string): string | null {
-  // Check if chrome.runtime is available (not available in tests)
-  if (typeof chrome !== 'undefined' && chrome.runtime?.getURL) {
-    return chrome.runtime.getURL(`assets/themes/${themeId}.png`)
-  }
-  return null
+  return THEME_SCREENSHOT_URLS[themeId] ?? null
 }
 
 // Helper to check if theme has animated effects

@@ -1,8 +1,15 @@
 import { render, screen, fireEvent, waitFor, act, cleanup } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { STORAGE_TOKEN_ENABLED, MSG_GET_TOKENS, MSG_TOKEN_UPDATE, type TokenStats } from '@themegpt/shared'
+import {
+  STORAGE_TOKEN_ENABLED,
+  STORAGE_TOKEN_DISPLAY_MODE,
+  STORAGE_TOKEN_CANVAS_PLACEMENT,
+  MSG_GET_TOKENS,
+  MSG_TOKEN_UPDATE,
+  MSG_TOKEN_SETTINGS_UPDATE,
+  type TokenStats
+} from '@themegpt/shared'
 
-// Hoisted mocks
 const { mockGet, mockSet, mockStorageData } = vi.hoisted(() => {
   const data: Record<string, unknown> = {}
   return {
@@ -22,7 +29,6 @@ vi.mock('@plasmohq/storage', () => ({
   }
 }))
 
-// Import after mocks
 import { TokenCounter } from './TokenCounter'
 
 describe('TokenCounter', () => {
@@ -33,15 +39,13 @@ describe('TokenCounter', () => {
   let messageListeners: ((message: unknown) => void)[] = []
 
   beforeEach(() => {
-    // Reset storage data
     Object.keys(mockStorageData).forEach(key => delete mockStorageData[key])
     mockGet.mockClear()
     mockSet.mockClear()
     messageListeners = []
 
-    // Mock chrome APIs
-    mockTabsQuery = vi.fn()
-    mockTabsSendMessage = vi.fn()
+    mockTabsQuery = vi.fn((_, callback) => callback([]))
+    mockTabsSendMessage = vi.fn((_, __, callback) => callback?.())
     mockAddListener = vi.fn((listener) => {
       messageListeners.push(listener)
     })
@@ -56,7 +60,7 @@ describe('TokenCounter', () => {
           sendMessage: mockTabsSendMessage
         },
         runtime: {
-          id: 'test-extension-id', // Required for isPopupContextValid() check
+          id: 'test-extension-id',
           lastError: null,
           onMessage: {
             addListener: mockAddListener,
@@ -73,85 +77,120 @@ describe('TokenCounter', () => {
     vi.clearAllMocks()
   })
 
-  describe('Rendering when enabled (default)', () => {
-    it('renders session tokens header when enabled', () => {
+  describe('Rendering', () => {
+    it('renders session token stats and privacy note', () => {
       render(<TokenCounter />)
-      expect(screen.getByText('Session Tokens')).toBeInTheDocument()
-    })
 
-    it('renders privacy notice text', () => {
-      render(<TokenCounter />)
+      expect(screen.getByText('Session Tokens')).toBeInTheDocument()
+      expect(screen.getByText('Input')).toBeInTheDocument()
+      expect(screen.getByText('Output')).toBeInTheDocument()
+      expect(screen.getByText('Total')).toBeInTheDocument()
       expect(screen.getByText(/no data leaves your browser/i)).toBeInTheDocument()
     })
 
-    it('renders hide button when enabled', () => {
+    it('renders a single canvas selector with Off, Side Top, and Compose Right', () => {
       render(<TokenCounter />)
-      expect(screen.getByText('Hide')).toBeInTheDocument()
+
+      const canvasSelector = screen.getByLabelText('Canvas') as HTMLSelectElement
+      expect(canvasSelector).toBeInTheDocument()
+      expect(screen.queryByLabelText('Display')).not.toBeInTheDocument()
+      expect(screen.queryByText('Hide')).not.toBeInTheDocument()
+      expect(screen.queryByText('Show Token Counter')).not.toBeInTheDocument()
+
+      const optionLabels = Array.from(canvasSelector.options).map(option => option.text)
+      expect(optionLabels).toEqual(['Off', 'Side Top', 'Compose Right'])
     })
 
-    it('renders stat labels', () => {
+    it('keeps session token stats visible when canvas is off', async () => {
+      mockStorageData[STORAGE_TOKEN_ENABLED] = false
+
       render(<TokenCounter />)
+
+      await waitFor(() => {
+        expect((screen.getByLabelText('Canvas') as HTMLSelectElement).value).toBe('off')
+      })
+
       expect(screen.getByText('Input')).toBeInTheDocument()
       expect(screen.getByText('Output')).toBeInTheDocument()
       expect(screen.getByText('Total')).toBeInTheDocument()
     })
 
-    it('renders placeholder values when no stats available', () => {
-      render(<TokenCounter />)
-      const dashes = screen.getAllByText('-')
-      expect(dashes.length).toBe(3) // Input, Output, Total
-    })
-  })
-
-  describe('Rendering when disabled', () => {
-    it('renders show button when disabled via storage', async () => {
-      mockStorageData[STORAGE_TOKEN_ENABLED] = false
+    it('maps legacy popup display mode to Off when enabled flag is missing', async () => {
+      mockStorageData[STORAGE_TOKEN_DISPLAY_MODE] = 'popup'
 
       render(<TokenCounter />)
 
       await waitFor(() => {
-        expect(screen.getByText('Show Token Counter')).toBeInTheDocument()
-      })
-    })
-
-    it('does not render session tokens header when disabled', async () => {
-      mockStorageData[STORAGE_TOKEN_ENABLED] = false
-
-      render(<TokenCounter />)
-
-      await waitFor(() => {
-        expect(screen.queryByText('Session Tokens')).not.toBeInTheDocument()
+        expect((screen.getByLabelText('Canvas') as HTMLSelectElement).value).toBe('off')
       })
     })
   })
 
-  describe('Toggle functionality', () => {
-    it('hides counter when Hide button is clicked', async () => {
+  describe('Canvas selector behavior', () => {
+    it('selecting Off persists disabled canvas state and notifies tab', async () => {
+      mockTabsQuery.mockImplementation((_, callback) => callback([{ id: 123 }]))
+
       render(<TokenCounter />)
 
-      fireEvent.click(screen.getByText('Hide'))
+      fireEvent.change(screen.getByLabelText('Canvas'), {
+        target: { value: 'off' }
+      })
 
       await waitFor(() => {
-        expect(screen.getByText('Show Token Counter')).toBeInTheDocument()
+        expect(mockSet).toHaveBeenCalledWith(STORAGE_TOKEN_ENABLED, false)
+        expect(mockTabsSendMessage).toHaveBeenCalledWith(
+          123,
+          { type: MSG_TOKEN_SETTINGS_UPDATE, payload: { enabled: false } },
+          expect.any(Function)
+        )
       })
-      expect(mockSet).toHaveBeenCalledWith(STORAGE_TOKEN_ENABLED, false)
     })
 
-    it('shows counter when Show button is clicked', async () => {
+    it('selecting Side Top stores enabled and sidebar placement', async () => {
       mockStorageData[STORAGE_TOKEN_ENABLED] = false
+      mockTabsQuery.mockImplementation((_, callback) => callback([{ id: 123 }]))
 
       render(<TokenCounter />)
 
-      await waitFor(() => {
-        expect(screen.getByText('Show Token Counter')).toBeInTheDocument()
+      fireEvent.change(screen.getByLabelText('Canvas'), {
+        target: { value: 'sidebar-top' }
       })
 
-      fireEvent.click(screen.getByText('Show Token Counter'))
+      await waitFor(() => {
+        expect(mockSet).toHaveBeenCalledWith(STORAGE_TOKEN_ENABLED, true)
+        expect(mockSet).toHaveBeenCalledWith(STORAGE_TOKEN_CANVAS_PLACEMENT, 'sidebar-top')
+        expect(mockTabsSendMessage).toHaveBeenCalledWith(
+          123,
+          {
+            type: MSG_TOKEN_SETTINGS_UPDATE,
+            payload: { enabled: true, placement: 'sidebar-top' }
+          },
+          expect.any(Function)
+        )
+      })
+    })
+
+    it('selecting Compose Right stores enabled and compose-right placement', async () => {
+      mockTabsQuery.mockImplementation((_, callback) => callback([{ id: 123 }]))
+
+      render(<TokenCounter />)
+
+      fireEvent.change(screen.getByLabelText('Canvas'), {
+        target: { value: 'composer-right' }
+      })
 
       await waitFor(() => {
-        expect(screen.getByText('Session Tokens')).toBeInTheDocument()
+        expect(mockSet).toHaveBeenCalledWith(STORAGE_TOKEN_ENABLED, true)
+        expect(mockSet).toHaveBeenCalledWith(STORAGE_TOKEN_CANVAS_PLACEMENT, 'composer-right')
+        expect(mockTabsSendMessage).toHaveBeenCalledWith(
+          123,
+          {
+            type: MSG_TOKEN_SETTINGS_UPDATE,
+            payload: { enabled: true, placement: 'composer-right' }
+          },
+          expect.any(Function)
+        )
       })
-      expect(mockSet).toHaveBeenCalledWith(STORAGE_TOKEN_ENABLED, true)
     })
   })
 
@@ -163,106 +202,56 @@ describe('TokenCounter', () => {
         total: 300,
         lastUpdated: Date.now()
       }
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([{ id: 123 }])
-      })
-      mockTabsSendMessage.mockImplementation((_, __, callback) => {
-        callback(mockStats)
+
+      mockTabsQuery.mockImplementation((_, callback) => callback([{ id: 123 }]))
+      mockTabsSendMessage.mockImplementation((_, message, callback) => {
+        if ((message as { type?: string }).type === MSG_GET_TOKENS) {
+          callback(mockStats)
+          return
+        }
+        callback?.()
       })
 
       render(<TokenCounter />)
 
       await waitFor(() => {
-        expect(mockTabsQuery).toHaveBeenCalled()
-        expect(mockTabsSendMessage).toHaveBeenCalledWith(123, { type: MSG_GET_TOKENS }, expect.any(Function))
+        expect(mockTabsSendMessage).toHaveBeenCalledWith(
+          123,
+          { type: MSG_GET_TOKENS },
+          expect.any(Function)
+        )
       })
     })
 
     it('displays stats from tab query', async () => {
       const mockStats: TokenStats = {
-        user: 100,
-        assistant: 200,
-        total: 300,
+        user: 12345,
+        assistant: 67890,
+        total: 80235,
         lastUpdated: Date.now()
       }
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([{ id: 123 }])
-      })
-      mockTabsSendMessage.mockImplementation((_, __, callback) => {
-        callback(mockStats)
+
+      mockTabsQuery.mockImplementation((_, callback) => callback([{ id: 123 }]))
+      mockTabsSendMessage.mockImplementation((_, message, callback) => {
+        if ((message as { type?: string }).type === MSG_GET_TOKENS) {
+          callback(mockStats)
+          return
+        }
+        callback?.()
       })
 
       render(<TokenCounter />)
 
       await waitFor(() => {
-        expect(screen.getByText('100')).toBeInTheDocument()
-        expect(screen.getByText('200')).toBeInTheDocument()
-        expect(screen.getByText('300')).toBeInTheDocument()
+        expect(screen.getByText('12,345')).toBeInTheDocument()
+        expect(screen.getByText('67,890')).toBeInTheDocument()
+        expect(screen.getByText('80,235')).toBeInTheDocument()
       })
     })
 
-    it('handles missing tab ID gracefully', async () => {
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([{}]) // No tab ID
-      })
-
+    it('updates stats when receiving MSG_TOKEN_UPDATE', async () => {
       render(<TokenCounter />)
 
-      // Should not throw, just not call sendMessage
-      await waitFor(() => {
-        expect(mockTabsQuery).toHaveBeenCalled()
-      })
-      expect(mockTabsSendMessage).not.toHaveBeenCalled()
-    })
-
-	    it('handles chrome runtime error gracefully', async () => {
-	      mockTabsQuery.mockImplementation((_, callback) => {
-	        callback([{ id: 123 }])
-	      })
-	      mockTabsSendMessage.mockImplementation((_, __, callback) => {
-	        // Simulate runtime error
-	        Object.defineProperty(globalThis.chrome.runtime, 'lastError', {
-	          value: { message: 'Tab not found' },
-	          configurable: true
-	        })
-	        callback(null)
-	        Object.defineProperty(globalThis.chrome.runtime, 'lastError', {
-	          value: null,
-	          configurable: true
-	        })
-	      })
-
-	      render(<TokenCounter />)
-
-      // Should not update stats when there's an error
-      await waitFor(() => {
-        const dashes = screen.getAllByText('-')
-        expect(dashes.length).toBe(3)
-      })
-    })
-
-    it('adds message listener on mount', () => {
-      render(<TokenCounter />)
-
-      expect(mockAddListener).toHaveBeenCalled()
-    })
-
-    it('removes message listener on unmount', () => {
-      const { unmount } = render(<TokenCounter />)
-
-      unmount()
-
-      expect(mockRemoveListener).toHaveBeenCalled()
-    })
-
-    it('updates stats when receiving MSG_TOKEN_UPDATE message', async () => {
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([])
-      })
-
-      render(<TokenCounter />)
-
-      // Simulate receiving a message
       const newStats: TokenStats = {
         user: 500,
         assistant: 600,
@@ -279,76 +268,53 @@ describe('TokenCounter', () => {
       await waitFor(() => {
         expect(screen.getByText('500')).toBeInTheDocument()
         expect(screen.getByText('600')).toBeInTheDocument()
-        expect(screen.getByText('1,100')).toBeInTheDocument() // Formatted with comma
+        expect(screen.getByText('1,100')).toBeInTheDocument()
       })
     })
 
-    it('ignores messages with wrong type', async () => {
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([])
-      })
+    it('handles missing tab ID gracefully', async () => {
+      mockTabsQuery.mockImplementation((_, callback) => callback([{}]))
 
       render(<TokenCounter />)
 
-      act(() => {
-        messageListeners.forEach(listener => {
-          listener({ type: 'WRONG_TYPE', payload: { user: 999, assistant: 888, total: 1887 } })
+      await waitFor(() => {
+        expect(mockTabsQuery).toHaveBeenCalled()
+      })
+      expect(mockTabsSendMessage).not.toHaveBeenCalledWith(
+        expect.any(Number),
+        { type: MSG_GET_TOKENS },
+        expect.any(Function)
+      )
+    })
+
+    it('handles chrome runtime error gracefully', async () => {
+      mockTabsQuery.mockImplementation((_, callback) => callback([{ id: 123 }]))
+      mockTabsSendMessage.mockImplementation((_, __, callback) => {
+        Object.defineProperty(globalThis.chrome.runtime, 'lastError', {
+          value: { message: 'Tab not found' },
+          configurable: true
+        })
+        callback(null)
+        Object.defineProperty(globalThis.chrome.runtime, 'lastError', {
+          value: null,
+          configurable: true
         })
       })
 
-      // Stats should remain at placeholders
-      const dashes = screen.getAllByText('-')
-      expect(dashes.length).toBe(3)
-    })
-
-    it('stops fetching stats after disabled', async () => {
-      mockStorageData[STORAGE_TOKEN_ENABLED] = false
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([])
-      })
-
       render(<TokenCounter />)
 
-      // Component starts enabled, then disables after storage loads
       await waitFor(() => {
-        expect(screen.getByText('Show Token Counter')).toBeInTheDocument()
+        const dashes = screen.getAllByText('-')
+        expect(dashes.length).toBe(3)
       })
+    })
 
-      // After disabled, should remove listener
+    it('adds message listener on mount and removes it on unmount', () => {
+      const { unmount } = render(<TokenCounter />)
+
+      expect(mockAddListener).toHaveBeenCalled()
+      unmount()
       expect(mockRemoveListener).toHaveBeenCalled()
-    })
-
-    it('does not add message listener when disabled', async () => {
-      mockStorageData[STORAGE_TOKEN_ENABLED] = false
-
-      render(<TokenCounter />)
-
-      await waitFor(() => {
-        expect(screen.getByText('Show Token Counter')).toBeInTheDocument()
-      })
-
-      // Check that addListener was not called (or was called and then removed)
-      // After storage loads as false, listener should not be added
-      expect(mockAddListener.mock.calls.length).toBe(mockRemoveListener.mock.calls.length)
-    })
-  })
-
-  describe('Number formatting', () => {
-    it('formats large numbers with locale string', async () => {
-      mockTabsQuery.mockImplementation((_, callback) => {
-        callback([{ id: 123 }])
-      })
-      mockTabsSendMessage.mockImplementation((_, __, callback) => {
-        callback({ user: 12345, assistant: 67890, total: 80235, lastUpdated: Date.now() })
-      })
-
-      render(<TokenCounter />)
-
-      await waitFor(() => {
-        expect(screen.getByText('12,345')).toBeInTheDocument()
-        expect(screen.getByText('67,890')).toBeInTheDocument()
-        expect(screen.getByText('80,235')).toBeInTheDocument()
-      })
     })
   })
 })

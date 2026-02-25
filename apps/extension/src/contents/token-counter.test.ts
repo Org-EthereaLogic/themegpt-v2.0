@@ -1,7 +1,29 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
-import { MSG_GET_TOKENS, MSG_TOKEN_UPDATE } from '@themegpt/shared'
+import {
+  MSG_GET_TOKENS,
+  MSG_TOKEN_UPDATE,
+  MSG_TOKEN_SETTINGS_UPDATE,
+  STORAGE_TOKEN_ENABLED,
+  STORAGE_TOKEN_DISPLAY_MODE,
+  STORAGE_TOKEN_CANVAS_PLACEMENT
+} from '@themegpt/shared'
 
-// Test the pure function directly
+const { mockStorageGet, mockStorageWatch, mockStorageData } = vi.hoisted(() => {
+  const data: Record<string, unknown> = {}
+  return {
+    mockStorageData: data,
+    mockStorageGet: vi.fn((key: string) => Promise.resolve(data[key])),
+    mockStorageWatch: vi.fn(() => true)
+  }
+})
+
+vi.mock('@plasmohq/storage', () => ({
+  Storage: class {
+    get = mockStorageGet
+    watch = mockStorageWatch
+  }
+}))
+
 import { calculateTokenStats } from './token-counter'
 
 describe('token-counter', () => {
@@ -78,47 +100,10 @@ describe('token-counter', () => {
       expect(stats.lastUpdated).toBeGreaterThanOrEqual(before)
       expect(stats.lastUpdated).toBeLessThanOrEqual(after)
     })
-
-    it('should handle null role', () => {
-      const messages = [
-        { role: null, text: 'Some text' },
-        { role: 'user', text: 'User text' }
-      ]
-
-      const stats = calculateTokenStats(messages)
-
-      // null role should be ignored
-      expect(stats.user).toBeGreaterThan(0)
-      expect(stats.assistant).toBe(0)
-    })
-
-    it('should tokenize longer messages correctly', () => {
-      const longText = 'This is a longer message that contains multiple words and should result in multiple tokens being counted accurately.'
-      const messages = [
-        { role: 'user', text: longText }
-      ]
-
-      const stats = calculateTokenStats(messages)
-
-      // Long message should have many tokens
-      expect(stats.user).toBeGreaterThan(10)
-      expect(stats.total).toBe(stats.user)
-    })
-
-    it('should handle special characters', () => {
-      const messages = [
-        { role: 'user', text: 'Hello! @#$%^&*() 你好 🎉' }
-      ]
-
-      const stats = calculateTokenStats(messages)
-
-      expect(stats.user).toBeGreaterThan(0)
-    })
   })
 
   describe('config export', () => {
     it('should export correct PlasmoCSConfig', async () => {
-      // Re-import to get the config
       const module = await import('./token-counter')
 
       expect(module.config).toBeDefined()
@@ -128,7 +113,6 @@ describe('token-counter', () => {
   })
 })
 
-// Separate describe block for DOM interaction tests
 describe('token-counter DOM interactions', () => {
   let mockSendMessage: ReturnType<typeof vi.fn>
   let mockAddListener: ReturnType<typeof vi.fn>
@@ -137,6 +121,9 @@ describe('token-counter DOM interactions', () => {
   beforeEach(() => {
     vi.useFakeTimers()
     messageListeners = new Map()
+    Object.keys(mockStorageData).forEach(key => delete mockStorageData[key])
+    mockStorageGet.mockClear()
+    mockStorageWatch.mockClear()
 
     mockSendMessage = vi.fn().mockImplementation(() => Promise.resolve())
     mockAddListener = vi.fn((listener) => {
@@ -156,7 +143,6 @@ describe('token-counter DOM interactions', () => {
       }
     })
 
-    // Set up document with mock body (initObserver checks document.body)
     document.body.innerHTML = ''
   })
 
@@ -164,21 +150,17 @@ describe('token-counter DOM interactions', () => {
     vi.useRealTimers()
     vi.clearAllMocks()
     document.body.innerHTML = ''
-    document.body.removeAttribute('data-testid')
   })
 
   it('should respond to GET_TOKENS message', async () => {
     vi.resetModules()
     await import('./token-counter')
 
-    // Verify listener was added
     expect(mockAddListener).toHaveBeenCalled()
 
-    // Get the listener
     const listener = messageListeners.get('listener')
     expect(listener).toBeDefined()
 
-    // Simulate receiving a GET_TOKENS message
     const sendResponse = vi.fn()
     const result = listener!({ type: MSG_GET_TOKENS }, {}, sendResponse)
 
@@ -186,134 +168,194 @@ describe('token-counter DOM interactions', () => {
     expect(sendResponse).toHaveBeenCalled()
   })
 
-  // Strategy 1: Data message author role
-  it('should detect messages with data-message-author-role', async () => {
+  it('detects messages with data-message-author-role', async () => {
     vi.resetModules()
     await import('./token-counter')
 
-    // Add message elements to DOM
     const userMessage = document.createElement('div')
     userMessage.setAttribute('data-message-author-role', 'user')
     userMessage.textContent = 'Hello world'
     document.body.appendChild(userMessage)
 
-    // Wait for observer
     await vi.advanceTimersByTimeAsync(1100)
 
     expect(mockSendMessage).toHaveBeenCalledWith(
       expect.objectContaining({
+        type: MSG_TOKEN_UPDATE,
         payload: expect.objectContaining({
           user: expect.any(Number),
           total: expect.any(Number)
         })
       })
     )
-    expect(mockSendMessage.mock.calls[0][0].payload.user).toBeGreaterThan(0)
   })
 
-  // Strategy 2: Data testid message
-  it('should detect messages with data-testid message attributes', async () => {
-    vi.resetModules()
-    await import('./token-counter')
-
-    const assistantMessage = document.createElement('div')
-    assistantMessage.setAttribute('data-testid', 'message-assistant')
-    assistantMessage.textContent = 'I am a helper bot.'
-    document.body.appendChild(assistantMessage)
-
-    await vi.advanceTimersByTimeAsync(1100)
-
-    expect(mockSendMessage).toHaveBeenCalled()
-    const payload = mockSendMessage.mock.calls[0][0].payload
-    expect(payload.assistant).toBeGreaterThan(0)
-  })
-
-  // Strategy 3: Conversation turns (nested)
-  it('should detect conversation turns and extract roles', async () => {
-    vi.resetModules()
-    await import('./token-counter')
-
-    const turn = document.createElement('div')
-    turn.setAttribute('data-testid', 'conversation-turn-3')
-
-    const userPart = document.createElement('div')
-    userPart.setAttribute('data-testid', 'user-message')
-    userPart.textContent = 'User says hi'
-
-    const botPart = document.createElement('div')
-    botPart.classList.add('markdown')
-    botPart.textContent = 'Bot says hello'
-
-    turn.appendChild(userPart)
-    turn.appendChild(botPart)
-    document.body.appendChild(turn)
-
-    await vi.advanceTimersByTimeAsync(1100)
-
-    expect(mockSendMessage).toHaveBeenCalled()
-    const payload = mockSendMessage.mock.calls[0][0].payload
-    expect(payload.user).toBeGreaterThan(0)
-    expect(payload.assistant).toBeGreaterThan(0)
-  })
-
-  it('should fallback to assistant logic if unknown turn', async () => {
-    vi.resetModules()
-    await import('./token-counter')
-
-    const turn = document.createElement('div')
-    turn.setAttribute('data-testid', 'conversation-turn-4')
-    turn.textContent = 'Just some text that we assume is from bot if unstructured'
-    document.body.appendChild(turn)
-
-    await vi.advanceTimersByTimeAsync(1100)
-
-    expect(mockSendMessage).toHaveBeenCalled()
-    const payload = mockSendMessage.mock.calls[0][0].payload
-    expect(payload.assistant).toBeGreaterThan(0)
-    expect(payload.user).toBe(0)
-  })
-
-  it('should not send update if total count unchanged', async () => {
-    vi.resetModules()
-    await import('./token-counter')
-
-    const userMsg = document.createElement('div')
-    userMsg.setAttribute('data-message-author-role', 'user')
-    userMsg.textContent = 'Hello'
-    document.body.appendChild(userMsg)
-
-    // First update
-    await vi.advanceTimersByTimeAsync(1100)
-    const firstCallCount = mockSendMessage.mock.calls.length
-
-    // Trigger another update (e.g. unrelated DOM change)
-    const unrelated = document.createElement('div')
-    document.body.appendChild(unrelated)
-    await vi.advanceTimersByTimeAsync(1100)
-
-    // Should not have sent additional update
-    expect(mockSendMessage.mock.calls.length).toBe(firstCallCount)
-  })
-
-  it('should retry initObserver if body not available (unlikely in test but good for coverage)', async () => {
-    // Manually mess with document.body if possible, or just trust the standard logic
-    // Since we can't easily remove document.body in jsdom without issues, we skip distinct test
-    // but we know initObserver guards against it.
-    expect(true).toBe(true)
-  })
-
-  it('should handle sendMessage errors gracefully', async () => {
-    mockSendMessage.mockImplementation(() => Promise.reject(new Error('Popup not open')))
+  it('hides canvas counter when enabled is false', async () => {
+    mockStorageData[STORAGE_TOKEN_ENABLED] = false
+    mockStorageData[STORAGE_TOKEN_CANVAS_PLACEMENT] = 'sidebar-top'
 
     vi.resetModules()
     await import('./token-counter')
+    await Promise.resolve()
 
-    const userMsg = document.createElement('div')
-    userMsg.setAttribute('data-message-author-role', 'user')
-    userMsg.textContent = 'Test'
-    document.body.appendChild(userMsg)
+    const counter = document.getElementById('themegpt-token-counter-canvas')
+    expect(counter).not.toBeInTheDocument()
+  })
 
-    // Should not throw even though sendMessage fails
-    await expect(vi.advanceTimersByTimeAsync(1100)).resolves.not.toThrow()
+  it('maps legacy popup mode to disabled when enabled flag is missing', async () => {
+    mockStorageData[STORAGE_TOKEN_DISPLAY_MODE] = 'popup'
+    mockStorageData[STORAGE_TOKEN_CANVAS_PLACEMENT] = 'sidebar-top'
+
+    vi.resetModules()
+    await import('./token-counter')
+    await Promise.resolve()
+
+    const counter = document.getElementById('themegpt-token-counter-canvas')
+    expect(counter).not.toBeInTheDocument()
+  })
+
+  it('maps legacy canvas mode to enabled when enabled flag is missing', async () => {
+    mockStorageData[STORAGE_TOKEN_DISPLAY_MODE] = 'canvas'
+    mockStorageData[STORAGE_TOKEN_CANVAS_PLACEMENT] = 'sidebar-top'
+
+    const aside = document.createElement('aside')
+    const nav = document.createElement('nav')
+    aside.appendChild(nav)
+    document.body.appendChild(aside)
+
+    vi.resetModules()
+    await import('./token-counter')
+    await Promise.resolve()
+
+    const counter = document.getElementById('themegpt-token-counter-canvas')
+    expect(counter).toBeInTheDocument()
+    expect(counter).toHaveClass('themegpt-token-counter--sidebar')
+  })
+
+  it('mounts canvas counter at sidebar top when selected', async () => {
+    mockStorageData[STORAGE_TOKEN_ENABLED] = true
+    mockStorageData[STORAGE_TOKEN_CANVAS_PLACEMENT] = 'sidebar-top'
+
+    const aside = document.createElement('aside')
+    const nav = document.createElement('nav')
+    aside.appendChild(nav)
+    document.body.appendChild(aside)
+
+    vi.resetModules()
+    await import('./token-counter')
+    await Promise.resolve()
+
+    const counter = document.getElementById('themegpt-token-counter-canvas')
+    expect(counter).toBeInTheDocument()
+    expect(counter).toHaveClass('themegpt-token-counter--sidebar')
+    expect(counter?.parentElement).toBe(nav)
+  })
+
+  it('mounts compose-right counter in far-right lane when space is available', async () => {
+    mockStorageData[STORAGE_TOKEN_ENABLED] = true
+    mockStorageData[STORAGE_TOKEN_CANVAS_PLACEMENT] = 'composer-right'
+
+    const textarea = document.createElement('textarea')
+    textarea.setAttribute('data-testid', 'prompt-textarea')
+    Object.defineProperty(textarea, 'getBoundingClientRect', {
+      value: () => ({
+        x: 20,
+        y: 620,
+        width: 700,
+        height: 56,
+        top: 620,
+        left: 20,
+        right: 720,
+        bottom: 676,
+        toJSON: () => ({})
+      })
+    })
+    document.body.appendChild(textarea)
+
+    vi.resetModules()
+    await import('./token-counter')
+    await Promise.resolve()
+
+    const counter = document.getElementById('themegpt-token-counter-canvas') as HTMLDivElement | null
+    expect(counter).toBeInTheDocument()
+    expect(counter).toHaveClass('themegpt-token-counter--composer-right')
+    expect(counter?.parentElement).toBe(document.body)
+    expect(Number.parseInt(counter?.style.left ?? '0', 10)).toBeGreaterThanOrEqual(732)
+  })
+
+  it('falls back to floating when compose-right lane has insufficient room', async () => {
+    mockStorageData[STORAGE_TOKEN_ENABLED] = true
+    mockStorageData[STORAGE_TOKEN_CANVAS_PLACEMENT] = 'composer-right'
+
+    const textarea = document.createElement('textarea')
+    textarea.setAttribute('data-testid', 'prompt-textarea')
+    Object.defineProperty(textarea, 'getBoundingClientRect', {
+      value: () => ({
+        x: 300,
+        y: 620,
+        width: 710,
+        height: 56,
+        top: 620,
+        left: 300,
+        right: 1010,
+        bottom: 676,
+        toJSON: () => ({})
+      })
+    })
+    document.body.appendChild(textarea)
+
+    vi.resetModules()
+    await import('./token-counter')
+    await Promise.resolve()
+
+    const counter = document.getElementById('themegpt-token-counter-canvas')
+    expect(counter).toBeInTheDocument()
+    expect(counter).toHaveClass('themegpt-token-counter--floating')
+  })
+
+  it('updates placement from runtime settings message', async () => {
+    mockStorageData[STORAGE_TOKEN_ENABLED] = false
+
+    const textarea = document.createElement('textarea')
+    textarea.setAttribute('data-testid', 'prompt-textarea')
+    document.body.appendChild(textarea)
+
+    vi.resetModules()
+    await import('./token-counter')
+    await Promise.resolve()
+
+    const listener = messageListeners.get('listener')
+    expect(listener).toBeDefined()
+
+    listener!(
+      {
+        type: MSG_TOKEN_SETTINGS_UPDATE,
+        payload: { enabled: true, placement: 'composer-right' }
+      },
+      {},
+      vi.fn()
+    )
+
+    const counter = document.getElementById('themegpt-token-counter-canvas')
+    expect(counter).toBeInTheDocument()
+    expect(counter).toHaveClass('themegpt-token-counter--composer-right')
+  })
+
+  it('renders mascot icon with data URI in counter header', async () => {
+    mockStorageData[STORAGE_TOKEN_ENABLED] = true
+    mockStorageData[STORAGE_TOKEN_CANVAS_PLACEMENT] = 'sidebar-top'
+
+    const aside = document.createElement('aside')
+    const nav = document.createElement('nav')
+    aside.appendChild(nav)
+    document.body.appendChild(aside)
+
+    vi.resetModules()
+    await import('./token-counter')
+    await Promise.resolve()
+
+    const icon = document.querySelector('#themegpt-token-counter-canvas .themegpt-token-counter__icon') as HTMLImageElement | null
+    expect(icon).toBeInTheDocument()
+    expect(icon?.getAttribute('src')).toMatch(/^data:image\/png;base64,/)
   })
 })

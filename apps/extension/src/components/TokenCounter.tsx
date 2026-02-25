@@ -1,6 +1,16 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, type ChangeEvent } from "react"
 import { Storage } from "@plasmohq/storage"
-import { MSG_GET_TOKENS, MSG_TOKEN_UPDATE, STORAGE_TOKEN_ENABLED, type TokenStats } from "@themegpt/shared"
+import {
+    MSG_GET_TOKENS,
+    MSG_TOKEN_UPDATE,
+    MSG_TOKEN_SETTINGS_UPDATE,
+    STORAGE_TOKEN_ENABLED,
+    STORAGE_TOKEN_DISPLAY_MODE,
+    STORAGE_TOKEN_CANVAS_PLACEMENT,
+    type TokenStats,
+    type TokenDisplayMode,
+    type TokenCanvasPlacement
+} from "@themegpt/shared"
 
 interface ChromeMessage {
     type: string;
@@ -8,6 +18,33 @@ interface ChromeMessage {
 }
 
 const storage = new Storage({ area: "local" })
+type CanvasSelection = "off" | TokenCanvasPlacement
+
+function notifyActiveTabSettings(payload: {
+    enabled?: boolean
+    placement?: TokenCanvasPlacement
+}): void {
+    if (!isPopupContextValid()) return
+
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+        if (!isPopupContextValid()) return
+        const tabId = tabs[0]?.id
+        if (!tabId) return
+
+        try {
+            chrome.tabs.sendMessage(
+                tabId,
+                { type: MSG_TOKEN_SETTINGS_UPDATE, payload },
+                () => {
+                    // Ignore when content script is not available in current tab
+                    void chrome.runtime.lastError
+                }
+            )
+        } catch {
+            // Context invalidated
+        }
+    })
+}
 
 /**
  * Check if popup extension context is still valid
@@ -21,19 +58,48 @@ function isPopupContextValid(): boolean {
     }
 }
 
+function normalizeLegacyDisplayMode(value: unknown): TokenDisplayMode | undefined {
+    if (value === "popup" || value === "canvas" || value === "both") {
+        return value
+    }
+    return undefined
+}
+
+function mapLegacyModeToEnabled(mode: TokenDisplayMode | undefined): boolean | undefined {
+    if (!mode) return undefined
+    return mode !== "popup"
+}
+
 export function TokenCounter() {
-    const [enabled, setEnabled] = useState(true)
+    const [canvasEnabled, setCanvasEnabled] = useState(true)
     const [stats, setStats] = useState<TokenStats | null>(null)
+    const [canvasPlacement, setCanvasPlacement] = useState<TokenCanvasPlacement>("sidebar-top")
 
     useEffect(() => {
-        storage.get<boolean>(STORAGE_TOKEN_ENABLED).then((val) => {
-            if (val !== undefined) setEnabled(val)
+        Promise.all([
+            storage.get<boolean>(STORAGE_TOKEN_ENABLED),
+            storage.get<unknown>(STORAGE_TOKEN_DISPLAY_MODE),
+            storage.get<TokenCanvasPlacement>(STORAGE_TOKEN_CANVAS_PLACEMENT)
+        ]).then(([enabledValue, legacyModeValue, placementValue]) => {
+            const legacyMode = normalizeLegacyDisplayMode(legacyModeValue)
+            const resolvedEnabled = typeof enabledValue === "boolean"
+                ? enabledValue
+                : (mapLegacyModeToEnabled(legacyMode) ?? true)
+            const resolvedPlacement = (placementValue === "sidebar-top" || placementValue === "composer-right")
+                ? placementValue
+                : "sidebar-top"
+
+            setCanvasEnabled(resolvedEnabled)
+            setCanvasPlacement(resolvedPlacement)
+
+            notifyActiveTabSettings({
+                enabled: resolvedEnabled,
+                placement: resolvedPlacement
+            })
         })
     }, [])
 
     useEffect(() => {
-        if (!enabled) return
-
         const fetchStats = () => {
             if (!isPopupContextValid()) return
 
@@ -71,39 +137,35 @@ export function TokenCounter() {
                 // Context might already be gone
             }
         }
-    }, [enabled])
+    }, [])
 
-    const toggle = () => {
-        const next = !enabled
-        setEnabled(next)
-        storage.set(STORAGE_TOKEN_ENABLED, next)
+    const updateCanvasSelection = (event: ChangeEvent<HTMLSelectElement>) => {
+        const nextSelection = event.target.value as CanvasSelection
+        if (nextSelection === "off") {
+            setCanvasEnabled(false)
+            storage.set(STORAGE_TOKEN_ENABLED, false)
+            notifyActiveTabSettings({ enabled: false })
+            return
+        }
+
+        setCanvasEnabled(true)
+        setCanvasPlacement(nextSelection)
+        storage.set(STORAGE_TOKEN_ENABLED, true)
+        storage.set(STORAGE_TOKEN_CANVAS_PLACEMENT, nextSelection)
+        notifyActiveTabSettings({
+            enabled: true,
+            placement: nextSelection
+        })
     }
 
-    if (!enabled) {
-        return (
-            <div className="pt-2 border-t border-brown/10 mt-2">
-                <button
-                    onClick={toggle}
-                    className="text-xs text-brown-soft hover:text-brown w-full text-center transition-colors"
-                >
-                    Show Token Counter
-                </button>
-            </div>
-        )
-    }
+    const canvasSelection: CanvasSelection = canvasEnabled ? canvasPlacement : "off"
 
     return (
         <div className="pt-3 border-t border-brown/10 mt-2">
-            <div className="flex items-center justify-between mb-2">
+            <div className="mb-2">
                 <span className="text-xs font-semibold uppercase tracking-[0.15em] text-brown-soft">
                     Session Tokens
                 </span>
-                <button
-                    onClick={toggle}
-                    className="text-[10px] text-brown-soft hover:text-coral-bright transition-colors"
-                >
-                    Hide
-                </button>
             </div>
 
             <div className="bg-cream-deep rounded-[16px] p-4 flex items-center justify-between text-brown shadow-card">
@@ -112,6 +174,21 @@ export function TokenCounter() {
                 <StatBlock label="Output" value={stats?.assistant} />
                 <Divider />
                 <StatBlock label="Total" value={stats?.total} highlight />
+            </div>
+
+            <div className="mt-3 grid grid-cols-1 gap-2">
+                <label className="text-[10px] uppercase tracking-[0.12em] text-brown-soft">
+                    Canvas
+                    <select
+                        value={canvasSelection}
+                        onChange={updateCanvasSelection}
+                        className="mt-1 block w-full rounded-button border border-brown/15 bg-white px-2 py-1 text-[11px] text-brown focus:outline-none focus:ring-2 focus:ring-teal/30"
+                    >
+                        <option value="off">Off</option>
+                        <option value="sidebar-top">Side Top</option>
+                        <option value="composer-right">Compose Right</option>
+                    </select>
+                </label>
             </div>
 
             <p className="text-[10px] text-center mt-2 text-brown-soft">

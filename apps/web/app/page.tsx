@@ -3,17 +3,23 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { logEvent } from "firebase/analytics";
+import dynamic from "next/dynamic";
 import { initAnalyticsIfConsented } from "@/lib/firebase";
 import { getAttributionEventParams, getStoredAttribution } from "@/lib/attribution";
 import { DEFAULT_THEMES } from "@themegpt/shared";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { Navigation } from "@/components/sections/Navigation";
 import { Hero } from "@/components/sections/Hero";
-import { ThemesSection } from "@/components/sections/ThemesSection";
-import { FeaturesSection } from "@/components/sections/FeaturesSection";
 import { PricingSection } from "@/components/sections/PricingSection";
 import { Footer } from "@/components/sections/Footer";
 import Link from "next/link";
+
+const ThemesSection = dynamic(
+  () => import("@/components/sections/ThemesSection").then((m) => ({ default: m.ThemesSection })),
+);
+const FeaturesSection = dynamic(
+  () => import("@/components/sections/FeaturesSection").then((m) => ({ default: m.FeaturesSection })),
+);
 
 const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
 const PENDING_CHECKOUT_KEY = "themegpt_pending_checkout_v1";

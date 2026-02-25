@@ -53,7 +53,7 @@ export function PricingSection({
           logEvent(analytics, "pricing_view", getAttributionEventParams());
         }
       },
-      { threshold: 0.45 }
+      { threshold: 0.15 }
     );
 
     observer.observe(node);

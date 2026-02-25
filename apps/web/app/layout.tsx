@@ -14,12 +14,14 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
-  weight: ["400", "500", "600", "700"],
+  weight: ["600", "700"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {

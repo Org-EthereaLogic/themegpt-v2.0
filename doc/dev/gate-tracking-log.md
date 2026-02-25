@@ -47,7 +47,7 @@
 | 2026-02-22 | 0% | Y | PASS | **First PASS day.** GA4 full-day: 17 total sessions (Paid Search 11, Cross-network 3, Direct 2, Paid Social 1, Unassigned 0). Zero unassigned traffic — all sessions attributed. Note: earlier midday snapshot showed 32% from 25 sessions; full-day reprocessing corrected the count. |
 | 2026-02-23 | 0% | Y | PASS | GA4 full-day: 21 total sessions (Paid Search 19, Cross-network 1, Direct 1). No unassigned traffic after reprocessing. |
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
-| 2026-02-25 | | | | |
+| 2026-02-25 | | | | Audit day — check after GA4 24h reprocessing. |
 | 2026-02-26 | | | | |
 | 2026-02-27 | | | | |
 
@@ -64,7 +64,7 @@
 | 2026-02-22 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 22 despite paid traffic volume. |
 | 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
-| 2026-02-25 | | | | | |
+| 2026-02-25 | | | | | Traffic & conversion audit day. See entry below. |
 | 2026-02-26 | | | | | |
 | 2026-02-27 | | | | | |
 
@@ -434,6 +434,49 @@ No Cloud Build deployment — docs-only change.
 - 1 returned without cancel param but Stripe confirms 0 new subscribers
 - 1 user attempted extension auth flow (3s, 0 clicks — race condition)
 - Session #2 notable: user clicked login twice, ended on support page — fixed in commit 9537d36
+
+---
+
+## Traffic & Conversion Audit — Feb 25, 2026
+
+**Scope:** Cross-platform traffic and conversion audit covering GA4, Clarity, CWS, and Google Ads data from Feb 22–25. Identified critical conversion blockers and implemented fixes.
+
+### Key Findings
+
+| Finding | Impact | Action |
+|---------|--------|--------|
+| 90% of GA4 sessions are mobile; ThemeGPT is a desktop extension | ~$230 of $361 ad spend wasted | P0: Exclude mobile in Google Ads (manual) |
+| Only 1 `pricing_view` in 4 days (31% avg scroll depth) | Users never see pricing | P1: Hero CTA → #pricing, lower IO threshold |
+| LCP 13.4s (p75), INP 544ms | Causing mobile bounces | P2: Font `display:swap`, trim weights, dynamic imports |
+| 0 conversions from 310 ad clicks ($361 spend) | $0 revenue | P3: Fix ad targeting, negative keywords (manual) |
+| 3 high-intent users attempted purchase but failed or abandoned | Lost revenue | P1: Investigate checkout return tracking |
+
+### Code Changes Deployed
+
+| File | Change | Audit Item |
+|------|--------|------------|
+| `layout.tsx` | Added `display: "swap"` to DM Sans + Fraunces; trimmed Fraunces to weights 600/700 only | P2: LCP font blocking |
+| `Hero.tsx` | Changed "See Themes" CTA → "See Plans" linking to `#pricing` | P1: Pricing visibility |
+| `PricingSection.tsx` | Lowered IntersectionObserver threshold from 0.45 → 0.15 | P1: `pricing_view` event capture |
+| `page.tsx` | Dynamic imports for ThemesSection + FeaturesSection (code-split below-fold) | P2: INP/hydration reduction |
+
+### Manual Actions Required (Google Ads)
+
+- [ ] Exclude mobile devices or set -90% bid adjustment
+- [ ] Fix disapproved sitelinks
+- [ ] Reduce daily budget from $130 to $50–75 until first conversion
+- [ ] Add negative keywords: "chatgpt login", "chatgpt free", "download chatgpt"
+- [ ] Consider keyword-specific ad groups: "chatgpt themes", "chatgpt dark mode", "customize chatgpt"
+
+### Metrics to Track (7-day targets)
+
+| Metric | Current (Feb 25) | Target |
+|--------|-------------------|--------|
+| Desktop sessions/day | ~1 | 10+ |
+| Pricing views/day | 0.25 | 3+ |
+| Checkout starts/day | 0 | 1+ |
+| LCP (p75) | 13.4s | <4.0s |
+| Bounce rate (desktop) | 50% | <40% |
 
 ---
 

@@ -110,14 +110,14 @@ export function Hero() {
             </svg>
           </a>
           <a
-            href="#themes"
+            href="#pricing"
             className="inline-flex items-center rounded-full border-2 px-6 py-3.5 font-semibold transition-all duration-300 hover:-translate-y-0.5"
             style={{
               borderColor: "#4A3728",
               color: "#4A3728",
             }}
           >
-            See Themes
+            See Plans
           </a>
         </div>
 

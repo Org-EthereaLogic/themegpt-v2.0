@@ -15,19 +15,17 @@ https://youtu.be/TFgUKvVzA6U
 ## Long Description (Copy everything below this line)
 ---BEGIN DESCRIPTION---
 
-Transform your ChatGPT experience with ThemeGPT!
+Transform your ChatGPT experience with ThemeGPT — the privacy-first extension for custom ChatGPT themes and local token tracking.
 
-The privacy-first theme manager that brings your chats to life. Featuring 15 handcrafted themes, stunning animated visual effects, and real-time local token tracking.
-
-Everything runs 100% locally in your browser — meaning your conversations stay private, and free features require absolutely no account to use!
+15 handcrafted themes, stunning animated visual effects, and a live canvas token counter. Everything runs 100% locally in your browser — your conversations stay private, and free features require absolutely no account.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 NEW IN v2.4
 
-Canvas Token Counter — See live input/output/total token stats directly on the ChatGPT page. Choose Side Top or Compose Right placement, or turn it off entirely.
+Canvas Token Counter — Live input/output/total token stats displayed directly on the ChatGPT page. Choose Side Top (sidebar area) or Compose Right (next to the composer), or turn it off entirely — controlled from the popup under "Canvas".
 
-Theme Preview Thumbnails — Browse themes with real screenshot previews in the popup for faster selection.
+Theme Preview Thumbnails — Browse all 15 themes with real screenshot previews in the popup. See exactly how each ChatGPT custom theme looks before you apply it.
 
 Smoother Premium Activation — Improved subscription state handling, checkout recovery, and one-click magic-link sign-in from the extension welcome screen.
 
@@ -37,56 +35,58 @@ Enhanced Compatibility — Seamless, break-proof integration with ChatGPT's late
 
 15 HANDCRAFTED THEMES
 
-FREE COLLECTION (7 themes)
+🆓 FREE COLLECTION (7 themes)
+No account needed — install and use immediately.
 
-ThemeGPT Dark & Light — Our signature cream & chocolate design
-Dracula — The beloved purple classic
-Monokai Pro — Warm golden accents
-Solarized Dark — Easy on the eyes
-One Dark — Clean blue highlights
-High Contrast — WCAG-compliant accessibility
+🌙 ThemeGPT Dark — Our signature dark chocolate & cream design
+☀️ ThemeGPT Light — Clean cream & chocolate light mode
+☀️ Solarized Dark — Easy on the eyes, classic teal accents
+🧛 Dracula — The beloved purple classic with glow
+🍯 Monokai Pro — Warm golden accents, developer favorite
+♿ High Contrast — WCAG-compliant accessibility theme
+💙 One Dark — Clean blue highlights, popular IDE port
 
-PREMIUM COLLECTION (8 themes with effects)
+⭐ PREMIUM COLLECTION (8 animated themes)
+Unlock at themegpt.ai — 30-day free trial, no card required.
 
-Aurora Borealis — Mesmerizing northern lights animation
-Electric Dreams — Cosmic neon aurora waves
-Sunset Blaze — Warm gradient animation
-Synth Wave — Retro neon grid effect
-Woodland Retreat — Forest scene with gentle snowfall
-Frosted Windowpane — Frosted glass with falling snow
-Silent Night — Twinkling stars with shooting stars
-Shades of Purple — Rich, deep purple tones
+🌌 Aurora Borealis — Mesmerizing northern lights animation
+💜 Electric Dreams — Cosmic neon aurora waves
+🌅 Sunset Blaze — Warm gradient aurora animation
+🌆 Synth Wave — Retro neon grid effect
+🌲 Woodland Retreat — Forest scene with gentle snowfall
+❄️ Frosted Windowpane — Frosted glass with falling snow
+✨ Silent Night — Dense twinkling starfield with shooting stars
+💟 Shades of Purple — Rich, deep purple tones
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 KEY FEATURES
 
-PRIVACY FIRST
-Your chat data never leaves your browser. No tracking. No analytics. We don't see your chats, period.
+🔒 PRIVACY FIRST
+Your chat data never leaves your browser. No tracking. No server-side analytics. We don't see your conversations, period.
 
-LOCAL TOKEN TRACKING
-Monitor your usage with built-in, real-time token counting for inputs and outputs. Calculated 100% locally on your device. NEW: Display token stats as a canvas overlay directly on the ChatGPT page — choose sidebar or composer placement.
+📊 LOCAL TOKEN COUNTER
+Real-time input, output, and total token tracking — calculated 100% on your device using the same tokenizer ChatGPT uses. Display counts in the popup or as a persistent canvas overlay directly on the ChatGPT page.
 
-ZERO CONFIGURATION
-Install and go! Themes apply instantly when you visit ChatGPT. Switch themes with a single click.
+⚡ ZERO CONFIGURATION
+Install and go. Themes apply instantly when you visit ChatGPT. Switch ChatGPT themes with a single click.
 
-ANIMATED EFFECTS
-Premium themes include stunning visual effects: aurora gradients, animated snowfall, twinkling starfields, and retro neon grids.
+🎨 ANIMATED EFFECTS
+Premium themes include live visual effects: aurora gradients, animated snowfall, twinkling starfields, and retro neon grids — all running locally in your browser.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 PREMIUM ACCESS & ACCOUNTS
 
-Enjoy the Free Collection immediately with zero friction. Want the animated effects? Premium themes are available through affordable subscription plans at themegpt.ai. Manage your subscription and connect your extension directly from your account.
+Enjoy the Free Collection immediately with zero friction. Want animated effects and the full ChatGPT customization experience? Premium themes are available through affordable subscription plans at themegpt.ai. Start a 30-day free trial — no credit card required. Manage your subscription and connect your extension directly from your account dashboard.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-OPEN SOURCE
-
-ThemeGPT is open source! Inspect our code on GitHub to verify exactly how we handle (or rather, don't handle) your data. Full transparency, always.
+WEBSITE
+Visit themegpt.ai for subscription plans, account management, and to unlock premium ChatGPT theme access.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-ThemeGPT is an independent project and is not affiliated with OpenAI or ChatGPT.
+⚠️ Disclaimer: ThemeGPT is an independent project and is not affiliated with, endorsed by, or sponsored by OpenAI or ChatGPT.
 
 ---END DESCRIPTION---

@@ -73,7 +73,7 @@ export function Navigation() {
             boxShadow: "0 4px 16px rgba(91, 181, 162, 0.25)",
           }}
         >
-          Add to Chrome — It&apos;s Free
+          Get Extension
         </a>
       </div>
     </nav>

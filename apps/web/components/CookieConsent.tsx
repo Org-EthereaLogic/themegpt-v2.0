@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 const CONSENT_KEY = "themegpt_analytics_consent";
 
@@ -19,8 +19,15 @@ function getServerSnapshot(): string | null {
 export function CookieConsent() {
   const consent = useSyncExternalStore(subscribeToNothing, getConsentSnapshot, getServerSnapshot);
   const [dismissed, setDismissed] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-  if (dismissed || consent === "accepted" || consent === "declined") return null;
+  useEffect(() => {
+    if (consent === "accepted" || consent === "declined") return;
+    const timer = setTimeout(() => setVisible(true), 5000);
+    return () => clearTimeout(timer);
+  }, [consent]);
+
+  if (dismissed || consent === "accepted" || consent === "declined" || !visible) return null;
 
   function respond(value: "accepted" | "declined") {
     localStorage.setItem(CONSENT_KEY, value);

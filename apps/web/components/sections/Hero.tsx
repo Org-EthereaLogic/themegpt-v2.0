@@ -60,9 +60,9 @@ export function Hero() {
             animation: "slideInLeft 0.6s ease-out 0.1s both",
           }}
         >
-          Give ChatGPT
+          ChatGPT Themes &
           <br />
-          <span className="wave-underline relative inline-block">your vibe</span>
+          <span className="wave-underline relative inline-block">Dark Mode</span>
         </h1>
 
         {/* Description */}
@@ -73,8 +73,8 @@ export function Hero() {
             animation: "slideInLeft 0.6s ease-out 0.2s both",
           }}
         >
-          Choose from 15 ChatGPT themes — including dark mode, animated aurora
-          effects, and more. Customize your ChatGPT interface with one click.
+          15 handcrafted themes including dark mode and animated aurora effects.
+          Install in one click.
         </p>
 
         {/* Buttons */}
@@ -120,6 +120,17 @@ export function Hero() {
             See Themes
           </a>
         </div>
+
+        {/* Trust Signal */}
+        <p
+          className="text-[0.85rem] mt-5 text-center lg:text-left"
+          style={{
+            color: "#7A6555",
+            animation: "slideInLeft 0.6s ease-out 0.4s both",
+          }}
+        >
+          Free Chrome extension — one-click install — no account required
+        </p>
       </div>
 
       {/* Video Demo - Hidden on mobile, shown on desktop */}

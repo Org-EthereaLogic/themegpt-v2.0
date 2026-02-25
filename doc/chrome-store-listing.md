@@ -4,7 +4,10 @@
 ThemeGPT - Custom ChatGPT Themes & Token Tracker
 
 ## Short Description (132 chars max)
-🎨 Transform ChatGPT with 15 stunning themes + animated effects. Track tokens locally. Privacy-first extension with local-only token stats.
+🎨 Transform ChatGPT with 15 themes + local token tracking. Privacy-first extension with animated effects and on-device stats.
+
+## Promo Video
+https://youtu.be/TFgUKvVzA6U
 
 ## Long Description (Copy everything below this line)
 ---BEGIN DESCRIPTION---

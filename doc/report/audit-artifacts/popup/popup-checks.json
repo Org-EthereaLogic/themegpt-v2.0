@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-02-25T07:20:09.421Z",
+  "extensionId": "pcdkcdlpchehllcamnklnijdcfgnnofk",
+  "totals": {
+    "checks": 7,
+    "blockerFailures": 0,
+    "warningFailures": 0
+  },
+  "checks": [
+    {
+      "check_id": "popup_theme_card_count",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/report/audit-artifacts/popup/popup-full.png",
+      "details": "Expected 15 theme cards, found 15."
+    },
+    {
+      "check_id": "popup_theme_names_present",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/report/audit-artifacts/popup/popup-full.png",
+      "details": "All production theme names are visible in popup cards."
+    },
+    {
+      "check_id": "popup_thumbnails_loaded",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/report/audit-artifacts/popup/popup-full.png",
+      "details": "All 15 theme cards render loaded screenshot thumbnails."
+    },
+    {
+      "check_id": "popup_canvas_selector_options",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/report/audit-artifacts/popup/popup-full.png",
+      "details": "Canvas options rendered: Off, Side Top, Compose Right."
+    },
+    {
+      "check_id": "popup_session_tokens_visible",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/report/audit-artifacts/popup/popup-full.png",
+      "details": "Session Tokens block is visible in popup."
+    },
+    {
+      "check_id": "popup_theme_cards_clickable",
+      "status": "pass",
+      "severity": "warning",
+      "evidence": "doc/report/audit-artifacts/popup/popup-full.png",
+      "details": "All 7 apply-state theme cards accepted click interactions."
+    },
+    {
+      "check_id": "popup_theme_card_screenshots_created",
+      "status": "pass",
+      "severity": "warning",
+      "evidence": "doc/report/audit-artifacts/popup/theme-cards",
+      "details": "Expected 15 per-card screenshots, wrote 15."
+    }
+  ]
+}

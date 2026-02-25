@@ -1,0 +1,113 @@
+{
+  "generatedAt": "2026-02-25T07:20:00.570Z",
+  "totalThemes": 15,
+  "generated": 15,
+  "missingSources": [],
+  "files": [
+    {
+      "themeId": "themegpt-dark",
+      "source": "asset/images/themegpt_dark_1.png",
+      "output": "apps/extension/assets/themes/themegpt-dark.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "themegpt-light",
+      "source": "asset/images/themegpt_light_1.png",
+      "output": "apps/extension/assets/themes/themegpt-light.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "solarized-dark",
+      "source": "asset/images/solarized_dark_1.png",
+      "output": "apps/extension/assets/themes/solarized-dark.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "dracula",
+      "source": "asset/images/dracula_1.png",
+      "output": "apps/extension/assets/themes/dracula.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "monokai-pro",
+      "source": "asset/images/monokai_pro_1.png",
+      "output": "apps/extension/assets/themes/monokai-pro.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "high-contrast",
+      "source": "asset/images/high_contrast_1.png",
+      "output": "apps/extension/assets/themes/high-contrast.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "one-dark",
+      "source": "asset/images/one_dark_1.png",
+      "output": "apps/extension/assets/themes/one-dark.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "aurora-borealis",
+      "source": "asset/images/aurora_borealis_1.png",
+      "output": "apps/extension/assets/themes/aurora-borealis.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "sunset-blaze",
+      "source": "asset/images/sunset_blaze_1.png",
+      "output": "apps/extension/assets/themes/sunset-blaze.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "electric-dreams",
+      "source": "asset/images/electric_dreams_1.png",
+      "output": "apps/extension/assets/themes/electric-dreams.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "woodland-retreat",
+      "source": "asset/images/woodland_retreat_1.png",
+      "output": "apps/extension/assets/themes/woodland-retreat.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "frosted-windowpane",
+      "source": "asset/images/frosted_windowpane_1.png",
+      "output": "apps/extension/assets/themes/frosted-windowpane.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "silent-night-starfield",
+      "source": "asset/images/silent_night_1.png",
+      "output": "apps/extension/assets/themes/silent-night-starfield.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "synth-wave",
+      "source": "asset/images/synth_wave_1.png",
+      "output": "apps/extension/assets/themes/synth-wave.png",
+      "width": 280,
+      "height": 160
+    },
+    {
+      "themeId": "shades-of-purple",
+      "source": "asset/images/shades_of_purple_1.png",
+      "output": "apps/extension/assets/themes/shades-of-purple.png",
+      "width": 280,
+      "height": 160
+    }
+  ]
+}

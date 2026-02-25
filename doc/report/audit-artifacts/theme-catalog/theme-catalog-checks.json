@@ -1,0 +1,98 @@
+{
+  "generatedAt": "2026-02-25T07:20:00.638Z",
+  "sourceOfTruth": "packages/shared/src/index.ts",
+  "totals": {
+    "productionThemes": 15,
+    "freeThemes": 7,
+    "premiumThemes": 8,
+    "checks": 12,
+    "blockerFailures": 0,
+    "warningFailures": 3
+  },
+  "checks": [
+    {
+      "check_id": "production_theme_total",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "packages/shared/src/index.ts",
+      "details": "Expected 15 production themes, found 15."
+    },
+    {
+      "check_id": "production_theme_split",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "packages/shared/src/index.ts",
+      "details": "Expected 7 free / 8 premium. Found 7 free / 8 premium."
+    },
+    {
+      "check_id": "theme_ids_unique",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "packages/shared/src/index.ts",
+      "details": "All 15 production theme IDs are unique."
+    },
+    {
+      "check_id": "theme_required_color_keys",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "packages/shared/src/index.ts",
+      "details": "All production themes include required color keys."
+    },
+    {
+      "check_id": "theme_hex_color_values",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "packages/shared/src/index.ts",
+      "details": "All production color values are valid 6-digit hex strings."
+    },
+    {
+      "check_id": "theme_contrast_thresholds",
+      "status": "fail",
+      "severity": "warning",
+      "evidence": "packages/shared/src/index.ts",
+      "details": "Contrast warnings: themegpt-light:accent/bg=1.69<3, solarized-dark:text/surface=4.11<4.5, one-dark:muted/bg=2.32<3."
+    },
+    {
+      "check_id": "popup_thumbnail_files_present",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "apps/extension/assets/themes",
+      "details": "All 15 production themes have popup thumbnails."
+    },
+    {
+      "check_id": "popup_thumbnail_dimensions",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "apps/extension/assets/themes",
+      "details": "All popup thumbnails are 280x160 PNG."
+    },
+    {
+      "check_id": "preview_missing_production_themes",
+      "status": "fail",
+      "severity": "warning",
+      "evidence": "apps/extension/tools/theme-preview/index.html",
+      "details": "Production IDs missing from preview tool: themegpt-dark, themegpt-light."
+    },
+    {
+      "check_id": "preview_extra_non_production_themes",
+      "status": "fail",
+      "severity": "warning",
+      "evidence": "apps/extension/tools/theme-preview/index.html",
+      "details": "Preview-only IDs: vscode-dark-plus, stellar-drift, candy-cane-chat, purple-twilight, snowfall-serenity, holiday-gift-wrapping, sage-forest-gift, festive-tree-gift, gingerbread-warmth, winter-wonderland, starry-christmas-eve, apple-ii-phosphor, tomorrow-night-blue, dark-forest, chocolate-caramel."
+    },
+    {
+      "check_id": "web_theme_screenshot_mapping_missing",
+      "status": "pass",
+      "severity": "warning",
+      "evidence": "apps/web/components/ui/ThemeCard.tsx",
+      "details": "Web theme screenshot mapping covers all production IDs."
+    },
+    {
+      "check_id": "web_theme_screenshot_mapping_extra",
+      "status": "pass",
+      "severity": "warning",
+      "evidence": "apps/web/components/ui/ThemeCard.tsx",
+      "details": "Web theme screenshot mapping has no non-production IDs."
+    }
+  ]
+}

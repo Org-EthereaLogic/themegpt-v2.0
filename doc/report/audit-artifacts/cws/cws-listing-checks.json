@@ -1,0 +1,121 @@
+{
+  "generatedAt": "2026-02-25T07:20:10.341Z",
+  "liveListingUrl": "https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba",
+  "requiredVideoUrl": "https://youtu.be/TFgUKvVzA6U",
+  "requiredVideoId": "TFgUKvVzA6U",
+  "screenshotAnalysis": [
+    {
+      "url": "https://lh3.googleusercontent.com/WtrxCcPHlE7hmGRNwde5fuK9vjHu6HeK-wupgS3RMpZWAZtlnZdpJYPH93yeYG7LCnpYxw9iwZGuBQxgrAevyqPtDnw",
+      "ok": true,
+      "status": 200,
+      "width": 1280,
+      "height": 800,
+      "bytes": 210734
+    },
+    {
+      "url": "https://lh3.googleusercontent.com/-sY9hmG_JxZSY6i8DcilgjLeRfm5ITDOOEUj43EMYU8T953LV02cc_smNMPp1MLEd63rvEGDqw9TBuUTkC3FSkwHSA",
+      "ok": true,
+      "status": 200,
+      "width": 1280,
+      "height": 800,
+      "bytes": 626368
+    },
+    {
+      "url": "https://lh3.googleusercontent.com/uVsFd-T2QP51Gn_qbe2gPrErGmiz5bWOBOmBI_lHAx53TVGH0bbhO5nxocMFNMm6F9B1qjHS1Elzit6JT-vjGkovIQ",
+      "ok": true,
+      "status": 200,
+      "width": 1280,
+      "height": 800,
+      "bytes": 749875
+    },
+    {
+      "url": "https://lh3.googleusercontent.com/P3z3BJtDWOAEeKQlwXhRM0V9hiMbg7jrXVFCEcOSu7XuUC-s5eJ7nsGOG1JzHDMxwVLbGl5yaP_rzfe3P1b7zUfMng",
+      "ok": true,
+      "status": 200,
+      "width": 1280,
+      "height": 800,
+      "bytes": 186545
+    },
+    {
+      "url": "https://lh3.googleusercontent.com/Y16Jv-qqAHuqs5bgSbf_uTL4qSS0wYpq5LehvyhCCT0mAnyl-yJgoM1fbzn7AiHaO9dBG0WDOIh_1_RLta6DEi8DRA",
+      "ok": true,
+      "status": 200,
+      "width": 1280,
+      "height": 800,
+      "bytes": 168348
+    }
+  ],
+  "videoEmbeds": [
+    "https://www.youtube.com/embed/TFgUKvVzA6U?rel=0&wmode=opaque&enablejsapi=1"
+  ],
+  "checks": [
+    {
+      "check_id": "draft_short_description_length",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/chrome-store-listing.md",
+      "details": "Short description length is 125 characters."
+    },
+    {
+      "check_id": "draft_contains_required_video_url",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/chrome-store-listing.md",
+      "details": "Draft listing includes required promo video URL https://youtu.be/TFgUKvVzA6U."
+    },
+    {
+      "check_id": "draft_theme_counts_match_production",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "doc/chrome-store-listing.md",
+      "details": "Draft claims total/free/premium = 15/7/8; production is 15/7/8."
+    },
+    {
+      "check_id": "live_screenshot_media_present",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba",
+      "details": "Live listing screenshot count: 5."
+    },
+    {
+      "check_id": "live_screenshot_media_compliance",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba",
+      "details": "All live screenshots meet dimension and size limits (>=1280x800, <=5MB)."
+    },
+    {
+      "check_id": "live_required_video_embed_present",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba",
+      "details": "Found 1 unique embed URLs containing TFgUKvVzA6U."
+    },
+    {
+      "check_id": "live_support_link_status",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "https://themegpt.ai/support",
+      "details": "Support URL returned HTTP 200."
+    },
+    {
+      "check_id": "live_privacy_link_status",
+      "status": "pass",
+      "severity": "blocker",
+      "evidence": "https://themegpt.ai/privacy",
+      "details": "Privacy URL returned HTTP 200."
+    },
+    {
+      "check_id": "live_contains_video_url_evidence",
+      "status": "pass",
+      "severity": "info",
+      "evidence": "https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba",
+      "details": "Video embed URLs: https://www.youtube.com/embed/TFgUKvVzA6U?rel=0&wmode=opaque&enablejsapi=1"
+    }
+  ],
+  "totals": {
+    "checks": 9,
+    "blockerFailures": 0,
+    "warningFailures": 0
+  }
+}

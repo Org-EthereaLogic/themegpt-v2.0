@@ -1,8 +1,8 @@
 {
   "name": "extension",
   "displayName": "ThemeGPT",
-  "version": "2.3.1",
-  "description": "The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally.",
+  "version": "2.4.0",
+  "description": "The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally — now with an on-page canvas counter.",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",

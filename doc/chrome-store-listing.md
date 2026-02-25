@@ -1,10 +1,13 @@
 # Chrome Web Store Listing
 
-## Title
-ThemeGPT - Custom ChatGPT Themes & Token Tracker
+## Title (from package)
+ThemeGPT
+
+## Summary (from package.json `description`)
+The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally — now with an on-page canvas counter.
 
 ## Short Description (132 chars max)
-🎨 Transform ChatGPT with 15 themes + local token tracking. Privacy-first extension with animated effects and on-device stats.
+Transform ChatGPT with 15 themes + local token tracking. Privacy-first extension with animated effects and on-device stats.
 
 ## Promo Video
 https://youtu.be/TFgUKvVzA6U
@@ -12,74 +15,78 @@ https://youtu.be/TFgUKvVzA6U
 ## Long Description (Copy everything below this line)
 ---BEGIN DESCRIPTION---
 
-🎨 Transform your ChatGPT experience with ThemeGPT 2.0!
+Transform your ChatGPT experience with ThemeGPT!
 
-The privacy-first theme manager featuring 15 beautiful themes, stunning animated visual effects, and local token tracking. Extension theme rendering and token counting run locally in your browser.
+The privacy-first theme manager that brings your chats to life. Featuring 15 handcrafted themes, stunning animated visual effects, and real-time local token tracking.
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-✨ VERSION 2.0 HIGHLIGHTS
-
-🆕 Completely Redesigned — Fresh, modern interface with an animated mascot and intuitive theme browser
-
-🌌 Animated Premium Themes — Watch aurora lights dance, snow gently fall, or stars twinkle across your screen while you chat
-
-⚡ Enhanced Compatibility — Seamless integration with ChatGPT's latest interface updates
+Everything runs 100% locally in your browser — meaning your conversations stay private, and free features require absolutely no account to use!
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🎨 15 HANDCRAFTED THEMES
+NEW IN v2.4
 
-🆓 FREE COLLECTION (7 themes)
+Canvas Token Counter — See live input/output/total token stats directly on the ChatGPT page. Choose Side Top or Compose Right placement, or turn it off entirely.
 
-🌙 ThemeGPT Dark & Light — Our signature cream & chocolate design
-🧛 Dracula — The beloved purple classic
-🍯 Monokai Pro — Warm golden accents
-☀️ Solarized Dark — Easy on the eyes
-💙 One Dark — Clean blue highlights
-♿ High Contrast — WCAG-compliant accessibility
+Theme Preview Thumbnails — Browse themes with real screenshot previews in the popup for faster selection.
 
-⭐ PREMIUM COLLECTION (8 themes with effects)
+Smoother Premium Activation — Improved subscription state handling, checkout recovery, and one-click magic-link sign-in from the extension welcome screen.
 
-🌌 Aurora Borealis — Mesmerizing northern lights animation
-💜 Electric Dreams — Cosmic neon aurora waves
-🌅 Sunset Blaze — Warm gradient animation
-🌆 Synth Wave — Retro neon grid effect
-🌲 Woodland Retreat — Forest scene with gentle snowfall
-❄️ Frosted Windowpane — Frosted glass with falling snow
-✨ Silent Night — Twinkling stars with shooting stars
-💟 Shades of Purple — Rich, deep purple tones
+Enhanced Compatibility — Seamless, break-proof integration with ChatGPT's latest interface updates.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-🔑 KEY FEATURES
+15 HANDCRAFTED THEMES
 
-🔒 PRIVACY FIRST
-Your chat data never leaves your browser. No accounts required for free themes. No tracking or analytics in the extension. (The optional themegpt.ai purchase flow uses consent-gated analytics.)
+FREE COLLECTION (7 themes)
 
-📊 LOCAL TOKEN TRACKING
-Monitor your ChatGPT usage with built-in token counting. See input/output tokens in real-time, all calculated locally on your device.
+ThemeGPT Dark & Light — Our signature cream & chocolate design
+Dracula — The beloved purple classic
+Monokai Pro — Warm golden accents
+Solarized Dark — Easy on the eyes
+One Dark — Clean blue highlights
+High Contrast — WCAG-compliant accessibility
 
-⚡ ZERO CONFIGURATION
+PREMIUM COLLECTION (8 themes with effects)
+
+Aurora Borealis — Mesmerizing northern lights animation
+Electric Dreams — Cosmic neon aurora waves
+Sunset Blaze — Warm gradient animation
+Synth Wave — Retro neon grid effect
+Woodland Retreat — Forest scene with gentle snowfall
+Frosted Windowpane — Frosted glass with falling snow
+Silent Night — Twinkling stars with shooting stars
+Shades of Purple — Rich, deep purple tones
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KEY FEATURES
+
+PRIVACY FIRST
+Your chat data never leaves your browser. No tracking. No analytics. We don't see your chats, period.
+
+LOCAL TOKEN TRACKING
+Monitor your usage with built-in, real-time token counting for inputs and outputs. Calculated 100% locally on your device. NEW: Display token stats as a canvas overlay directly on the ChatGPT page — choose sidebar or composer placement.
+
+ZERO CONFIGURATION
 Install and go! Themes apply instantly when you visit ChatGPT. Switch themes with a single click.
 
-✨ ANIMATED EFFECTS
+ANIMATED EFFECTS
 Premium themes include stunning visual effects: aurora gradients, animated snowfall, twinkling starfields, and retro neon grids.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-💎 PREMIUM ACCESS
+PREMIUM ACCESS & ACCOUNTS
 
-Free themes work immediately — no account needed! Premium animated themes are available through affordable subscription plans with easy Google/GitHub sign-in.
+Enjoy the Free Collection immediately with zero friction. Want the animated effects? Premium themes are available through affordable subscription plans at themegpt.ai. Manage your subscription and connect your extension directly from your account.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-📖 OPEN SOURCE
+OPEN SOURCE
 
 ThemeGPT is open source! Inspect our code on GitHub to verify exactly how we handle (or rather, don't handle) your data. Full transparency, always.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⚠️ ThemeGPT is an independent project and is not affiliated with OpenAI or ChatGPT.
+ThemeGPT is an independent project and is not affiliated with OpenAI or ChatGPT.
 
 ---END DESCRIPTION---

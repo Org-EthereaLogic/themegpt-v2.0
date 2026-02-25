@@ -3,7 +3,7 @@
 **Purpose:** Weekly operating snapshot for active paid + organic growth.
 **Cadence:** Weekly
 **Owner:** Growth + Product + Ops
-**Data freshness:** GA4 data reflects Feb 21–23 (full-day processed). Feb 24 data pending (24–48h delay). GA4 OAuth token re-authed Feb 24 evening.
+**Data freshness:** GA4 data reflects Feb 21–24 (full-day processed as of Feb 25 verification pull). GA4 OAuth token was re-authed Feb 24 evening.
 
 ---
 
@@ -23,20 +23,20 @@
 | CWS listing views | — | — | Pull from CWS dashboard |
 | CWS installs | — | — | Pull from CWS dashboard |
 | CWS uninstall rate % | — | — | Pull from CWS dashboard |
-| Web sessions (GA4, Feb 21–23) | ~48 | N/A (Days 2–4) | GA4 property `516189580`. Full-day processed data for Feb 21–23. Feb 22: 17 sessions (Paid Search 11, Cross-network 3, Direct 2, Paid Social 1). Feb 23: 27 sessions (Cross-network 13, Unassigned 8, Paid Search 5, Direct 1). |
-| Paid traffic share % | ~71% | N/A | Paid Search (16) + Cross-network (16) + Paid Social (2) = 34 of ~48 total sessions. Paid channels dominant. |
+| Web sessions (GA4, Feb 21–23) | 42 | N/A (Days 2–4) | GA4 property `516189580`. Feb 21: 4 sessions (Direct 3, Referral 1). Feb 22: 17 sessions (Paid Search 11, Cross-network 3, Direct 2, Paid Social 1). Feb 23: 21 sessions (Paid Search 19, Cross-network 1, Direct 1). |
+| Paid traffic share % | 83% | N/A | Paid Search (30) + Cross-network (4) + Paid Social (1) = 35 of 42 total sessions. Paid channels dominant. |
 
 **Session channel breakdown (Feb 21–23 full-day processed):**
 
 | Channel | Sessions | Notes |
 |---------|----------|-------|
-| Cross-network | 16 | Google Performance Max / multi-channel. Dominated Feb 23 (13 of 27). |
-| Paid Search | 16 | Google Search "Website traffic-Search-1". Feb 22 was strongest day (11). 100% bounce, avg 0.0s in GA4. |
-| Unassigned | 9 | Feb 21: 1, Feb 22: 0 (PASS), Feb 23: 8 (FAIL). Inconsistent attribution. |
-| Direct | 5 | Organic/bookmarks. |
-| Paid Social | 2 | Reddit `reddit_launch_v1` — 97% of Reddit clicks go to mobile (platform limitation). |
-| Referral | 0 | Stripe referrals likely reattributed in full-day processing. |
-| **Total** | **~48** | Feb 22 first Gate 1 PASS day (0% unassigned). |
+| Paid Search | 30 | Google Search "Website traffic-Search-1". Strong volume, weak engagement (5.3–11.9s avg session duration). |
+| Cross-network | 4 | Google cross-network traffic (mostly mobile). |
+| Direct | 6 | Organic/bookmarks. |
+| Paid Social | 1 | Reddit `reddit_launch_v1` appears minimally in GA4 attribution for this window. |
+| Referral | 1 | Organic referral traffic present on Feb 21. |
+| Unassigned | 0 | No unassigned sessions in Feb 21–23 after full-day reprocessing. |
+| **Total** | **42** | Attribution quality improved versus earlier snapshots. |
 
 ---
 
@@ -73,7 +73,7 @@ Pull from: `GET /api/metrics/monetization?days=7` (requires auth — pull manual
 | `purchase_success` | 0 | N/A | No completed purchases in GA4 yet |
 | `trial_start` | 0 | N/A | No trial conversions visible in GA4 |
 
-> **Feb 24 update:** Feb 22–23 generated zero new funnel events. All nonzero events (checkout_start=5, pricing_view=3) are confirmed as Feb 21 organic only; trial_start and purchase_success remain at zero throughout. Paid traffic has produced zero funnel events across 4 days (Feb 21–24). First live trial conversion confirmed server-side on Feb 22 (`adrielletherat@gmail.com`), but GA4 client-side event not reflected (consent gap or event timing).
+> **Feb 24 update (revalidated Feb 25):** checkout_start=5 and pricing_view=3 are still concentrated on Feb 21. `trial_start` and `purchase_success` remain at zero in GA4 for Feb 21–24. Feb 24 did record mobile funnel activity (`mobile_landing`=4, `mobile_email_capture`=1), but no checkout-stage events.
 
 Clarity weekly review:
 
@@ -156,8 +156,8 @@ Escalation rule: India share 0% vs US 13% — no escalation. Pakistan at 11% is 
 ## 8) Narrative Summary
 
 - **What improved this week:** First live trial conversion on Feb 22 (`adrielletherat@gmail.com` — Monthly Trial). Root cause of 18 checkouts / 0 conversions resolved (`payment_method_collection: 'if_required'`). Full payment system audit completed — 3 conversion blockers patched (infinite spinner for single-theme buyers, `trialing→active` DB sync gap, `session.customer` null cast). Abandoned checkout recovery pipeline confirmed live via 3 received recovery emails. Stripe Customer Portal shipped and live-tested end-to-end with real subscriber. `allow_promotion_codes: true` added to checkout. Google Ads and Reddit Ads pivoted to desktop-only targeting. Reddit campaign launched at $50/day for $500 credit promo. EIN/tax ID submitted to Stripe. Two deploys: revisions `00173-xb7` and `00176-5ts`.
-- **What regressed this week:** Gate 1 (unassigned traffic) FAIL for 3 consecutive days. Paid ad traffic generating 0 funnel events (day 3) — 100% bounce. Device engagement inversion: mobile traffic averaged 21.9s vs PC 0.8s on Clarity. Desktop targeting shift is intentional (extension not usable on mobile), but emphasizes the poor PC performance. GA4 events missing for known conversion (consent gap).
+- **What regressed this week:** Paid ad traffic generated no checkout-stage funnel events after Feb 21. Mobile volume remained high (37/44 sessions across Feb 21–24), while checkout-stage conversion signals stayed flat. GA4 still does not reflect the known server-side trial conversion (consent or timing gap).
 - **Evening session (Feb 23):** Deep Clarity session replay analysis identified three UX friction points: (1) checkout double-login caused by `callbackUrl` losing scroll position + silent 401 on auto-resume, (2) login page giving no context about pending checkout, (3) extension auth race condition where fast API beat 2s ping timeout. All three fixed and deployed (commit `9537d36`, build `df4378ef`). Google Ads structured snippets applied (Styles: Aurora Borealis, Synth Wave, Midnight Dark). Reddit Ads investigation revealed 97% mobile spend waste ($112/$115) with no platform-level device exclusion available. 8 specialized agents added to `.claude/agents/` with routing rules in CLAUDE.md and AGENTS.md.
-- **Feb 24 evening session:** Full analytics pull via Clarity MCP + re-authed GA4 Data API. Key finding: Feb 22 was first Gate 1 PASS day (0% unassigned — all 17 sessions attributed). Mobile traffic worsened to 76% with 9s avg active time (was 21.9s on Feb 23). Desktop users average 212s — strong engagement when reached. Pakistan emerged at 11% in country mix (new entrant). All 5 checkout_start events confirmed as Feb 21 organic only — paid traffic has generated zero funnel events across 4 days. Decision: continue ads while investigating conversion gap (150+ CWS installs suggest demand exists). Two mobile strategy options brainstormed: (1) email-link-to-desktop flow for mobile visitors, (2) mobile extension (unlikely due to technical constraints). Google Ads MCP still needs separate re-auth (different OAuth from GA4).
+- **Feb 24 evening session (revalidated Feb 25):** GA4 full-day data now shows Feb 21 PASS (0% unassigned), Feb 22 PASS (0%), Feb 23 PASS (0%), and Feb 24 FAIL (50% on 2-session volume). Mobile remained dominant (37 of 44 sessions across Feb 21–24). Source/device split indicates mobile traffic is primarily Google-attributed (`google / cpc` mobile = 28 sessions) while Reddit attribution remains low (`reddit / paid_social` mobile = 1 session). Checkout-stage funnel events remain concentrated on Feb 21 only.
 - **Biggest unknown:** Why 150+ CWS installs (with daily growth) have produced zero paid conversions. The gap between product installs and revenue is the key mystery — is it pricing, trial friction, extension-to-web disconnect, or something else?
 - **Next week action:** Investigate conversion gap via Clarity session replays and user feedback. Monitor checkout completion rate post-UX-fix. Evaluate mobile email-link flow feasibility. Re-auth Google Ads MCP for automated spend tracking. Pull Google Ads spend manually for guardrail verification. Test extension auth flow end-to-end in production.

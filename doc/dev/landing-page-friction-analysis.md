@@ -1,10 +1,19 @@
 # Landing Page Friction Analysis
 Prepared: Feb 23, 2026
 
+## Status Update — Feb 25, 2026
+
+- This document captures a **historical Feb 23 snapshot** and should not be treated as current page state.
+- The CTA recommendation in this document has already been shipped:
+  - Hero CTA now points directly to CWS with "Add to Chrome — It's Free"
+  - Navigation CTA now points directly to CWS with "Add to Chrome — It's Free"
+  - Features CTA now points directly to CWS with "Add to Chrome — It's Free"
+- Updated GA4 pulls for Feb 21-24 show mobile traffic is still the core issue, but attribution is primarily Google mobile (`google / cpc`), not Reddit-dominant.
+
 ## Context
 Desktop-only search ad traffic (from campaign "Website traffic-Search-1") is reflecting a 100% bounce rate with 0.0s average engagement time in GA4 and only 0.8s average duration on Clarity. We need to identify why high-intent search users are bouncing instantly.
 
-## Current Experience Review
+## Historical Experience Review (Feb 23 Snapshot)
 Based on a review of `apps/web/app/page.tsx` and its components:
 
 ### 1. The Ad-to-Message Match
@@ -26,7 +35,7 @@ Based on a review of `apps/web/app/page.tsx` and its components:
 - When mobile users were hitting the page, they couldn't install it, so they explored the page (giving 21.9s duration).
 - When desktop users hit the page, they *can* install it, but the page tells them to "Start Free 30-Day Trial", pushing them into a checkout flow rather than a simple Web Store install. The immediate cognitive load of a subscription wall causes an instant bounce (0.8s duration).
 
-## Recommended Action Plan
+## Historical Action Plan (Completed)
 
 To fix the 100% desktop bounce rate, we must reduce the initial friction and align the page with standard Chrome extension acquisition flows.
 
@@ -64,10 +73,11 @@ A user hit `/auth/extension` for 3 seconds with 0 clicks and left.
 
 **Fix:** Decoupled token generation from extension send. New `useEffect` watches both `token` and `extensionDetected` independently.
 
-#### 6. Reddit Ads — 97% Mobile Spend Waste (NO FIX AVAILABLE)
+#### 6. Reddit Ads — Platform Device Limitation (Historical Spend Observation)
 Reddit Ads device breakdown: iOS 88 clicks, Android 34 clicks, macOS 1 click, Windows 3 clicks. Only 4 desktop clicks out of 126 total ($115 spend). Reddit Ads has no device exclusion feature at the ad group level — only Feed/Conversations placement controls.
 
-**Status:** Campaign kept running while evaluating pause decision. No platform-level mitigation available.
+**Status:** Campaign kept running while evaluating pause decision. No platform-level mitigation available.  
+**Note (Feb 25 GA4 verification):** session attribution for Feb 21-24 shows 1 `reddit / paid_social` mobile session versus 28 `google / cpc` mobile sessions.
 
 ### Analytics Snapshot (Clarity — Last 3 Days)
 - 50 sessions, 40 unique users, 1.68 pages/session

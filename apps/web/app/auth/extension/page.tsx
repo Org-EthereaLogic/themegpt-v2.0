@@ -123,7 +123,7 @@ function TokenSentSuccess({ email }: { email: string }) {
       })
       const data = await res.json()
       if (data.success && data.checkoutUrl) {
-        trackFunnelEvent("trial_started", { source: "post_auth_prompt" })
+        trackFunnelEvent("trial_start", { source: "post_auth_prompt" })
         window.location.href = data.checkoutUrl
       } else if (data.alreadySubscribed) {
         setTrialError("You already have an active subscription.")

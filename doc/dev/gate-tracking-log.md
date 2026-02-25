@@ -3,7 +3,7 @@
 **Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
 **Updated:** Daily, by checking GA4
 **Blocker:** No hard launch blocker. Gate 1 and Gate 3 are tracked as diagnostics while paid acquisition begins.
-**Latest deployment snapshot:** Feb 24, 2026 — commit `2ce4adb` deployed via trigger `deploy-themegpt-on-push` (build `f08d5ef3-51ab-42fb-9cee-d52d154677e1`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00202-kkv` (100% traffic).
+**Latest deployment snapshot:** Feb 24, 2026 — commit `f4458c7` deployed via trigger `deploy-themegpt-on-push` (build `5b73bea4-3a48-4593-870d-2962a2f9bfc8`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00209-xjk` (100% traffic).
 
 ---
 
@@ -43,10 +43,10 @@
 | Date | Unassigned % | Filter Active? | Status | Notes |
 |------|-------------|----------------|--------|-------|
 | 2026-02-20 | 0% | Y | TRACKING | 2 total Direct sessions. No unassigned traffic. (Data API lagging, true Day 1 still Feb 21). |
-| 2026-02-21 | 50% | Y | FAIL | 2 total sessions (1 Direct, 1 Unassigned). Low volume — not statistically meaningful. GA4 Data API confirmed: page_view×7, checkout_start×3, pricing_view×2. |
+| 2026-02-21 | 0% | Y | PASS | 4 total sessions (Direct 3, Referral 1). No unassigned traffic after full-day reprocessing. |
 | 2026-02-22 | 0% | Y | PASS | **First PASS day.** GA4 full-day: 17 total sessions (Paid Search 11, Cross-network 3, Direct 2, Paid Social 1, Unassigned 0). Zero unassigned traffic — all sessions attributed. Note: earlier midday snapshot showed 32% from 25 sessions; full-day reprocessing corrected the count. |
-| 2026-02-23 | 30% | Y | FAIL | GA4 full-day: 27 total sessions (Cross-network 13, Unassigned 8, Paid Search 5, Direct 1). Unassigned = 8/27 = 30%. Cross-network dominated (48%). 100% bounce from ads continues (0 checkout_start). Desktop-only targeting applied mid-day for Google Ads. Reddit campaign stable at 1 session/day. |
-| 2026-02-24 (eve) | — | Y | — | Evening analytics pull via Clarity MCP + re-authed GA4 Data API. Clarity 3-day snapshot: 42 sessions, 38 users, Google 69% of traffic, mobile 76%. Desktop avg active time 212s vs mobile 9s. GA4 daily pull for Feb 24 still pending (24–48h processing delay). GA4 OAuth token re-authed this session. |
+| 2026-02-23 | 0% | Y | PASS | GA4 full-day: 21 total sessions (Paid Search 19, Cross-network 1, Direct 1). No unassigned traffic after reprocessing. |
+| 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
 | 2026-02-25 | | | | |
 | 2026-02-26 | | | | |
 | 2026-02-27 | | | | |
@@ -60,10 +60,10 @@
 | Date | `trial_start` | `checkout_start` | `purchase_success` | All 3 visible? | Notes |
 |------|--------------|-----------------|-------------------|----------------|-------|
 | 2026-02-20 | N | N | N | N | GA4 SDK was not loading pre-redeploy. Post-fix: GA4 confirmed working via Realtime. No conversion activity today (expected — funnel events require real user purchases). |
-| 2026-02-21 | N | Y (×3) | N | N | GA4 Data API confirmed. checkout_start firing (3 events). pricing_view firing (2 events). trial_start and purchase_success absent — expected, no completed purchases yet. |
-| 2026-02-22 | N | Y (×5) | N | N | GA4 API confirmed: checkout_start ×5, pricing_view ×3. trial_start and purchase_success absent — no completed purchases this day. checkout_abandon not firing (users may not be returning via canceled param consistently). |
-| 2026-02-23 | N | N | N | N | Midday audit: 0 checkout_start, 0 pricing_view from 26 GA4 sessions. Zero funnel events from paid traffic for the third straight day. Clicks bounce before a single event fires (0.0s avg duration in GA4). Note: the 5 organic checkouts from Feb 21 were canary testing. Funnel is solid, but not being reached by landing page traffic. Stripe portal deployed — self-serve subscription management now live. |
-| 2026-02-24 (eve) | N | N | N | N | GA4 token re-authed. MCP cumulative Feb 21–23 confirms checkout_start=5, pricing_view=3 — all nonzero funnel events from Feb 21 organic traffic only. trial_start and purchase_success remain at zero. Zero funnel events from paid traffic across all 4 days (Feb 21–24). Checkout UX fixes deployed but no new conversions yet. |
+| 2026-02-21 | N | Y (×5) | N | N | GA4 Data API full-day: checkout_start ×5 and pricing_view ×3 (all from Feb 21). trial_start and purchase_success absent. |
+| 2026-02-22 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 22 despite paid traffic volume. |
+| 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
+| 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
 | 2026-02-25 | | | | | |
 | 2026-02-26 | | | | | |
 | 2026-02-27 | | | | | |

@@ -2,7 +2,7 @@
 
 Privacy-first Chrome extension for customizing ChatGPT themes and tracking token counts locally.
 
-## Current Status (As of February 24, 2026)
+## Current Status (As of February 25, 2026)
 
 - Extension package version in repo: `2.3.1`
 - Latest published Chrome Web Store version: `2.3.0` (approved February 22, 2026)

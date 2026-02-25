@@ -17,9 +17,9 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 
 > **Latest published extension: v2.3.0** — approved by the Chrome Web Store on February 22, 2026.
 >
-> **Current extension source version in this repo: v2.3.1** — submission pending store review as of February 24, 2026.
+> **Current extension source version in this repo: v2.3.1** — submitted to CWS and Edge; review status is tracked in `doc/dev/gate-tracking-log.md`.
 >
-> **Latest production web deployment:** commit `2ce4adb` auto-deployed via Cloud Build trigger `deploy-themegpt-on-push` to Cloud Run revision `themegpt-web-00202-kkv` on February 24, 2026.
+> **Latest production web deployment:** commit `c9d2cb5` auto-deployed via Cloud Build trigger `deploy-themegpt-on-push` (build `999bff5b-31d3-409d-9a69-cb975873d715`) to Cloud Run revision `themegpt-web-00211-84v` (100% traffic) on February 25, 2026.
 >
 > See [CHANGELOG.md](./CHANGELOG.md) for release notes and [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md) for live submission/review status.
 
@@ -143,6 +143,13 @@ pnpm test
 - Daily gate and deployment integrity log: [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md)
 - Engineering execution checklist: [doc/dev/monetization-growth-execution-checklist.md](./doc/dev/monetization-growth-execution-checklist.md)
 - Governance and standards: [CONSTITUTION.md](./CONSTITUTION.md), [DIRECTIVES.md](./DIRECTIVES.md), [AGENTS.md](./AGENTS.md)
+
+Latest campaign snapshot (GA4 web property `516189580`, Feb 21-24):
+- 44 sessions, 39 active users
+- 84% mobile (37/44)
+- mobile attribution concentrated in `google / cpc` (28 sessions) vs `reddit / paid_social` (1 session)
+- checkout-stage events remain limited (`checkout_start=5`, `trial_start=0`, `purchase_success=0`)
+- campaign-ops note: Google Ads API auth is currently invalid (developer token); spend/click reporting is being validated manually in ad dashboards
 
 ---
 

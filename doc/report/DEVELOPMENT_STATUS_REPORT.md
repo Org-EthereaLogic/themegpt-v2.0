@@ -1,10 +1,10 @@
 # ThemeGPT v2.0 - Development Status Report
 
-**Generated:** 2026-02-17 | **Last updated:** 2026-02-20
+**Generated:** 2026-02-17 | **Last updated:** 2026-02-25
 **Branch:** `main`
 **Repository:** Org-EthereaLogic/themegpt-v2.0
 
-> **Note:** Sections 2–8 reflect the project state at initial report generation (Feb 17, 2026). The architecture and feature set have grown significantly since then (subscription system, premium themes, full Stripe/Firestore integration, abandoned checkout recovery). Sections 9–11 and the Executive Summary are kept current.
+> **Note:** Sections 2–8 reflect the baseline project snapshot at initial report generation (Feb 17, 2026). For current release, deployment, and campaign status use the Executive Summary, the Feb 25 addendum below, `doc/dev/gate-tracking-log.md`, and `themegpt-90-day-monetization-roadmap.html`.
 
 ---
 
@@ -19,9 +19,19 @@ ThemeGPT v2.0 is a **privacy-first Chrome extension** that enables users to cust
 | Web App LOC | ~1,500+ | Marketing site + API routes + Stripe webhooks |
 | Shared Package LOC | ~400+ | Types, constants, shared utilities |
 | Test Coverage | 5 test files | 94/94 passing |
-| Public Version | v2.2.2 live / v2.3.0 pending CWS review | End-to-end payment flow validated Feb 19, 2026 |
+| Public Version | v2.3.0 live / v2.3.1 pending CWS+Edge review | Recent web conversion UX refresh deployed Feb 25, 2026 |
 
-**Overall Project Health: GOOD** — v2.2.2 live on CWS (published Feb 20); v2.3.0 submitted to CWS Feb 20 (run `22238384383`, pending review); abandoned checkout recovery deployed to Cloud Run; Stripe, Firestore indexes, and full payment funnel confirmed operational; GA4 Gate 1/3 observation windows are active as of Feb 20, 2026.
+**Overall Project Health: GOOD** — v2.3.0 is live on CWS, v2.3.1 extension submissions remain pending CWS/Edge review, and web production is deployed from `main` at commit `c9d2cb5` (Cloud Run revision `themegpt-web-00211-84v`). Stripe + Firestore payment infrastructure remains stable; current growth focus is paid-traffic quality and mobile-to-desktop conversion.
+
+### Current Operations Addendum (Feb 25, 2026)
+
+- **Recent codebase updates (web):**
+  - `885a6bf`: analytics event naming aligned (`trial_started` -> `trial_start`)
+  - `c9d2cb5`: install-first Hero/navigation messaging, `/mobile` email-first conversion flow with social proof, delayed cookie consent prompt
+- **Latest deploy evidence:** Cloud Build `999bff5b-31d3-409d-9a69-cb975873d715` (SUCCESS) -> Cloud Run `themegpt-web-00211-84v` (100% traffic)
+- **Advertising diagnostics (GA4 property `516189580`, Feb 21-24):** 44 sessions, 39 active users, 84% mobile (37/44), `google / cpc` mobile 28 sessions, `reddit / paid_social` mobile 1 session
+- **Funnel signal:** `checkout_start=5`, `trial_start=0`, `purchase_success=0`, `mobile_landing=4`, `mobile_email_capture=1`
+- **Campaign reporting limitations:** Google Ads API auth is invalid (developer token), so spend/click checks are manual; Reddit Ads API export is not available in this workflow
 
 ---
 
@@ -344,8 +354,8 @@ pnpm lint   # ESLint validation
 
 - CWS listing review (submitted Feb 22, 2026; metadata-only — expected faster review than full extension)
 - Gate 1 / Gate 3: running as **diagnostic indicators only** — no longer block any launch activity
-- Google Search ads ($25/day) + Reddit ads ($50/day) — live since Feb 21, 2026
-- Week-1 social posts (Twitter/X + LinkedIn) — copy finalized, pending publish
+- Google Search ads ($80/day optimized cap) + Reddit ads ($50/day) — live since Feb 21, 2026
+- Paid traffic optimization and channel triage based on GA4 + server-side monetization diagnostics
 - Product Hunt launch — assets complete, **no gate dependency**, execute when ready
 - **Primary focus: monetization** — scale channels with attributed server-side revenue
 
@@ -422,8 +432,8 @@ pnpm clean        # Clean all build artifacts
 
 ### Chrome Web Store
 
-- **Published:** 2.2.2 (live — published Feb 20, 2026 via run `22205732502`)
-- **Pending Review:** 2.3.0 (submitted Feb 20, 2026 via run `22238384383`)
+- **Published:** 2.3.0 (approved Feb 22, 2026; currently live)
+- **Pending Review:** 2.3.1 (CWS + Edge submissions in review)
 - **Extension ID:** `dlphknialdlpmcgoknkcmapmclgckhba`
 - **URL:** https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba
 

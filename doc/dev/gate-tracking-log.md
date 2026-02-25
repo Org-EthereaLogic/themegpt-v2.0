@@ -3,7 +3,7 @@
 **Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
 **Updated:** Daily, by checking GA4
 **Blocker:** No hard launch blocker. Gate 1 and Gate 3 are tracked as diagnostics while paid acquisition begins.
-**Latest deployment snapshot:** Feb 24, 2026 — commit `f4458c7` deployed via trigger `deploy-themegpt-on-push` (build `5b73bea4-3a48-4593-870d-2962a2f9bfc8`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00209-xjk` (100% traffic).
+**Latest deployment snapshot:** Feb 25, 2026 — commit `c9d2cb5` deployed via trigger `deploy-themegpt-on-push` (build `999bff5b-31d3-409d-9a69-cb975873d715`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00211-84v` (100% traffic).
 
 ---
 
@@ -129,6 +129,20 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
     - Woodland Retreat
   - Section heading and each card deep-link to `/?skip_mobile=1#themes`.
 - **Deploy evidence:** commit `2ce4adb` auto-triggered Cloud Build build `f08d5ef3-51ab-42fb-9cee-d52d154677e1` (SUCCESS) and rolled out Cloud Run revision `themegpt-web-00202-kkv` at 100% traffic.
+
+---
+
+## Conversion UX + CTA Messaging Refresh — Feb 25, 2026
+
+- **Scope:** Improve paid-traffic first impression and mobile-to-desktop install conversion.
+- **Shipped behavior:**
+  - Hero copy tightened to explicit install-first value proposition ("ChatGPT Themes & Dark Mode").
+  - Navigation primary CTA simplified ("Get Extension").
+  - `/mobile` flow switched to email-first layout with social proof, stronger primary CTA, and shorter visual preview cards.
+  - Cookie consent banner now appears after a short delay to reduce immediate friction on landing.
+  - Funnel naming normalized: `trial_started` -> `trial_start` in extension auth handoff.
+- **Deploy evidence:** commit `c9d2cb5` auto-triggered Cloud Build build `999bff5b-31d3-409d-9a69-cb975873d715` (SUCCESS) and rolled out Cloud Run revision `themegpt-web-00211-84v` at 100% traffic.
+- **Campaign measurement limits:** Google Ads API auth is currently invalid (developer token), so ad spend/click checks are manual in the dashboard; Reddit campaign attribution remains GA4-based because direct API export is unavailable in this workflow.
 
 ---
 

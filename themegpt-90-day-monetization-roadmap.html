@@ -217,23 +217,23 @@
       </p>
       <div class="meta">
         <span>Prepared: February 16, 2026</span>
-        <span>Updated: February 24, 2026 (Mobile Onboarding Theme Mix + Deploy Integrity)</span>
+        <span>Updated: February 25, 2026 (Conversion UX + CTA Messaging Refresh)</span>
         <span>Published extension: v2.3.0</span>
         <span>Extension candidate pending review: v2.3.1</span>
       </div>
     </header>
 
     <section class="panel">
-      <h2>Executive Status (As of February 24, 2026)</h2>
+      <h2>Executive Status (As of February 25, 2026)</h2>
       <p>
         Payment infrastructure is verified healthy and no longer a blocker.
-        Both advertising channels (Google Search + Reddit) are live and actively
-        serving. Google Ads campaign has been fully optimized: missing tag fixed
-        via Consent Mode v2, 9 keywords added, 4 callouts + 4 sitelinks applied,
-        headlines improved (ad strength: Average → Good), and Display Expansion
-        enabled for unspent budget utilization. Mobile onboarding now uses real
-        screenshot previews with mixed free + premium themes and direct deep-links
-        to the main theme gallery to improve expectation-setting before desktop install.
+        Both advertising channels (Google Search + Reddit) are live and actively serving.
+        Current challenge is traffic composition and intent depth: GA4 (Feb 21-24)
+        shows 44 sessions with 84% mobile share, where mobile attribution is concentrated
+        in <span class="mono">google / cpc</span> (28 sessions) while
+        <span class="mono">reddit / paid_social</span> attribution is low (1 session).
+        Conversion UX updates are now deployed (install-first hero/nav messaging, email-first
+        mobile flow, delayed consent prompt) to improve qualified progression toward checkout events.
       </p>
       <div class="grid">
         <div class="stat ok">
@@ -277,20 +277,20 @@
         <tbody>
           <tr>
             <td>CWS GA4 (<span class="mono">521095252</span>)</td>
-            <td>21</td>
-            <td>24</td>
-            <td>Top-of-funnel listing traffic only (views/install intent).</td>
+            <td>—</td>
+            <td>—</td>
+            <td>Top-of-funnel listing traffic only (views/install intent). Pull current values from CWS dashboard.</td>
           </tr>
           <tr>
             <td>Web GA4 (<span class="mono">516189580</span>)</td>
-            <td>3</td>
-            <td>6</td>
-            <td>Web app visits; includes consent-gated funnel events.</td>
+            <td>39</td>
+            <td>44</td>
+            <td>Validated full-day web sessions for Feb 21-24; includes consent-gated funnel events.</td>
           </tr>
           <tr>
             <td>Web funnel events</td>
-            <td colspan="2"><span class="mono">trial_start=0</span>, <span class="mono">checkout_start=5</span>, <span class="mono">purchase_success=0</span></td>
-            <td>Nonzero checkout intent confirmed; current constraint remains paid conversion volume.</td>
+            <td colspan="2"><span class="mono">trial_start=0</span>, <span class="mono">checkout_start=5</span>, <span class="mono">purchase_success=0</span>, <span class="mono">mobile_landing=4</span>, <span class="mono">mobile_email_capture=1</span></td>
+            <td>Checkout intent exists but remains concentrated on Feb 21 organic traffic; paid conversion volume remains the active constraint.</td>
           </tr>
         </tbody>
       </table>
@@ -313,7 +313,7 @@
     </section>
 
     <section class="panel">
-      <h2>Launch Verification & Deployment Audit (Feb 21-24, 2026)</h2>
+      <h2>Launch Verification & Deployment Audit (Feb 21-25, 2026)</h2>
       <ul>
         <li>
           Ad-console evidence captured on February 21, 2026:
@@ -326,6 +326,15 @@
           Evidence scope: campaign live status currently depends on manual
           console screenshots; API/CSV exports are not committed in this
           repository yet.
+        </li>
+        <li>
+          Google Ads API auth is currently invalid (developer token), so
+          spend/click/impression checks are temporarily manual in the
+          Google Ads dashboard.
+        </li>
+        <li>
+          Reddit Ads API export is not available in this workflow; channel
+          performance attribution is monitored through GA4 diagnostics.
         </li>
         <li>
           Deployment evidence: push of commit
@@ -341,11 +350,11 @@
           one main-branch deploy trigger remains.
         </li>
         <li>
-          Latest deployment evidence: commit <span class="mono">2ce4adb</span>
+          Latest deployment evidence: commit <span class="mono">c9d2cb5</span>
           auto-triggered Cloud Build (build
-          <span class="mono">f08d5ef3-51ab-42fb-9cee-d52d154677e1</span>,
+          <span class="mono">999bff5b-31d3-409d-9a69-cb975873d715</span>,
           status <span class="mono">SUCCESS</span>) and rolled out Cloud Run revision
-          <span class="mono">themegpt-web-00202-kkv</span> at 100% traffic.
+          <span class="mono">themegpt-web-00211-84v</span> at 100% traffic.
         </li>
       </ul>
     </section>
@@ -569,6 +578,12 @@
             <td>February 24, 2026</td>
             <td>Mobile onboarding preview cards rebalanced (free + premium) and linked to full theme gallery.</td>
           </tr>
+          <tr>
+            <td>main@c9d2cb5 (web)</td>
+            <td>Deployed to production</td>
+            <td>February 25, 2026</td>
+            <td>Install-first Hero/nav messaging, email-first mobile flow with social proof, delayed consent reveal, and funnel naming aligned to <span class="mono">trial_start</span>.</td>
+          </tr>
         </tbody>
       </table>
     </section>
@@ -666,7 +681,7 @@
           <tr class="ok">
             <td>1c</td>
             <td>Optimize Mobile Traffic & GA4 ✓</td>
-            <td>Mobile bid modifier set to -70% on search_launch_v1 to control CAC. Mobile LCP (Hero video) optimized. `/mobile` onboarding now shows screenshot-based mixed theme previews with direct desktop gallery link.</td>
+            <td>Mobile bid controls and onboarding UX are live. `/mobile` is now email-first with social proof and stronger CTA; Hero/Nav messaging tightened for install-first clarity. Latest GA4 check confirms mobile remains dominant and primarily Google-attributed.</td>
             <td>Growth / Ops</td>
           </tr>
           <tr>
@@ -748,7 +763,7 @@
     </section>
 
     <div class="footer">
-      ThemeGPT consolidated roadmap updated February 24, 2026 (Mobile Onboarding Theme Mix + Deploy Integrity).
+      ThemeGPT consolidated roadmap updated February 25, 2026 (Conversion UX + CTA Messaging Refresh + Campaign Revalidation).
       Focus: advertising optimized with spend guardrails, deterministic
       attribution, Clarity session replays, and server-side revenue-based optimization.
     </div>

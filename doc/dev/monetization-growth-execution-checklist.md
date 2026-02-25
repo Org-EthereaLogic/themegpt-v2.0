@@ -1,7 +1,7 @@
 # Monetization & Growth Execution Checklist
 
-**Date:** 2026-02-24
-**Mode:** Advertising live with guardrails + mobile onboarding refinement
+**Date:** 2026-02-25
+**Mode:** Advertising live with guardrails + mobile conversion UX optimization
 **Source strategy:** `ThemeGPT-Monetization-Strategy.docx`
 
 ---
@@ -23,6 +23,11 @@
 - [x] Replaced `/mobile` theme swatch previews with real screenshot cards that deep-link to `/?skip_mobile=1#themes`.
 - [x] Rebalanced mobile theme preview sequence to alternate light/dark by row using a mixed free + premium set.
 - [x] Verified deployment of mobile preview refresh: commit `2ce4adb` → Cloud Build `f08d5ef3-51ab-42fb-9cee-d52d154677e1` (`SUCCESS`) → Cloud Run revision `themegpt-web-00202-kkv` at 100% traffic.
+- [x] Tightened install-first Hero + navigation messaging to reduce ad-to-page mismatch.
+- [x] Refactored `/mobile` into email-first conversion flow with social proof and stronger primary CTA ("Email Me the Link").
+- [x] Added delayed cookie-consent reveal (5s) to reduce immediate first-screen interruption on paid sessions.
+- [x] Standardized funnel event naming in extension auth handoff: `trial_started` → `trial_start` (GA4 consistency).
+- [x] Verified conversion UX deploy: commit `c9d2cb5` → Cloud Build `999bff5b-31d3-409d-9a69-cb975873d715` (`SUCCESS`) → Cloud Run revision `themegpt-web-00211-84v` at 100% traffic.
 
 ---
 
@@ -47,6 +52,8 @@
 - [ ] Ensure every outbound campaign URL uses unique `utm_source`, `utm_medium`, `utm_campaign`.
 - [x] Apply structured snippets to Google Ads (Styles: Aurora Borealis, Synth Wave, Midnight Dark) — Feb 23, 2026.
 - [x] Investigate Reddit Ads mobile waste — confirmed 97% of spend going to iOS/Android with no platform-level device exclusion. Decision pending on pause/continue.
+- [x] Re-validate paid traffic composition via GA4 Data API (Feb 21-24): 44 sessions total, 84% mobile; `google / cpc` mobile = 28 sessions vs `reddit / paid_social` mobile = 1 session.
+- [ ] Restore Google Ads API auth (developer token invalid as of Feb 24-25) so spend/click/impression reporting can return to automated pulls instead of manual dashboard checks.
 - [x] Fix checkout double-login friction (callbackUrl #pricing anchor + login page context messaging) — commit `9537d36`, deployed Feb 23.
 - [x] Fix extension auth race condition (decoupled token generation from ping timeout) — commit `9537d36`, deployed Feb 23.
 - [x] Ship mobile onboarding theme-mix refresh (ThemeGPT Light, Frosted Windowpane, Electric Dreams, Woodland Retreat) — commit `2ce4adb`, deployed Feb 24.

@@ -2,15 +2,21 @@
 
 Marketing website plus API backend for ThemeGPT, including authentication, checkout, subscriptions, install reminder email, and theme preview gallery.
 
-## Current Status (As of February 24, 2026)
+## Current Status (As of February 25, 2026)
 
 - Production deploy is automated from `main` via Cloud Build trigger `deploy-themegpt-on-push`.
-- Latest deployed commit: `2ce4adb` (Cloud Run revision `themegpt-web-00202-kkv`, 100% traffic).
+- Latest deployed commit: `c9d2cb5` (Cloud Build `999bff5b-31d3-409d-9a69-cb975873d715`, Cloud Run revision `themegpt-web-00211-84v`, 100% traffic).
 - Mobile onboarding route (`/mobile`) is live with:
   - Desktop install reminder email capture (`/api/mobile-reminder`)
   - Mixed free + premium screenshot previews
   - Direct link to full theme gallery (`/?skip_mobile=1#themes`)
+- Recent conversion UX refresh:
+  - Hero and navigation copy tightened for install-first clarity
+  - `/mobile` converted to email-first flow with social proof and stronger primary CTA
+  - Cookie consent banner delayed by 5s to reduce first-impression interruption
 - Web package version: `2.3.1` (`apps/web/package.json`).
+- Latest validated paid traffic pattern (GA4 Feb 21-24): 44 sessions total, 84% mobile, `google / cpc` mobile dominates (28 sessions) while `reddit / paid_social` mobile attribution is low (1 session).
+- Campaign reporting note: Google Ads API auth is currently invalid (developer token); ad-spend and click validation is temporarily manual in platform dashboards.
 
 ## Tech Stack
 

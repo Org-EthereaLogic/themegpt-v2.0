@@ -365,7 +365,7 @@ async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
     : null;
   // Only send recovery emails when the customer opted in to promotions at Checkout.
   const reminderEligible = Boolean(
-    email && recoveryUrl && promotionsConsent === "opted_in"
+    email && recoveryUrl && promotionsConsent === "opt_in"
   );
 
   const existingRecord = await db.getAbandonedCheckoutBySessionId(sessionId);

@@ -106,7 +106,7 @@
   - Pause a channel at `>= $75` spend with zero checkout sessions.
   - Pause a channel if CAC `> $45` for 3 consecutive days.
   - Do not increase daily caps during first 7 days.
-  - **Current caps:** Google Search `$65/day` (reduced from $130 on Feb 25 — zero conversions after $361 spend), Reddit `$50/day` (approved exception for $500 ad credit).
+  - **Current caps:** Google Search `$100/day` (raised from $65 on evening Feb 25 — $65 was uncompetitive in keyword auctions), Reddit `$50/day` (approved exception for $500 ad credit).
   - **Guardrail reset note (Feb 22, 2026):** Reddit campaign reached $75+ spend with 0 conversions but was NOT paused — the 0-conversion period was caused by a broken Stripe checkout (3DS authentication failure blocking all channels equally, not Reddit-specific). Checkout fixed in v2.3.1. Guardrail evaluation resets from Feb 22 with a functional payment system.
   - **Audit action (Feb 25, 2026):** Google Search budget halved ($130 → $65) after 310 clicks / $361 spend / 0 conversions. 15 negative keywords added. Disapproved sitelink removed. Mobile -100% bid adj still in effect (set Feb 23; Smart Bidding may override during learning phase).
 

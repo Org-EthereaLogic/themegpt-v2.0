@@ -48,7 +48,7 @@
 | 2026-02-23 | 0% | Y | PASS | GA4 full-day: 21 total sessions (Paid Search 19, Cross-network 1, Direct 1). No unassigned traffic after reprocessing. |
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
 | 2026-02-25 | 20% | Y | FAIL | 5 total sessions (Paid Search 3 desktop, Direct 1 mobile, Unassigned 1 desktop). 1 unassigned/5 = 20%. Low volume; GA4 partial processing. |
-| 2026-02-26 | | | | |
+| 2026-02-26 | TBD | Y | TBD | GA4 Data API blocked by gcloud reauth. Clarity shows 6 sessions (5 users). Will backfill once GA4 access restored. |
 | 2026-02-27 | | | | |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
@@ -65,7 +65,7 @@
 | 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
 | 2026-02-25 | N | N | N | N | 4 page_views, 4 session_starts, 3 first_visits, 2 user_engagements. No conversion funnel events. However, 5 new external users signed up via Google OAuth (visible in Firestore `users` collection, not yet instrumented as GA4 events). |
-| 2026-02-26 | | | | | |
+| 2026-02-26 | TBD | TBD | TBD | TBD | GA4 Data API blocked by gcloud reauth. Clarity: 3 Login smart events, 2 OutboundClicks. Will backfill once GA4 access restored. |
 | 2026-02-27 | | | | | |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
@@ -513,6 +513,83 @@ No Cloud Build deployment — docs-only change.
 | Checkout starts/day | 0 | 1+ |
 | LCP (p75) | 13.4s | <4.0s |
 | Bounce rate (desktop) | 50% | <40% |
+
+---
+
+---
+
+## Traffic & Conversion Audit — Feb 26, 2026
+
+**Scope:** Post-change impact assessment comparing Clarity data from Feb 21–23 (pre-changes) vs Feb 24–26 (post-changes). GA4 Data API blocked by expired gcloud credentials; Clarity is the primary data source for this audit.
+
+**Changes under evaluation (deployed Feb 25):**
+- Hero CTA "See Themes" → "See Plans" (#pricing)
+- Font `display:swap` + trimmed Fraunces weights
+- Dynamic imports for ThemesSection/FeaturesSection
+- PricingSection IO threshold 0.45 → 0.15
+- Email sign-in + free user auth gate
+- Account page onboarding flow for free users
+- Google Ads: budget $130 → $65, +15 negative keywords, removed disapproved sitelink
+
+### Key Findings
+
+| Finding | Pre (Feb 21-23) | Post (Feb 24-26) | Change | Impact |
+|---------|-----------------|-------------------|--------|--------|
+| Desktop session share | 32% (16/50) | 62% (8/13) | **+93%** | Users can now install extension |
+| Homepage scroll depth (all) | 28.8% | 52.3% | **+81.7%** | Users see pricing section |
+| Homepage scroll depth (PC) | 49.0% | 55.8% | +13.7% | Confirmed on target device |
+| Session volume | 50 | 13 | -74% | Budget cut + negative keywords |
+| LCP p75 | 3,844ms | 6,028ms | **+56.8% worse** | Performance regression |
+| INP p75 | 464ms | 1,736ms | **+274% worse** | Performance regression |
+| CLS p75 | 0 | 12 | **Catastrophic** | Layout shift regression |
+| PC session duration | 215s | 107s | -50% | Shorter but more targeted |
+| PC quick backs | 18.75% | 25% | +33% worse | Needs investigation |
+| Organic search sessions | ~0 | 4 (25%) | New channel | SEO emerging |
+| New user signups | 4 total (5 days) | 5 in 1 day (Feb 25) | **+525%** | Free funnel working |
+
+### Clarity Behavioral Signals (Feb 24-26)
+
+- **Smart events:** Login ×3, OutboundClick ×2
+- **Pages visited:** / (9), /mobile (3), /privacy (2), /login (2), /support (1), /account (1)
+- **User engagement:** 100% new users, 0% returning
+- **Geography:** US 5, Mexico 4, Ecuador 2, India 2
+- **Traffic sources:** PaidSearch 5, OrganicSearch 4, Direct 4, Self-referral 3
+
+### CWV Regression Root Cause Hypotheses
+
+1. **CLS 12**: Dynamic imports for ThemesSection/FeaturesSection likely cause massive layout shifts when lazy-loaded sections pop into the DOM
+2. **INP 1,736ms**: Lazy hydration of framer-motion bundles blocking main thread during user interactions
+3. **LCP 6,028ms**: Font `display:swap` may cause re-rendering; combined with dynamic imports delaying LCP element
+4. **Caveat**: 13 sessions vs 50 makes p75 very noisy — need larger sample to confirm
+
+### Conversion Status
+
+- **Revenue:** $0 (unchanged)
+- **Checkout starts:** 0 (unchanged)
+- **Trial starts:** 0 (unchanged)
+- **Free user signups:** 5 new on Feb 25 (total external: 9)
+- **Google Ads ROI:** ~$65/day for ~5 paid sessions = ~$13/session, 0 conversions
+
+### Incident: Sign-Up Flow Blocked Overnight (Feb 25-26)
+
+Recent changes deployed late Feb 25 introduced a bug that prevented new users from signing up. Issue was identified and resolved morning of Feb 26. Impact: any ad traffic arriving overnight could not convert to signups. Duration unknown — likely several hours.
+
+### Google Ads Budget Update
+
+Budget raised from $65/day to **$100/day** on the evening of Feb 25. Rationale: competitors in the ChatGPT customization niche bid at $100+/day minimum; dropping to $65 was causing ThemeGPT to lose competitive positioning on keyword auctions.
+
+**Current caps:** Google Search $100/day, Reddit $50/day.
+
+### Action Items
+
+| Priority | Action | Status |
+|----------|--------|--------|
+| P0 | Run Lighthouse on production — diagnose CWV regression (LCP, INP, CLS) | TODO |
+| P0 | Complete `gcloud auth application-default login` to restore GA4 Data API | TODO |
+| P1 | Investigate dynamic imports as CLS/INP root cause; consider reverting if confirmed | TODO |
+| P1 | Track new signups through onboarding funnel (extension install rate) | TODO |
+| P2 | Monitor $100/day Google Ads budget ROI over next 3 days | TODO |
+| P3 | Investigate LatAm organic traffic (Mexico 4, Ecuador 2) as expansion opportunity | TODO |
 
 ---
 

@@ -13,7 +13,7 @@
 
 - **Tracking window start:** `2026-02-21` (True Gate Day 1 after GA4 recovery)
 - **Tracking window end:** `2026-02-26` (Weekly report cutoff; earliest 7-day gate checkpoint is Feb 27)
-- **Prepared on:** `2026-02-25`
+- **Prepared on:** `2026-02-26` (updated with post-change Clarity data)
 - **Prepared by:** EthereaLogic Team
 
 ---
@@ -48,6 +48,16 @@
 | Mobile | 37 (90%) | 73% | 12.9s |
 | Desktop | 4 (10%) | 50% | 16.9s |
 
+### Device Split Post-Changes (Clarity, Feb 24-26)
+
+| Device | Sessions | Share | Avg Duration (PC) |
+|--------|----------|-------|--------------------|
+| PC | 8 | 62% | 107s |
+| Mobile | 3 | 23% | — |
+| Tablet | 2 | 15% | — |
+
+Desktop share flipped from 10% to 62% after Google Ads targeting fixes and negative keywords.
+
 ---
 
 ## 3) Conversion Funnel (GA4 Events, Feb 22-25)
@@ -66,12 +76,13 @@
 
 ## 4) Performance (Clarity, p75)
 
-| Metric | Value | Threshold | Rating |
-|--------|-------|-----------|--------|
-| LCP | 13.4s | 2.5s good / 4.0s poor | POOR |
-| INP | 544ms | 200ms good / 500ms poor | POOR |
-| CLS | 0.005 | 0.1 good / 0.25 poor | GOOD |
-| Performance Score | 68.6/100 | | Needs improvement |
+| Metric | Feb 21-23 | Feb 24-26 | Threshold | Change |
+|--------|-----------|-----------|-----------|--------|
+| LCP | 3,844ms | 6,028ms | 2.5s good / 4.0s poor | +56.8% WORSE |
+| INP | 464ms | 1,736ms | 200ms good / 500ms poor | +274% WORSE |
+| CLS | 0 | 12 | 0.1 good / 0.25 poor | CATASTROPHIC |
+
+**CWV regression detected.** All three metrics worsened after Feb 25 code changes (dynamic imports, font swap). CLS of 12 is extreme — likely caused by lazy-loaded sections shifting layout. Small sample (13 sessions) adds noise, but magnitude demands investigation.
 
 ---
 
@@ -121,15 +132,20 @@
 | Add pricing link to empty download history | Eng | Feb 25 | DONE |
 | Strategy: shift to user base growth (100 users) before monetization | Growth | Feb 25 | DONE |
 | Google Ads: Consider keyword-specific ad groups | Growth | Feb 28 | TODO |
+| P0: Investigate CWV regression (LCP, INP, CLS all worse post-deploy) | Eng | Feb 27 | TODO |
+| P0: Complete gcloud reauth to restore GA4 Data API | Ops | Feb 26 | TODO |
+| P1: Investigate dynamic imports as CLS/INP root cause; consider reverting | Eng | Feb 27 | TODO |
+| P1: Track 5 new signups through onboarding funnel (extension install rate) | Growth | Feb 28 | TODO |
+| P2: Evaluate Google Ads ROI ($13/session, 0 conversions) | Growth | Feb 28 | TODO |
 
 ---
 
 ## 8) Narrative Summary
 
-- **What improved this week:** Traffic volume up 310% (41 sessions vs 10) driven by Google Ads `search_launch_v1` campaign. 4 CWS install clicks from organic visitors. Mobile redirect and email capture working. Multiple payment system fixes shipped (session cookie expiry, past_due access, trial email branching, checkout double-login).
-- **What regressed this week:** 90% of GA4 sessions are mobile — users who cannot install a Chrome extension. $230+ of $361 ad spend wasted on mobile traffic. Bounce rate worsened to 70.7%. Only 1 pricing_view in 4 days (31% avg scroll depth means users never see pricing). LCP 13.4s / INP 544ms causing immediate bounces.
-- **Critical finding:** Zero conversions from 310 paid clicks ($361 spend). Three high-intent users attempted purchase but encountered friction (login loops, Stripe abandonment). The conversion path exists but users aren't reaching it.
-- **Actions taken (Feb 25):** Deployed conversion path fixes (Hero CTA → pricing, IO threshold, font optimization, dynamic imports). Reduced Google Ads budget 50% ($130 → $65). Added 15 negative keywords. Removed disapproved sitelink. Added email magic-link sign-in + opened auth gate to free users. Replaced account page dead-end with 3-step onboarding (install extension → pick free theme → premium upsell). Updated login copy to welcome free users.
-- **Key result (Feb 25):** 5 new external users signed up via Google OAuth in a single day (more than prior 4 days combined). Total external Firestore users: 9. Desktop paid search sessions showing 77s avg duration / 0% bounce — targeting improvements working.
-- **Strategy shift:** Prioritizing user base growth to 100 users before monetization push. Plan to launch email campaign at scale to drive upgrades once user base is large enough.
-- **Next week action:** Monitor daily sign-up rate post-auth-gate. Track extension installs from new account onboarding CTA. Re-check Clarity LCP after font optimization. Consider keyword-specific ad groups.
+- **What improved this week:** Traffic volume up 310% (41 sessions vs 10) driven by Google Ads campaign. Desktop share flipped from 10% to 62% after targeting fixes. Homepage scroll depth nearly doubled (28.8% → 52.3%) — users now see pricing section. Organic search emerging (4 sessions). Free user acquisition funnel working — 5 signups in one day (Feb 25). Multiple payment and auth fixes shipped.
+- **What regressed this week:** CWV regression after Feb 25 code changes — LCP 3.8s → 6.0s, INP 464ms → 1.7s, CLS 0 → 12 (catastrophic). Session volume dropped 74% (50 → 13) after budget cut and negative keywords. PC session duration halved (215s → 107s). PC quick backs worsened (19% → 25%). Sign-up flow had a blocking bug overnight Feb 25-26 (resolved morning Feb 26).
+- **Critical finding:** Zero revenue from entire week. $361+ ad spend with 0 conversions. CWV regression may be undermining the scroll depth and targeting gains. Dynamic imports likely root cause of CLS/INP degradation.
+- **Actions taken (Feb 25-26):** Hero CTA → #pricing, font swap, dynamic imports, IO threshold lowered. Google Ads: budget $130 → $65 → $100/day, 15 negative keywords, removed disapproved sitelink. Email sign-in + free auth gate. Account onboarding flow. Sign-up bug fix (morning Feb 26).
+- **Key results:** Desktop targeting working (62% share). Scroll depth doubled. 5 new signups in 1 day. Organic search appearing. But CWV catastrophe (CLS 12) and 0 revenue remain critical.
+- **Strategy:** User base growth to 100 users before monetization push. Budget raised to $100/day to stay competitive on keyword bidding.
+- **Next week action:** P0: Diagnose and fix CWV regression (likely revert dynamic imports). P0: Restore GA4 Data API access. P1: Track new signups through extension install funnel. P2: Monitor $100/day budget ROI.

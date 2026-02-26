@@ -343,9 +343,17 @@ export default function AccountPage() {
               ))}
             </div>
           ) : (
-            <p className="text-center text-[#7D5A4A] py-6">
-              No downloads yet. Start exploring premium themes!
-            </p>
+            <div className="text-center py-6">
+              <p className="text-[#7D5A4A] mb-3">
+                No downloads yet.
+              </p>
+              <Link
+                href="/#pricing"
+                className="text-[#5BB5A2] font-medium hover:underline"
+              >
+                Explore premium themes &rarr;
+              </Link>
+            </div>
           )}
         </div>
 

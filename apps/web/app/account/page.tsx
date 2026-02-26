@@ -4,7 +4,8 @@ import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { SubscriptionResponse } from "@themegpt/shared";
+import { DEFAULT_THEMES, SubscriptionResponse } from "@themegpt/shared";
+import { getInstallStoreUrl } from "@/lib/extension-distribution";
 
 // Local type for download history (API response)
 interface DownloadHistoryItem {
@@ -12,6 +13,12 @@ interface DownloadHistoryItem {
   themeName: string;
   downloadedAt: string;
 }
+
+const FREE_THEME_NAMES = DEFAULT_THEMES
+  .filter((theme) => !theme.isPremium)
+  .map((theme) => theme.name);
+
+const FREE_THEME_COUNT = FREE_THEME_NAMES.length;
 
 function Spinner({ className = "" }: { className?: string }) {
   return (
@@ -98,6 +105,7 @@ export default function AccountPage() {
 
   // Determine if user is in grace period (canceled but still has access)
   const isGracePeriod = subscription?.status === "canceled" && subscription?.gracePeriodEnds;
+  const installStoreUrl = getInstallStoreUrl("chrome");
 
   return (
     <div className="min-h-screen bg-[#FAF6F0] p-4 md:p-8">
@@ -232,16 +240,68 @@ export default function AccountPage() {
               )}
             </div>
           ) : (
-            <div className="text-center py-6">
-              <p className="text-[#7D5A4A] mb-4">
-                You don&apos;t have an active subscription.
-              </p>
-              <Link
-                href="/#pricing"
-                className="inline-block px-6 py-3 bg-[#5BB5A2] text-white font-medium rounded-lg hover:bg-[#4DA593] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2]"
-              >
-                Subscribe Now
-              </Link>
+            <div className="space-y-5">
+              <div className="text-center">
+                <p className="text-lg font-semibold text-[#4B2E1E]">
+                  Welcome to ThemeGPT!
+                </p>
+                <p className="text-[#7D5A4A] mt-1">
+                  You have access to {FREE_THEME_COUNT} free themes. Install the extension to get started.
+                </p>
+              </div>
+
+              {/* Step 1: Install Extension */}
+              <div className="bg-[#FAF6F0] rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#5BB5A2] text-white flex items-center justify-center text-sm font-bold">1</span>
+                  <div className="flex-1">
+                    <p className="font-medium text-[#4B2E1E]">Install the Chrome Extension</p>
+                    <p className="text-sm text-[#7D5A4A] mt-1">One click to transform your ChatGPT experience.</p>
+                    <a
+                      href={installStoreUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-3 px-5 py-2.5 bg-[#5BB5A2] text-white font-medium rounded-lg hover:bg-[#4DA593] transition-all duration-300 active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#5BB5A2]"
+                    >
+                      Add to Chrome — It&apos;s Free
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 2: Pick a Theme */}
+              <div className="bg-[#FAF6F0] rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#E5DDD5] text-[#4B2E1E] flex items-center justify-center text-sm font-bold">2</span>
+                  <div className="flex-1">
+                    <p className="font-medium text-[#4B2E1E]">Pick a Free Theme</p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {FREE_THEME_NAMES.map((name) => (
+                        <span key={name} className="px-2.5 py-1 bg-white rounded-md text-xs font-medium text-[#4B2E1E] border border-[#E5DDD5]">{name}</span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Step 3: Premium upsell hint */}
+              <div className="bg-[#FAF6F0] rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-7 h-7 rounded-full bg-[#E5DDD5] text-[#4B2E1E] flex items-center justify-center text-sm font-bold">3</span>
+                  <div className="flex-1">
+                    <p className="font-medium text-[#4B2E1E]">Want Animated Themes?</p>
+                    <p className="text-sm text-[#7D5A4A] mt-1">
+                      Upgrade anytime for aurora effects, synth waves, and 8 premium themes.
+                    </p>
+                    <Link
+                      href="/#pricing"
+                      className="inline-block mt-2 text-sm text-[#5BB5A2] font-medium hover:underline"
+                    >
+                      See plans &rarr;
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>

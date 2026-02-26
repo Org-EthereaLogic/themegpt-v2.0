@@ -84,7 +84,7 @@ function LoginContent() {
           <p className="text-[#7D5A4A]">
             {isCheckoutFlow
               ? "Sign in to complete your checkout. Your selection will be waiting for you."
-              : "Access your account to manage subscriptions and download themes"}
+              : "Sign in to get free themes and personalize your ChatGPT"}
           </p>
         </div>
 

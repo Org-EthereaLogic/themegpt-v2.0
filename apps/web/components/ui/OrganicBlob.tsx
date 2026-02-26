@@ -49,6 +49,8 @@ export function OrganicBlob({
         ...position,
         animation: `${animationName} 25s ease-in-out infinite`,
         animationDelay,
+        willChange: "filter, transform",
+        contain: "strict",
       }}
     />
   );

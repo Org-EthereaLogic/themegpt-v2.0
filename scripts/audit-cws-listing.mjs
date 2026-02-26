@@ -61,6 +61,22 @@ function decodeHtmlUrl(value) {
   return value.replaceAll("&amp;", "&")
 }
 
+function hasHostname(url, hostname) {
+  try {
+    return new URL(url).hostname === hostname
+  } catch {
+    return false
+  }
+}
+
+function safeHref(url) {
+  try {
+    return new URL(url).href
+  } catch {
+    return ""
+  }
+}
+
 async function fetchStatus(url) {
   try {
     const response = await fetch(url, { method: "GET", redirect: "follow" })
@@ -114,8 +130,15 @@ async function main() {
   const premiumThemes = themes.filter((theme) => theme.isPremium).length
 
   const mediaUrls = Array.from(liveHtml.matchAll(/data-media-url="([^"]+)"/g)).map((match) => decodeHtmlUrl(match[1]))
-  const screenshotUrls = Array.from(new Set(mediaUrls.filter((url) => url.includes("lh3.googleusercontent.com"))))
-  const videoEmbeds = Array.from(new Set(mediaUrls.filter((url) => url.includes("youtube.com/embed/"))))
+  const screenshotUrls = Array.from(new Set(mediaUrls.filter((url) => hasHostname(url, "lh3.googleusercontent.com")))).map(safeHref)
+  const videoEmbeds = Array.from(new Set(mediaUrls.filter((url) => {
+    try {
+      const parsed = new URL(url)
+      return parsed.hostname === "www.youtube.com" && parsed.pathname.startsWith("/embed/")
+    } catch {
+      return false
+    }
+  }))).map(safeHref)
 
   const screenshotAnalysis = await analyzeLiveScreenshots(screenshotUrls)
   const screenshotFailures = screenshotAnalysis.filter((item) => {
@@ -139,6 +162,17 @@ async function main() {
   const claimedFree = freeClaimMatch ? Number.parseInt(freeClaimMatch[1], 10) : null
   const claimedPremium = premiumClaimMatch ? Number.parseInt(premiumClaimMatch[1], 10) : null
 
+  const requiredVideoParsed = new URL(REQUIRED_VIDEO_URL)
+  const draftUrlMatches = Array.from(draftSource.matchAll(/https?:\/\/[^\s)>\]]+/g), (m) => m[0])
+  const draftHasVideoUrl = draftUrlMatches.some((rawUrl) => {
+    try {
+      const parsed = new URL(rawUrl)
+      return parsed.origin === requiredVideoParsed.origin && parsed.pathname === requiredVideoParsed.pathname
+    } catch {
+      return false
+    }
+  })
+
   const supportStatus = await fetchStatus("https://themegpt.ai/support")
   const privacyStatus = await fetchStatus("https://themegpt.ai/privacy")
 
@@ -152,10 +186,10 @@ async function main() {
     ),
     createCheck(
       "draft_contains_required_video_url",
-      draftSource.includes(REQUIRED_VIDEO_URL),
+      draftHasVideoUrl,
       "blocker",
       path.relative(ROOT, DRAFT_LISTING),
-      draftSource.includes(REQUIRED_VIDEO_URL)
+      draftHasVideoUrl
         ? `Draft listing includes required promo video URL ${REQUIRED_VIDEO_URL}.`
         : `Draft listing is missing required promo video URL ${REQUIRED_VIDEO_URL}.`
     ),
@@ -258,7 +292,12 @@ async function main() {
   }
 
   lines.push("")
-  await fs.writeFile(REPORT_PATH, lines.join("\n"))
+  const report = lines.join("\n")
+  // Validate report before writing — reject unexpected control characters from network data
+  if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(report)) {
+    throw new Error("Report contains unexpected control characters from fetched data")
+  }
+  await fs.writeFile(REPORT_PATH, report)
 
   console.log(`CWS listing audit complete: ${path.relative(ROOT, REPORT_PATH)}`)
   console.log(`Artifact JSON: ${path.relative(ROOT, ARTIFACT_JSON)}`)

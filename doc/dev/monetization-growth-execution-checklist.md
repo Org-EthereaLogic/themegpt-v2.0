@@ -1,7 +1,7 @@
 # Monetization & Growth Execution Checklist
 
 **Date:** 2026-02-25
-**Mode:** Advertising live with guardrails + mobile conversion UX optimization
+**Mode:** Advertising live with guardrails + free user base growth (target: 100 users before monetization push)
 **Source strategy:** `ThemeGPT-Monetization-Strategy.docx`
 
 ---
@@ -33,6 +33,12 @@
 - [x] Dynamic imports for ThemesSection + FeaturesSection to code-split below-fold framer-motion bundles and reduce INP (was 544ms).
 - [x] Lowered PricingSection IntersectionObserver threshold from 0.45 → 0.15 to improve `pricing_view` event capture.
 - [x] Verified audit deploy: commit `64f0d85` → Cloud Build `f8775498` (`SUCCESS`) → Cloud Run revision `themegpt-web-00215-dvw` at 100% traffic.
+- [x] Added email magic-link sign-in via `/api/auth/magic-link` endpoint + email input on `/login` page.
+- [x] Opened server-side auth gate so free users can sign in and access `/account` without a subscription.
+- [x] Replaced `/account` dead-end ("You don't have an active subscription / Subscribe Now") with 3-step onboarding: install extension CTA, free theme list, soft premium upsell.
+- [x] Updated `/login` sub-copy to welcome free users: "Sign in to get free themes and personalize your ChatGPT".
+- [x] Added "Explore premium themes →" link to empty download history state on `/account`.
+- [x] Verified onboarding deploys: commit `8214c55` → Cloud Build `6a2fc928` (`SUCCESS`) → revision `themegpt-web-00218-95f`; commit `a873048` → Cloud Build `34ae7481` (`SUCCESS`) → revision `themegpt-web-00219-95f` at 100% traffic.
 
 ---
 

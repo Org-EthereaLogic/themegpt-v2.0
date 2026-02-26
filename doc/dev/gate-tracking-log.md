@@ -3,7 +3,7 @@
 **Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
 **Updated:** Daily, by checking GA4
 **Blocker:** No hard launch blocker. Gate 1 and Gate 3 are tracked as diagnostics while paid acquisition begins.
-**Latest deployment snapshot:** Feb 25, 2026 — commit `c9d2cb5` deployed via trigger `deploy-themegpt-on-push` (build `999bff5b-31d3-409d-9a69-cb975873d715`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00211-84v` (100% traffic).
+**Latest deployment snapshot:** Feb 25, 2026 — commit `a873048` deployed via trigger `deploy-themegpt-on-push` (build `34ae7481-8c4c-4605-93a9-efce23dad78c`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00219-95f` (100% traffic).
 
 ---
 
@@ -47,7 +47,7 @@
 | 2026-02-22 | 0% | Y | PASS | **First PASS day.** GA4 full-day: 17 total sessions (Paid Search 11, Cross-network 3, Direct 2, Paid Social 1, Unassigned 0). Zero unassigned traffic — all sessions attributed. Note: earlier midday snapshot showed 32% from 25 sessions; full-day reprocessing corrected the count. |
 | 2026-02-23 | 0% | Y | PASS | GA4 full-day: 21 total sessions (Paid Search 19, Cross-network 1, Direct 1). No unassigned traffic after reprocessing. |
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
-| 2026-02-25 | | | | Audit day — check after GA4 24h reprocessing. |
+| 2026-02-25 | 20% | Y | FAIL | 5 total sessions (Paid Search 3 desktop, Direct 1 mobile, Unassigned 1 desktop). 1 unassigned/5 = 20%. Low volume; GA4 partial processing. |
 | 2026-02-26 | | | | |
 | 2026-02-27 | | | | |
 
@@ -64,7 +64,7 @@
 | 2026-02-22 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 22 despite paid traffic volume. |
 | 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
-| 2026-02-25 | | | | | Traffic & conversion audit day. See entry below. |
+| 2026-02-25 | N | N | N | N | 4 page_views, 4 session_starts, 3 first_visits, 2 user_engagements. No conversion funnel events. However, 5 new external users signed up via Google OAuth (visible in Firestore `users` collection, not yet instrumented as GA4 events). |
 | 2026-02-26 | | | | | |
 | 2026-02-27 | | | | | |
 
@@ -129,6 +129,33 @@ Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality,
     - Woodland Retreat
   - Section heading and each card deep-link to `/?skip_mobile=1#themes`.
 - **Deploy evidence:** commit `2ce4adb` auto-triggered Cloud Build build `f08d5ef3-51ab-42fb-9cee-d52d154677e1` (SUCCESS) and rolled out Cloud Run revision `themegpt-web-00202-kkv` at 100% traffic.
+
+---
+
+## Free User Onboarding + Sign-Up Flow Improvements — Feb 25, 2026
+
+- **Scope:** Remove friction from the sign-up flow for free users and improve post-login experience to drive extension installs.
+- **Strategy context:** Prioritizing user base growth to 100 users before monetization push. 5 new external users signed up via Google OAuth on Feb 25 alone (more than the previous 4 days combined), validating the email sign-in auth gate deployed earlier today.
+- **Shipped behavior:**
+  - `/account` page: Replaced dead-end "You don't have an active subscription / Subscribe Now" with a 3-step onboarding flow: (1) Install Chrome Extension CTA, (2) Free theme list (7 themes), (3) Soft premium upsell with pricing link.
+  - `/account` page: Empty download history now shows "Explore premium themes →" link to `/#pricing` instead of dead-end text.
+  - `/login` page: Updated sub-copy from "Access your account to manage subscriptions and download themes" to "Sign in to get free themes and personalize your ChatGPT".
+- **Deploy evidence:**
+  - Commit `8214c55` → Cloud Build `6a2fc928` (SUCCESS, 5m03s) → Cloud Run revision `themegpt-web-00218-95f`
+  - Commit `a873048` → Cloud Build `34ae7481` (SUCCESS) → Cloud Run revision `themegpt-web-00219-95f` (100% traffic)
+- **New user sign-ups (Feb 25, Firestore `users` collection):**
+  - 5 new external users via Google OAuth: Anne Mushington (1:04 AM PT), Burak Mucahit Kocakoc (6:02 AM), EntellaB03 (6:35 AM), 阿七 (8:13 AM), sunny sunshine (9:11 AM)
+  - Total external users in Firestore: 9 (up from 4 on Feb 24)
+
+---
+
+## Email Sign-In + Server-Side Auth Gate — Feb 25, 2026
+
+- **Scope:** Add email magic-link sign-in and open authentication to free users (previously sign-in was only accessible through checkout flow).
+- **Shipped behavior:**
+  - Added email magic-link sign-in option on `/login` page (Google, GitHub, and Email).
+  - Server-side auth gate allows free users to sign in and access `/account` without requiring a subscription.
+- **Deploy evidence:** Commit `246752f` auto-triggered Cloud Build and deployed to Cloud Run.
 
 ---
 

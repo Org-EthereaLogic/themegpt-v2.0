@@ -115,6 +115,11 @@
 | Google Ads: Reduce budget $130 → $65/day | Growth | Feb 25 | DONE |
 | Google Ads: Add 15 negative keywords for intent mismatch | Growth | Feb 25 | DONE |
 | Google Ads: Remove disapproved "Install Chrome Extension" sitelink | Growth | Feb 25 | DONE |
+| Add email sign-in + open auth gate to free users | Eng | Feb 25 | DONE |
+| Replace /account dead-end with 3-step onboarding for free users | Eng | Feb 25 | DONE |
+| Update login copy to welcome free users | Eng | Feb 25 | DONE |
+| Add pricing link to empty download history | Eng | Feb 25 | DONE |
+| Strategy: shift to user base growth (100 users) before monetization | Growth | Feb 25 | DONE |
 | Google Ads: Consider keyword-specific ad groups | Growth | Feb 28 | TODO |
 
 ---
@@ -124,5 +129,7 @@
 - **What improved this week:** Traffic volume up 310% (41 sessions vs 10) driven by Google Ads `search_launch_v1` campaign. 4 CWS install clicks from organic visitors. Mobile redirect and email capture working. Multiple payment system fixes shipped (session cookie expiry, past_due access, trial email branching, checkout double-login).
 - **What regressed this week:** 90% of GA4 sessions are mobile — users who cannot install a Chrome extension. $230+ of $361 ad spend wasted on mobile traffic. Bounce rate worsened to 70.7%. Only 1 pricing_view in 4 days (31% avg scroll depth means users never see pricing). LCP 13.4s / INP 544ms causing immediate bounces.
 - **Critical finding:** Zero conversions from 310 paid clicks ($361 spend). Three high-intent users attempted purchase but encountered friction (login loops, Stripe abandonment). The conversion path exists but users aren't reaching it.
-- **Actions taken (Feb 25):** Deployed conversion path fixes (Hero CTA → pricing, IO threshold, font optimization, dynamic imports). Reduced Google Ads budget 50% ($130 → $65). Added 15 negative keywords. Removed disapproved sitelink.
-- **Next week action:** Monitor desktop session volume increase after negative keywords take effect. Track pricing_view/checkout_start rates. Re-check Clarity LCP after font optimization. Investigate User B's possible Stripe completion on Feb 22.
+- **Actions taken (Feb 25):** Deployed conversion path fixes (Hero CTA → pricing, IO threshold, font optimization, dynamic imports). Reduced Google Ads budget 50% ($130 → $65). Added 15 negative keywords. Removed disapproved sitelink. Added email magic-link sign-in + opened auth gate to free users. Replaced account page dead-end with 3-step onboarding (install extension → pick free theme → premium upsell). Updated login copy to welcome free users.
+- **Key result (Feb 25):** 5 new external users signed up via Google OAuth in a single day (more than prior 4 days combined). Total external Firestore users: 9. Desktop paid search sessions showing 77s avg duration / 0% bounce — targeting improvements working.
+- **Strategy shift:** Prioritizing user base growth to 100 users before monetization push. Plan to launch email campaign at scale to drive upgrades once user base is large enough.
+- **Next week action:** Monitor daily sign-up rate post-auth-gate. Track extension installs from new account onboarding CTA. Re-check Clarity LCP after font optimization. Consider keyword-specific ad groups.

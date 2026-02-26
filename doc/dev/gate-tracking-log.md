@@ -47,8 +47,8 @@
 | 2026-02-22 | 0% | Y | PASS | **First PASS day.** GA4 full-day: 17 total sessions (Paid Search 11, Cross-network 3, Direct 2, Paid Social 1, Unassigned 0). Zero unassigned traffic — all sessions attributed. Note: earlier midday snapshot showed 32% from 25 sessions; full-day reprocessing corrected the count. |
 | 2026-02-23 | 0% | Y | PASS | GA4 full-day: 21 total sessions (Paid Search 19, Cross-network 1, Direct 1). No unassigned traffic after reprocessing. |
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
-| 2026-02-25 | 20% | Y | FAIL | 5 total sessions (Paid Search 3 desktop, Direct 1 mobile, Unassigned 1 desktop). 1 unassigned/5 = 20%. Low volume; GA4 partial processing. |
-| 2026-02-26 | TBD | Y | TBD | GA4 Data API blocked by gcloud reauth. Clarity shows 6 sessions (5 users). Will backfill once GA4 access restored. |
+| 2026-02-25 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 9 total sessions (Paid Search 6, Direct 2, Organic 1). Zero unassigned. Earlier midday snapshot showed 20% from 5 sessions — full-day reprocessing corrected. |
+| 2026-02-26 | 0% | Y | PASS | 1 session (Referral). Zero unassigned. Partial day — GA4 API lag; more data expected in tomorrow's pull. GA4 Data API restored (reauthed with analytics.readonly scope). |
 | 2026-02-27 | | | | |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
@@ -64,8 +64,8 @@
 | 2026-02-22 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 22 despite paid traffic volume. |
 | 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
-| 2026-02-25 | N | N | N | N | 4 page_views, 4 session_starts, 3 first_visits, 2 user_engagements. No conversion funnel events. However, 5 new external users signed up via Google OAuth (visible in Firestore `users` collection, not yet instrumented as GA4 events). |
-| 2026-02-26 | TBD | TBD | TBD | TBD | GA4 Data API blocked by gcloud reauth. Clarity: 3 Login smart events, 2 OutboundClicks. Will backfill once GA4 access restored. |
+| 2026-02-25 | N | N | N | N | **Corrected (full-day reprocessing).** 12 page_views, 1 pricing_view. No checkout_start/trial_start/purchase_success. 9 sessions total (Paid Search 6, Direct 2, Organic 1). Engagement massively improved: 89% engaged sessions, 45.5s avg duration, 11% bounce rate. 5 new external users signed up via Google OAuth. |
+| 2026-02-26 | N | N | N | N | 1 page_view (partial day — GA4 API lag). 1 session (Referral). GA4 Data API restored. |
 | 2026-02-27 | | | | | |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)

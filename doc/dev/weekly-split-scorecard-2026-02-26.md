@@ -133,7 +133,7 @@ Desktop share flipped from 10% to 62% after Google Ads targeting fixes and negat
 | Strategy: shift to user base growth (100 users) before monetization | Growth | Feb 25 | DONE |
 | Google Ads: Consider keyword-specific ad groups | Growth | Feb 28 | TODO |
 | P0: Investigate CWV regression (LCP, INP, CLS all worse post-deploy) | Eng | Feb 27 | TODO |
-| P0: Complete gcloud reauth to restore GA4 Data API | Ops | Feb 26 | TODO |
+| P0: Complete gcloud reauth to restore GA4 Data API | Ops | Feb 26 | DONE |
 | P1: Investigate dynamic imports as CLS/INP root cause; consider reverting | Eng | Feb 27 | TODO |
 | P1: Track 5 new signups through onboarding funnel (extension install rate) | Growth | Feb 28 | TODO |
 | P2: Evaluate Google Ads ROI ($13/session, 0 conversions) | Growth | Feb 28 | TODO |

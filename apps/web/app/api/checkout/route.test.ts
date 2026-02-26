@@ -74,7 +74,7 @@ describe("Checkout API Route", () => {
     vi.mocked(db.upsertCheckoutSession).mockResolvedValue(true);
   });
 
-  it("creates monthly checkout without promotions consent collection and persists attribution", async () => {
+  it("creates monthly trial checkout with consent collection but without promo codes, and persists attribution", async () => {
     const response = await POST(
       makeRequest({
         type: "monthly",
@@ -97,6 +97,7 @@ describe("Checkout API Route", () => {
     expect(checkoutParams.metadata.utm_source).toBe("extension");
     expect(checkoutParams.metadata.utm_medium).toBe("popup");
     expect(checkoutParams.metadata.utm_campaign).toBe("launch");
+    expect(checkoutParams.allow_promotion_codes).toBeUndefined();
     expect(checkoutParams.subscription_data.trial_period_days).toBe(30);
     expect(checkoutParams.subscription_data.metadata.utm_source).toBe("extension");
 

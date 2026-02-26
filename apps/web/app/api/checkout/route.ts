@@ -217,7 +217,6 @@ export async function POST(request: NextRequest) {
           quantity: 1,
         },
       ],
-      allow_promotion_codes: true,
       metadata: {
         type: normalizedType,
         planType: planType || "",
@@ -260,7 +259,9 @@ export async function POST(request: NextRequest) {
       };
       // Skip upfront card collection for trial checkouts — 3DS on setup_intent
       // was blocking all conversions. Card is collected before trial ends via email.
-      if (!isEarlyAdopterEligible) {
+      if (isEarlyAdopterEligible) {
+        checkoutParams.allow_promotion_codes = true;
+      } else {
         checkoutParams.payment_method_collection = "if_required";
       }
     } else if (normalizedType === "monthly") {
@@ -276,6 +277,10 @@ export async function POST(request: NextRequest) {
         },
       };
       checkoutParams.payment_method_collection = "if_required";
+    }
+
+    if (normalizedType === "single") {
+      checkoutParams.allow_promotion_codes = true;
     }
 
     const checkoutSession = await getStripe().checkout.sessions.create(checkoutParams);

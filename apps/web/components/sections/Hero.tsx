@@ -117,7 +117,7 @@ export function Hero() {
               color: "#4A3728",
             }}
           >
-            See Plans
+            See Plans — from $6.99/mo
           </a>
         </div>
 
@@ -129,7 +129,7 @@ export function Hero() {
             animation: "slideInLeft 0.6s ease-out 0.4s both",
           }}
         >
-          Free Chrome extension — one-click install — no account required
+          7 free themes included — premium from $6.99/mo — 30-day free trial
         </p>
       </div>
 

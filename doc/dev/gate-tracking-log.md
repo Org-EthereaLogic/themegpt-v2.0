@@ -65,7 +65,7 @@
 | 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
 | 2026-02-25 | N | N | N | N | **Corrected (full-day reprocessing).** 12 page_views, 1 pricing_view. No checkout_start/trial_start/purchase_success. 9 sessions total (Paid Search 6, Direct 2, Organic 1). Engagement massively improved: 89% engaged sessions, 45.5s avg duration, 11% bounce rate. 5 new external users signed up via Google OAuth. |
-| 2026-02-26 | N | N | N | N | **Evening update.** 10 sessions across 5 channels. No checkout_start/trial_start/purchase_success. Social launch posts (Twitter/X, LinkedIn, Reddit) drove traffic but no funnel events. 4 new external user signups (Carlos Camacho, Jose Alba, Muhammad Shoaib Farooq, Xiomara Archivos). Total external users: 17. |
+| 2026-02-26 | N | N | N | N | **Evening update.** 10 sessions across 5 channels. No checkout_start/trial_start/purchase_success. Social launch posts (Twitter/X, LinkedIn, Reddit) drove traffic but no funnel events. 4 new external user signups recorded. Total external users: 17. |
 | 2026-02-27 | | | | | |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
@@ -630,7 +630,7 @@ Budget raised from $65/day to **$100/day** on the evening of Feb 25. Rationale: 
 
 ### User Growth (Feb 26 evening snapshot)
 
-- **New signups today:** 4 external users (Carlos Camacho, Jose Alba, Muhammad Shoaib Farooq, Xiomara Archivos)
+- **New signups today:** 4 external users
 - **Total external users:** 17 (up from 9 on Feb 25, from 4 on Feb 24)
 - **Clarity (last 3 days):** 21 sessions, 16 unique users, 64.64% scroll depth, 42s active time, 9.52% quick backs, 4 login events
 

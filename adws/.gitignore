@@ -12,11 +12,12 @@ __pycache__/
 .pytest_cache/
 .coverage
 htmlcov/
+uv.lock
 
 # Runtime artifacts (created during ADWS runs)
 agents/
 specs/
 trees/
 
-# Environment (API keys — use .env.example instead)
+# Environment (API keys — create a local .env)
 .env

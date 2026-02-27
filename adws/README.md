@@ -31,8 +31,8 @@ ADWS processes GitHub issues end-to-end through six phases: **plan, build, test,
 cd adws
 uv sync
 
-# 2. Copy .env and add your API keys
-cp .env.example .env
+# 2. Create .env and add your API keys
+touch .env
 # Edit .env with your ANTHROPIC_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY, GITHUB_TOKEN
 
 # 3. Run the full pipeline on a GitHub issue
@@ -376,7 +376,7 @@ uv run pytest tests/test_layer2_dryrun.py  # Layer 2 only
 
 ### Module-Level Tests
 
-Each core module has its own test file: `test_provider_clients.py`, `test_trinity_protocol.py`, `test_state.py`, `test_worktree_ops.py`, plus individual phase script tests (`test_plan.py`, `test_build.py`, etc.).
+Each core module has its own test file: `test_provider_clients.py`, `test_trinity_protocol.py`, `test_state.py`, `test_worktree_ops.py`, plus phase tests such as `test_build_phase.py`, `test_test_phase.py`, `test_review_phase.py`, `test_document_phase.py`, and `test_ship_phase.py`.
 
 ---
 

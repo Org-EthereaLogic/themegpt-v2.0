@@ -49,7 +49,7 @@
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
 | 2026-02-25 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 9 total sessions (Paid Search 6, Direct 2, Organic 1). Zero unassigned. Earlier midday snapshot showed 20% from 5 sessions — full-day reprocessing corrected. |
 | 2026-02-26 | 50% | Y | FAIL | **Evening update.** 10 total sessions (Unassigned 5, Direct 2, Cross-network 1, Paid Search 1, Referral 1). 5 unassigned sessions likely from organic social posts (Twitter/X, LinkedIn, Reddit) arriving without UTM params. Earlier midday snapshot showed 1 session/0% — full-day reprocessing may reclassify some. |
-| 2026-02-27 | | | TBD | CRO deploy: PricingSection moved before FeaturesSection (commit `402b19e`, build `ad520a63`, SUCCESS). Pending GA4 full-day reprocessing. |
+| 2026-02-27 | | | TBD | CRO deploy live (pricing at 44% depth). Reddit organic: r/SideProject (redd.it/1rgetzo) + r/ChatGPT (redd.it/1rgewjh) posted this morning — expect unassigned spike from Reddit traffic without UTM. Pending GA4 full-day reprocessing. |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
 
@@ -66,7 +66,7 @@
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
 | 2026-02-25 | N | N | N | N | **Corrected (full-day reprocessing).** 12 page_views, 1 pricing_view. No checkout_start/trial_start/purchase_success. 9 sessions total (Paid Search 6, Direct 2, Organic 1). Engagement massively improved: 89% engaged sessions, 45.5s avg duration, 11% bounce rate. 5 new external users signed up via Google OAuth. |
 | 2026-02-26 | N | N | N | N | **Evening update.** 10 sessions across 5 channels. No checkout_start/trial_start/purchase_success. Social launch posts (Twitter/X, LinkedIn, Reddit) drove traffic but no funnel events. 4 new external user signups recorded. Total external users: 17. |
-| 2026-02-27 | TBD | TBD | TBD | TBD | CRO deploy live: pricing now at 44% scroll depth. `pricing_view` GA4 event expected to rise. Pending GA4 full-day reprocessing. |
+| 2026-02-27 | TBD | TBD | TBD | TBD | CRO deploy live: pricing at 44% scroll depth — `pricing_view` expected to rise. Reddit posts live: r/SideProject + r/ChatGPT (Use cases flair). Pending GA4 full-day reprocessing. |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
 
@@ -660,8 +660,8 @@ Firebase secrets (all 7) and Stripe keys (all 4) confirmed in Cloud Build trigge
 | Subreddit | Title | Status | Flair |
 |-----------|-------|--------|-------|
 | r/chrome_extensions | "Built a ChatGPT theme extension with Plasmo — here's how the CSS injection architecture works" | **POSTED** (live) | Sharing Resources/Tips |
-| r/SideProject | "I quit staring at ChatGPT's grey interface and built a theme extension instead — 22 users in the first week, here's what I learned" | **DRAFTED** (ready to post) | — |
-| r/ChatGPT | "I got tired of staring at the same sterile ChatGPT interface every day, so I built a theme extension" | **QUEUED** (post Feb 27, 9-11am ET) | — |
+| r/SideProject | "I quit staring at ChatGPT's grey interface and built a theme extension instead — 22 users in the first week, here's what I learned" | **POSTED** Feb 27 — https://redd.it/1rgetzo | — |
+| r/ChatGPT | "I got tired of staring at the same sterile ChatGPT interface every day, so I built a theme extension" | **POSTED** Feb 27 — https://redd.it/1rgewjh | Use cases |
 
 - All posts attach `default-to-aurora-borealis.gif` as the lead visual
 - UTM links: `utm_source=reddit&utm_medium=organic_social&utm_campaign=launch_feb26`
@@ -685,6 +685,37 @@ All 14 launch assets verified and deployed:
 - 4 before/after GIFs (Aurora Borealis, Synth Wave, Woodland Retreat, ThemeGPT Dark)
 - Demo video (30s source + web-optimized + 10s highlight GIF)
 - PH thumbnail + 4 gallery images
+
+---
+
+## Reddit Organic Launch — Feb 27, 2026
+
+**Scope:** Two remaining Reddit organic posts from the multi-channel launch plan published this morning.
+
+### Posts Published
+
+| Subreddit | Title | URL | Flair |
+|-----------|-------|-----|-------|
+| r/SideProject | "I quit staring at ChatGPT's grey interface and built a theme extension instead — 22 users in the first week, here's what I learned" | https://redd.it/1rgetzo | — |
+| r/ChatGPT | "I got tired of staring at the same sterile ChatGPT interface every day, so I built a theme extension" | https://redd.it/1rgewjh | Use cases |
+
+- UTM links: `utm_source=reddit&utm_medium=organic_social&utm_campaign=launch_feb26`
+- Account: u/themegpt
+- Submitted: Feb 27, 2026 (morning)
+
+### Full Launch Sequence — Complete
+
+| Channel | Date | Status |
+|---------|------|--------|
+| Twitter/X | Feb 26 | Posted |
+| LinkedIn | Feb 26 | Posted |
+| Product Hunt | Feb 26 | Submitted (pending scheduler) |
+| r/chrome_extensions | Feb 26 | Posted |
+| r/SideProject | Feb 27 | Posted |
+| r/ChatGPT | Feb 27 | Posted |
+
+### Gate 1 Watch
+Reddit organic traffic arrives without UTM params — expect unassigned sessions to rise in today's GA4 data. Evaluate gate status after full-day reprocessing tomorrow morning.
 
 ---
 

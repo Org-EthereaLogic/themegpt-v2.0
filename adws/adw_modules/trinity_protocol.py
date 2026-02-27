@@ -15,7 +15,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from adws.adw_modules.provider_clients import (
+from .provider_clients import (
     LLMResponse,
     ProviderClient,
     ProviderClientFactory,

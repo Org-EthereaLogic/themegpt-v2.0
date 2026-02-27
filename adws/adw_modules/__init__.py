@@ -1,19 +1,19 @@
 # ADWS Greenfield - Core Modules Package
 
-from adws.adw_modules.provider_clients import (
+from .provider_clients import (
     ClaudeClient,
     GeminiClient,
     GPTClient,
     LLMResponse,
     ProviderClientFactory,
 )
-from adws.adw_modules.state import ADWPhaseRecord, ADWState, StateManager
-from adws.adw_modules.trinity_protocol import (
+from .state import ADWPhaseRecord, ADWState, StateManager
+from .trinity_protocol import (
     TrinityPerspective,
     TrinityPlan,
     TrinityProtocol,
 )
-from adws.adw_modules.worktree_ops import (
+from .worktree_ops import (
     create_worktree,
     generate_adw_id,
     get_ports_for_adw,

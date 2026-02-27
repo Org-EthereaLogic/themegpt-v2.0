@@ -25,12 +25,18 @@ Creates:
 from __future__ import annotations
 
 import asyncio
+import sys
 import time
 from pathlib import Path
 
 import typer
 from rich.console import Console
 from rich.panel import Panel
+
+# Ensure `adws` package imports resolve when running from `cd adws`.
+REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from adws.adw_modules.state import StateManager
 from adws.adw_modules.trinity_protocol import TrinityProtocol

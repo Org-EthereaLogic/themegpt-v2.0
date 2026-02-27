@@ -141,13 +141,13 @@ export default function Home() {
       <Navigation />
       <Hero />
       <ThemesSection />
-      <FeaturesSection />
       <PricingSection
         selectedTheme={selectedTheme}
         onThemeChange={setSelectedTheme}
         onCheckout={handleCheckout}
         checkoutError={checkoutError}
       />
+      <FeaturesSection />
       <Footer />
     </div>
   );

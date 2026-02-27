@@ -41,6 +41,11 @@ logging.basicConfig(
 logger = logging.getLogger("adws-bridge")
 
 
+def _sanitize_log_value(value: object) -> str:
+    """Strip control characters from user-supplied values to prevent log injection."""
+    return re.sub(r"[\x00-\x1f\x7f]", "_", str(value))
+
+
 # =============================================================================
 # Configuration
 # =============================================================================
@@ -282,28 +287,50 @@ async def execute_script(
     # those validators as the single source of truth for project and args
     # validation, and simply use the validated values here.
 
-    # Resolve project path
-    project_path = WORKSPACE_PATH / request.project
+    # Resolve project path canonically to guard against symlink traversal.
+    # The project name is validated to ^[a-zA-Z0-9_-]+$ by field_validator, but
+    # resolving the canonical path also blocks symlinks pointing outside the workspace.
+    workspace_resolved = WORKSPACE_PATH.resolve()
+    project_path = (WORKSPACE_PATH / request.project).resolve()
+    try:
+        project_path.relative_to(workspace_resolved)
+    except ValueError:
+        logger.error("Project path escapes workspace: %s", _sanitize_log_value(request.project))
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Project directory is outside workspace boundary",
+        )
+
     if not project_path.exists():
-        logger.error(f"Project directory not found: {project_path}")
+        logger.error("Project directory not found: %s", _sanitize_log_value(project_path))
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Project directory '{request.project}' does not exist",
         )
 
     if not project_path.is_dir():
-        logger.error(f"Project path is not a directory: {project_path}")
+        logger.error("Project path is not a directory: %s", _sanitize_log_value(project_path))
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Project path '{request.project}' is not a directory",
         )
 
-    # Resolve script path from allowlist
+    # Resolve script path from allowlist and verify it stays within the project.
+    # The relative path comes from the hardcoded ALLOWLISTED_SCRIPTS dict (not user input),
+    # but we still resolve and check containment to catch any symlink edge cases.
     script_relative_path = ALLOWLISTED_SCRIPTS[request.script]
-    script_path = project_path / script_relative_path
+    script_path = (project_path / script_relative_path).resolve()
+    try:
+        script_path.relative_to(project_path)
+    except ValueError:
+        logger.error("Script path escapes project boundary: %s", _sanitize_log_value(request.script))
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Script '{request.script}' has an invalid path",
+        )
 
     if not script_path.exists():
-        logger.error(f"Script not found: {script_path}")
+        logger.error("Script not found: %s", _sanitize_log_value(script_path))
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Script '{request.script}' not found in project",
@@ -311,19 +338,24 @@ async def execute_script(
 
     # Build command with validated arguments
     command = ["uv", "run", "python", str(script_path), *request.args]
-    logger.info(f"Executing: {' '.join(command)}")
-    logger.info(f"Working directory: {project_path}")
+    logger.info("Executing: %s", _sanitize_log_value(" ".join(command)))
+    logger.info("Working directory: %s", _sanitize_log_value(project_path))
 
     # Execute with timeout and capture output
     start_time = time.monotonic()
 
     try:
-        result = subprocess.run(
+        # shell=False (the default for list-form commands) means each element is
+        # passed directly to execv — no shell interprets metacharacters.
+        # script_path is verified to be within project_path above; request.args
+        # are validated by field_validator (blocklist + no control chars).
+        result = subprocess.run(  # codeql[py/command-line-injection]
             command,
             cwd=project_path,
             capture_output=True,
             text=True,
             timeout=EXECUTION_TIMEOUT,
+            shell=False,
         )
         duration = time.monotonic() - start_time
         success = result.returncode == 0

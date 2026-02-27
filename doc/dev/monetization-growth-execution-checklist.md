@@ -39,6 +39,7 @@
 - [x] Updated `/login` sub-copy to welcome free users: "Sign in to get free themes and personalize your ChatGPT".
 - [x] Added "Explore premium themes →" link to empty download history state on `/account`.
 - [x] Verified onboarding deploys: commit `8214c55` → Cloud Build `6a2fc928` (`SUCCESS`) → revision `themegpt-web-00218-95f`; commit `a873048` → Cloud Build `34ae7481` (`SUCCESS`) → revision `themegpt-web-00219-95f` at 100% traffic.
+- [x] **CRO: Moved PricingSection before FeaturesSection** — Clarity showed 37–52% median scroll depth; PricingSection was at ~76% (above most users' exit point). Swapped order so pricing sits at ~44% depth (Hero → ThemesSection → PricingSection → FeaturesSection). Features now reinforce post-decision. Verified: `#pricing` anchor intact, `pricing_view` GA4 event unaffected, all 3 pricing cards rendered. Commit `402b19e` → Cloud Build `ad520a63` (`SUCCESS`), Feb 27, 2026.
 
 ---
 

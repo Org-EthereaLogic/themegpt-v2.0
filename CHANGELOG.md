@@ -2,6 +2,16 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
+## [Unreleased] - Web
+
+> **Web-only CRO change.** No extension code changed; no CWS submission required.
+
+### Changed
+
+- **Homepage section order (CRO):** `PricingSection` now renders before `FeaturesSection`. Clarity analytics showed median scroll depth of 37–52%; pricing was previously at ~76% scroll depth, above where most users exit. New order: Hero → ThemesSection → PricingSection → FeaturesSection → Footer. Pricing is now at ~44% scroll depth, within the median scroll range. `#pricing` anchor, checkout props, and `pricing_view` GA4 event are unaffected. Deployed commit `402b19e`, Cloud Build `ad520a63` (SUCCESS), Feb 27, 2026.
+
+---
+
 ## [2.3.1] - 2026-02-22
 
 > **Web-only release.** No extension code changed; no CWS submission required.

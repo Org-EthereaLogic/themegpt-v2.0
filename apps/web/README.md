@@ -2,20 +2,21 @@
 
 Marketing website plus API backend for ThemeGPT, including authentication, checkout, subscriptions, install reminder email, and theme preview gallery.
 
-## Current Status (As of February 25, 2026)
+## Current Status (As of February 27, 2026)
 
 - Production deploy is automated from `main` via Cloud Build trigger `deploy-themegpt-on-push`.
-- Latest deployed commit: `c9d2cb5` (Cloud Build `999bff5b-31d3-409d-9a69-cb975873d715`, Cloud Run revision `themegpt-web-00211-84v`, 100% traffic).
+- Latest deployed commit: `402b19e` (Cloud Build `ad520a63-e595-4df0-af0a-b6341e22d222`, status `SUCCESS`, deployed Feb 27, 2026).
 - Mobile onboarding route (`/mobile`) is live with:
   - Desktop install reminder email capture (`/api/mobile-reminder`)
   - Mixed free + premium screenshot previews
   - Direct link to full theme gallery (`/?skip_mobile=1#themes`)
-- Recent conversion UX refresh:
+- Recent conversion UX changes:
+  - **CRO (Feb 27):** `PricingSection` moved before `FeaturesSection` on homepage. Pricing now at ~44% scroll depth (was ~76%), within the 52% Clarity median scroll range. Features serve as post-decision reinforcement.
   - Hero and navigation copy tightened for install-first clarity
   - `/mobile` converted to email-first flow with social proof and stronger primary CTA
   - Cookie consent banner delayed by 5s to reduce first-impression interruption
 - Web package version: `2.3.1` (`apps/web/package.json`).
-- Latest validated paid traffic pattern (GA4 Feb 21-24): 44 sessions total, 84% mobile, `google / cpc` mobile dominates (28 sessions) while `reddit / paid_social` mobile attribution is low (1 session).
+- Post-change traffic (Clarity, Feb 24-26): desktop share 62% (up from 10% pre-changes), homepage scroll depth 52.3% (up from 28.8%), 17 total external users in Firestore (up from 4 on Feb 24). CWV regression under investigation (LCP 6s, INP 1.7s, CLS 12 — dynamic imports likely root cause).
 - Campaign reporting note: Google Ads API auth is currently invalid (developer token); ad-spend and click validation is temporarily manual in platform dashboards.
 
 ## Tech Stack

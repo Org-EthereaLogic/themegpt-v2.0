@@ -3,7 +3,7 @@
 **Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
 **Updated:** Daily, by checking GA4
 **Blocker:** No hard launch blocker. Gate 1 and Gate 3 are tracked as diagnostics while paid acquisition begins.
-**Latest deployment snapshot:** Feb 25, 2026 — commit `a873048` deployed via trigger `deploy-themegpt-on-push` (build `34ae7481-8c4c-4605-93a9-efce23dad78c`, status `SUCCESS`), serving on Cloud Run revision `themegpt-web-00219-95f` (100% traffic).
+**Latest deployment snapshot:** Feb 27, 2026 — commit `402b19e` deployed via trigger `deploy-themegpt-on-push` (build `ad520a63-e595-4df0-af0a-b6341e22d222`, status `SUCCESS`). CRO section reorder: PricingSection moved before FeaturesSection.
 
 ---
 
@@ -49,7 +49,7 @@
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
 | 2026-02-25 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 9 total sessions (Paid Search 6, Direct 2, Organic 1). Zero unassigned. Earlier midday snapshot showed 20% from 5 sessions — full-day reprocessing corrected. |
 | 2026-02-26 | 50% | Y | FAIL | **Evening update.** 10 total sessions (Unassigned 5, Direct 2, Cross-network 1, Paid Search 1, Referral 1). 5 unassigned sessions likely from organic social posts (Twitter/X, LinkedIn, Reddit) arriving without UTM params. Earlier midday snapshot showed 1 session/0% — full-day reprocessing may reclassify some. |
-| 2026-02-27 | | | | |
+| 2026-02-27 | | | TBD | CRO deploy: PricingSection moved before FeaturesSection (commit `402b19e`, build `ad520a63`, SUCCESS). Pending GA4 full-day reprocessing. |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
 
@@ -66,7 +66,7 @@
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
 | 2026-02-25 | N | N | N | N | **Corrected (full-day reprocessing).** 12 page_views, 1 pricing_view. No checkout_start/trial_start/purchase_success. 9 sessions total (Paid Search 6, Direct 2, Organic 1). Engagement massively improved: 89% engaged sessions, 45.5s avg duration, 11% bounce rate. 5 new external users signed up via Google OAuth. |
 | 2026-02-26 | N | N | N | N | **Evening update.** 10 sessions across 5 channels. No checkout_start/trial_start/purchase_success. Social launch posts (Twitter/X, LinkedIn, Reddit) drove traffic but no funnel events. 4 new external user signups recorded. Total external users: 17. |
-| 2026-02-27 | | | | | |
+| 2026-02-27 | TBD | TBD | TBD | TBD | CRO deploy live: pricing now at 44% scroll depth. `pricing_view` GA4 event expected to rise. Pending GA4 full-day reprocessing. |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
 
@@ -590,6 +590,51 @@ Budget raised from $65/day to **$100/day** on the evening of Feb 25. Rationale: 
 | P1 | Track new signups through onboarding funnel (extension install rate) | TODO |
 | P2 | Monitor $100/day Google Ads budget ROI over next 3 days | TODO |
 | P3 | Investigate LatAm organic traffic (Mexico 4, Ecuador 2) as expansion opportunity | TODO |
+
+---
+
+## CRO Section Reorder — Feb 27, 2026 (commit 402b19e)
+
+**Scope:** Homepage section order change to move PricingSection within median user scroll range.
+
+### Rationale
+
+Clarity analytics showed average homepage scroll depth of 37–52%. With the previous layout, PricingSection started at ~76% scroll depth — above the exit point for most users. Users who viewed the themes gallery (proof of product) then hit the FeaturesSection before ever seeing pricing.
+
+### Change Applied
+
+Swapped `FeaturesSection` and `PricingSection` in `apps/web/app/page.tsx`:
+
+**Before:** Hero → ThemesSection → FeaturesSection → PricingSection → Footer
+**After:** Hero → ThemesSection → **PricingSection** → FeaturesSection → Footer
+
+### Verified Section Positions (DOM, 4,584px page)
+
+| Section | y-offset | % page depth |
+|---------|----------|-------------|
+| `#themes` | 862px | 19% |
+| `#pricing` | 2,013px | **44%** ← within 52% median |
+| `#features` | 2,835px | 62% |
+
+### Verification
+
+- `#pricing` anchor (`"See Plans"` Hero CTA, nav `"Pricing"` link): ✅ scrolls to correct section
+- All three pricing cards rendered (Monthly $6.99, Yearly $69.99, Single Theme $3.99): ✅
+- Checkout props, `IntersectionObserver` `pricing_view` event, `#pricing` anchor: ✅ unaffected
+- Live browser test: section order confirmed in DOM via `mcp__kapture`
+
+### Build & Revision
+
+| Build ID | Status | Commit |
+|---|---|---|
+| `ad520a63-e595-4df0-af0a-b6341e22d222` | **SUCCESS** | `402b19e` |
+
+Firebase secrets (all 7) and Stripe keys (all 4) confirmed in Cloud Build trigger `a34788f2` before deploy.
+
+### Expected Impact
+
+- `pricing_view` GA4 event should fire more frequently (section now visible to median user)
+- Monitor Clarity scroll depth and `pricing_view` event over next 3–5 days
 
 ---
 

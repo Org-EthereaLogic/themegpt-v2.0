@@ -19,7 +19,7 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 >
 > **Current extension source version in this repo: v2.3.1** — submitted to CWS and Edge; review status is tracked in `doc/dev/gate-tracking-log.md`.
 >
-> **Latest production web deployment:** commit `a873048` auto-deployed via Cloud Build trigger `deploy-themegpt-on-push` (build `34ae7481-8c4c-4605-93a9-efce23dad78c`) to Cloud Run revision `themegpt-web-00219-95f` (100% traffic) on February 25, 2026.
+> **Latest production web deployment:** commit `402b19e` auto-deployed via Cloud Build trigger `deploy-themegpt-on-push` (build `ad520a63-e595-4df0-af0a-b6341e22d222`, status `SUCCESS`) on February 27, 2026. CRO change: PricingSection moved before FeaturesSection to sit within the 52% median scroll depth.
 >
 > See [CHANGELOG.md](./CHANGELOG.md) for release notes and [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md) for live submission/review status.
 
@@ -144,13 +144,15 @@ pnpm test
 - Engineering execution checklist: [doc/dev/monetization-growth-execution-checklist.md](./doc/dev/monetization-growth-execution-checklist.md)
 - Governance and standards: [CONSTITUTION.md](./CONSTITUTION.md), [DIRECTIVES.md](./DIRECTIVES.md), [AGENTS.md](./AGENTS.md)
 
-Latest campaign snapshot (GA4 web property `516189580`, Feb 21-25):
-- 46 sessions, 41 active users (Feb 21-25 cumulative)
-- Google Ads Feb 25: 95 clicks, 1,185 impr, $0.85 CPC, $80.52 spend (budget reduced to $65/day)
-- Desktop paid search sessions appearing with 77s avg duration and 0% bounce (targeting improvement)
-- 9 external users in Firestore (5 new on Feb 25 alone — sign-up velocity 5x after email auth gate)
+Latest campaign snapshot (GA4 web property `516189580`, Feb 21-27):
+- 17 total external users in Firestore (5 new Feb 25, 4 new Feb 26; up from 4 on Feb 24)
+- Desktop session share: 62% post-targeting fixes (up from 10% on Feb 22-24)
+- Homepage scroll depth: 52.3% (up from 28.8%) — pricing section now within median reach
+- Google Ads: $100/day budget; 310 clicks / $361 spend through Feb 24, 0 conversions; negative keyword refinements applied Feb 25
+- Multi-channel launch Feb 26: Product Hunt listed, Reddit r/chrome_extensions posted, Twitter/X + LinkedIn published
 - Conversion funnel: `checkout_start=5`, `trial_start=0`, `purchase_success=0` — focusing on user base growth to 100 before monetization push
-- campaign-ops note: Google Ads API auth is currently invalid (developer token); spend/click reporting is being validated manually in ad dashboards
+- CWV regression under investigation: LCP 6.0s, INP 1.7s, CLS 12 (likely dynamic imports — see gate-tracking-log.md)
+- Campaign-ops note: Google Ads API auth is currently invalid (developer token); spend/click reporting is being validated manually in ad dashboards
 
 ---
 

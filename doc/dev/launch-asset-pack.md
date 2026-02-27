@@ -82,8 +82,7 @@ Alternatives:
 
 ## 4. Product Hunt Specific Assets
 
-Product Hunt is optional and no longer a launch blocker. Run it when messaging
-and social cadence are stable.
+**SUBMITTED Feb 26, 2026** — Listing scheduled via producthunt.com/posts/new/submission.
 
 | # | Asset | File | Status |
 |---|-------|------|--------|
@@ -122,8 +121,8 @@ and social cadence are stable.
 
 | # | Asset | Platform | Spec | Status |
 |---|-------|----------|------|--------|
-| 1 | Announcement post | Twitter/X | 280 chars + 1 GIF (lead before/after) | [x] Finalized |
-| 2 | Announcement post | LinkedIn | Short post + lead GIF | [x] Finalized |
+| 1 | Announcement post | Twitter/X | 280 chars + 1 GIF (lead before/after) | [x] **POSTED Feb 26** |
+| 2 | Announcement post | LinkedIn | Short post + lead GIF | [x] **POSTED Feb 26** |
 | 3 | OG image | All | 1200x630 — already exists at `apps/web/public/og-image.png` | [x] |
 | 4 | Twitter card | Twitter/X | 1200x600 — already exists in `asset/archive/` | [x] |
 

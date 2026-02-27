@@ -48,7 +48,7 @@
 | 2026-02-23 | 0% | Y | PASS | GA4 full-day: 21 total sessions (Paid Search 19, Cross-network 1, Direct 1). No unassigned traffic after reprocessing. |
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
 | 2026-02-25 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 9 total sessions (Paid Search 6, Direct 2, Organic 1). Zero unassigned. Earlier midday snapshot showed 20% from 5 sessions — full-day reprocessing corrected. |
-| 2026-02-26 | 0% | Y | PASS | 1 session (Referral). Zero unassigned. Partial day — GA4 API lag; more data expected in tomorrow's pull. GA4 Data API restored (reauthed with analytics.readonly scope). |
+| 2026-02-26 | 50% | Y | FAIL | **Evening update.** 10 total sessions (Unassigned 5, Direct 2, Cross-network 1, Paid Search 1, Referral 1). 5 unassigned sessions likely from organic social posts (Twitter/X, LinkedIn, Reddit) arriving without UTM params. Earlier midday snapshot showed 1 session/0% — full-day reprocessing may reclassify some. |
 | 2026-02-27 | | | | |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
@@ -65,7 +65,7 @@
 | 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
 | 2026-02-25 | N | N | N | N | **Corrected (full-day reprocessing).** 12 page_views, 1 pricing_view. No checkout_start/trial_start/purchase_success. 9 sessions total (Paid Search 6, Direct 2, Organic 1). Engagement massively improved: 89% engaged sessions, 45.5s avg duration, 11% bounce rate. 5 new external users signed up via Google OAuth. |
-| 2026-02-26 | N | N | N | N | 1 page_view (partial day — GA4 API lag). 1 session (Referral). GA4 Data API restored. |
+| 2026-02-26 | N | N | N | N | **Evening update.** 10 sessions across 5 channels. No checkout_start/trial_start/purchase_success. Social launch posts (Twitter/X, LinkedIn, Reddit) drove traffic but no funnel events. 4 new external user signups (Carlos Camacho, Jose Alba, Muhammad Shoaib Farooq, Xiomara Archivos). Total external users: 17. |
 | 2026-02-27 | | | | | |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
@@ -590,6 +590,56 @@ Budget raised from $65/day to **$100/day** on the evening of Feb 25. Rationale: 
 | P1 | Track new signups through onboarding funnel (extension install rate) | TODO |
 | P2 | Monitor $100/day Google Ads budget ROI over next 3 days | TODO |
 | P3 | Investigate LatAm organic traffic (Mexico 4, Ecuador 2) as expansion opportunity | TODO |
+
+---
+
+## Multi-Channel Launch — Feb 26, 2026
+
+**Scope:** Product Hunt submission + Reddit community posts + social media launch across Twitter/X and LinkedIn.
+
+### Product Hunt
+
+- **Status:** Scheduled for launch (date TBD by PH scheduler)
+- **Listing name:** ChatGPT Themes & Dark Mode — ThemeGPT
+- **Tagline:** "Make ChatGPT yours."
+- **Description:** 430-char summary covering free/premium split, animated effects, privacy, and early adopter offer
+- **Gallery:** 6 images (2 auto-pulled from site + 4 custom PH gallery images)
+- **Video:** YouTube promo (`https://youtu.be/TFgUKvVzA6U`)
+- **Maker comment:** Pre-filled (Anthony intro + feature bullets + lifetime offer CTA)
+- **Tag:** Chrome Extensions
+- **Pricing:** Paid with free trial/plan
+- **Funding:** Bootstrapped
+
+### Reddit Posts
+
+| Subreddit | Title | Status | Flair |
+|-----------|-------|--------|-------|
+| r/chrome_extensions | "Built a ChatGPT theme extension with Plasmo — here's how the CSS injection architecture works" | **POSTED** (live) | Sharing Resources/Tips |
+| r/SideProject | "I quit staring at ChatGPT's grey interface and built a theme extension instead — 22 users in the first week, here's what I learned" | **DRAFTED** (ready to post) | — |
+| r/ChatGPT | "I got tired of staring at the same sterile ChatGPT interface every day, so I built a theme extension" | **QUEUED** (post Feb 27, 9-11am ET) | — |
+
+- All posts attach `default-to-aurora-borealis.gif` as the lead visual
+- UTM links: `utm_source=reddit&utm_medium=organic_social&utm_campaign=launch_feb26`
+
+### Social Media
+
+| Platform | Status | UTM |
+|----------|--------|-----|
+| Twitter/X | Posted/Scheduled | — |
+| LinkedIn | Posted/Scheduled | — |
+
+### User Growth (Feb 26 evening snapshot)
+
+- **New signups today:** 4 external users (Carlos Camacho, Jose Alba, Muhammad Shoaib Farooq, Xiomara Archivos)
+- **Total external users:** 17 (up from 9 on Feb 25, from 4 on Feb 24)
+- **Clarity (last 3 days):** 21 sessions, 16 unique users, 64.64% scroll depth, 42s active time, 9.52% quick backs, 4 login events
+
+### Assets Used (from `asset/launch/`)
+
+All 14 launch assets verified and deployed:
+- 4 before/after GIFs (Aurora Borealis, Synth Wave, Woodland Retreat, ThemeGPT Dark)
+- Demo video (30s source + web-optimized + 10s highlight GIF)
+- PH thumbnail + 4 gallery images
 
 ---
 

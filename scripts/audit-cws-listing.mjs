@@ -268,7 +268,12 @@ async function main() {
     }
   }
 
-  await fs.writeFile(ARTIFACT_JSON, JSON.stringify(artifact, null, 2))
+  const artifactJson = JSON.stringify(artifact, null, 2)
+  if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(artifactJson)) {
+    throw new Error("Artifact contains unexpected control characters from fetched data")
+  }
+  // codeql[js/http-to-file-access] - This is a local audit script writing a JSON artifact
+  await fs.writeFile(ARTIFACT_JSON, artifactJson)
 
   const lines = [
     "# CWS Listing Audit - 2026-02-25",
@@ -297,6 +302,7 @@ async function main() {
   if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(report)) {
     throw new Error("Report contains unexpected control characters from fetched data")
   }
+  // codeql[js/http-to-file-access] - This is a local audit script writing a markdown report
   await fs.writeFile(REPORT_PATH, report)
 
   console.log(`CWS listing audit complete: ${path.relative(ROOT, REPORT_PATH)}`)

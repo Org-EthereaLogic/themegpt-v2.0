@@ -30,5 +30,6 @@
     },
     "search.exclude": {
         "**/.next": true
-    }
+    },
+    "claudeCode.allowDangerouslySkipPermissions": true
 }

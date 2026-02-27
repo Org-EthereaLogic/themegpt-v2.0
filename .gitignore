@@ -39,6 +39,8 @@ __pycache__/
 .turbo
 dist
 coverage
+tmp/
+output/
 .env
 .firebase
 service-account.json

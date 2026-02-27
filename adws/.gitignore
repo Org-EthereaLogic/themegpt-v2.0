@@ -1,0 +1,22 @@
+# Virtual environment
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Test cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Runtime artifacts (created during ADWS runs)
+agents/
+specs/
+trees/
+
+# Environment (API keys — use .env.example instead)
+.env

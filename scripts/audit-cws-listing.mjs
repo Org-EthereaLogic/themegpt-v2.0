@@ -302,8 +302,7 @@ async function main() {
   if (/[\x00-\x08\x0B\x0C\x0E-\x1F]/.test(report)) {
     throw new Error("Report contains unexpected control characters from fetched data")
   }
-  // codeql[js/http-to-file-access] - This is a local audit script writing a markdown report
-  await fs.writeFile(REPORT_PATH, report)
+  await fs.writeFile(REPORT_PATH, report) // codeql[js/http-to-file-access] - local audit script writing markdown report to a fixed, sanitized local path
 
   console.log(`CWS listing audit complete: ${path.relative(ROOT, REPORT_PATH)}`)
   console.log(`Artifact JSON: ${path.relative(ROOT, ARTIFACT_JSON)}`)

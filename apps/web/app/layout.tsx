@@ -1,14 +1,22 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import dynamic from "next/dynamic";
 import { DM_Sans, Fraunces } from "next/font/google";
 import { SessionProvider } from "@/components/SessionProvider";
-import { Analytics } from "@/components/Analytics";
-import { ClarityAnalytics } from "@/components/ClarityAnalytics";
-import { GoogleAdsAnalytics } from "@/components/GoogleAdsAnalytics";
 import { AttributionCapture } from "@/components/AttributionCapture";
 import { CookieConsent } from "@/components/CookieConsent";
 import { Toaster } from "sonner";
 import "./globals.css";
+
+const Analytics = dynamic(() =>
+  import("@/components/Analytics").then((m) => ({ default: m.Analytics }))
+);
+const ClarityAnalytics = dynamic(() =>
+  import("@/components/ClarityAnalytics").then((m) => ({ default: m.ClarityAnalytics }))
+);
+const GoogleAdsAnalytics = dynamic(() =>
+  import("@/components/GoogleAdsAnalytics").then((m) => ({ default: m.GoogleAdsAnalytics }))
+);
 
 const dmSans = DM_Sans({
   subsets: ["latin"],

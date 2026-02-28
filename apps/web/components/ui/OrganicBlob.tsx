@@ -1,5 +1,3 @@
-"use client";
-
 interface OrganicBlobProps {
   color: "teal-soft" | "coral-soft" | "yellow" | "teal" | "coral";
   size: number;

@@ -3,6 +3,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { createPortal } from "react-dom";
+import { logEvent } from "firebase/analytics";
+import { initAnalyticsIfConsented } from "@/lib/firebase";
+import { getAttributionEventParams } from "@/lib/attribution";
 import type { Theme } from "@themegpt/shared";
 import { getThemeBlurColor } from "@/lib/theme-blur-data";
 
@@ -473,9 +476,17 @@ export function ThemeCard({ theme, index = 0, isPremium = false, onClick }: Them
     if (onClick) {
       onClick();
     } else {
+      const a = initAnalyticsIfConsented();
+      if (a) {
+        logEvent(a, "theme_preview", {
+          theme_id: theme.id,
+          plan_type: isPremium ? "premium" : "free",
+          ...getAttributionEventParams()
+        });
+      }
       setIsExpanded(true);
     }
-  }, [onClick]);
+  }, [onClick, theme.id, isPremium]);
 
   const handleClose = useCallback(() => {
     setIsExpanded(false);

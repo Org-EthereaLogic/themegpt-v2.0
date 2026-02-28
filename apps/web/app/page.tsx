@@ -29,7 +29,14 @@ export default function Home() {
   );
   const [checkoutError, setCheckoutError] = useState<React.ReactNode | null>(null);
 
-  const handleCheckout = useCallback(async (type: CheckoutType, themeId?: string) => {
+  const handleCheckout = useCallback(async (type: CheckoutType, themeId?: string, isResume = false) => {
+    // Fire checkout_start before anything else, unless this is a resumed checkout (after auth redirect)
+    if (!isResume) {
+      const a = initAnalyticsIfConsented();
+      if (a) {
+        logEvent(a, "checkout_start", { plan_type: type, ...getAttributionEventParams() });
+      }
+    }
     // Enforce login before checkout; persist intent so purchase resumes immediately after auth.
     if (!session) {
       window.sessionStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify({ type, themeId }));
@@ -40,12 +47,6 @@ export default function Home() {
     }
 
     setCheckoutError(null);
-
-    // Gate 3: fire checkout_start before the POST so the event is always recorded
-    const a = initAnalyticsIfConsented();
-    if (a) {
-      logEvent(a, "checkout_start", { plan_type: type, ...getAttributionEventParams() });
-    }
 
     try {
       window.sessionStorage.removeItem(CHECKOUT_ABANDON_LOGGED_KEY);
@@ -126,7 +127,7 @@ export default function Home() {
       const parsed = JSON.parse(raw) as { type?: CheckoutType; themeId?: string };
       if (parsed.type === "monthly" || parsed.type === "yearly" || parsed.type === "single") {
         const resumeTimer = window.setTimeout(() => {
-          void handleCheckout(parsed.type as CheckoutType, parsed.themeId);
+          void handleCheckout(parsed.type as CheckoutType, parsed.themeId, true);
         }, 0);
         return () => window.clearTimeout(resumeTimer);
       }

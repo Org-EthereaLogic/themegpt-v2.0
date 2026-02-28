@@ -491,7 +491,7 @@ async def collect_clarity() -> CollectorResult:
         )
 
     try:
-        url = f"https://www.clarity.ms/export-data/api/v1/{project_id}/live-insights"
+        url = "https://www.clarity.ms/export-data/api/v1/project-live-insights"
         headers = {
             "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",

@@ -12,6 +12,7 @@
     "verify:stripe:cloud-run": "node scripts/verify_stripe.js --cloud-run"
   },
   "dependencies": {
+    "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@microsoft/clarity": "^1.0.2",
     "@react-email/components": "^1.0.8",
     "@themegpt/shared": "workspace:*",

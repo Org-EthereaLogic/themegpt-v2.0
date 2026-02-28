@@ -9,6 +9,7 @@ import {
   sendTrialEndingEmail,
   sendPaymentFailedEmail,
 } from "@/lib/email";
+import { tagContact } from "@/lib/mailchimp";
 import { LicenseEntitlement, PlanType, SubscriptionStatus } from "@themegpt/shared";
 import { v4 as uuidv4 } from "uuid";
 import Stripe from "stripe";
@@ -218,6 +219,16 @@ async function handleCheckoutComplete(session: Stripe.Checkout.Session) {
       } as const;
       const recordId = await db.upsertSubscriptionByStripeId(subscriptionPayload);
       console.log(`Subscription record upserted for user: ${userId} (plan: ${normalizedPlanType}, id: ${recordId})`);
+
+      // Tag in MailChimp for trial nurture sequence (non-blocking)
+      const checkoutEmail = session.customer_email || session.customer_details?.email;
+      if (checkoutEmail) {
+        const mergeFields: Record<string, string> = { PLAN_TYPE: normalizedPlanType };
+        if (trialEndsAt) mergeFields.TRIAL_END = trialEndsAt.toISOString().split("T")[0];
+        tagContact(checkoutEmail, ["trial-started"], mergeFields).catch((err) =>
+          console.error("[webhook] MailChimp trial-started tag failed:", err)
+        );
+      }
     }
   } else {
     // Single theme purchase
@@ -652,6 +663,20 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
     // Covers trialing → active (trial converted to paid) and past_due → active (payment recovered)
     await db.updateSubscription(dbSubscription.id, { status: 'active' });
     console.log(`Subscription activated: ${dbSubscription.id} (was: ${dbSubscription.status})`);
+
+    // Tag as converted when trial becomes paid (non-blocking)
+    if (dbSubscription.status === 'trialing') {
+      try {
+        const customer = await getStripe().customers.retrieve(subscription.customer as string);
+        if (!customer.deleted && customer.email) {
+          tagContact(customer.email, ["converted"]).catch((err) =>
+            console.error("[webhook] MailChimp converted tag failed:", err)
+          );
+        }
+      } catch (err) {
+        console.error("[webhook] Failed to retrieve customer for MailChimp converted tag:", err);
+      }
+    }
   }
 }
 
@@ -706,6 +731,13 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 
     // Also deactivate legacy license key
     const customer = await getStripe().customers.retrieve(customerId);
+
+    // Tag as churned in MailChimp (non-blocking)
+    if (!customer.deleted && customer.email) {
+      tagContact(customer.email, ["churned"]).catch((err) =>
+        console.error("[webhook] MailChimp churned tag failed:", err)
+      );
+    }
     if (customer.deleted) return;
 
     const licenseKey = customer.metadata?.licenseKey;

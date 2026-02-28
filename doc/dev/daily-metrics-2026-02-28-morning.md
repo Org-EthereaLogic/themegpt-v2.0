@@ -1,6 +1,6 @@
 # Daily Metrics Report: 2026-02-28 (Morning)
 
-**Generated:** 04:13 UTC  
+**Generated:** 18:47 UTC  
 **Period:** Morning  
 **Lookback:** 1 day(s)  
 
@@ -11,19 +11,19 @@
 - **google_ads**: FAILED ((<_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.250.73.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, <_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.250.73.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, errors {
   error_code {
     authorization_error: USER_PERMISSION_DENIED
   }
   message: "User doesn\'t have permission to access customer. Note: If you\'re accessing a client customer, the manager\'s customer id must be set in the \'login-customer-id\' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid"
 }
-request_id: "iecDeV-cql-XCLt1jwhFyg"
-, 'iecDeV-cql-XCLt1jwhFyg'))
+request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
+, 'YJRKa8lcLZiWGXyI-6bmNQ'))
 - **clarity**: OK
 - **cws**: OK
 - **monetization**: OK
@@ -34,37 +34,37 @@ request_id: "iecDeV-cql-XCLt1jwhFyg"
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 7 |
-| Users | 6 |
-| New Users | 5 |
-| Engaged Sessions | 6 |
-| Avg Session Duration | 133.2s |
-| Page Views | 8 |
-| Bounce Rate | 14.3% |
+| Sessions | 9 |
+| Users | 8 |
+| New Users | 8 |
+| Engaged Sessions | 9 |
+| Avg Session Duration | 122.9s |
+| Page Views | 11 |
+| Bounce Rate | 0.0% |
 
 ### Channel Breakdown
 
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
-| Unassigned | 4 | 0 | 100.0% | 17.0s |
-| Direct | 3 | 3 | 0.0% | 288.2s |
-| Organic Search | 2 | 2 | 0.0% | 0.0s |
-| Cross-network | 1 | 1 | 0.0% | 0.0s |
+| Paid Search | 4 | 4 | 0.0% | 13.7s |
+| Direct | 3 | 3 | 0.0% | 337.3s |
+| Organic Search | 2 | 2 | 0.0% | 19.6s |
 
 ### Device Split
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 7 | 14.3% | 133.2s |
+| desktop | 9 | 0.0% | 122.9s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-| United States | 3 | 50.0% |
-| Mexico | 1 | 16.7% |
-| Pakistan | 1 | 16.7% |
-| Venezuela | 1 | 16.7% |
+| United States | 3 | 37.5% |
+| Mexico | 2 | 25.0% |
+| Brazil | 1 | 12.5% |
+| Pakistan | 1 | 12.5% |
+| Venezuela | 1 | 12.5% |
 
 ---
 
@@ -72,7 +72,7 @@ request_id: "iecDeV-cql-XCLt1jwhFyg"
 
 | Event | Count |
 |-------|-------|
-| `pricing_view` | 3 |
+| `pricing_view` | 4 |
 | `theme_preview` | 0 |
 | `checkout_start` | 0 |
 | `checkout_abandon` | 0 |
@@ -105,19 +105,19 @@ request_id: "iecDeV-cql-XCLt1jwhFyg"
 *Google Ads data unavailable: (<_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.250.73.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, <_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.250.73.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, errors {
   error_code {
     authorization_error: USER_PERMISSION_DENIED
   }
   message: "User doesn\'t have permission to access customer. Note: If you\'re accessing a client customer, the manager\'s customer id must be set in the \'login-customer-id\' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid"
 }
-request_id: "iecDeV-cql-XCLt1jwhFyg"
-, 'iecDeV-cql-XCLt1jwhFyg')*
+request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
+, 'YJRKa8lcLZiWGXyI-6bmNQ')*
 
 ---
 
@@ -125,17 +125,17 @@ request_id: "iecDeV-cql-XCLt1jwhFyg"
 
 | Metric | Value |
 |--------|-------|
-| Installs | 17 |
-| Listing Views | 15 |
+| Installs | 27 |
+| Listing Views | 25 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `install` | 17 |
-| `page_view` | 15 |
-| `first_visit` | 12 |
-| `session_start` | 12 |
+| `install` | 27 |
+| `page_view` | 25 |
+| `session_start` | 22 |
+| `first_visit` | 21 |
 
 ---
 

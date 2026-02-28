@@ -3,6 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { db as firestore } from "./firebase-admin";
+import { subscribeContact } from "./mailchimp";
 
 // In-memory log ring buffer for diagnostics (readable via /api/health)
 const MAX_LOG_ENTRIES = 50;
@@ -153,6 +154,10 @@ export const authOptions: NextAuthOptions = {
             createdAt: new Date(),
             updatedAt: new Date(),
           });
+          // Subscribe to MailChimp welcome sequence (non-blocking)
+          subscribeContact(user.email, ["free-user"]).catch((err) =>
+            console.error("[auth] MailChimp subscribe failed:", err)
+          );
         } else {
           // Update existing user
           const userDoc = existingUser.docs[0];

@@ -23,8 +23,16 @@ export function CookieConsent() {
 
   useEffect(() => {
     if (consent === "accepted" || consent === "declined") return;
-    const timer = setTimeout(() => setVisible(true), 5000);
-    return () => clearTimeout(timer);
+    const timer = window.setTimeout(() => setVisible(true), 5000);
+    const onScroll = () => {
+      if (window.scrollY > window.innerHeight * 0.8) setVisible(true);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+    return () => {
+      window.clearTimeout(timer);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, [consent]);
 
   if (dismissed || consent === "accepted" || consent === "declined" || !visible) return null;

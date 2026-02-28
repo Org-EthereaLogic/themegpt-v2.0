@@ -48,8 +48,8 @@
 | 2026-02-23 | 0% | Y | PASS | GA4 full-day: 21 total sessions (Paid Search 19, Cross-network 1, Direct 1). No unassigned traffic after reprocessing. |
 | 2026-02-24 | 50% | Y | FAIL | 2 total sessions (Direct 1, Unassigned 1). Very low volume day; treat as directional only. |
 | 2026-02-25 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 9 total sessions (Paid Search 6, Direct 2, Organic 1). Zero unassigned. Earlier midday snapshot showed 20% from 5 sessions — full-day reprocessing corrected. |
-| 2026-02-26 | 50% | Y | FAIL | **Evening update.** 10 total sessions (Unassigned 5, Direct 2, Cross-network 1, Paid Search 1, Referral 1). 5 unassigned sessions likely from organic social posts (Twitter/X, LinkedIn, Reddit) arriving without UTM params. Earlier midday snapshot showed 1 session/0% — full-day reprocessing may reclassify some. |
-| 2026-02-27 | | | TBD | CRO deploy live (pricing at 44% depth). Reddit organic: r/SideProject (redd.it/1rgetzo) + r/ChatGPT (redd.it/1rgewjh) posted this morning — expect unassigned spike from Reddit traffic without UTM. Pending GA4 full-day reprocessing. |
+| 2026-02-26 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 6 total sessions (Paid Search 3, Direct 2, Referral 1). Zero unassigned. Earlier evening snapshot showed 50% from 10 sessions (5 unassigned) — full-day reprocessing reclassified all. Same correction pattern as Feb 22 and Feb 25. |
+| 2026-02-27 | 40% | Y | FAIL | **Afternoon snapshot.** 10 total sessions (Unassigned 4, Direct 3, Organic Search 2, Cross-network 1). 4 unassigned sessions from Reddit organic posts (r/SideProject + r/ChatGPT) without UTM params. CRO deploy live (pricing at 44% depth). Pending full-day reprocessing — expect correction. |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
 
@@ -65,8 +65,8 @@
 | 2026-02-23 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 23. |
 | 2026-02-24 | N | N | N | N | No checkout_start/trial_start/purchase_success visible on Feb 24. mobile_landing ×4 and mobile_email_capture ×1 were recorded this day. |
 | 2026-02-25 | N | N | N | N | **Corrected (full-day reprocessing).** 12 page_views, 1 pricing_view. No checkout_start/trial_start/purchase_success. 9 sessions total (Paid Search 6, Direct 2, Organic 1). Engagement massively improved: 89% engaged sessions, 45.5s avg duration, 11% bounce rate. 5 new external users signed up via Google OAuth. |
-| 2026-02-26 | N | N | N | N | **Evening update.** 10 sessions across 5 channels. No checkout_start/trial_start/purchase_success. Social launch posts (Twitter/X, LinkedIn, Reddit) drove traffic but no funnel events. 4 new external user signups recorded. Total external users: 17. |
-| 2026-02-27 | TBD | TBD | TBD | TBD | CRO deploy live: pricing at 44% scroll depth — `pricing_view` expected to rise. Reddit posts live: r/SideProject + r/ChatGPT (Use cases flair). Pending GA4 full-day reprocessing. |
+| 2026-02-26 | N | N | N | N | **Corrected (full-day reprocessing).** 6 sessions (Paid Search 3, Direct 2, Referral 1). No checkout_start/trial_start/purchase_success. Social launch posts drove traffic but no funnel events. 4 new external user signups recorded. Total external users: 17. |
+| 2026-02-27 | N | N | N | N | **Afternoon snapshot.** 10 sessions. No funnel events (checkout_start/trial_start/purchase_success) visible yet. CRO section reorder live — pricing at 44% scroll depth. Reddit posts live: r/SideProject + r/ChatGPT. Pending full-day reprocessing. |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
 

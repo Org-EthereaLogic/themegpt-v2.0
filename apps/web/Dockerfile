@@ -62,6 +62,9 @@ ENV NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=$NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 # - STRIPE_SUBSCRIPTION_PRICE_ID: Stripe monthly subscription price ID
 # - STRIPE_YEARLY_PRICE_ID: Stripe yearly subscription price ID
 # - STRIPE_SINGLE_THEME_PRICE_ID: Stripe single theme purchase price ID
+# - MAILCHIMP_API_KEY: MailChimp API key (optional — enables nurture sequences)
+# - MAILCHIMP_LIST_ID: MailChimp audience ID
+# - MAILCHIMP_SERVER_PREFIX: MailChimp server prefix (e.g. us4)
 
 RUN pnpm build
 

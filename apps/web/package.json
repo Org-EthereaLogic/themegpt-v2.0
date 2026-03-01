@@ -16,7 +16,7 @@
     "@microsoft/clarity": "^1.0.2",
     "@react-email/components": "^1.0.8",
     "@themegpt/shared": "workspace:*",
-    "firebase": "^12.9.0",
+    "firebase": "^12.10.0",
     "firebase-admin": "^13.6.1",
     "framer-motion": "^12.34.3",
     "jose": "^6.1.3",

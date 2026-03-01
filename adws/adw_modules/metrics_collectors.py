@@ -160,6 +160,44 @@ def _ga4_dim(row, idx: int) -> str:
 
 
 # ---------------------------------------------------------------------------
+# GA4 credential helper
+# ---------------------------------------------------------------------------
+
+_GA4_SCOPES = [
+    "https://www.googleapis.com/auth/analytics.readonly",
+]
+
+_GCLOUD_REAUTH_CMD = (
+    "gcloud auth application-default login "
+    '--scopes="openid,'
+    "https://www.googleapis.com/auth/userinfo.email,"
+    "https://www.googleapis.com/auth/cloud-platform,"
+    'https://www.googleapis.com/auth/analytics.readonly"'
+)
+
+
+def _ga4_client(ClientClass):  # type: ignore[no-untyped-def]
+    """Return a GA4 client with analytics.readonly scope, raising a clear error if
+    the current ADC credentials were not authorized with that scope."""
+    try:
+        import google.auth
+        from google.auth.transport.requests import Request
+
+        creds, _ = google.auth.default(scopes=_GA4_SCOPES)
+        # Force a token refresh so scope issues surface here, not mid-request.
+        creds.refresh(Request())
+        return ClientClass(credentials=creds)
+    except Exception as exc:
+        err = str(exc)
+        if "scope" in err.lower() or "insufficient" in err.lower() or "403" in err:
+            raise PermissionError(
+                f"GA4 credentials missing analytics.readonly scope. Re-authenticate with:\n\n"
+                f"  {_GCLOUD_REAUTH_CMD}\n\nOriginal error: {err}"
+            ) from exc
+        raise
+
+
+# ---------------------------------------------------------------------------
 # 1) GA4 Collector
 # ---------------------------------------------------------------------------
 
@@ -184,7 +222,7 @@ async def collect_ga4_traffic(days: int = 1) -> CollectorResult:
         )
 
     try:
-        client = BetaAnalyticsDataClient()
+        client = _ga4_client(BetaAnalyticsDataClient)
         prop = f"properties/{property_id}"
         end = datetime.now(UTC).date()
         start = end - timedelta(days=days)
@@ -330,7 +368,7 @@ async def collect_ga4_funnel(days: int = 1) -> CollectorResult:
         )
 
     try:
-        client = BetaAnalyticsDataClient()
+        client = _ga4_client(BetaAnalyticsDataClient)
         prop = f"properties/{property_id}"
         end = datetime.now(UTC).date()
         start = end - timedelta(days=days)
@@ -609,7 +647,7 @@ async def collect_cws(days: int = 7) -> CollectorResult:
         )
 
     try:
-        client = BetaAnalyticsDataClient()
+        client = _ga4_client(BetaAnalyticsDataClient)
         prop = f"properties/{property_id}"
         end = datetime.now(UTC).date()
         start = end - timedelta(days=days)

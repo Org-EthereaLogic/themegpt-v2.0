@@ -86,6 +86,19 @@ Each workflow is fully isolated: its own git worktree, its own branch (`feat/iss
 - API keys for Anthropic, OpenAI, and Google Gemini
 - GitHub personal access token (for the ship phase)
 
+#### Metrics Prerequisites (`/adws-metrics`)
+
+The daily metrics report needs Google Application Default Credentials with the `analytics.readonly` scope. The default `gcloud auth application-default login` **does not** include this scope — you must pass it explicitly:
+
+```bash
+gcloud auth application-default login \
+  --scopes="openid,https://www.googleapis.com/auth/userinfo.email,https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/analytics.readonly"
+```
+
+Run this once after each machine reboot or credential expiry. The credentials are saved to `~/.config/gcloud/application_default_credentials.json` and picked up automatically by the GA4 collector.
+
+If you see `403 ACCESS_TOKEN_SCOPE_INSUFFICIENT` for GA4 or CWS, re-run the command above — the token was issued without the analytics scope.
+
 ### Environment Variables
 
 Create a `.env` file in the `adws/` directory:

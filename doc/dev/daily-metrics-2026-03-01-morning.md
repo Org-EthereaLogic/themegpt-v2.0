@@ -1,6 +1,6 @@
 # Daily Metrics Report: 2026-03-01 (Morning)
 
-**Generated:** 05:44 UTC  
+**Generated:** 17:19 UTC
 **Period:** Morning  
 **Lookback:** 1 day(s)  
 
@@ -19,34 +19,35 @@
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 3 |
-| Users | 3 |
-| New Users | 3 |
-| Engaged Sessions | 3 |
-| Avg Session Duration | 2.1s |
-| Page Views | 3 |
+| Sessions | 5 |
+| Users | 4 |
+| New Users | 4 |
+| Engaged Sessions | 5 |
+| Avg Session Duration | 25.2s |
+| Page Views | 6 |
 | Bounce Rate | 0.0% |
 
 ### Channel Breakdown
 
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
-| Paid Search | 2 | 2 | 0.0% | 0.0s |
-| Cross-network | 1 | 1 | 0.0% | 6.2s |
+| Paid Search | 4 | 4 | 0.0% | 28.9s |
+| Cross-network | 1 | 1 | 0.0% | 10.4s |
 | Unassigned | 1 | 0 | 100.0% | 0.0s |
 
 ### Device Split
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 3 | 0.0% | 2.1s |
+| desktop | 5 | 0.0% | 25.2s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-|  | 2 | 66.7% |
-| Ecuador | 1 | 33.3% |
+| (not set) | 2 | 50.0% |
+| Ecuador | 1 | 25.0% |
+| Uganda | 1 | 25.0% |
 
 ---
 
@@ -98,17 +99,17 @@
 
 | Metric | Value |
 |--------|-------|
-| Installs | 23 |
-| Listing Views | 23 |
+| Installs | 36 |
+| Listing Views | 34 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `install` | 23 |
-| `page_view` | 23 |
-| `session_start` | 19 |
-| `first_visit` | 17 |
+| `install` | 36 |
+| `page_view` | 34 |
+| `session_start` | 29 |
+| `first_visit` | 26 |
 
 ---
 

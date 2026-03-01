@@ -6,7 +6,7 @@
       "error": "authorization_error: USER_PERMISSION_DENIED: User doesn't have permission to access customer. Note: If you're accessing a client customer, the manager's customer id must be set in the 'login-customer-id' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid",
       "traceback": null,
       "dashboard_url": "https://ads.google.com/aw/campaigns?__e=1702899815",
-      "timestamp": "2026-03-01T06:26:50.722175+00:00",
+      "timestamp": "2026-03-01T07:54:26.979649+00:00",
       "attempts": 1
     }
   ]

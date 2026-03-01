@@ -1,32 +1,21 @@
-Google Ads Campaigns — ThemeGPT (170-289-9815)
-Captured: 2026-03-01 (Diagnostics Phase)
-URL: https://ads.google.com/aw/campaigns
+Google Ads Campaign Dashboard — ThemeGPT (170-289-9815)
+Captured: 2026-03-01 evening
+URL: https://ads.google.com/aw/campaigns?ocid=8039463263&__e=1702899815
 
-Date range shown: Feb 21 – 27, 2026
+--- VISIBLE CAMPAIGN STATS (Feb 21–27, 2026, Last 30 days view) ---
 
-SUMMARY METRICS (from browser — API not returning these)
-  Clicks:       889
-  Impressions:  11,956
-  Avg. CPC:     $0.74
-  Total Cost:   $661.72
+Clicks:     889
+Impressions: 11,956
+Avg. CPC:   $0.74
+Cost:       $661.72
 
-CAMPAIGNS
-  Website traffic-Search-1
-    Budget: $100.00/day
-    Status: Active (green)
-    Campaign type: Search
-    Optimization score: 100%
+Campaign: Website traffic-Search-1
+Budget:   $100.00/day
+Status:   Enabled (green dot)
+Campaign type: Search
+Optimization score: 100%
 
-CREDENTIAL CONFIG (~/.config/google-ads.yaml)
-  login_customer_id: "********8615"  ← correctly set to Manager account
-  developer_token:   [REDACTED]
-
-DIAGNOSIS
-  API error: USER_PERMISSION_DENIED (same root cause as prior DEVELOPER_TOKEN_INVALID)
-  login_customer_id is CORRECTLY set to manager ***-***-8615.
-  The developer token is still in Test Account mode — test tokens cannot query
-  production accounts. This is a permanent failure until Google approves
-  Basic Access for the developer token.
-
-  Action required: Submit Basic Access application in Google Ads API console.
-  URL: https://developers.google.com/google-ads/api/docs/access-levels
+--- NOTE ---
+UI loaded without errors. The ADWS script failure is purely an API-level
+authorization issue (developer token at Test Account level, not Basic access).
+Applied for Basic access on 2026-03-01. Awaiting Google review (1-3 days).

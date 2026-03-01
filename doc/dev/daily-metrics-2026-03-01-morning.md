@@ -1,6 +1,6 @@
 # Daily Metrics Report: 2026-03-01 (Morning)
 
-**Generated:** 00:22 UTC  
+**Generated:** 05:44 UTC  
 **Period:** Morning  
 **Lookback:** 1 day(s)  
 
@@ -8,22 +8,7 @@
 
 - **ga4_traffic**: OK
 - **ga4_funnel**: OK
-- **google_ads**: FAILED ((<_SingleThreadedRendezvous of RPC that terminated with:
-	status = StatusCode.UNAUTHENTICATED
-	details = "Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_status:16, grpc_message:"Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."}"
->, <_SingleThreadedRendezvous of RPC that terminated with:
-	status = StatusCode.UNAUTHENTICATED
-	details = "Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_status:16, grpc_message:"Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."}"
->, errors {
-  error_code {
-    authentication_error: DEVELOPER_TOKEN_INVALID
-  }
-  message: "The developer token is not valid."
-}
-request_id: "0Bu7jfpH2qFDtnrN0ayprg"
-, '0Bu7jfpH2qFDtnrN0ayprg'))
+- **google_ads**: FAILED (authorization_error: USER_PERMISSION_DENIED: User doesn't have permission to access customer. Note: If you're accessing a client customer, the manager's customer id must be set in the 'login-customer-id' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid)
 - **clarity**: OK
 - **cws**: OK
 - **monetization**: OK
@@ -34,12 +19,12 @@ request_id: "0Bu7jfpH2qFDtnrN0ayprg"
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 2 |
-| Users | 2 |
-| New Users | 2 |
-| Engaged Sessions | 2 |
-| Avg Session Duration | 0.0s |
-| Page Views | 2 |
+| Sessions | 3 |
+| Users | 3 |
+| New Users | 3 |
+| Engaged Sessions | 3 |
+| Avg Session Duration | 2.1s |
+| Page Views | 3 |
 | Bounce Rate | 0.0% |
 
 ### Channel Breakdown
@@ -47,18 +32,21 @@ request_id: "0Bu7jfpH2qFDtnrN0ayprg"
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
 | Paid Search | 2 | 2 | 0.0% | 0.0s |
+| Cross-network | 1 | 1 | 0.0% | 6.2s |
+| Unassigned | 1 | 0 | 100.0% | 0.0s |
 
 ### Device Split
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 2 | 0.0% | 0.0s |
+| desktop | 3 | 0.0% | 2.1s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-|  | 2 | 100.0% |
+|  | 2 | 66.7% |
+| Ecuador | 1 | 33.3% |
 
 ---
 
@@ -90,28 +78,19 @@ request_id: "0Bu7jfpH2qFDtnrN0ayprg"
 | Total Sessions | 0 |
 | Scroll Depth | — |
 | Rage Clicks | 0 |
-| Dead Clicks | 0 |
+| Dead Clicks | 1 |
+
+### Device Breakdown (Clarity)
+
+| Device | Sessions | Share |
+|--------|----------|-------|
+| PC | 0 | 0.0% |
 
 ---
 
 ## 4) Google Ads Campaign
 
-*Google Ads data unavailable: (<_SingleThreadedRendezvous of RPC that terminated with:
-	status = StatusCode.UNAUTHENTICATED
-	details = "Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_status:16, grpc_message:"Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."}"
->, <_SingleThreadedRendezvous of RPC that terminated with:
-	status = StatusCode.UNAUTHENTICATED
-	details = "Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_status:16, grpc_message:"Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project."}"
->, errors {
-  error_code {
-    authentication_error: DEVELOPER_TOKEN_INVALID
-  }
-  message: "The developer token is not valid."
-}
-request_id: "0Bu7jfpH2qFDtnrN0ayprg"
-, '0Bu7jfpH2qFDtnrN0ayprg')*
+*Google Ads data unavailable: authorization_error: USER_PERMISSION_DENIED: User doesn't have permission to access customer. Note: If you're accessing a client customer, the manager's customer id must be set in the 'login-customer-id' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid*
 
 ---
 
@@ -119,17 +98,17 @@ request_id: "0Bu7jfpH2qFDtnrN0ayprg"
 
 | Metric | Value |
 |--------|-------|
-| Installs | 14 |
-| Listing Views | 15 |
+| Installs | 23 |
+| Listing Views | 23 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `page_view` | 15 |
-| `install` | 14 |
-| `session_start` | 12 |
-| `first_visit` | 11 |
+| `install` | 23 |
+| `page_view` | 23 |
+| `session_start` | 19 |
+| `first_visit` | 17 |
 
 ---
 

@@ -1,0 +1,32 @@
+Google Ads Campaigns — ThemeGPT (170-289-9815)
+Captured: 2026-03-01 (Diagnostics Phase)
+URL: https://ads.google.com/aw/campaigns
+
+Date range shown: Feb 21 – 27, 2026
+
+SUMMARY METRICS (from browser — API not returning these)
+  Clicks:       889
+  Impressions:  11,956
+  Avg. CPC:     $0.74
+  Total Cost:   $661.72
+
+CAMPAIGNS
+  Website traffic-Search-1
+    Budget: $100.00/day
+    Status: Active (green)
+    Campaign type: Search
+    Optimization score: 100%
+
+CREDENTIAL CONFIG (~/.config/google-ads.yaml)
+  login_customer_id: "********8615"  ← correctly set to Manager account
+  developer_token:   [REDACTED]
+
+DIAGNOSIS
+  API error: USER_PERMISSION_DENIED (same root cause as prior DEVELOPER_TOKEN_INVALID)
+  login_customer_id is CORRECTLY set to manager ***-***-8615.
+  The developer token is still in Test Account mode — test tokens cannot query
+  production accounts. This is a permanent failure until Google approves
+  Basic Access for the developer token.
+
+  Action required: Submit Basic Access application in Google Ads API console.
+  URL: https://developers.google.com/google-ads/api/docs/access-levels

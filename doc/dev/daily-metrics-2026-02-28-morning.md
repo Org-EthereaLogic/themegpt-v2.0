@@ -1,6 +1,6 @@
 # Daily Metrics Report: 2026-02-28 (Morning)
 
-**Generated:** 18:47 UTC  
+**Generated:** 23:51 UTC  
 **Period:** Morning  
 **Lookback:** 1 day(s)  
 
@@ -11,19 +11,19 @@
 - **google_ads**: FAILED ((<_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, <_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, errors {
   error_code {
     authorization_error: USER_PERMISSION_DENIED
   }
   message: "User doesn\'t have permission to access customer. Note: If you\'re accessing a client customer, the manager\'s customer id must be set in the \'login-customer-id\' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid"
 }
-request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
-, 'YJRKa8lcLZiWGXyI-6bmNQ'))
+request_id: "o32x1c9EjwufLjzSF_lfzQ"
+, 'o32x1c9EjwufLjzSF_lfzQ'))
 - **clarity**: OK
 - **cws**: OK
 - **monetization**: OK
@@ -34,19 +34,19 @@ request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 9 |
-| Users | 8 |
-| New Users | 8 |
-| Engaged Sessions | 9 |
-| Avg Session Duration | 122.9s |
-| Page Views | 11 |
+| Sessions | 11 |
+| Users | 10 |
+| New Users | 10 |
+| Engaged Sessions | 11 |
+| Avg Session Duration | 100.5s |
+| Page Views | 13 |
 | Bounce Rate | 0.0% |
 
 ### Channel Breakdown
 
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
-| Paid Search | 4 | 4 | 0.0% | 13.7s |
+| Paid Search | 6 | 6 | 0.0% | 9.1s |
 | Direct | 3 | 3 | 0.0% | 337.3s |
 | Organic Search | 2 | 2 | 0.0% | 19.6s |
 
@@ -54,17 +54,18 @@ request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 9 | 0.0% | 122.9s |
+| desktop | 11 | 0.0% | 100.5s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-| United States | 3 | 37.5% |
-| Mexico | 2 | 25.0% |
-| Brazil | 1 | 12.5% |
-| Pakistan | 1 | 12.5% |
-| Venezuela | 1 | 12.5% |
+| United States | 3 | 30.0% |
+|  | 2 | 20.0% |
+| Mexico | 2 | 20.0% |
+| Brazil | 1 | 10.0% |
+| Pakistan | 1 | 10.0% |
+| Venezuela | 1 | 10.0% |
 
 ---
 
@@ -105,19 +106,19 @@ request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
 *Google Ads data unavailable: (<_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, <_SingleThreadedRendezvous of RPC that terminated with:
 	status = StatusCode.PERMISSION_DENIED
 	details = "The caller does not have permission"
-	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.45.138:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
+	debug_error_string = "UNKNOWN:Error received from peer ipv4:142.251.46.74:443 {grpc_message:"The caller does not have permission", grpc_status:7}"
 >, errors {
   error_code {
     authorization_error: USER_PERMISSION_DENIED
   }
   message: "User doesn\'t have permission to access customer. Note: If you\'re accessing a client customer, the manager\'s customer id must be set in the \'login-customer-id\' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid"
 }
-request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
-, 'YJRKa8lcLZiWGXyI-6bmNQ')*
+request_id: "o32x1c9EjwufLjzSF_lfzQ"
+, 'o32x1c9EjwufLjzSF_lfzQ')*
 
 ---
 
@@ -125,17 +126,17 @@ request_id: "YJRKa8lcLZiWGXyI-6bmNQ"
 
 | Metric | Value |
 |--------|-------|
-| Installs | 27 |
-| Listing Views | 25 |
+| Installs | 39 |
+| Listing Views | 38 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `install` | 27 |
-| `page_view` | 25 |
-| `session_start` | 22 |
-| `first_visit` | 21 |
+| `install` | 39 |
+| `page_view` | 38 |
+| `session_start` | 32 |
+| `first_visit` | 29 |
 
 ---
 

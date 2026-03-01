@@ -38,6 +38,10 @@ class CollectorResult(BaseModel):
     error: str | None = None
     collected_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
     data: dict[str, Any] = Field(default_factory=dict)
+    traceback: str | None = None       # full Python traceback on failure
+    duration_ms: float | None = None   # wall-clock collection time
+    attempts: int = 1                  # how many tries were made
+    artifacts: list[str] = Field(default_factory=list)  # Kapture diagnostic file paths
 
 
 class TrafficData(BaseModel):
@@ -471,7 +475,8 @@ async def collect_google_ads(days: int = 7) -> CollectorResult:
         )
     except Exception as e:
         logger.exception("Google Ads collection failed")
-        return CollectorResult(source="google_ads", success=False, error=str(e))
+        from .fault_tolerant import clean_error_message
+        return CollectorResult(source="google_ads", success=False, error=clean_error_message(e))
 
 
 # ---------------------------------------------------------------------------
@@ -506,7 +511,49 @@ async def collect_clarity() -> CollectorResult:
         vitals = WebVitalsData()
         devices: list[ClarityDeviceRow] = []
 
-        if isinstance(raw, dict):
+        if isinstance(raw, list):
+            # API returns a list of {metricName, information} objects
+            by_name = {item["metricName"]: item.get("information", []) for item in raw}
+
+            def _subtotal(name: str) -> int:
+                info = by_name.get(name, [{}])
+                return int(info[0].get("subTotal", 0)) if info else 0
+
+            def _sessions(name: str) -> int:
+                info = by_name.get(name, [{}])
+                return int(info[0].get("sessionsCount", 0)) if info else 0
+
+            # Total sessions from Traffic metric; fall back to any item's sessionsCount
+            traffic_info = by_name.get("Traffic", [])
+            if traffic_info:
+                vitals.total_sessions = int(traffic_info[0].get("sessionsCount", 0))
+            else:
+                # Use sessionsCount from first available metric
+                for info in by_name.values():
+                    if info:
+                        vitals.total_sessions = int(info[0].get("sessionsCount", 0))
+                        break
+
+            vitals.rage_clicks = _subtotal("RageClickCount")
+            vitals.dead_clicks = _subtotal("DeadClickCount")
+
+            scroll_info = by_name.get("ScrollDepth", [{}])
+            if scroll_info:
+                raw_scroll = scroll_info[0].get("subTotal")
+                vitals.scroll_depth_pct = float(raw_scroll) if raw_scroll is not None else None
+
+            # Device breakdown
+            for d in by_name.get("Device", []):
+                sessions = int(d.get("subTotal", 0))
+                devices.append(ClarityDeviceRow(
+                    device=d.get("name", "unknown"),
+                    sessions=sessions,
+                    share_pct=round(
+                        sessions / vitals.total_sessions * 100, 1
+                    ) if vitals.total_sessions else 0,
+                ))
+
+        elif isinstance(raw, dict):
             metrics = raw.get("metrics", raw)
             vitals.total_sessions = metrics.get("totalSessionCount", 0)
             vitals.scroll_depth_pct = metrics.get("scrollDepth", None)
@@ -688,27 +735,24 @@ async def collect_monetization(days: int = 7) -> CollectorResult:
 # ---------------------------------------------------------------------------
 
 async def collect_all(days: int = 1) -> dict[str, CollectorResult]:
-    """Run all 5 collectors in parallel and return results keyed by source."""
-    results = await asyncio.gather(
-        collect_ga4_traffic(days),
-        collect_ga4_funnel(days),
-        collect_google_ads(days),
-        collect_clarity(),
-        collect_cws(days),
-        collect_monetization(days),
+    """Run all 6 collectors in parallel with per-collector timeout and retry."""
+    from .fault_tolerant import CONFIGS, run_with_resilience
+
+    raw = await asyncio.gather(
+        run_with_resilience(CONFIGS["ga4_traffic"], lambda: collect_ga4_traffic(days)),
+        run_with_resilience(CONFIGS["ga4_funnel"], lambda: collect_ga4_funnel(days)),
+        run_with_resilience(CONFIGS["google_ads"], lambda: collect_google_ads(days)),
+        run_with_resilience(CONFIGS["clarity"], lambda: collect_clarity()),
+        run_with_resilience(CONFIGS["cws"], lambda: collect_cws(days)),
+        run_with_resilience(CONFIGS["monetization"], lambda: collect_monetization(days)),
         return_exceptions=True,
     )
 
-    sources = [
-        "ga4_traffic", "ga4_funnel", "google_ads",
-        "clarity", "cws", "monetization",
-    ]
+    sources = ["ga4_traffic", "ga4_funnel", "google_ads", "clarity", "cws", "monetization"]
     out: dict[str, CollectorResult] = {}
-    for name, result in zip(sources, results):
+    for name, result in zip(sources, raw):
         if isinstance(result, Exception):
-            out[name] = CollectorResult(
-                source=name, success=False, error=str(result),
-            )
+            out[name] = CollectorResult(source=name, success=False, error=str(result))
         else:
             out[name] = result
 

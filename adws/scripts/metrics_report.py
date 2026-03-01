@@ -30,6 +30,7 @@ async def execute_metrics_report(
     output_dir: Path,
 ) -> int:
     """Orchestrate parallel data collection and report generation."""
+    from adws.adw_modules.fault_tolerant import write_failure_manifest
     from adws.adw_modules.metrics_collectors import collect_all
     from adws.adw_modules.report_generator import (
         generate_html_report,
@@ -55,10 +56,15 @@ async def execute_metrics_report(
     for name, result in results.items():
         if result.success:
             ok_count += 1
-            console.print(f"  [green]OK[/]   {name}")
+            dur = f" ({result.duration_ms:.0f}ms)" if result.duration_ms else ""
+            console.print(f"  [green]OK[/]   {name}{dur}")
         else:
             fail_count += 1
             console.print(f"  [red]FAIL[/] {name}: {result.error}")
+
+    manifest_path = write_failure_manifest(results, date_str, output_dir)
+    if manifest_path:
+        console.print(f"\n  [yellow]Failure manifest:[/] {manifest_path}")
 
     console.print()
 

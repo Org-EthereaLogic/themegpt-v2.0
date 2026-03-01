@@ -42,6 +42,21 @@ def _source_status_line(results: dict[str, CollectorResult]) -> str:
     return "\n".join(lines)
 
 
+def _failure_detail(r: CollectorResult | None, label: str) -> str:
+    """Return a failure message with optional collapsed traceback and artifact links."""
+    err = r.error if r else "not collected"
+    parts = [f"*{label}: {err}*\n"]
+    if r and r.traceback:
+        parts.append(
+            f"<details><summary>Traceback</summary>\n\n```\n{r.traceback.strip()}\n```\n\n</details>\n"
+        )
+    if r and r.artifacts:
+        parts.append("**Diagnostic artifacts:**\n")
+        for path in r.artifacts:
+            parts.append(f"- `{path}`\n")
+    return "\n".join(parts)
+
+
 def _get(data: dict, *keys: str, default: Any = None) -> Any:
     """Safely traverse nested dict keys."""
     current = data
@@ -134,8 +149,7 @@ def generate_markdown_report(
                 sections.append(f"| {c['country']} | {c['users']} | {_fmt_pct(c['user_share_pct'])} |")
             sections.append("")
     else:
-        err = ga4.error if ga4 else "not collected"
-        sections.append(f"*GA4 traffic data unavailable: {err}*\n")
+        sections.append(_failure_detail(ga4, "GA4 traffic data unavailable"))
 
     sections.append("---\n")
 
@@ -150,8 +164,7 @@ def generate_markdown_report(
             sections.append(f"| `{e['event_name']}` | {e['count']} |")
         sections.append("")
     else:
-        err = funnel.error if funnel else "not collected"
-        sections.append(f"*GA4 funnel data unavailable: {err}*\n")
+        sections.append(_failure_detail(funnel, "GA4 funnel data unavailable"))
 
     sections.append("---\n")
 
@@ -194,8 +207,7 @@ def generate_markdown_report(
                 sections.append(f"| {d['device']} | {d['sessions']} | {_fmt_pct(d['share_pct'])} |")
             sections.append("")
     else:
-        err = clarity.error if clarity else "not collected"
-        sections.append(f"*Clarity data unavailable: {err}*\n")
+        sections.append(_failure_detail(clarity, "Clarity data unavailable"))
 
     sections.append("---\n")
 
@@ -230,8 +242,7 @@ def generate_markdown_report(
                 )
             sections.append("")
     else:
-        err = ads.error if ads else "not collected"
-        sections.append(f"*Google Ads data unavailable: {err}*\n")
+        sections.append(_failure_detail(ads, "Google Ads data unavailable"))
 
     sections.append("---\n")
 
@@ -262,8 +273,7 @@ def generate_markdown_report(
                 sections.append(f"| `{k}` | {v} |")
             sections.append("")
     else:
-        err = cws.error if cws else "not collected"
-        sections.append(f"*CWS data unavailable: {err}*\n")
+        sections.append(_failure_detail(cws, "CWS data unavailable"))
 
     sections.append("---\n")
 
@@ -296,8 +306,7 @@ def generate_markdown_report(
                 )
             sections.append("")
     else:
-        err = monet.error if monet else "not collected"
-        sections.append(f"*Monetization data unavailable: {err}*\n")
+        sections.append(_failure_detail(monet, "Monetization data unavailable"))
 
     sections.append("---\n")
 

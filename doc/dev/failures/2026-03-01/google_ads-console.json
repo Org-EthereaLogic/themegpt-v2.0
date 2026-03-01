@@ -1,1 +1,21 @@
-{"errors": [], "note": "No browser console errors — Google Ads UI loaded successfully as authenticated user. API failure is server-side auth only."}
+{
+  "source": "google_ads",
+  "date": "2026-03-01",
+  "root_cause": "Developer token has Test Account access only — cannot query production accounts",
+  "error_chain": {
+    "grpc_manager_query": "UNAUTHENTICATED: developer token not valid (7996328615 as customer)",
+    "grpc_client_query": "PERMISSION_DENIED: USER_PERMISSION_DENIED (1702899815 via manager 7996328615)",
+    "oauth_token": "VALID — refresh token exchanges successfully",
+    "rest_v19": "INVALID_ARGUMENT: version deprecated (auth passed at this layer)",
+    "rest_v23": "UNAUTHENTICATED: missing auth credential"
+  },
+  "account_structure": {
+    "manager_account": "799-632-8615 (Themegpt Manager)",
+    "client_account": "170-289-9815 (ThemeGPT)",
+    "login_customer_id_in_yaml": "7996328615",
+    "customer_id_in_env": "1702899815"
+  },
+  "fix_required": "Apply for Basic or Standard developer token access — current token is Test Account level and cannot query real production accounts",
+  "reference": "https://developers.google.com/google-ads/api/docs/access-levels",
+  "workaround": "Manual reporting from Google Ads UI until token approved"
+}

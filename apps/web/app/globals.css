@@ -321,6 +321,71 @@ body {
   image-rendering: crisp-edges;
 }
 
+/* ===== BLOG PROSE STYLES ===== */
+
+.blog-prose {
+  color: #4A3728;
+  line-height: 1.75;
+  font-size: 1.0625rem;
+}
+
+.blog-prose p {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+
+.blog-prose h2 {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #4A3728;
+  margin-top: 2.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.blog-prose h3 {
+  font-family: var(--font-fraunces), serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #4A3728;
+  margin-top: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.blog-prose ul,
+.blog-prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.blog-prose li {
+  margin-bottom: 0.4rem;
+}
+
+.blog-prose a {
+  color: #5BB5A2;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.blog-prose a:hover {
+  color: #3AA08C;
+}
+
+.blog-prose code {
+  font-size: 0.875em;
+  background: #F5EDE3;
+  color: #4A3728;
+  border-radius: 4px;
+  padding: 0.15em 0.4em;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+.blog-prose strong {
+  font-weight: 600;
+  color: #4A3728;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   .animate-ripple,

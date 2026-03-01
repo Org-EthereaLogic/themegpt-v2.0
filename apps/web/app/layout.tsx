@@ -55,6 +55,23 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  name: "ThemeGPT",
+  applicationCategory: "BrowserApplication",
+  operatingSystem: "Chrome",
+  description:
+    "Customize ChatGPT with 15 handcrafted themes — dark mode, animated effects, and token tracking. Privacy-first Chrome extension.",
+  url: "https://themegpt.ai",
+  downloadUrl:
+    "https://chromewebstore.google.com/detail/themegpt-chatgpt-themes/dlphknialdlpmcgoknkcmapmclgckhba",
+  offers: [
+    { "@type": "Offer", name: "Free", price: "0", priceCurrency: "USD" },
+    { "@type": "Offer", name: "Premium", price: "6.99", priceCurrency: "USD" },
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -66,6 +83,10 @@ export default function RootLayout({
         className={`${dmSans.variable} ${fraunces.variable} antialiased`}
         suppressHydrationWarning
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         <Suspense fallback={null}>
           <AttributionCapture />
         </Suspense>

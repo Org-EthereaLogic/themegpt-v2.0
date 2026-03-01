@@ -3,6 +3,8 @@
 import { AnimatedMascot } from "@/components/ui/AnimatedMascot";
 
 const footerLinks = [
+  { label: "Blog", href: "/blog" },
+  { label: "Themes", href: "/themes" },
   { label: "Privacy", href: "/privacy" },
   { label: "Terms", href: "/terms" },
   { label: "Support", href: "/support" },

@@ -1,0 +1,7 @@
+GA4 Analytics Home — page loaded successfully (property p516189580).
+Active users (last 7d): 51 (+131.8%)
+Event count: 264 (+92.7%)
+Key events: 59
+New users: 50 (+127.3%)
+Active users in last 30 min: 0
+Note: API failure is due to insufficient OAuth scopes (ACCESS_TOKEN_SCOPE_INSUFFICIENT) — run: gcloud auth application-default login --scopes=https://www.googleapis.com/auth/analytics.readonly

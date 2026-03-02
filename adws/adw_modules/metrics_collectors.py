@@ -1,4 +1,4 @@
-"""Metrics collectors for 5 data sources: GA4, Google Ads, Clarity, CWS, Monetization."""
+"""Metrics collectors for 6 data sources: GA4, Google Ads, Clarity, CWS, Monetization."""
 
 from __future__ import annotations
 
@@ -138,21 +138,21 @@ class MonetizationChannel(BaseModel):
 # Helper: safe int/float extraction from GA4 rows
 # ---------------------------------------------------------------------------
 
-def _ga4_metric_int(row, idx: int) -> int:
+def _ga4_metric_int(row: Any, idx: int) -> int:
     try:
         return int(row.metric_values[idx].value)
     except (IndexError, ValueError):
         return 0
 
 
-def _ga4_metric_float(row, idx: int) -> float:
+def _ga4_metric_float(row: Any, idx: int) -> float:
     try:
         return float(row.metric_values[idx].value)
     except (IndexError, ValueError):
         return 0.0
 
 
-def _ga4_dim(row, idx: int) -> str:
+def _ga4_dim(row: Any, idx: int) -> str:
     try:
         return row.dimension_values[idx].value
     except (IndexError, AttributeError):
@@ -160,45 +160,7 @@ def _ga4_dim(row, idx: int) -> str:
 
 
 # ---------------------------------------------------------------------------
-# GA4 credential helper
-# ---------------------------------------------------------------------------
-
-_GA4_SCOPES = [
-    "https://www.googleapis.com/auth/analytics.readonly",
-]
-
-_GCLOUD_REAUTH_CMD = (
-    "gcloud auth application-default login "
-    '--scopes="openid,'
-    "https://www.googleapis.com/auth/userinfo.email,"
-    "https://www.googleapis.com/auth/cloud-platform,"
-    'https://www.googleapis.com/auth/analytics.readonly"'
-)
-
-
-def _ga4_client(ClientClass):  # type: ignore[no-untyped-def]
-    """Return a GA4 client with analytics.readonly scope, raising a clear error if
-    the current ADC credentials were not authorized with that scope."""
-    try:
-        import google.auth
-        from google.auth.transport.requests import Request
-
-        creds, _ = google.auth.default(scopes=_GA4_SCOPES)
-        # Force a token refresh so scope issues surface here, not mid-request.
-        creds.refresh(Request())
-        return ClientClass(credentials=creds)
-    except Exception as exc:
-        err = str(exc)
-        if "scope" in err.lower() or "insufficient" in err.lower() or "403" in err:
-            raise PermissionError(
-                f"GA4 credentials missing analytics.readonly scope. Re-authenticate with:\n\n"
-                f"  {_GCLOUD_REAUTH_CMD}\n\nOriginal error: {err}"
-            ) from exc
-        raise
-
-
-# ---------------------------------------------------------------------------
-# 1) GA4 Collector
+# 1) GA4 Traffic Collector
 # ---------------------------------------------------------------------------
 
 async def collect_ga4_traffic(days: int = 1) -> CollectorResult:
@@ -222,7 +184,8 @@ async def collect_ga4_traffic(days: int = 1) -> CollectorResult:
         )
 
     try:
-        client = _ga4_client(BetaAnalyticsDataClient)
+        from .credentials import ga4_client
+        client = ga4_client(BetaAnalyticsDataClient)
         prop = f"properties/{property_id}"
         end = datetime.now(UTC).date()
         start = end - timedelta(days=days)
@@ -345,6 +308,10 @@ async def collect_ga4_traffic(days: int = 1) -> CollectorResult:
         return CollectorResult(source="ga4_traffic", success=False, error=str(e))
 
 
+# ---------------------------------------------------------------------------
+# 2) GA4 Funnel Collector
+# ---------------------------------------------------------------------------
+
 async def collect_ga4_funnel(days: int = 1) -> CollectorResult:
     """Collect funnel event counts from GA4."""
     _load_env()
@@ -368,7 +335,8 @@ async def collect_ga4_funnel(days: int = 1) -> CollectorResult:
         )
 
     try:
-        client = _ga4_client(BetaAnalyticsDataClient)
+        from .credentials import ga4_client
+        client = ga4_client(BetaAnalyticsDataClient)
         prop = f"properties/{property_id}"
         end = datetime.now(UTC).date()
         start = end - timedelta(days=days)
@@ -416,8 +384,14 @@ async def collect_ga4_funnel(days: int = 1) -> CollectorResult:
 
 
 # ---------------------------------------------------------------------------
-# 2) Google Ads Collector
+# 3) Google Ads Collector
 # ---------------------------------------------------------------------------
+
+_ADS_PENDING_MSG = (
+    "Google Ads API: Basic developer token access pending. "
+    "Check status at ads.google.com/aw/developer-token."
+)
+
 
 async def collect_google_ads(days: int = 7) -> CollectorResult:
     """Collect campaign performance from Google Ads."""
@@ -512,13 +486,22 @@ async def collect_google_ads(days: int = 7) -> CollectorResult:
             },
         )
     except Exception as e:
+        # Known blocker: Test-level developer token rejected by production accounts.
+        # Return a stable, human-readable message instead of a gRPC stack trace.
+        err_str = str(e)
+        if "USER_PERMISSION_DENIED" in err_str or "DEVELOPER_TOKEN_NOT_APPROVED" in err_str:
+            logger.warning("Google Ads API blocked by developer token tier: %s", err_str)
+            return CollectorResult(
+                source="google_ads", success=False, error=_ADS_PENDING_MSG
+            )
+
         logger.exception("Google Ads collection failed")
         from .fault_tolerant import clean_error_message
         return CollectorResult(source="google_ads", success=False, error=clean_error_message(e))
 
 
 # ---------------------------------------------------------------------------
-# 3) Microsoft Clarity Collector
+# 4) Microsoft Clarity Collector
 # ---------------------------------------------------------------------------
 
 async def collect_clarity() -> CollectorResult:
@@ -549,76 +532,47 @@ async def collect_clarity() -> CollectorResult:
         vitals = WebVitalsData()
         devices: list[ClarityDeviceRow] = []
 
-        if isinstance(raw, list):
-            # API returns a list of {metricName, information} objects
-            by_name = {item["metricName"]: item.get("information", []) for item in raw}
+        # API returns a list of {metricName, information} objects
+        by_name = {item["metricName"]: item.get("information", []) for item in raw}
 
-            def _subtotal(name: str) -> int:
-                info = by_name.get(name, [{}])
-                return int(info[0].get("subTotal", 0)) if info else 0
+        def _subtotal(name: str) -> int:
+            info = by_name.get(name, [{}])
+            return int(info[0].get("subTotal", 0)) if info else 0
 
-            def _sessions(name: str) -> int:
-                info = by_name.get(name, [{}])
-                return int(info[0].get("sessionsCount", 0)) if info else 0
+        # Total sessions from Traffic metric; fall back to first available sessionsCount
+        traffic_info = by_name.get("Traffic", [])
+        if traffic_info:
+            vitals.total_sessions = int(traffic_info[0].get("sessionsCount", 0))
+        else:
+            for info in by_name.values():
+                if info:
+                    vitals.total_sessions = int(info[0].get("sessionsCount", 0))
+                    break
 
-            # Total sessions from Traffic metric; fall back to any item's sessionsCount
-            traffic_info = by_name.get("Traffic", [])
-            if traffic_info:
-                vitals.total_sessions = int(traffic_info[0].get("sessionsCount", 0))
-            else:
-                # Use sessionsCount from first available metric
-                for info in by_name.values():
-                    if info:
-                        vitals.total_sessions = int(info[0].get("sessionsCount", 0))
-                        break
+        vitals.rage_clicks = _subtotal("RageClickCount")
+        vitals.dead_clicks = _subtotal("DeadClickCount")
 
-            vitals.rage_clicks = _subtotal("RageClickCount")
-            vitals.dead_clicks = _subtotal("DeadClickCount")
+        scroll_info = by_name.get("ScrollDepth", [{}])
+        if scroll_info:
+            raw_scroll = scroll_info[0].get("subTotal")
+            vitals.scroll_depth_pct = float(raw_scroll) if raw_scroll is not None else None
 
-            scroll_info = by_name.get("ScrollDepth", [{}])
-            if scroll_info:
-                raw_scroll = scroll_info[0].get("subTotal")
-                vitals.scroll_depth_pct = float(raw_scroll) if raw_scroll is not None else None
-
-            # Device breakdown
-            for d in by_name.get("Device", []):
-                sessions = int(d.get("subTotal", 0))
-                devices.append(ClarityDeviceRow(
-                    device=d.get("name", "unknown"),
-                    sessions=sessions,
-                    share_pct=round(
-                        sessions / vitals.total_sessions * 100, 1
-                    ) if vitals.total_sessions else 0,
-                ))
-
-        elif isinstance(raw, dict):
-            metrics = raw.get("metrics", raw)
-            vitals.total_sessions = metrics.get("totalSessionCount", 0)
-            vitals.scroll_depth_pct = metrics.get("scrollDepth", None)
-            vitals.rage_clicks = metrics.get("rageClickCount", 0)
-            vitals.dead_clicks = metrics.get("deadClickCount", 0)
-
-            perf = metrics.get("performance", {})
-            vitals.lcp_ms = perf.get("lcp", None)
-            vitals.inp_ms = perf.get("inp", None)
-            vitals.cls_score = perf.get("cls", None)
-
-            for d in metrics.get("devices", []):
-                sessions = d.get("count", 0)
-                devices.append(ClarityDeviceRow(
-                    device=d.get("name", "unknown"),
-                    sessions=sessions,
-                    share_pct=round(
-                        sessions / vitals.total_sessions * 100, 1
-                    ) if vitals.total_sessions else 0,
-                ))
+        # Device breakdown
+        for d in by_name.get("Device", []):
+            sessions = int(d.get("subTotal", 0))
+            devices.append(ClarityDeviceRow(
+                device=d.get("name", "unknown"),
+                sessions=sessions,
+                share_pct=round(
+                    sessions / vitals.total_sessions * 100, 1
+                ) if vitals.total_sessions else 0,
+            ))
 
         return CollectorResult(
             source="clarity",
             data={
                 "vitals": vitals.model_dump(),
                 "devices": [d.model_dump() for d in devices],
-                "raw_keys": list(raw.keys()) if isinstance(raw, dict) else [],
             },
         )
     except Exception as e:
@@ -627,7 +581,7 @@ async def collect_clarity() -> CollectorResult:
 
 
 # ---------------------------------------------------------------------------
-# 4) Chrome Web Store Collector (via CWS GA4 property)
+# 5) Chrome Web Store Collector (via CWS GA4 property)
 # ---------------------------------------------------------------------------
 
 async def collect_cws(days: int = 7) -> CollectorResult:
@@ -647,7 +601,8 @@ async def collect_cws(days: int = 7) -> CollectorResult:
         )
 
     try:
-        client = _ga4_client(BetaAnalyticsDataClient)
+        from .credentials import ga4_client
+        client = ga4_client(BetaAnalyticsDataClient)
         prop = f"properties/{property_id}"
         end = datetime.now(UTC).date()
         start = end - timedelta(days=days)
@@ -698,7 +653,7 @@ async def collect_cws(days: int = 7) -> CollectorResult:
 
 
 # ---------------------------------------------------------------------------
-# 5) Server-Side Monetization Collector
+# 6) Server-Side Monetization Collector
 # ---------------------------------------------------------------------------
 
 async def collect_monetization(days: int = 7) -> CollectorResult:

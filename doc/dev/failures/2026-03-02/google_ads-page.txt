@@ -1,0 +1,5 @@
+Google Ads — Account selector page loaded (accounts visible in browser).
+Accounts available: ThemeGPT (170-289-9815), Themegpt Manager (799-632-8615).
+Note: API failure is USER_PERMISSION_DENIED from Google Ads API — developer token is Test Account level.
+Applied for Basic access 2026-03-01. Awaiting Google review (typically 1-3 business days).
+Manual workaround: Check Google Ads UI directly at https://ads.google.com/aw/campaigns?__e=1702899815

@@ -1,0 +1,6 @@
+Chrome Web Store Dev Console — redirected to Google "Verify it's you" re-auth prompt.
+Account: anthony.johnsonii@etherealogic.ai
+Browser requires re-authentication to access CWS dev console.
+Note: API failure is ACCESS_TOKEN_SCOPE_INSUFFICIENT — same root cause as GA4 failures.
+Fix: Run gcloud auth application-default login with correct scopes.
+Manual CWS stats available at: https://chrome.google.com/webstore/devconsole

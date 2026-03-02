@@ -1,0 +1,14 @@
+[
+  {
+    "id": "1987c7de-c119-408b-b0a4-8999ce353096",
+    "level": "warn",
+    "args": ["Failed to inject root provider minified:bsb: Null check operator used on a null value"],
+    "timestamp": "2026-03-02T16:32:16.311Z"
+  },
+  {
+    "id": "fd5a36c9-c25b-4d0c-9d52-6b1d10cee4b5",
+    "level": "warn",
+    "args": ["Failed to inject root provider minified:bsb: Null check operator used on a null value"],
+    "timestamp": "2026-03-02T16:31:59.793Z"
+  }
+]

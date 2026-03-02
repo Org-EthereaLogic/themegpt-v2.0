@@ -2,11 +2,35 @@
   "date": "2026-03-02",
   "failures": [
     {
+      "source": "ga4_traffic",
+      "error": "403 Request had insufficient authentication scopes. [reason: \"ACCESS_TOKEN_SCOPE_INSUFFICIENT\"\ndomain: \"googleapis.com\"\nmetadata {\n  key: \"service\"\n  value: \"analyticsdata.googleapis.com\"\n}\nmetadata {\n  key: \"method\"\n  value: \"google.analytics.data.v1beta.BetaAnalyticsData.RunReport\"\n}\n]",
+      "traceback": null,
+      "dashboard_url": "https://analytics.google.com/analytics/web/#/p516189580",
+      "timestamp": "2026-03-02T16:44:33.050814+00:00",
+      "attempts": 1
+    },
+    {
+      "source": "ga4_funnel",
+      "error": "403 Request had insufficient authentication scopes. [reason: \"ACCESS_TOKEN_SCOPE_INSUFFICIENT\"\ndomain: \"googleapis.com\"\nmetadata {\n  key: \"service\"\n  value: \"analyticsdata.googleapis.com\"\n}\nmetadata {\n  key: \"method\"\n  value: \"google.analytics.data.v1beta.BetaAnalyticsData.RunReport\"\n}\n]",
+      "traceback": null,
+      "dashboard_url": "https://analytics.google.com/analytics/web/#/p516189580",
+      "timestamp": "2026-03-02T16:44:33.048329+00:00",
+      "attempts": 1
+    },
+    {
       "source": "google_ads",
       "error": "authorization_error: USER_PERMISSION_DENIED: User doesn't have permission to access customer. Note: If you're accessing a client customer, the manager's customer id must be set in the 'login-customer-id' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid",
       "traceback": null,
       "dashboard_url": "https://ads.google.com/aw/campaigns?__e=1702899815",
-      "timestamp": "2026-03-02T01:20:43.915732+00:00",
+      "timestamp": "2026-03-02T16:44:33.050341+00:00",
+      "attempts": 1
+    },
+    {
+      "source": "cws",
+      "error": "403 Request had insufficient authentication scopes. [reason: \"ACCESS_TOKEN_SCOPE_INSUFFICIENT\"\ndomain: \"googleapis.com\"\nmetadata {\n  key: \"service\"\n  value: \"analyticsdata.googleapis.com\"\n}\nmetadata {\n  key: \"method\"\n  value: \"google.analytics.data.v1beta.BetaAnalyticsData.RunReport\"\n}\n]",
+      "traceback": null,
+      "dashboard_url": "https://chrome.google.com/webstore/devconsole",
+      "timestamp": "2026-03-02T16:44:33.170468+00:00",
       "attempts": 1
     }
   ]

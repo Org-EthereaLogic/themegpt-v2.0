@@ -21,3 +21,6 @@ trees/
 
 # Environment (API keys — create a local .env)
 .env
+
+# Service account credentials (never commit)
+credentials/

@@ -73,6 +73,8 @@
 - [x] Google Ads: Added 15 negative keywords to block intent-mismatched queries (chatgpt login/free/download/app/sign up/account/api/plus, open ai, openai, chat gpt variants, desktop/mobile app) — Feb 25.
 - [x] Google Ads: Removed disapproved "Install Chrome Extension" sitelink (flagged for "Free desktop software" policy) — Feb 25.
 - [ ] Google Ads: Consider keyword-specific ad groups targeting "chatgpt themes", "chatgpt dark mode", "customize chatgpt" instead of broad match.
+- [x] Google Ads: Fixed location match type from "Presence or interest" → "Presence: People in or regularly in your included locations" — stopped serving ads to LATAM/Africa users who show interest in US content but can't install a Chrome extension (Mar 1, 2026).
+- [x] Google Ads: Fixed backup payment card (Mastercard ···8331 was declined) — resolved by owner Mar 1, 2026. Primary Visa ···5393 processed $242.28 monthly charge on Mar 1 without interruption.
 
 ---
 
@@ -110,6 +112,7 @@
   - **Current caps:** Google Search `$100/day` (raised from $65 on evening Feb 25 — $65 was uncompetitive in keyword auctions), Reddit `$50/day` (approved exception for $500 ad credit).
   - **Guardrail reset note (Feb 22, 2026):** Reddit campaign reached $75+ spend with 0 conversions but was NOT paused — the 0-conversion period was caused by a broken Stripe checkout (3DS authentication failure blocking all channels equally, not Reddit-specific). Checkout fixed in v2.3.1. Guardrail evaluation resets from Feb 22 with a functional payment system.
   - **Audit action (Feb 25, 2026):** Google Search budget halved ($130 → $65) after 310 clicks / $361 spend / 0 conversions. 15 negative keywords added. Disapproved sitelink removed. Mobile -100% bid adj still in effect (set Feb 23; Smart Bidding may override during learning phase).
+  - **Geo-targeting fix (Mar 1, 2026):** Location match type changed from "Presence or interest" → "Presence only". International (LATAM/Africa) ad impressions eliminated. Total Feb spend: $829.39. March Day 1 spend: $140.32. Backup card fixed.
 
 ---
 

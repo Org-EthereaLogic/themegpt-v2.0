@@ -50,6 +50,7 @@
 | 2026-02-25 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 9 total sessions (Paid Search 6, Direct 2, Organic 1). Zero unassigned. Earlier midday snapshot showed 20% from 5 sessions — full-day reprocessing corrected. |
 | 2026-02-26 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 6 total sessions (Paid Search 3, Direct 2, Referral 1). Zero unassigned. Earlier evening snapshot showed 50% from 10 sessions (5 unassigned) — full-day reprocessing reclassified all. Same correction pattern as Feb 22 and Feb 25. |
 | 2026-02-27 | 40% | Y | FAIL | **Afternoon snapshot.** 10 total sessions (Unassigned 4, Direct 3, Organic Search 2, Cross-network 1). 4 unassigned sessions from Reddit organic posts (r/SideProject + r/ChatGPT) without UTM params. CRO deploy live (pricing at 44% depth). Pending full-day reprocessing — expect correction. |
+| 2026-03-01 | 22% | Y | TRACKING | **Morning snapshot.** 9 total sessions (Paid Search 5, Cross-network 3, Unassigned 2, Referral 1). 2 unassigned sessions. 100% desktop (targeting fix confirmed working). Countries: Ecuador 2, Brazil 1, Mexico 1, Uganda 1 — root cause identified as "Presence or interest" location match type (fixed Mar 1, see below). Pending full-day reprocessing. |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
 
@@ -67,6 +68,7 @@
 | 2026-02-25 | N | N | N | N | **Corrected (full-day reprocessing).** 12 page_views, 1 pricing_view. No checkout_start/trial_start/purchase_success. 9 sessions total (Paid Search 6, Direct 2, Organic 1). Engagement massively improved: 89% engaged sessions, 45.5s avg duration, 11% bounce rate. 5 new external users signed up via Google OAuth. |
 | 2026-02-26 | N | N | N | N | **Corrected (full-day reprocessing).** 6 sessions (Paid Search 3, Direct 2, Referral 1). No checkout_start/trial_start/purchase_success. Social launch posts drove traffic but no funnel events. 4 new external user signups recorded. Total external users: 17. |
 | 2026-02-27 | N | N | N | N | **Afternoon snapshot.** 10 sessions. No funnel events (checkout_start/trial_start/purchase_success) visible yet. CRO section reorder live — pricing at 44% scroll depth. Reddit posts live: r/SideProject + r/ChatGPT. Pending full-day reprocessing. |
+| 2026-03-01 | N | N | N | N | **Morning snapshot.** 9 sessions, 0 funnel events. 100% desktop traffic. Zero checkout or trial activity. Geo-targeting location match fixed (see Mar 1 audit below). |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
 
@@ -716,6 +718,45 @@ All 14 launch assets verified and deployed:
 
 ### Gate 1 Watch
 Reddit organic traffic arrives without UTM params — expect unassigned sessions to rise in today's GA4 data. Evaluate gate status after full-day reprocessing tomorrow morning.
+
+---
+
+---
+
+## Google Ads Geo-Targeting Fix — Mar 1, 2026
+
+**Scope:** Location match type corrected from "Presence or interest" to "Presence only" to stop serving ads to users physically outside targeted countries.
+
+### Root Cause
+
+The campaign targeted 4 countries (Australia, Canada, United Kingdom, United States) but the **Location options → Include** setting was `Presence or interest: People in, regularly in, or who've shown interest in your included locations`. Google's default setting. This caused ads to serve to users in Ecuador, Brazil, Mexico, Uganda, etc. who merely showed online interest in US-related content — users who cannot install a Chrome extension and will never convert.
+
+Evidence: Mar 1 morning GA4 data showed 9 sessions, all desktop, but with countries Ecuador (2), Brazil (1), Mexico (1), Uganda (1) despite no countries outside AU/CA/UK/US being targeted.
+
+### Fix Applied
+
+| Setting | Before | After |
+|---------|--------|-------|
+| Location options → Include | Presence or interest (recommended default) | **Presence: People in or regularly in your included locations** |
+
+- Campaign: Website traffic-Search-1
+- Account: ThemeGPT `170-289-9815`
+- Applied: Mar 1, 2026 via Google Ads → Campaigns → Settings → Other settings → Locations → Location options
+- Targeted countries unchanged: Australia, Canada, United Kingdom, United States
+
+### Expected Impact
+
+- Impressions and clicks will drop (international traffic eliminated)
+- CPC may increase temporarily as the learning algorithm adjusts to smaller eligible audience
+- Conversion quality should improve significantly — remaining clicks will be from users who can actually install Chrome extensions
+- Watch for CPC creep over next 48–72h as bid model re-learns
+
+### Billing Context (Mar 1)
+
+- Last auto-payment: $242.28 processed Mar 1 (Visa ···5393, monthly charge)
+- Backup card Mastercard ···8331 was declined — fixed by owner on Mar 1
+- March spend so far: $140.32 (1 day at $100/day budget)
+- February net cost: $829.39 (month still processing)
 
 ---
 

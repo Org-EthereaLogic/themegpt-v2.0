@@ -1,6 +1,6 @@
 # Daily Metrics Report: 2026-03-01 (Morning)
 
-**Generated:** 17:19 UTC
+**Generated:** 23:36 UTC  
 **Period:** Morning  
 **Lookback:** 1 day(s)  
 
@@ -19,35 +19,38 @@
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 5 |
-| Users | 4 |
-| New Users | 4 |
-| Engaged Sessions | 5 |
-| Avg Session Duration | 25.2s |
-| Page Views | 6 |
-| Bounce Rate | 0.0% |
+| Sessions | 9 |
+| Users | 7 |
+| New Users | 7 |
+| Engaged Sessions | 8 |
+| Avg Session Duration | 15.2s |
+| Page Views | 10 |
+| Bounce Rate | 11.1% |
 
 ### Channel Breakdown
 
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
-| Paid Search | 4 | 4 | 0.0% | 28.9s |
-| Cross-network | 1 | 1 | 0.0% | 10.4s |
-| Unassigned | 1 | 0 | 100.0% | 0.0s |
+| Paid Search | 5 | 4 | 20.0% | 23.1s |
+| Cross-network | 3 | 3 | 0.0% | 3.5s |
+| Unassigned | 2 | 0 | 100.0% | 5.5s |
+| Referral | 1 | 1 | 0.0% | 0.0s |
 
 ### Device Split
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 5 | 0.0% | 25.2s |
+| desktop | 9 | 11.1% | 15.2s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-| (not set) | 2 | 50.0% |
-| Ecuador | 1 | 25.0% |
-| Uganda | 1 | 25.0% |
+| (not set) | 2 | 28.6% |
+| Ecuador | 2 | 28.6% |
+| Brazil | 1 | 14.3% |
+| Mexico | 1 | 14.3% |
+| Uganda | 1 | 14.3% |
 
 ---
 
@@ -79,7 +82,7 @@
 | Total Sessions | 0 |
 | Scroll Depth | — |
 | Rage Clicks | 0 |
-| Dead Clicks | 1 |
+| Dead Clicks | 2 |
 
 ### Device Breakdown (Clarity)
 
@@ -91,7 +94,32 @@
 
 ## 4) Google Ads Campaign
 
-*Google Ads data unavailable: authorization_error: USER_PERMISSION_DENIED: User doesn't have permission to access customer. Note: If you're accessing a client customer, the manager's customer id must be set in the 'login-customer-id' header. See https://developers.google.com/google-ads/api/docs/concepts/call-structure#cid*
+*API unavailable (developer token pending Basic access upgrade — applied Mar 1). Data below captured manually via browser dashboard.*
+
+**Date range shown: Feb 21 – 28, 2026 (cumulative since campaign launch)**
+
+| Metric | Value |
+|--------|-------|
+| Clicks | 1,080 |
+| Impressions | 13,810 |
+| Avg CPC | $0.71 |
+| Total Spend (Feb 21-28) | $762.09 |
+| Campaign Status | Bid strategy learning |
+| Budget | $100.00/day |
+
+**March 1 Spend (from billing):** $140.32 (campaign actively running)
+**February total net cost:** $829.39 (month still processing)
+**Last payment processed:** $242.28 on Mar 1 (monthly auto-charge, Visa ···5393)
+
+### ⚠️ BILLING ALERT — Action Required
+
+| Item | Status |
+|------|--------|
+| Primary: Visa ···5393 | ✅ Active |
+| Backup: Mastercard ···8331 | ❌ Payment declined |
+
+**"There's an issue with your backup payment method. Fix it to help prevent campaign interruption."**
+→ Navigate to Billing → Settings → Fix backup card to prevent potential campaign pause.
 
 ---
 
@@ -99,17 +127,17 @@
 
 | Metric | Value |
 |--------|-------|
-| Installs | 36 |
-| Listing Views | 34 |
+| Installs | 57 |
+| Listing Views | 51 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `install` | 36 |
-| `page_view` | 34 |
-| `session_start` | 29 |
-| `first_visit` | 26 |
+| `install` | 57 |
+| `page_view` | 51 |
+| `session_start` | 41 |
+| `first_visit` | 37 |
 
 ---
 

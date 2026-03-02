@@ -34,7 +34,7 @@ if secrets:
         "--set-secrets=[REDACTED]" if arg.startswith("--set-secrets=") else arg
         for arg in cmd
     ]
-    print(f"Running: {' '.join(redacted_cmd)}")
+    print("Running gcloud run services update for service 'themegpt-web' with secrets (arguments redacted).")
     subprocess.run(cmd)
 else:
     print("No secrets found to restore.")

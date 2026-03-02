@@ -30,7 +30,11 @@ if secrets:
         f"--set-secrets={secrets_arg}",
         "--region", "us-central1"
     ]
-    print(f"Running: {' '.join(cmd)}")
+    redacted_cmd = [
+        "--set-secrets=[REDACTED]" if arg.startswith("--set-secrets=") else arg
+        for arg in cmd
+    ]
+    print(f"Running: {' '.join(redacted_cmd)}")
     subprocess.run(cmd)
 else:
     print("No secrets found to restore.")

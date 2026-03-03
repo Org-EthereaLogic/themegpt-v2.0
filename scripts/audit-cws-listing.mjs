@@ -14,7 +14,7 @@ const REQUIRED_VIDEO_ID = "TFgUKvVzA6U"
 const LIVE_LISTING_URL = "https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba"
 
 const SHARED_INDEX = path.join(ROOT, "packages/shared/src/index.ts")
-const DRAFT_LISTING = path.join(ROOT, "doc/chrome-store-listing.md")
+const DRAFT_LISTING = path.join(ROOT, "doc/marketing/chrome-store-listing.md")
 const ARTIFACT_DIR = path.join(ROOT, "doc/report/audit-artifacts/cws")
 const ARTIFACT_JSON = path.join(ARTIFACT_DIR, "cws-listing-checks.json")
 const REPORT_PATH = path.join(ROOT, "doc/report/cws-listing-audit-2026-02-25.md")

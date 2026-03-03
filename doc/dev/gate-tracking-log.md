@@ -14,7 +14,7 @@
 - **Measures:** Percentage of GA4 sessions with no UTM attribution and no referrer (Session source/medium = `(not set)`)
 - **Pass criterion:** ≤10% unassigned sessions for 7 consecutive calendar days
 - **Status as of Feb 20:** TRACKING — GA4 was not collecting web app data until mid-day Feb 20 (Firebase env vars missing from Cloud Run build; redeployed with fix). True data collection starts Feb 20 evening. Pre-filter baseline of 25% (Feb 19) was from wrong property (CWS listing) and is invalid.
-- **Filter activation status:** COMPLETE — applied, realtime-verified, and activated per `docs/ga4-filter-guide.md`
+- **Filter activation status:** COMPLETE — applied, realtime-verified, and activated per `doc/dev/ga4-filter-guide.md`
 - **Correct GA4 property:** `516189580` (gen-lang-client-0312336987), measurement ID `G-41BZB7X7H7`
 - **How to measure:**
   1. GA4 → Reports → Acquisition → Traffic Acquisition

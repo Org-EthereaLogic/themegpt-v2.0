@@ -1,6 +1,6 @@
 # Daily Metrics Report: 2026-03-03 (Morning)
 
-**Generated:** 04:13 UTC  
+**Generated:** 19:24 UTC  
 **Period:** Morning  
 **Lookback:** 1 day(s)  
 
@@ -19,32 +19,36 @@
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 2 |
-| Users | 2 |
-| New Users | 2 |
-| Engaged Sessions | 2 |
-| Avg Session Duration | 23.2s |
-| Page Views | 2 |
+| Sessions | 5 |
+| Users | 5 |
+| New Users | 5 |
+| Engaged Sessions | 5 |
+| Avg Session Duration | 97.2s |
+| Page Views | 6 |
 | Bounce Rate | 0.0% |
 
 ### Channel Breakdown
 
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
-| Direct | 2 | 2 | 0.0% | 23.2s |
-| Unassigned | 1 | 0 | 100.0% | 0.0s |
+| Direct | 3 | 3 | 0.0% | 15.4s |
+| Unassigned | 2 | 0 | 100.0% | 0.0s |
+| Cross-network | 1 | 1 | 0.0% | 439.5s |
+| Paid Search | 1 | 1 | 0.0% | 0.0s |
 
 ### Device Split
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 2 | 0.0% | 23.2s |
+| desktop | 5 | 0.0% | 97.2s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-| United States | 2 | 100.0% |
+| United States | 3 | 60.0% |
+| Bhutan | 1 | 20.0% |
+| Mexico | 1 | 20.0% |
 
 ---
 
@@ -76,7 +80,7 @@
 | Total Sessions | 0 |
 | Scroll Depth | — |
 | Rage Clicks | 0 |
-| Dead Clicks | 5 |
+| Dead Clicks | 1 |
 
 ### Device Breakdown (Clarity)
 
@@ -96,17 +100,17 @@
 
 | Metric | Value |
 |--------|-------|
-| Installs | 16 |
-| Listing Views | 18 |
+| Installs | 28 |
+| Listing Views | 30 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `page_view` | 18 |
-| `install` | 16 |
-| `first_visit` | 15 |
-| `session_start` | 15 |
+| `page_view` | 30 |
+| `install` | 28 |
+| `session_start` | 24 |
+| `first_visit` | 23 |
 
 ---
 

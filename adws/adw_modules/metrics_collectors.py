@@ -601,8 +601,8 @@ async def collect_cws(days: int = 7) -> CollectorResult:
         )
 
     try:
-        from .credentials import ga4_client
-        client = ga4_client(BetaAnalyticsDataClient)
+        from .credentials import cws_ga4_client
+        client = cws_ga4_client(BetaAnalyticsDataClient)
         prop = f"properties/{property_id}"
         end = datetime.now(UTC).date()
         start = end - timedelta(days=days)

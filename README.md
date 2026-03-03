@@ -144,15 +144,14 @@ pnpm test
 - Engineering execution checklist: [doc/dev/monetization-growth-execution-checklist.md](./doc/dev/monetization-growth-execution-checklist.md)
 - Governance and standards: [CONSTITUTION.md](./CONSTITUTION.md), [DIRECTIVES.md](./DIRECTIVES.md), [AGENTS.md](./AGENTS.md)
 
-Latest campaign snapshot (GA4 web property `516189580`, Feb 21-27):
-- 17 total external users in Firestore (5 new Feb 25, 4 new Feb 26; up from 4 on Feb 24)
-- Desktop session share: 62% post-targeting fixes (up from 10% on Feb 22-24)
-- Homepage scroll depth: 52.3% (up from 28.8%) — pricing section now within median reach
-- Google Ads: $100/day budget; 310 clicks / $361 spend through Feb 24, 0 conversions; negative keyword refinements applied Feb 25
-- Multi-channel launch Feb 26: Product Hunt listed, Reddit r/chrome_extensions posted, Twitter/X + LinkedIn published
-- Conversion funnel: `checkout_start=5`, `trial_start=0`, `purchase_success=0` — focusing on user base growth to 100 before monetization push
+Latest campaign snapshot (GA4 web property `516189580`, Feb 21 - Mar 2):
+- 17 total external users in Firestore as of Feb 26 (5 new Feb 25, 4 new Feb 26; up from 4 on Feb 24)
+- Google Ads (Feb 21 - Mar 2): 1,647 clicks, 18,998 impressions, $0.61 avg CPC, $1,006.92 total cost, 0 conversions
+- Google Ads budget: $100/day; location match type fixed to "Presence only" on Mar 1 (was serving ads to LATAM/Africa)
+- CWS organic (tracked automatically via ADWS): 16 installs/day, 18 listing views/day — running independently of paid campaign
+- ADWS daily metrics system: 5/6 sources live (GA4, Clarity, Stripe, CWS, Monetization API); Google Ads API still blocked (developer token Basic access applied Mar 1, awaiting review)
+- Conversion funnel: all funnel events at 0 (pricing_view, checkout_start, trial_start, purchase_success) — focusing on user base growth to 100 before monetization push
 - CWV regression under investigation: LCP 6.0s, INP 1.7s, CLS 12 (likely dynamic imports — see gate-tracking-log.md)
-- Campaign-ops note: Google Ads API auth is currently invalid (developer token); spend/click reporting is being validated manually in ad dashboards
 
 ---
 

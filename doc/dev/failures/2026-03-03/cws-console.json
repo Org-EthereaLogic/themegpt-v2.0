@@ -1,0 +1,1 @@
+{"source":"cws","error":"PERMISSION_DENIED on GA4 property 521095252","note":"Cannot grant service account access - user lacks Admin role on CWS-managed property. CWS data unavailable via GA4 API."}

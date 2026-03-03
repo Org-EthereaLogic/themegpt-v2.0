@@ -18,7 +18,7 @@ In GCP Console → [IAM & Admin → Service Accounts](https://console.cloud.goog
 
 1. Click **Create Service Account**
 2. Name: `adws-metrics`
-3. Service account ID: `adws-metrics` (email will be `adws-metrics@gen-lang-client-0312336987.iam.gserviceaccount.com`)
+3. Service account ID: `adws-metrics-369` (email will be `adws-metrics-369@gen-lang-client-0312336987.iam.gserviceaccount.com`)
 4. Skip optional role grants at the project level (GA4 access is granted per-property)
 5. Click **Done**
 
@@ -26,18 +26,20 @@ In GCP Console → [IAM & Admin → Service Accounts](https://console.cloud.goog
 
 In [Google Analytics Admin](https://analytics.google.com/):
 
-For **both** properties below, go to Property → Property Access Management → Add users:
+For the web app property below, go to Property → Property Access Management → Add users:
 
-| Property | ID | Role |
-|----------|----|------|
-| ThemeGPT web app | `516189580` | Viewer |
-| CWS listing | `521095252` | Viewer |
+| Property | ID | Role | Service Account Access? |
+|----------|----|------|------------------------|
+| ThemeGPT web app | `516189580` | Viewer | Yes — add service account here |
+| CWS listing | `521095252` | Viewer | **No** — CWS-managed property; cannot grant service account access (see [CWS Authentication](#cws-authentication) below) |
 
-Add `adws-metrics@gen-lang-client-0312336987.iam.gserviceaccount.com` as **Viewer**.
+Add `adws-metrics-369@gen-lang-client-0312336987.iam.gserviceaccount.com` as **Viewer** to property `516189580` only.
+
+> **Note:** Property `521095252` is managed by Chrome Web Store. The developer does not have Admin role on it and cannot add service accounts. CWS GA4 data is accessed via user-account OAuth instead — see the CWS Authentication section below.
 
 ### 3. Download the JSON key
 
-1. In GCP Console → Service Accounts → click `adws-metrics`
+1. In GCP Console → Service Accounts → click `adws-metrics-369`
 2. Keys tab → **Add Key → Create new key → JSON**
 3. Save the downloaded file as:
 
@@ -59,6 +61,38 @@ GOOGLE_APPLICATION_CREDENTIALS=credentials/ga4-sa.json
 
 ---
 
+## CWS Authentication
+
+The CWS GA4 property (`521095252`) is managed by Chrome Web Store. Only the developer's personal Google account has Viewer access via the CWS Developer Console — the service account cannot be added.
+
+**Solution:** A one-time OAuth flow creates a user-account token with `analytics.readonly` scope for querying CWS GA4 data.
+
+### Setup
+
+1. Run the setup script (sign in as `anthony.johnsonii@etherealogic.ai` when prompted):
+
+```bash
+cd adws && uv run python setup_cws_auth.py
+```
+
+2. The script opens a browser for Google OAuth consent. Authorize the `analytics.readonly` scope.
+
+3. Output: `credentials/cws-user-oauth.json` (gitignored — never commit this file).
+
+4. Add to `adws/.env`:
+
+```
+CWS_GOOGLE_CREDENTIALS=credentials/cws-user-oauth.json
+```
+
+### How it works
+
+- `adw_modules/credentials.py` provides `cws_ga4_client()` which loads the user OAuth token from `CWS_GOOGLE_CREDENTIALS`
+- `adw_modules/metrics_collectors.py` uses `cws_ga4_client()` for CWS data collection
+- The token auto-refreshes on use; re-run `setup_cws_auth.py` only if the token is revoked or the refresh token expires
+
+---
+
 ## Verification
 
 ```bash
@@ -72,7 +106,7 @@ print(validate_credentials())
 "
 # Expected: {'ga4': True, 'google_ads': True, 'clarity': True, 'monetization': True}
 
-# Run full report
+# Run full report (5/6 sources expected — google_ads blocked pending Basic token approval)
 cd adws && uv run python -m scripts.metrics_report
 ```
 
@@ -82,6 +116,6 @@ cd adws && uv run python -m scripts.metrics_report
 
 Service account JSON keys do not expire, but rotate annually as a best practice:
 
-1. GCP Console → Service Accounts → `adws-metrics` → Keys → **Add Key**
+1. GCP Console → Service Accounts → `adws-metrics-369` → Keys → **Add Key**
 2. Download new JSON → replace `adws/credentials/ga4-sa.json`
 3. Delete the old key from GCP Console after confirming the new one works

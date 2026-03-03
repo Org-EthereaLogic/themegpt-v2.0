@@ -760,4 +760,23 @@ Evidence: Mar 1 morning GA4 data showed 9 sessions, all desktop, but with countr
 
 ---
 
+## ADWS Metrics System — CWS Fix (Mar 3, 2026)
+
+**CWS collector unblocked**: The CWS GA4 property (521095252) is managed by
+Chrome Web Store — the developer does not have Admin role and cannot grant
+service account access. Fixed by adding user-account OAuth credentials
+(setup_cws_auth.py) with analytics.readonly scope for
+anthony.johnsonii@etherealogic.ai. CWS data now flowing.
+
+CWS stats (1-day Mar 3): 16 installs, 18 listing views
+ADWS sources: 5/6 OK (google_ads still blocked pending Basic token approval)
+
+Changes:
+- adws/setup_cws_auth.py — one-time OAuth setup script
+- adws/adw_modules/credentials.py — cws_ga4_client() function
+- adws/adw_modules/metrics_collectors.py — collect_cws uses cws_ga4_client
+- adws/.env — CWS_GOOGLE_CREDENTIALS=credentials/cws-user-oauth.json
+
+---
+
 *Track daily. Record numbers each morning for the prior day. Update the summary block when a gate resolves.*

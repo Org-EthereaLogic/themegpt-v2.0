@@ -20,6 +20,14 @@
 | `screenshots/` | Temporary LLM troubleshooting screenshots (gitignored) | — |
 | `specs/` | Product specifications and scoped requirements | 1 |
 
+## Migration Note (2026-03-03)
+
+- **Docs consolidation:** legacy `docs/` marketing artifacts were moved into `doc/marketing/`.
+- **Metrics/Theme docs moved under `doc/dev`:**
+  - `doc/dev/*daily-metrics*` → `doc/dev/metrics/*`
+  - `doc/dev/*theme*` design/research files → `doc/dev/themes/*`
+- Update any custom links or scripts referencing old paths before running audits or reviews.
+
 ## Key Operational Docs
 
 | File | Purpose |

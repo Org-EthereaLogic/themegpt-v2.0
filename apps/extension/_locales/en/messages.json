@@ -1,0 +1,258 @@
+{
+  "extName": {
+    "message": "ThemeGPT",
+    "description": "Extension display name"
+  },
+  "extDescription": {
+    "message": "The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally — now with an on-page canvas counter.",
+    "description": "Extension description shown in the Chrome Web Store and browser extension manager"
+  },
+  "popup_sign_in": {
+    "message": "Sign In",
+    "description": "Header button shown when user is not authenticated"
+  },
+  "popup_status_lifetime": {
+    "message": "Lifetime",
+    "description": "Header button label for lifetime subscribers"
+  },
+  "popup_status_trial": {
+    "message": "Trial",
+    "description": "Header button label for users in their free trial"
+  },
+  "popup_status_premium": {
+    "message": "Premium",
+    "description": "Header button label for paid subscribers"
+  },
+  "popup_status_active": {
+    "message": "Active",
+    "description": "Tooltip for the green status dot indicating an active subscription"
+  },
+  "popup_status_connected": {
+    "message": "Connected",
+    "description": "Tooltip for the status dot indicating a connected but not active account"
+  },
+  "popup_account_heading": {
+    "message": "Account",
+    "description": "Section heading in the account panel when connected"
+  },
+  "popup_disconnect": {
+    "message": "Disconnect",
+    "description": "Button to disconnect the user's account"
+  },
+  "popup_plan_lifetime": {
+    "message": "Lifetime Access",
+    "description": "Badge label for lifetime access plan"
+  },
+  "popup_plan_trial": {
+    "message": "Trial Active",
+    "description": "Badge label shown during the free trial period"
+  },
+  "popup_plan_yearly": {
+    "message": "Yearly",
+    "description": "Badge label for annual subscription plan"
+  },
+  "popup_plan_monthly": {
+    "message": "Monthly",
+    "description": "Badge label for monthly subscription plan"
+  },
+  "popup_credits_remaining": {
+    "message": "$CREDITS$ downloads left",
+    "description": "Shows how many theme downloads remain in the current billing period",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "popup_trial_days_left": {
+    "message": "$DAYS$ days left in trial",
+    "description": "Shows how many days remain in the free trial",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "popup_start_trial": {
+    "message": "Start free 30-day trial",
+    "description": "CTA button for users without a subscription to start a free trial"
+  },
+  "popup_sub_ended": {
+    "message": "Your subscription has ended.",
+    "description": "Message shown when a user's subscription is canceled"
+  },
+  "popup_reactivate": {
+    "message": "Reactivate to restore access.",
+    "description": "Link text to reactivate a canceled subscription"
+  },
+  "popup_payment_failed": {
+    "message": "Payment failed.",
+    "description": "Message shown when the most recent payment has failed"
+  },
+  "popup_update_billing": {
+    "message": "Update your billing details to restore access.",
+    "description": "Link text to update payment method for past-due accounts"
+  },
+  "popup_connect_heading": {
+    "message": "Connect Account",
+    "description": "Section heading in the account panel when not connected"
+  },
+  "popup_connect_subtext": {
+    "message": "Sign in to unlock 8 animated premium themes.",
+    "description": "Subtitle in the connect account panel"
+  },
+  "popup_connecting": {
+    "message": "Connecting...",
+    "description": "Loading state text shown while connecting"
+  },
+  "popup_connect_button": {
+    "message": "Connect with Google/GitHub",
+    "description": "OAuth sign-in button label"
+  },
+  "popup_or_paste_token": {
+    "message": "or paste token",
+    "description": "Divider text between OAuth and token input methods"
+  },
+  "popup_token_placeholder": {
+    "message": "Paste token...",
+    "description": "Placeholder text for the authentication token input field"
+  },
+  "popup_go": {
+    "message": "Go",
+    "description": "Submit button label for the token input form"
+  },
+  "popup_free_collection": {
+    "message": "Free Collection",
+    "description": "Section heading for free themes"
+  },
+  "popup_premium_collection": {
+    "message": "Premium Collection",
+    "description": "Section heading for premium themes"
+  },
+  "popup_review_ask": {
+    "message": "Loving ThemeGPT? A quick review helps others find it. ⭐",
+    "description": "Banner asking users to leave a review on the Chrome Web Store"
+  },
+  "popup_leave_review": {
+    "message": "Leave a review",
+    "description": "Button to open the Chrome Web Store review page"
+  },
+  "popup_maybe_later": {
+    "message": "Maybe later",
+    "description": "Button to dismiss the review request banner"
+  },
+  "popup_manage_account": {
+    "message": "Manage Account",
+    "description": "Footer link to the account management page"
+  },
+  "popup_session_expired": {
+    "message": "Session expired. Please reconnect.",
+    "description": "Status message shown when the auth token has expired"
+  },
+  "popup_connection_error": {
+    "message": "Connection Error",
+    "description": "Status message shown when a network or server error occurs"
+  },
+  "popup_invalid_token": {
+    "message": "Invalid token. Please try again.",
+    "description": "Status message shown when the provided auth token is invalid"
+  },
+  "popup_account_connected": {
+    "message": "Account Connected ✅",
+    "description": "Status message shown after successfully connecting an active account"
+  },
+  "popup_account_connected_inactive": {
+    "message": "Account Connected",
+    "description": "Status message shown after connecting an account without an active subscription"
+  },
+  "popup_connection_failed": {
+    "message": "Connection failed. Please try again.",
+    "description": "Status message shown when authentication fails"
+  },
+  "popup_no_downloads": {
+    "message": "No downloads remaining this period. Manage your account at themegpt.ai",
+    "description": "Error shown when the user has exhausted their theme downloads for the billing period"
+  },
+  "popup_connect_first": {
+    "message": "Please connect your account first.",
+    "description": "Error shown when an action requires authentication"
+  },
+  "popup_trial_teaser_1": {
+    "message": "This is a premium theme — start your free 30-day trial.",
+    "description": "First upsell message shown when clicking a locked premium theme"
+  },
+  "popup_trial_teaser_2": {
+    "message": "Unlock all 8 premium themes with a free 30-day trial.",
+    "description": "Second upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_trial_teaser_3": {
+    "message": "You keep coming back to premium themes. Unlock them all free for 30 days.",
+    "description": "Third upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_connection_error_retry": {
+    "message": "Connection error. Please try again.",
+    "description": "Error shown when a network error occurs during theme download"
+  },
+  "popup_failed_to_unlock": {
+    "message": "Failed to unlock theme",
+    "description": "Error shown when the theme download API returns an error"
+  },
+  "popup_theme_apply_label": {
+    "message": "Apply $THEME_NAME$ theme",
+    "description": "Accessible label for the theme card button when the theme is unlocked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "popup_theme_unlock_label": {
+    "message": "$THEME_NAME$ - Premium, click to unlock",
+    "description": "Accessible label for the theme card button when the theme is locked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "token_counter_session_tokens": {
+    "message": "Session Tokens",
+    "description": "Section heading for the token counter in the popup and canvas overlay"
+  },
+  "token_counter_input": {
+    "message": "Input",
+    "description": "Label for user input token count"
+  },
+  "token_counter_output": {
+    "message": "Output",
+    "description": "Label for AI output token count"
+  },
+  "token_counter_total": {
+    "message": "Total",
+    "description": "Label for total token count"
+  },
+  "token_counter_canvas": {
+    "message": "Canvas",
+    "description": "Label for the canvas overlay position selector"
+  },
+  "token_counter_off": {
+    "message": "Off",
+    "description": "Option to disable the canvas token counter"
+  },
+  "token_counter_side_top": {
+    "message": "Side Top",
+    "description": "Option to show the canvas counter in the sidebar at the top"
+  },
+  "token_counter_compose_right": {
+    "message": "Compose Right",
+    "description": "Option to show the canvas counter to the right of the composer"
+  },
+  "token_counter_estimated": {
+    "message": "Estimated · No data leaves your browser",
+    "description": "Privacy disclaimer shown below the token counter"
+  }
+}

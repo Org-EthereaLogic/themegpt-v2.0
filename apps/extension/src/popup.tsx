@@ -25,6 +25,9 @@ import woodlandRetreatScreenshotUrl from "url:../assets/themes/woodland-retreat.
 
 const storage = new Storage({ area: "local" })
 
+// Thin i18n helper — keeps the file within the one-liner rule from AGENTS.md
+const t = (key: string, subs?: string | string[]) => chrome.i18n.getMessage(key, subs)
+
 // Environment-controlled: true in dev, false in production
 const DEV_UNLOCK_ALL_PREMIUM = process.env.PLASMO_PUBLIC_DEV_UNLOCK_PREMIUM === 'true'
 
@@ -72,8 +75,8 @@ export default function Popup() {
   const [showReviewAsk, setShowReviewAsk] = useState(false)
 
   useEffect(() => {
-    storage.get<Theme>("activeTheme").then((t) => {
-      if (t) setActiveThemeId(t.id)
+    storage.get<Theme>("activeTheme").then((th) => {
+      if (th) setActiveThemeId(th.id)
     })
     // In dev mode, skip loading stored unlock state to keep all premium themes unlocked
     if (!DEV_UNLOCK_ALL_PREMIUM) {
@@ -106,7 +109,7 @@ export default function Popup() {
             isActive: false,
             accessibleThemes: []
           })
-          setStatusMsg("Session expired. Please reconnect.")
+          setStatusMsg(t("popup_session_expired"))
           return
         }
         throw new Error("Failed to check status")
@@ -135,11 +138,11 @@ export default function Popup() {
           storage.set("unlockedThemes", data.accessibleThemes || [])
         }
 
-        setStatusMsg(newStatus.isActive ? "Account Connected ✅" : "Account Connected")
+        setStatusMsg(newStatus.isActive ? t("popup_account_connected") : t("popup_account_connected_inactive"))
       }
     } catch (e) {
       console.error("Status check error:", e)
-      setStatusMsg("Connection Error")
+      setStatusMsg(t("popup_connection_error"))
     } finally {
       setIsLoading(false)
     }
@@ -154,7 +157,7 @@ export default function Popup() {
     if (!tokenInput.trim()) return
 
     setIsLoading(true)
-    setStatusMsg("Connecting...")
+    setStatusMsg(t("popup_connecting"))
 
     try {
       // Verify the token works
@@ -163,7 +166,7 @@ export default function Popup() {
       })
 
       if (!res.ok) {
-        setStatusMsg("Invalid token. Please try again.")
+        setStatusMsg(t("popup_invalid_token"))
         setIsLoading(false)
         return
       }
@@ -176,12 +179,12 @@ export default function Popup() {
 
         // Update status
         await checkAccountStatus(tokenInput.trim())
-        setStatusMsg("Account Connected ✅")
+        setStatusMsg(t("popup_account_connected"))
       } else {
-        setStatusMsg("Connection failed. Please try again.")
+        setStatusMsg(t("popup_connection_failed"))
       }
     } catch {
-      setStatusMsg("Connection Error")
+      setStatusMsg(t("popup_connection_error"))
     } finally {
       setIsLoading(false)
     }
@@ -214,14 +217,14 @@ export default function Popup() {
     if (accountStatus.isActive) {
       // Check credits
       if (accountStatus.creditsRemaining !== undefined && accountStatus.creditsRemaining <= 0) {
-        setSlotError("No downloads remaining this period. Manage your account at themegpt.ai")
+        setSlotError(t("popup_no_downloads"))
         return
       }
 
       // Download the theme
       const token = await storage.get<string>("authToken")
       if (!token) {
-        setSlotError("Please connect your account first.")
+        setSlotError(t("popup_connect_first"))
         return
       }
 
@@ -257,10 +260,10 @@ export default function Popup() {
           checkAccountStatus(token)
         } else {
           const data = await res.json()
-          setSlotError(data.message || "Failed to unlock theme")
+          setSlotError(data.message || t("popup_failed_to_unlock"))
         }
       } catch {
-        setSlotError("Connection error. Please try again.")
+        setSlotError(t("popup_connection_error_retry"))
       }
       return
     }
@@ -270,19 +273,19 @@ export default function Popup() {
     await storage.set("premiumClickCount", clickCount)
     const trialUrl = `${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`
     if (clickCount === 1) {
-      setSlotError("This is a premium theme — start your free 30-day trial.")
+      setSlotError(t("popup_trial_teaser_1"))
       window.open(trialUrl, '_blank')
     } else if (clickCount === 2) {
-      setSlotError("Unlock all 8 premium themes with a free 30-day trial.")
+      setSlotError(t("popup_trial_teaser_2"))
       window.open(trialUrl, '_blank')
     } else {
-      setSlotError("You keep coming back to premium themes. Unlock them all free for 30 days.")
+      setSlotError(t("popup_trial_teaser_3"))
       window.open(trialUrl, '_blank')
     }
   }
 
-  const freeThemes = useMemo(() => DEFAULT_THEMES.filter(t => !t.isPremium), [])
-  const premiumThemes = useMemo(() => DEFAULT_THEMES.filter(t => t.isPremium), [])
+  const freeThemes = useMemo(() => DEFAULT_THEMES.filter(th => !th.isPremium), [])
+  const premiumThemes = useMemo(() => DEFAULT_THEMES.filter(th => th.isPremium), [])
 
   return (
     <div className="flex flex-col h-full bg-cream text-brown font-sans relative">
@@ -313,16 +316,16 @@ export default function Popup() {
           >
             {accountStatus.connected
               ? (accountStatus.isLifetime
-                ? "Lifetime"
+                ? t("popup_status_lifetime")
                 : accountStatus.subscriptionStatus === 'trialing'
-                  ? "Trial"
-                  : "Premium")
-              : "Sign In"}
+                  ? t("popup_status_trial")
+                  : t("popup_status_premium"))
+              : t("popup_sign_in")}
           </button>
           {accountStatus.connected && (
             <div
               className={`w-2 h-2 rounded-full ${accountStatus.isActive ? 'bg-teal shadow-[0_0_8px_rgba(91,181,162,0.8)]' : 'bg-coral'}`}
-              title={accountStatus.isActive ? "Active" : "Connected"}
+              title={accountStatus.isActive ? t("popup_status_active") : t("popup_status_connected")}
             />
           )}
         </div>
@@ -334,12 +337,12 @@ export default function Popup() {
           {accountStatus.connected ? (
             <>
               <div className="flex items-center justify-between mb-3">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-brown-soft">Account</h3>
+                <h3 className="text-xs font-semibold uppercase tracking-wider text-brown-soft">{t("popup_account_heading")}</h3>
                 <button
                   onClick={handleDisconnect}
                   className="text-[10px] text-coral-bright hover:text-coral font-medium transition-colors"
                 >
-                  Disconnect
+                  {t("popup_disconnect")}
                 </button>
               </div>
               <div className="text-xs text-brown-soft mb-2">{accountStatus.email}</div>
@@ -352,25 +355,25 @@ export default function Popup() {
                       : 'bg-coral/10 text-coral'
                     }`}>
                     {accountStatus.isLifetime
-                      ? 'Lifetime Access'
+                      ? t("popup_plan_lifetime")
                       : accountStatus.subscriptionStatus === 'trialing'
-                        ? 'Trial Active'
+                        ? t("popup_plan_trial")
                         : accountStatus.planType === 'yearly'
-                          ? 'Yearly'
-                          : 'Monthly'}
+                          ? t("popup_plan_yearly")
+                          : t("popup_plan_monthly")}
                   </span>
                   {accountStatus.isActive && !accountStatus.isLifetime && accountStatus.creditsRemaining !== undefined && (
                     <span className="text-[10px] text-brown-soft">
-                      {accountStatus.creditsRemaining} downloads left
+                      {t("popup_credits_remaining", [String(accountStatus.creditsRemaining)])}
                     </span>
                   )}
                 </div>
               )}
               {accountStatus.subscriptionStatus === 'trialing' && accountStatus.trialEndsAt && (
                 <p className="text-[10px] text-brown-soft mt-1">
-                  {Math.max(0, Math.ceil(
+                  {t("popup_trial_days_left", [String(Math.max(0, Math.ceil(
                     (new Date(accountStatus.trialEndsAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24)
-                  ))} days left in trial
+                  )))])}
                 </p>
               )}
               {!accountStatus.hasSubscription && (
@@ -378,40 +381,40 @@ export default function Popup() {
                   onClick={() => window.open(`${API_BASE_URL}/?utm_source=extension&utm_medium=popup&utm_campaign=trial_teaser&extension_version=${getExtensionVersion()}#pricing`, '_blank')}
                   className="mt-3 text-xs bg-teal text-white px-4 py-2 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300"
                 >
-                  Start free 30-day trial
+                  {t("popup_start_trial")}
                 </button>
               )}
               {accountStatus.hasSubscription && !accountStatus.isActive &&
                 accountStatus.subscriptionStatus === 'canceled' && (
                   <div className="mt-3 text-[10px] text-brown-soft">
-                    Your subscription has ended.{" "}
+                    {t("popup_sub_ended")}{" "}
                     <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management&extension_version=${getExtensionVersion()}`} target="_blank" className="text-teal underline">
-                      Reactivate to restore access.
+                      {t("popup_reactivate")}
                     </a>
                   </div>
                 )}
               {accountStatus.hasSubscription && !accountStatus.isActive &&
                 accountStatus.subscriptionStatus === 'past_due' && (
                   <div className="mt-3 text-[10px] text-brown-soft">
-                    Payment failed.{" "}
+                    {t("popup_payment_failed")}{" "}
                     <a href={`${API_BASE_URL}/account?utm_source=extension&utm_medium=popup&utm_campaign=account_management&extension_version=${getExtensionVersion()}`} target="_blank" className="text-coral underline">
-                      Update your billing details to restore access.
+                      {t("popup_update_billing")}
                     </a>
                   </div>
                 )}
             </>
           ) : (
             <>
-              <h3 className="text-xs font-semibold uppercase tracking-wider text-brown-soft mb-2">Connect Account</h3>
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-brown-soft mb-2">{t("popup_connect_heading")}</h3>
               <p className="text-[10px] text-brown-soft mb-3">
-                Sign in to unlock 8 animated premium themes.
+                {t("popup_connect_subtext")}
               </p>
               <button
                 onClick={handleConnect}
                 disabled={isLoading}
                 className="w-full bg-teal text-white text-sm py-2.5 rounded-button font-semibold hover:translate-y-[-1px] hover:shadow-button transition-all duration-300 disabled:opacity-50 mb-3"
               >
-                {isLoading ? "Connecting..." : "Connect with Google/GitHub"}
+                {isLoading ? t("popup_connecting") : t("popup_connect_button")}
               </button>
 
               <div className="relative my-3">
@@ -419,7 +422,7 @@ export default function Popup() {
                   <div className="w-full border-t border-brown/10"></div>
                 </div>
                 <div className="relative flex justify-center text-[10px]">
-                  <span className="bg-cream-warm px-2 text-brown-soft">or paste token</span>
+                  <span className="bg-cream-warm px-2 text-brown-soft">{t("popup_or_paste_token")}</span>
                 </div>
               </div>
 
@@ -428,14 +431,14 @@ export default function Popup() {
                   value={tokenInput}
                   onChange={(e) => setTokenInput(e.target.value)}
                   className="flex-1 text-xs p-2.5 rounded-button border border-brown/15 bg-white focus:outline-none focus:ring-2 focus:ring-teal/30 transition-all"
-                  placeholder="Paste token..."
+                  placeholder={t("popup_token_placeholder")}
                 />
                 <button
                   onClick={handleTokenSubmit}
                   disabled={isLoading || !tokenInput.trim()}
                   className="bg-brown text-cream text-xs px-4 rounded-button font-semibold hover:bg-brown-soft disabled:opacity-50 transition-colors"
                 >
-                  Go
+                  {t("popup_go")}
                 </button>
               </div>
               {statusMsg && <div className="text-[10px] mt-2 text-brown-soft">{statusMsg}</div>}
@@ -449,7 +452,7 @@ export default function Popup() {
         {/* FREE TIER */}
         <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-brown-soft mb-3 flex items-center gap-2">
-            <span>Free Collection</span>
+            <span>{t("popup_free_collection")}</span>
             <span className="bg-teal/10 text-teal px-2 py-0.5 rounded-full text-[10px] font-semibold">
               {freeThemes.length}
             </span>
@@ -470,7 +473,7 @@ export default function Popup() {
         {/* PREMIUM TIER */}
         <section>
           <h2 className="text-xs font-semibold uppercase tracking-[0.15em] text-brown-soft mb-3 flex items-center gap-2">
-            <span>Premium Collection</span>
+            <span>{t("popup_premium_collection")}</span>
             <span className="bg-coral/10 text-coral px-2 py-0.5 rounded-full text-[10px] font-semibold">
               {premiumThemes.length}
             </span>
@@ -494,7 +497,7 @@ export default function Popup() {
         {/* REVIEW ASK BANNER */}
         {showReviewAsk && (
           <div className="mt-4 p-3 rounded-card bg-teal/10 border border-teal/30 text-brown text-xs" role="status">
-            <p className="font-medium mb-2">Loving ThemeGPT? A quick review helps others find it. ⭐</p>
+            <p className="font-medium mb-2">{t("popup_review_ask")}</p>
             <div className="flex gap-2">
               <a
                 href="https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba/reviews"
@@ -505,7 +508,7 @@ export default function Popup() {
                 }}
                 className="text-[10px] bg-teal text-white px-3 py-1.5 rounded-button font-semibold hover:translate-y-[-1px] transition-all"
               >
-                Leave a review
+                {t("popup_leave_review")}
               </a>
               <button
                 onClick={async () => {
@@ -514,7 +517,7 @@ export default function Popup() {
                 }}
                 className="text-[10px] text-brown-soft hover:text-brown transition-colors px-2"
               >
-                Maybe later
+                {t("popup_maybe_later")}
               </button>
             </div>
           </div>
@@ -539,7 +542,7 @@ export default function Popup() {
             target="_blank"
             className="group inline-flex items-center gap-1 text-xs font-medium text-brown-soft hover:text-brown transition-colors"
           >
-            Manage Account
+            {t("popup_manage_account")}
             <span className="group-hover:translate-x-0.5 transition-transform">&rarr;</span>
           </a>
         </footer>
@@ -618,7 +621,9 @@ function ThemeCard({
   return (
     <button
       onClick={onSelect}
-      aria-label={isLocked ? `${theme.name} - Premium, click to unlock` : `Apply ${theme.name} theme`}
+      aria-label={isLocked
+        ? t("popup_theme_unlock_label", [theme.name])
+        : t("popup_theme_apply_label", [theme.name])}
       className={`
         group relative flex flex-col items-start p-2.5 rounded-card border transition-all duration-300 text-left w-full
         ${isActive

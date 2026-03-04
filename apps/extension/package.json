@@ -1,8 +1,8 @@
 {
   "name": "extension",
-  "displayName": "ThemeGPT",
+  "displayName": "__MSG_extName__",
   "version": "2.4.0",
-  "description": "The privacy-first ChatGPT theme manager. Customize appearances and track tokens locally — now with an on-page canvas counter.",
+  "description": "__MSG_extDescription__",
   "scripts": {
     "dev": "plasmo dev",
     "build": "plasmo build",
@@ -38,6 +38,7 @@
     "vitest": "^4.0.18"
   },
   "manifest": {
+    "default_locale": "en",
     "host_permissions": [
       "https://chat.openai.com/*",
       "https://chatgpt.com/*",

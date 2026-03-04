@@ -232,20 +232,20 @@ function updateCanvasCounterText(): void {
 
     canvasCounterElement.innerHTML = `
 <div class="themegpt-token-counter__header">
-  <span class="themegpt-token-counter__title">Session Tokens</span>
+  <span class="themegpt-token-counter__title">${chrome.i18n.getMessage("token_counter_session_tokens")}</span>
   ${iconMarkup}
 </div>
 <div class="themegpt-token-counter__stats">
   <span class="themegpt-token-counter__metric themegpt-token-counter__metric--input">
-    <span class="themegpt-token-counter__label">Input</span>
+    <span class="themegpt-token-counter__label">${chrome.i18n.getMessage("token_counter_input")}</span>
     <span class="themegpt-token-counter__value">${latestStats.user.toLocaleString()}</span>
   </span>
   <span class="themegpt-token-counter__metric themegpt-token-counter__metric--output">
-    <span class="themegpt-token-counter__label">Output</span>
+    <span class="themegpt-token-counter__label">${chrome.i18n.getMessage("token_counter_output")}</span>
     <span class="themegpt-token-counter__value">${latestStats.assistant.toLocaleString()}</span>
   </span>
   <span class="themegpt-token-counter__metric themegpt-token-counter__metric--total">
-    <span class="themegpt-token-counter__label">Total</span>
+    <span class="themegpt-token-counter__label">${chrome.i18n.getMessage("token_counter_total")}</span>
     <span class="themegpt-token-counter__value">${latestStats.total.toLocaleString()}</span>
   </span>
 </div>

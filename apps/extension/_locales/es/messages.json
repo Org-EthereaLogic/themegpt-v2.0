@@ -1,0 +1,258 @@
+{
+  "extName": {
+    "message": "ThemeGPT",
+    "description": "Extension display name"
+  },
+  "extDescription": {
+    "message": "El gestor de temas de ChatGPT que protege tu privacidad. Personaliza apariencias y rastrea tokens localmente — ahora con un contador en la página.",
+    "description": "Extension description shown in the Chrome Web Store and browser extension manager"
+  },
+  "popup_sign_in": {
+    "message": "Iniciar sesión",
+    "description": "Header button shown when user is not authenticated"
+  },
+  "popup_status_lifetime": {
+    "message": "De por vida",
+    "description": "Header button label for lifetime subscribers"
+  },
+  "popup_status_trial": {
+    "message": "Prueba",
+    "description": "Header button label for users in their free trial"
+  },
+  "popup_status_premium": {
+    "message": "Premium",
+    "description": "Header button label for paid subscribers"
+  },
+  "popup_status_active": {
+    "message": "Activo",
+    "description": "Tooltip for the green status dot indicating an active subscription"
+  },
+  "popup_status_connected": {
+    "message": "Conectado",
+    "description": "Tooltip for the status dot indicating a connected but not active account"
+  },
+  "popup_account_heading": {
+    "message": "Cuenta",
+    "description": "Section heading in the account panel when connected"
+  },
+  "popup_disconnect": {
+    "message": "Desconectar",
+    "description": "Button to disconnect the user's account"
+  },
+  "popup_plan_lifetime": {
+    "message": "Acceso de por vida",
+    "description": "Badge label for lifetime access plan"
+  },
+  "popup_plan_trial": {
+    "message": "Prueba activa",
+    "description": "Badge label shown during the free trial period"
+  },
+  "popup_plan_yearly": {
+    "message": "Anual",
+    "description": "Badge label for annual subscription plan"
+  },
+  "popup_plan_monthly": {
+    "message": "Mensual",
+    "description": "Badge label for monthly subscription plan"
+  },
+  "popup_credits_remaining": {
+    "message": "$CREDITS$ descargas restantes",
+    "description": "Shows how many theme downloads remain in the current billing period",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "popup_trial_days_left": {
+    "message": "$DAYS$ días restantes en la prueba",
+    "description": "Shows how many days remain in the free trial",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "popup_start_trial": {
+    "message": "Iniciar prueba gratuita de 30 días",
+    "description": "CTA button for users without a subscription to start a free trial"
+  },
+  "popup_sub_ended": {
+    "message": "Tu suscripción ha terminado.",
+    "description": "Message shown when a user's subscription is canceled"
+  },
+  "popup_reactivate": {
+    "message": "Reactívala para restaurar el acceso.",
+    "description": "Link text to reactivate a canceled subscription"
+  },
+  "popup_payment_failed": {
+    "message": "Pago fallido.",
+    "description": "Message shown when the most recent payment has failed"
+  },
+  "popup_update_billing": {
+    "message": "Actualiza tus datos de facturación para restaurar el acceso.",
+    "description": "Link text to update payment method for past-due accounts"
+  },
+  "popup_connect_heading": {
+    "message": "Conectar cuenta",
+    "description": "Section heading in the account panel when not connected"
+  },
+  "popup_connect_subtext": {
+    "message": "Inicia sesión para desbloquear 8 temas premium animados.",
+    "description": "Subtitle in the connect account panel"
+  },
+  "popup_connecting": {
+    "message": "Conectando...",
+    "description": "Loading state text shown while connecting"
+  },
+  "popup_connect_button": {
+    "message": "Conectar con Google/GitHub",
+    "description": "OAuth sign-in button label"
+  },
+  "popup_or_paste_token": {
+    "message": "o pega el token",
+    "description": "Divider text between OAuth and token input methods"
+  },
+  "popup_token_placeholder": {
+    "message": "Pega el token...",
+    "description": "Placeholder text for the authentication token input field"
+  },
+  "popup_go": {
+    "message": "Ir",
+    "description": "Submit button label for the token input form"
+  },
+  "popup_free_collection": {
+    "message": "Colección gratuita",
+    "description": "Section heading for free themes"
+  },
+  "popup_premium_collection": {
+    "message": "Colección premium",
+    "description": "Section heading for premium themes"
+  },
+  "popup_review_ask": {
+    "message": "¿Te gusta ThemeGPT? Una reseña rápida ayuda a otros a encontrarlo. ⭐",
+    "description": "Banner asking users to leave a review on the Chrome Web Store"
+  },
+  "popup_leave_review": {
+    "message": "Dejar una reseña",
+    "description": "Button to open the Chrome Web Store review page"
+  },
+  "popup_maybe_later": {
+    "message": "Quizás después",
+    "description": "Button to dismiss the review request banner"
+  },
+  "popup_manage_account": {
+    "message": "Administrar cuenta",
+    "description": "Footer link to the account management page"
+  },
+  "popup_session_expired": {
+    "message": "Sesión expirada. Por favor, vuelve a conectarte.",
+    "description": "Status message shown when the auth token has expired"
+  },
+  "popup_connection_error": {
+    "message": "Error de conexión",
+    "description": "Status message shown when a network or server error occurs"
+  },
+  "popup_invalid_token": {
+    "message": "Token inválido. Por favor, inténtalo de nuevo.",
+    "description": "Status message shown when the provided auth token is invalid"
+  },
+  "popup_account_connected": {
+    "message": "Cuenta conectada ✅",
+    "description": "Status message shown after successfully connecting an active account"
+  },
+  "popup_account_connected_inactive": {
+    "message": "Cuenta conectada",
+    "description": "Status message shown after connecting an account without an active subscription"
+  },
+  "popup_connection_failed": {
+    "message": "Conexión fallida. Por favor, inténtalo de nuevo.",
+    "description": "Status message shown when authentication fails"
+  },
+  "popup_no_downloads": {
+    "message": "No quedan descargas en este período. Gestiona tu cuenta en themegpt.ai",
+    "description": "Error shown when the user has exhausted their theme downloads for the billing period"
+  },
+  "popup_connect_first": {
+    "message": "Por favor, conecta tu cuenta primero.",
+    "description": "Error shown when an action requires authentication"
+  },
+  "popup_trial_teaser_1": {
+    "message": "Este es un tema premium — inicia tu prueba gratuita de 30 días.",
+    "description": "First upsell message shown when clicking a locked premium theme"
+  },
+  "popup_trial_teaser_2": {
+    "message": "Desbloquea los 8 temas premium con una prueba gratuita de 30 días.",
+    "description": "Second upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_trial_teaser_3": {
+    "message": "Sigues volviendo a los temas premium. Desbloquéalos todos gratis por 30 días.",
+    "description": "Third upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_connection_error_retry": {
+    "message": "Error de conexión. Por favor, inténtalo de nuevo.",
+    "description": "Error shown when a network error occurs during theme download"
+  },
+  "popup_failed_to_unlock": {
+    "message": "No se pudo desbloquear el tema",
+    "description": "Error shown when the theme download API returns an error"
+  },
+  "popup_theme_apply_label": {
+    "message": "Aplicar tema $THEME_NAME$",
+    "description": "Accessible label for the theme card button when the theme is unlocked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "popup_theme_unlock_label": {
+    "message": "$THEME_NAME$ - Premium, haz clic para desbloquear",
+    "description": "Accessible label for the theme card button when the theme is locked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "token_counter_session_tokens": {
+    "message": "Tokens de sesión",
+    "description": "Section heading for the token counter in the popup and canvas overlay"
+  },
+  "token_counter_input": {
+    "message": "Entrada",
+    "description": "Label for user input token count"
+  },
+  "token_counter_output": {
+    "message": "Salida",
+    "description": "Label for AI output token count"
+  },
+  "token_counter_total": {
+    "message": "Total",
+    "description": "Label for total token count"
+  },
+  "token_counter_canvas": {
+    "message": "Lienzo",
+    "description": "Label for the canvas overlay position selector"
+  },
+  "token_counter_off": {
+    "message": "Apagado",
+    "description": "Option to disable the canvas token counter"
+  },
+  "token_counter_side_top": {
+    "message": "Lateral superior",
+    "description": "Option to show the canvas counter in the sidebar at the top"
+  },
+  "token_counter_compose_right": {
+    "message": "Redactar derecha",
+    "description": "Option to show the canvas counter to the right of the composer"
+  },
+  "token_counter_estimated": {
+    "message": "Estimado · Los datos no salen de tu navegador",
+    "description": "Privacy disclaimer shown below the token counter"
+  }
+}

@@ -7,8 +7,8 @@
     "dev": "plasmo dev",
     "build": "plasmo build",
     "build:edge": "plasmo build --target=edge-mv3",
-    "package": "plasmo package",
-    "package:edge": "plasmo package --target=edge-mv3",
+    "package": "plasmo package && node ./tools/include-locales-in-package.mjs chrome-mv3-prod",
+    "package:edge": "plasmo package --target=edge-mv3 && node ./tools/include-locales-in-package.mjs edge-mv3-prod",
     "lint": "tsc --noEmit",
     "test": "vitest run"
   },

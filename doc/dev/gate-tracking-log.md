@@ -51,6 +51,7 @@
 | 2026-02-26 | 0% | Y | PASS | **Corrected (full-day reprocessing).** 6 total sessions (Paid Search 3, Direct 2, Referral 1). Zero unassigned. Earlier evening snapshot showed 50% from 10 sessions (5 unassigned) — full-day reprocessing reclassified all. Same correction pattern as Feb 22 and Feb 25. |
 | 2026-02-27 | 40% | Y | FAIL | **Afternoon snapshot.** 10 total sessions (Unassigned 4, Direct 3, Organic Search 2, Cross-network 1). 4 unassigned sessions from Reddit organic posts (r/SideProject + r/ChatGPT) without UTM params. CRO deploy live (pricing at 44% depth). Pending full-day reprocessing — expect correction. |
 | 2026-03-01 | 22% | Y | TRACKING | **Morning snapshot.** 9 total sessions (Paid Search 5, Cross-network 3, Unassigned 2, Referral 1). 2 unassigned sessions. 100% desktop (targeting fix confirmed working). Countries: Ecuador 2, Brazil 1, Mexico 1, Uganda 1 — root cause identified as "Presence or interest" location match type (fixed Mar 1, see below). Pending full-day reprocessing. |
+| 2026-03-04 | 37.5% | Y | FAIL | **Morning snapshot.** 8 total sessions (Cross-network 3, Unassigned 3, Paid Search 2, Direct 1). 3 unassigned sessions. 100% desktop. Countries: US 4, Mexico 2, Bhutan 1, UK 1. High unassigned share likely from cross-network/direct sessions without UTM. Pending full-day reprocessing. |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
 
@@ -69,6 +70,7 @@
 | 2026-02-26 | N | N | N | N | **Corrected (full-day reprocessing).** 6 sessions (Paid Search 3, Direct 2, Referral 1). No checkout_start/trial_start/purchase_success. Social launch posts drove traffic but no funnel events. 4 new external user signups recorded. Total external users: 17. |
 | 2026-02-27 | N | N | N | N | **Afternoon snapshot.** 10 sessions. No funnel events (checkout_start/trial_start/purchase_success) visible yet. CRO section reorder live — pricing at 44% scroll depth. Reddit posts live: r/SideProject + r/ChatGPT. Pending full-day reprocessing. |
 | 2026-03-01 | N | N | N | N | **Morning snapshot.** 9 sessions, 0 funnel events. 100% desktop traffic. Zero checkout or trial activity. Geo-targeting location match fixed (see Mar 1 audit below). |
+| 2026-03-04 | N | N | N | N | **Morning snapshot.** 8 sessions, 0 funnel events. Firebase 28-day event counts: checkout_start ×5 total, pricing_view ×11, mobile_landing ×8. No new funnel events today. CWV optimization deployed (see Mar 4 fix below). |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
 
@@ -776,6 +778,59 @@ Changes:
 - adws/adw_modules/credentials.py — cws_ga4_client() function
 - adws/adw_modules/metrics_collectors.py — collect_cws uses cws_ga4_client
 - adws/.env — CWS_GOOGLE_CREDENTIALS=credentials/cws-user-oauth.json
+
+---
+
+## Google Ads Budget Reduction & Token Status — Mar 3, 2026
+
+**Budget change:** Daily budget reduced from $100/day to $50/day.
+**Reason:** Conserving spend while Google Ads API developer token Basic access approval is pending.
+
+**Developer token status:** Still **Pending review** as of Mar 3, 2026 (applied Mar 1). Check status at `ads.google.com/aw/apicenter`. No action required until Google responds.
+
+**Campaign:** Website traffic-Search-1, Account: ThemeGPT `170-289-9815`
+**Cumulative spend (Feb 21–Mar 2):** $1,012.21 | Clicks: 1,659 | Impr: 19,118 | CPC: $0.61
+
+---
+
+---
+
+## CWV Performance Regression Fix — Mar 4, 2026
+
+**Scope:** Address LCP/INP regression identified in Clarity (3-day): LCP 7.1s POOR, INP 710ms POOR, performance score 49/100. Root cause analysis from Feb 26 audit implicated dynamic imports and heavy GPU effects.
+
+### Regression Baseline (Clarity, Last 3 days as of Mar 4)
+
+| Metric | Value | Status |
+|--------|-------|--------|
+| LCP | 7.1s | POOR (threshold: 4.0s) |
+| INP | 710ms | POOR (threshold: 500ms) |
+| CLS | 0.001 | GOOD |
+| Performance Score | 49/100 | — |
+| Quick Back Rate | 33.33% | High — users leaving before page loads |
+
+### Optimizations Implemented
+
+| Area | Change | Expected Impact |
+|------|--------|----------------|
+| `OrganicBlob` components | Replaced heavy CSS `blur()` filters with radial-gradient backgrounds — removes GPU compositing layer overhead | LCP reduction, INP improvement |
+| Hero text (`h1` and `p`) | Removed artificial animation delays — elements now render immediately on parse | LCP improvement (hero text is likely LCP candidate) |
+| Hero video | Changed `preload="none"` → `preload="auto"` — browser begins downloading alongside HTML parse | Faster video availability without blocking LCP |
+
+### Build Verification
+
+- `npm run build` in `apps/web`: **SUCCESS**
+- No TypeScript errors
+
+### Expected Outcome
+
+- LCP target: < 4.0s (good)
+- INP target: < 500ms (needs improvement → good)
+- Quick back rate should decrease as page loads faster for first-time visitors
+
+### Monitoring
+
+Watch Clarity "Last 3 days" performance score over the next 48–72h. CWV data has processing delay — first meaningful signal expected Mar 6–7.
 
 ---
 

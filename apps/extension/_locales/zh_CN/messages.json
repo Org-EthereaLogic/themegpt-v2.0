@@ -1,0 +1,258 @@
+{
+  "extName": {
+    "message": "ThemeGPT",
+    "description": "Extension display name"
+  },
+  "extDescription": {
+    "message": "注重隐私的ChatGPT主题管理器。在本地自定义外观并追踪令牌——现已支持页面内画布计数器。",
+    "description": "Extension description shown in the Chrome Web Store and browser extension manager"
+  },
+  "popup_sign_in": {
+    "message": "登录",
+    "description": "Header button shown when user is not authenticated"
+  },
+  "popup_status_lifetime": {
+    "message": "终身",
+    "description": "Header button label for lifetime subscribers"
+  },
+  "popup_status_trial": {
+    "message": "试用",
+    "description": "Header button label for users in their free trial"
+  },
+  "popup_status_premium": {
+    "message": "高级版",
+    "description": "Header button label for paid subscribers"
+  },
+  "popup_status_active": {
+    "message": "已激活",
+    "description": "Tooltip for the green status dot indicating an active subscription"
+  },
+  "popup_status_connected": {
+    "message": "已连接",
+    "description": "Tooltip for the status dot indicating a connected but not active account"
+  },
+  "popup_account_heading": {
+    "message": "账户",
+    "description": "Section heading in the account panel when connected"
+  },
+  "popup_disconnect": {
+    "message": "断开连接",
+    "description": "Button to disconnect the user's account"
+  },
+  "popup_plan_lifetime": {
+    "message": "终身访问",
+    "description": "Badge label for lifetime access plan"
+  },
+  "popup_plan_trial": {
+    "message": "试用中",
+    "description": "Badge label shown during the free trial period"
+  },
+  "popup_plan_yearly": {
+    "message": "年度",
+    "description": "Badge label for annual subscription plan"
+  },
+  "popup_plan_monthly": {
+    "message": "月度",
+    "description": "Badge label for monthly subscription plan"
+  },
+  "popup_credits_remaining": {
+    "message": "剩余$CREDITS$次下载",
+    "description": "Shows how many theme downloads remain in the current billing period",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "popup_trial_days_left": {
+    "message": "试用期剩余$DAYS$天",
+    "description": "Shows how many days remain in the free trial",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "popup_start_trial": {
+    "message": "开始30天免费试用",
+    "description": "CTA button for users without a subscription to start a free trial"
+  },
+  "popup_sub_ended": {
+    "message": "您的订阅已结束。",
+    "description": "Message shown when a user's subscription is canceled"
+  },
+  "popup_reactivate": {
+    "message": "重新激活以恢复访问权限。",
+    "description": "Link text to reactivate a canceled subscription"
+  },
+  "popup_payment_failed": {
+    "message": "支付失败。",
+    "description": "Message shown when the most recent payment has failed"
+  },
+  "popup_update_billing": {
+    "message": "更新您的账单信息以恢复访问权限。",
+    "description": "Link text to update payment method for past-due accounts"
+  },
+  "popup_connect_heading": {
+    "message": "连接账户",
+    "description": "Section heading in the account panel when not connected"
+  },
+  "popup_connect_subtext": {
+    "message": "登录以解锁8个动态高级主题。",
+    "description": "Subtitle in the connect account panel"
+  },
+  "popup_connecting": {
+    "message": "连接中...",
+    "description": "Loading state text shown while connecting"
+  },
+  "popup_connect_button": {
+    "message": "使用Google/GitHub连接",
+    "description": "OAuth sign-in button label"
+  },
+  "popup_or_paste_token": {
+    "message": "或粘贴令牌",
+    "description": "Divider text between OAuth and token input methods"
+  },
+  "popup_token_placeholder": {
+    "message": "粘贴令牌...",
+    "description": "Placeholder text for the authentication token input field"
+  },
+  "popup_go": {
+    "message": "确定",
+    "description": "Submit button label for the token input form"
+  },
+  "popup_free_collection": {
+    "message": "免费主题集",
+    "description": "Section heading for free themes"
+  },
+  "popup_premium_collection": {
+    "message": "高级主题集",
+    "description": "Section heading for premium themes"
+  },
+  "popup_review_ask": {
+    "message": "喜欢ThemeGPT？快速评价能帮助他人发现它。⭐",
+    "description": "Banner asking users to leave a review on the Chrome Web Store"
+  },
+  "popup_leave_review": {
+    "message": "写评价",
+    "description": "Button to open the Chrome Web Store review page"
+  },
+  "popup_maybe_later": {
+    "message": "稍后再说",
+    "description": "Button to dismiss the review request banner"
+  },
+  "popup_manage_account": {
+    "message": "管理账户",
+    "description": "Footer link to the account management page"
+  },
+  "popup_session_expired": {
+    "message": "会话已过期。请重新连接。",
+    "description": "Status message shown when the auth token has expired"
+  },
+  "popup_connection_error": {
+    "message": "连接错误",
+    "description": "Status message shown when a network or server error occurs"
+  },
+  "popup_invalid_token": {
+    "message": "令牌无效。请重试。",
+    "description": "Status message shown when the provided auth token is invalid"
+  },
+  "popup_account_connected": {
+    "message": "账户已连接 ✅",
+    "description": "Status message shown after successfully connecting an active account"
+  },
+  "popup_account_connected_inactive": {
+    "message": "账户已连接",
+    "description": "Status message shown after connecting an account without an active subscription"
+  },
+  "popup_connection_failed": {
+    "message": "连接失败。请重试。",
+    "description": "Status message shown when authentication fails"
+  },
+  "popup_no_downloads": {
+    "message": "本周期下载次数已用完。请在themegpt.ai管理您的账户",
+    "description": "Error shown when the user has exhausted their theme downloads for the billing period"
+  },
+  "popup_connect_first": {
+    "message": "请先连接您的账户。",
+    "description": "Error shown when an action requires authentication"
+  },
+  "popup_trial_teaser_1": {
+    "message": "这是高级主题——开始您的30天免费试用。",
+    "description": "First upsell message shown when clicking a locked premium theme"
+  },
+  "popup_trial_teaser_2": {
+    "message": "使用30天免费试用解锁全部8个高级主题。",
+    "description": "Second upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_trial_teaser_3": {
+    "message": "您一直在使用高级主题。免费解锁全部主题，享用30天。",
+    "description": "Third upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_connection_error_retry": {
+    "message": "连接错误。请重试。",
+    "description": "Error shown when a network error occurs during theme download"
+  },
+  "popup_failed_to_unlock": {
+    "message": "主题解锁失败",
+    "description": "Error shown when the theme download API returns an error"
+  },
+  "popup_theme_apply_label": {
+    "message": "应用$THEME_NAME$主题",
+    "description": "Accessible label for the theme card button when the theme is unlocked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "popup_theme_unlock_label": {
+    "message": "$THEME_NAME$ - 高级版，点击解锁",
+    "description": "Accessible label for the theme card button when the theme is locked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "token_counter_session_tokens": {
+    "message": "会话令牌",
+    "description": "Section heading for the token counter in the popup and canvas overlay"
+  },
+  "token_counter_input": {
+    "message": "输入",
+    "description": "Label for user input token count"
+  },
+  "token_counter_output": {
+    "message": "输出",
+    "description": "Label for AI output token count"
+  },
+  "token_counter_total": {
+    "message": "总计",
+    "description": "Label for total token count"
+  },
+  "token_counter_canvas": {
+    "message": "画布",
+    "description": "Label for the canvas overlay position selector"
+  },
+  "token_counter_off": {
+    "message": "关闭",
+    "description": "Option to disable the canvas token counter"
+  },
+  "token_counter_side_top": {
+    "message": "侧边顶部",
+    "description": "Option to show the canvas counter in the sidebar at the top"
+  },
+  "token_counter_compose_right": {
+    "message": "编辑区右侧",
+    "description": "Option to show the canvas counter to the right of the composer"
+  },
+  "token_counter_estimated": {
+    "message": "估算值 · 数据不会离开您的浏览器",
+    "description": "Privacy disclaimer shown below the token counter"
+  }
+}

@@ -13,6 +13,7 @@ const PREMIUM_THEMES = DEFAULT_THEMES.filter((t) => t.isPremium);
 const PENDING_CHECKOUT_KEY = "themegpt_pending_checkout_v1";
 const LAST_CHECKOUT_TYPE_KEY = "themegpt_last_checkout_type_v1";
 const CHECKOUT_ABANDON_LOGGED_KEY = "themegpt_checkout_abandon_logged_v1";
+const SIGNIN_PROMPT_LOGGED_KEY = "themegpt_signin_prompt_logged_v1";
 
 type CheckoutType = "yearly" | "monthly" | "single";
 
@@ -32,6 +33,7 @@ export default function CheckoutController() {
     }
     if (!session) {
       window.sessionStorage.setItem(PENDING_CHECKOUT_KEY, JSON.stringify({ type, themeId }));
+      window.sessionStorage.removeItem(SIGNIN_PROMPT_LOGGED_KEY);
       const callbackUrl = window.location.origin + window.location.pathname + "#pricing";
       signIn(undefined, { callbackUrl });
       return;
@@ -108,6 +110,7 @@ export default function CheckoutController() {
     if (!raw) return;
 
     window.sessionStorage.removeItem(PENDING_CHECKOUT_KEY);
+    window.sessionStorage.removeItem(SIGNIN_PROMPT_LOGGED_KEY);
 
     try {
       const parsed = JSON.parse(raw) as { type?: CheckoutType; themeId?: string };

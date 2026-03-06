@@ -65,7 +65,7 @@ GOOGLE_APPLICATION_CREDENTIALS=credentials/ga4-sa.json
 
 The CWS GA4 property (`521095252`) is managed by Chrome Web Store. Only the developer's personal Google account has Viewer access via the CWS Developer Console — the service account cannot be added.
 
-**Solution:** A one-time OAuth flow creates a user-account token with `analytics.readonly` scope for querying CWS GA4 data.
+**Solution:** A one-time OAuth flow creates a user-account token with `analytics.readonly` scope for querying CWS GA4 data, then stores the authorized-user payload in the local system keychain.
 
 ### Setup
 
@@ -77,19 +77,24 @@ cd adws && uv run python setup_cws_auth.py
 
 2. The script opens a browser for Google OAuth consent. Authorize the `analytics.readonly` scope.
 
-3. Output: `credentials/cws-user-oauth.json` (gitignored — never commit this file).
+3. The script stores the authorized-user payload in the system keychain:
 
-4. Add to `adws/.env`:
+```text
+service: themegpt.adws.cws-ga4
+account: anthony.johnsonii@etherealogic.ai
+```
 
-```
-CWS_GOOGLE_CREDENTIALS=credentials/cws-user-oauth.json
-```
+4. No `CWS_GOOGLE_CREDENTIALS` entry is required in `adws/.env`.
+
+### One-time migration
+
+If you still have the legacy plaintext file at `adws/credentials/cws-user-oauth.json`, the next CWS collector run will import it into the system keychain and delete the file after verifying the keychain save.
 
 ### How it works
 
-- `adw_modules/credentials.py` provides `cws_ga4_client()` which loads the user OAuth token from `CWS_GOOGLE_CREDENTIALS`
+- `adw_modules/credentials.py` provides `cws_ga4_client()` which loads the user OAuth token from the system keychain
 - `adw_modules/metrics_collectors.py` uses `cws_ga4_client()` for CWS data collection
-- The token auto-refreshes on use; re-run `setup_cws_auth.py` only if the token is revoked or the refresh token expires
+- The token auto-refreshes on use and writes the refreshed token back to the system keychain; re-run `setup_cws_auth.py` only if the token is revoked or the refresh token expires
 
 ---
 
@@ -104,7 +109,7 @@ cd adws && uv run python -c "
 from adw_modules.credentials import validate_credentials
 print(validate_credentials())
 "
-# Expected: {'ga4': True, 'google_ads': True, 'clarity': True, 'monetization': True}
+# Expected: {'ga4': True, 'cws': True, 'google_ads': True, 'clarity': True, 'monetization': True}
 
 # Run full report (5/6 sources expected — google_ads blocked pending Basic token approval)
 cd adws && uv run python -m scripts.metrics_report

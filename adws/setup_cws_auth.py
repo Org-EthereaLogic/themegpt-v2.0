@@ -3,8 +3,9 @@
 Run this once from the adws/ directory:
     uv run python setup_cws_auth.py
 
-Opens a browser for OAuth consent, then saves credentials/cws-user-oauth.json.
-The collect_cws collector uses this file to query GA4 property 521095252.
+Opens a browser for OAuth consent, then saves the authorized-user payload
+to the local system keychain. The collect_cws collector uses that keychain
+entry to query GA4 property 521095252.
 
 Why needed: the CWS GA4 property (521095252) is managed by Chrome Web Store —
 you cannot grant service accounts access to it. A user-account OAuth token
@@ -12,15 +13,19 @@ for anthony.johnsonii@etherealogic.ai works because that account has Viewer
 access via the CWS Developer Console.
 """
 
-import json
-import os
 from pathlib import Path
 
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-SCOPES = ["https://www.googleapis.com/auth/analytics.readonly"]
+from adw_modules.credentials import (
+    CWS_KEYCHAIN_ACCOUNT,
+    CWS_KEYCHAIN_SERVICE,
+    CWS_SCOPES,
+    build_cws_authorized_user_info,
+    store_cws_authorized_user_info,
+)
+
 CLIENT_SECRETS = Path(__file__).parent / "client_secrets.json"
-OUT_PATH = Path(__file__).parent / "credentials" / "cws-user-oauth.json"
 
 
 def main() -> None:
@@ -31,22 +36,14 @@ def main() -> None:
     print(f"Sign in as: anthony.johnsonii@etherealogic.ai")
     print(f"Scope requested: analytics.readonly\n")
 
-    flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS), scopes=SCOPES)
+    flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS), scopes=CWS_SCOPES)
     creds = flow.run_local_server(port=8080)
 
-    OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    token_data = {
-        "token": creds.token,
-        "refresh_token": creds.refresh_token,
-        "token_uri": creds.token_uri,
-        "client_id": creds.client_id,
-        "client_secret": creds.client_secret,
-        "scopes": list(creds.scopes or SCOPES),
-    }
-    OUT_PATH.write_text(json.dumps(token_data, indent=2))
-    print(f"\nSaved to {OUT_PATH}")
-    print("Add this to adws/.env:")
-    print("  CWS_GOOGLE_CREDENTIALS=credentials/cws-user-oauth.json")
+    store_cws_authorized_user_info(build_cws_authorized_user_info(creds))
+    print("\nSaved CWS GA4 credentials to the system keychain:")
+    print(f"  service: {CWS_KEYCHAIN_SERVICE}")
+    print(f"  account: {CWS_KEYCHAIN_ACCOUNT}")
+    print("No CWS secret entry is needed in adws/.env.")
 
 
 if __name__ == "__main__":

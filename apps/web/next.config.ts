@@ -44,6 +44,16 @@ const nextConfig: NextConfig = {
         ],
       },
       {
+        // Media URLs are not fingerprinted, so keep them cacheable but refreshable.
+        source: "/media/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=86400, must-revalidate",
+          },
+        ],
+      },
+      {
         source: "/:path*",
         headers: securityHeaders,
       },

@@ -129,7 +129,8 @@ export function Hero() {
           loop
           muted
           playsInline
-          preload="auto"
+          preload="none"
+          poster="/themes/aurora_borealis_1.webp"
           className="w-full h-auto object-cover bg-black"
         >
           <source src="/media/demo-30s.mp4" type="video/mp4" />

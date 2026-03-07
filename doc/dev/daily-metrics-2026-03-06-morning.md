@@ -1,6 +1,6 @@
 # Daily Metrics Report: 2026-03-06 (Morning)
 
-**Generated:** 06:29 UTC  
+**Generated:** 22:52 UTC  
 **Period:** Morning  
 **Lookback:** 1 day(s)  
 
@@ -19,34 +19,35 @@
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 4 |
-| Users | 4 |
-| New Users | 4 |
-| Engaged Sessions | 4 |
-| Avg Session Duration | 32.4s |
-| Page Views | 4 |
+| Sessions | 7 |
+| Users | 7 |
+| New Users | 7 |
+| Engaged Sessions | 7 |
+| Avg Session Duration | 19.2s |
+| Page Views | 8 |
 | Bounce Rate | 0.0% |
 
 ### Channel Breakdown
 
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
+| Direct | 2 | 2 | 0.0% | 9.8s |
+| Paid Search | 2 | 2 | 0.0% | 52.0s |
 | Referral | 2 | 2 | 0.0% | 5.3s |
-| Cross-network | 1 | 1 | 0.0% | 103.4s |
-| Direct | 1 | 1 | 0.0% | 0.0s |
-| Unassigned | 1 | 0 | 100.0% | 15.4s |
+| Cross-network | 1 | 1 | 0.0% | 0.0s |
 
 ### Device Split
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 4 | 0.0% | 32.4s |
+| desktop | 7 | 0.0% | 19.2s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-| United States | 4 | 100.0% |
+| United States | 6 | 85.7% |
+| Canada | 1 | 14.3% |
 
 ---
 
@@ -78,7 +79,7 @@
 | Total Sessions | 0 |
 | Scroll Depth | — |
 | Rage Clicks | 0 |
-| Dead Clicks | 2 |
+| Dead Clicks | 1 |
 
 ### Device Breakdown (Clarity)
 
@@ -98,17 +99,17 @@
 
 | Metric | Value |
 |--------|-------|
-| Installs | 12 |
-| Listing Views | 14 |
+| Installs | 22 |
+| Listing Views | 21 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `first_visit` | 14 |
-| `page_view` | 14 |
-| `session_start` | 14 |
-| `install` | 12 |
+| `install` | 22 |
+| `page_view` | 21 |
+| `first_visit` | 20 |
+| `session_start` | 20 |
 
 ---
 

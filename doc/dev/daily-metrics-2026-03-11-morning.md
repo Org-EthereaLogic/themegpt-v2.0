@@ -1,6 +1,6 @@
-# Daily Metrics Report: 2026-03-09 (Morning)
+# Daily Metrics Report: 2026-03-11 (Morning)
 
-**Generated:** 19:02 UTC
+**Generated:** 21:37 UTC
 **Period:** Morning
 **Lookback:** 1 day(s)
 
@@ -19,39 +19,35 @@
 
 | Metric | Value |
 |--------|-------|
-| Sessions | 15 |
-| Users | 15 |
-| New Users | 11 |
-| Engaged Sessions | 12 |
-| Avg Session Duration | 37.0s |
-| Page Views | 21 |
-| Bounce Rate | 20.0% |
+| Sessions | 8 |
+| Users | 8 |
+| New Users | 7 |
+| Engaged Sessions | 7 |
+| Avg Session Duration | 30.1s |
+| Page Views | 9 |
+| Bounce Rate | 12.5% |
 
 ### Channel Breakdown
 
 | Channel | Sessions | Engaged | Bounce Rate | Avg Duration |
 |---------|----------|---------|-------------|-------------|
-| Unassigned | 9 | 0 | 100.0% | 16.4s |
-| Cross-network | 5 | 5 | 0.0% | 44.2s |
-| Referral | 3 | 3 | 0.0% | 24.0s |
-| Paid Search | 2 | 2 | 0.0% | 24.1s |
-| Direct | 1 | 1 | 0.0% | 37.2s |
-| Organic Search | 1 | 1 | 0.0% | 28.8s |
+| Paid Search | 5 | 5 | 0.0% | 1.1s |
+| Unassigned | 2 | 0 | 100.0% | 35.5s |
+| Cross-network | 1 | 1 | 0.0% | 139.1s |
+| Referral | 1 | 1 | 0.0% | 25.0s |
 
 ### Device Split
 
 | Device | Sessions | Bounce Rate | Avg Duration |
 |--------|----------|-------------|-------------|
-| desktop | 15 | 20.0% | 37.0s |
+| desktop | 8 | 12.5% | 30.1s |
 
 ### Country Split (Top 10)
 
 | Country | Users | Share |
 |---------|-------|-------|
-| United States | 12 | 80.0% |
-| Costa Rica | 1 | 6.7% |
-| Japan | 1 | 6.7% |
-| United Kingdom | 1 | 6.7% |
+| United States | 5 | 62.5% |
+| United Kingdom | 3 | 37.5% |
 
 ---
 
@@ -59,7 +55,7 @@
 
 | Event | Count |
 |-------|-------|
-| `pricing_view` | 7 |
+| `pricing_view` | 2 |
 | `theme_preview` | 0 |
 | `checkout_start` | 0 |
 | `checkout_abandon` | 0 |
@@ -83,7 +79,7 @@
 | Total Sessions | 0 |
 | Scroll Depth | — |
 | Rage Clicks | 0 |
-| Dead Clicks | 0 |
+| Dead Clicks | 1 |
 
 ### Device Breakdown (Clarity)
 
@@ -95,7 +91,19 @@
 
 ## 4) Google Ads Campaign
 
-*Google Ads data unavailable: Google Ads API: Basic developer token access pending. Check status at ads.google.com/aw/developer-token.*
+*Google Ads API unavailable (developer token pending). Data below captured manually from Google Ads UI.*
+
+| Metric | Value |
+|--------|-------|
+| Clicks | 90 |
+| Impressions | 617 |
+| Avg CPC | $0.39 |
+| Est. Cost | ~$35.10 |
+| Conversions | 0 |
+
+*vs. prior day: -31 clicks, -366 impr, -$0.03 CPC*
+
+> Screenshot: [doc/dev/failures/2026-03-11/google_ads.webp](failures/2026-03-11/google_ads.webp)
 
 ---
 
@@ -103,17 +111,17 @@
 
 | Metric | Value |
 |--------|-------|
-| Installs | 24 |
-| Listing Views | 19 |
+| Installs | 22 |
+| Listing Views | 21 |
 
 ### Raw CWS GA4 Events
 
 | Event | Count |
 |-------|-------|
-| `install` | 24 |
-| `page_view` | 19 |
-| `session_start` | 18 |
+| `install` | 22 |
+| `page_view` | 21 |
 | `first_visit` | 17 |
+| `session_start` | 17 |
 
 ---
 
@@ -135,5 +143,5 @@
 
 | Guardrail | Value | Threshold | Status |
 |-----------|-------|-----------|--------|
-| No-signal kill | Spend: $0.00, Checkouts: 0 | >= $75 with 0 checkouts | OK |
+| No-signal kill | Spend: ~$35.10, Checkouts: 0 | >= $75 with 0 checkouts | OK |
 | CAC | N/A (0 conversions) | > $45 | — |

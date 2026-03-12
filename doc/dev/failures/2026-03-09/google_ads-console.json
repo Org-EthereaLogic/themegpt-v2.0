@@ -1,6 +1,6 @@
 {
   "source": "google_ads",
-  "timestamp": "2026-03-09T17:54:13Z",
-  "console_errors": [],
-  "note": "No console errors. Page shows account selector with ThemeGPT (170-289-9815) and Themegpt Manager (799-632-8615). API failure is server-side: developer token still at Test Account tier."
+  "url": "https://ads.google.com/nav/selectaccount?authuser=0&dst=/aw/campaigns?__e%3D1702899815",
+  "note": "Browser logged in as test account asap.johnson00@gmail.com (not ThemeGPT production account). Page shows 'You do not have any Google Ads accounts.' Root cause is developer token pending Basic access, not browser auth.",
+  "console_errors": []
 }

@@ -1,0 +1,9 @@
+Google Ads - Sign in
+URL: https://accounts.google.com/v3/signin/accountchooser
+
+Page shows "Choose an account" with 3 Google accounts (all signed out).
+Cannot reach Google Ads dashboard without authentication.
+
+Root cause: Google Ads API developer token is Test Account level.
+Basic access application submitted Mar 1, 2026 — still pending review.
+Manual workaround: Sign in to ads.google.com and pull data from the UI.

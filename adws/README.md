@@ -88,7 +88,7 @@ Each workflow is fully isolated: its own git worktree, its own branch (`feat/iss
 
 #### Metrics Prerequisites (`/adws-metrics`)
 
-The daily metrics report needs Google Application Default Credentials with the `analytics.readonly` scope. The default `gcloud auth application-default login` **does not** include this scope — you must pass it explicitly:
+The web-app GA4 collector needs Google Application Default Credentials with the `analytics.readonly` scope. The default `gcloud auth application-default login` **does not** include this scope — you must pass it explicitly:
 
 ```bash
 gcloud auth application-default login \
@@ -97,7 +97,13 @@ gcloud auth application-default login \
 
 Run this once after each machine reboot or credential expiry. The credentials are saved to `~/.config/gcloud/application_default_credentials.json` and picked up automatically by the GA4 collector.
 
-If you see `403 ACCESS_TOKEN_SCOPE_INSUFFICIENT` for GA4 or CWS, re-run the command above — the token was issued without the analytics scope.
+The CWS collector uses a separate user OAuth token stored in the local system keychain. Set it up once with:
+
+```bash
+cd adws && uv run python setup_cws_auth.py
+```
+
+If you see `403 ACCESS_TOKEN_SCOPE_INSUFFICIENT` for the web-app GA4 collector, re-run the `gcloud auth application-default login` command above. If the CWS collector fails, re-run `setup_cws_auth.py` to refresh the keychain entry.
 
 ### Environment Variables
 

@@ -71,6 +71,6 @@ The pre-filter baseline cause was internal and staging traffic reaching GA4 with
 - Staging URL: `https://themegpt-web-dufb63uofq-uc.a.run.app`
 - Local development sessions
 
-**Status (Feb 20, 2026):** GA4 internal traffic filter is applied, realtime-verified, and active per `docs/ga4-filter-guide.md`. Gate 1 observation tracking is now in progress; continue daily unassigned % logging in `doc/dev/gate-tracking-log.md`.
+**Status (Feb 20, 2026):** GA4 internal traffic filter is applied, realtime-verified, and active per `doc/dev/ga4-filter-guide.md`. Gate 1 observation tracking is now in progress; continue daily unassigned % logging in `doc/dev/gate-tracking-log.md`.
 
 The unbuilt `ext_sidebar` and `ext_app_menu` surfaces will not affect Gate 1 until those features are built and shipped.

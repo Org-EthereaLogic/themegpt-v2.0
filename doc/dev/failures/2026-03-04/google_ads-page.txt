@@ -1,0 +1,4 @@
+Google Ads page redirected to account selection (Select a Google Ads account).
+Accounts visible: ThemeGPT (170-289-9815), Themegpt Manager (799-632-8615).
+API error: PERMISSION_DENIED — developer token (Test Account tier) cannot access production campaign data.
+Basic access application submitted 2026-03-01, pending Google review.

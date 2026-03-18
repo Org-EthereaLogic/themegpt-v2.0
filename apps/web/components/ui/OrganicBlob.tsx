@@ -29,11 +29,11 @@ export function OrganicBlob({
   position,
   animationDelay = "0s",
   animationVariant = "default",
-  blur = 60,
   opacity = 0.5,
   className = "",
 }: OrganicBlobProps) {
   const animationName = animationMap[animationVariant];
+  const hexColor = colorMap[color];
 
   return (
     <div
@@ -41,13 +41,12 @@ export function OrganicBlob({
       style={{
         width: size,
         height: size,
-        background: colorMap[color],
-        filter: `blur(${blur}px)`,
+        background: `radial-gradient(circle closest-side, ${hexColor}FF, ${hexColor}00)`,
         opacity,
         ...position,
         animation: `${animationName} 25s ease-in-out infinite`,
         animationDelay,
-        willChange: "filter, transform",
+        willChange: "transform",
         contain: "strict",
       }}
     />

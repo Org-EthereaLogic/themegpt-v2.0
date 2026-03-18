@@ -65,7 +65,7 @@
 - [x] Apply structured snippets to Google Ads (Styles: Aurora Borealis, Synth Wave, Midnight Dark) — Feb 23, 2026.
 - [x] Investigate Reddit Ads mobile waste — confirmed 97% of spend going to iOS/Android with no platform-level device exclusion. Decision pending on pause/continue.
 - [x] Re-validate paid traffic composition via GA4 Data API (Feb 21-24): 44 sessions total, 84% mobile; `google / cpc` mobile = 28 sessions vs `reddit / paid_social` mobile = 1 session.
-- [ ] Restore Google Ads API auth (developer token invalid as of Feb 24-25) so spend/click/impression reporting can return to automated pulls instead of manual dashboard checks.
+- [ ] Restore Google Ads API auth (developer token invalid as of Feb 24-25) so spend/click/impression reporting can return to automated pulls instead of manual dashboard checks. **Partial — Basic developer token access applied Mar 1, 2026. Awaiting Google review (1-3 business days).**
 - [x] Fix checkout double-login friction (callbackUrl #pricing anchor + login page context messaging) — commit `9537d36`, deployed Feb 23.
 - [x] Fix extension auth race condition (decoupled token generation from ping timeout) — commit `9537d36`, deployed Feb 23.
 - [x] Ship mobile onboarding theme-mix refresh (ThemeGPT Light, Frosted Windowpane, Electric Dreams, Woodland Retreat) — commit `2ce4adb`, deployed Feb 24.
@@ -98,7 +98,15 @@
 
 ---
 
-## 4) Daily Ops Checklist
+## 4) Analytics & Reporting
+
+- [x] ADWS metrics service account (`adws-metrics-369`) granted Viewer on GA4 property `516189580` (Mar 2, 2026).
+- [x] ADWS metrics CWS collector unblocked — user OAuth credentials for CWS GA4 property `521095252` via `setup_cws_auth.py` (Mar 3, 2026).
+- [ ] Google Ads API: awaiting Basic developer token approval (applied Mar 1, 2026).
+
+---
+
+## 5) Daily Ops Checklist
 
 - [ ] Pull `GET /api/metrics/monetization?days=7` and log:
   - `checkoutCreated`, `checkoutCompleted`, `checkoutExpired`
@@ -116,7 +124,7 @@
 
 ---
 
-## 5) Decision Rule
+## 6) Decision Rule
 
 Scale only channels with attributed server-side revenue.  
 Treat GA4/Clarity as diagnostic context, not billing truth.

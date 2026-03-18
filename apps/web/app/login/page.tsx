@@ -1,9 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { logEvent } from "firebase/analytics";
+import { initAnalyticsIfConsented } from "@/lib/firebase";
+import { getAttributionEventParams } from "@/lib/attribution";
+
+const PENDING_CHECKOUT_KEY = "themegpt_pending_checkout_v1";
+const SIGNIN_PROMPT_LOGGED_KEY = "themegpt_signin_prompt_logged_v1";
+
+type PendingCheckout = {
+  type?: "yearly" | "monthly" | "single";
+};
 
 function Spinner({ className = "" }: { className?: string }) {
   return (
@@ -40,6 +50,30 @@ function LoginContent() {
   const [emailStatus, setEmailStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
   const [emailError, setEmailError] = useState<string | null>(null);
   const isCheckoutFlow = callbackUrl.includes("#pricing");
+
+  useEffect(() => {
+    if (!isCheckoutFlow) return;
+    if (window.sessionStorage.getItem(SIGNIN_PROMPT_LOGGED_KEY) === "1") return;
+
+    const rawPendingCheckout = window.sessionStorage.getItem(PENDING_CHECKOUT_KEY);
+    if (!rawPendingCheckout) return;
+
+    try {
+      const pendingCheckout = JSON.parse(rawPendingCheckout) as PendingCheckout;
+      if (!pendingCheckout.type) return;
+
+      const analytics = initAnalyticsIfConsented();
+      if (!analytics) return;
+
+      logEvent(analytics, "signin_prompted", {
+        plan_type: pendingCheckout.type,
+        ...getAttributionEventParams(),
+      });
+      window.sessionStorage.setItem(SIGNIN_PROMPT_LOGGED_KEY, "1");
+    } catch (error) {
+      console.error("Failed to log signin_prompted event", error);
+    }
+  }, [isCheckoutFlow]);
 
   const handleSignIn = async (provider: "google" | "github") => {
     setLoadingProvider(provider);

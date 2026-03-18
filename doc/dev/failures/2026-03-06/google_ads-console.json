@@ -1,0 +1,11 @@
+{
+  "source": "google_ads",
+  "date": "2026-03-06",
+  "diagnostics": {
+    "browser_screenshot": "Account selector page loaded successfully. Both accounts visible: ThemeGPT (170-289-9815) and Themegpt Manager (799-632-8615).",
+    "console_errors": [],
+    "notes": "Google Ads dashboard accessible via browser. API failure is due to developer token tier (Test Account level), not account access. Basic access application submitted Mar 1, 2026 — still pending review. Direct campaign URL redirected to sign-in (expected for programmatic navigation)."
+  },
+  "root_cause": "Developer token jF4pmhtk-... is Test Account level. Cannot query production accounts via API until upgraded to Basic access.",
+  "action_required": "Check developer token status at ads.google.com/aw/apicenter. No code changes needed — will auto-resolve when Basic access is granted."
+}

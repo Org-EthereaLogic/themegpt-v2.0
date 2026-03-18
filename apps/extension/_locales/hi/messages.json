@@ -1,0 +1,258 @@
+{
+  "extName": {
+    "message": "ThemeGPT",
+    "description": "Extension display name"
+  },
+  "extDescription": {
+    "message": "गोपनीयता-प्रथम ChatGPT थीम प्रबंधक। स्थानीय रूप से रूप-रंग को अनुकूलित करें और टोकन ट्रैक करें — अब पेज पर कैनवास काउंटर के साथ।",
+    "description": "Extension description shown in the Chrome Web Store and browser extension manager"
+  },
+  "popup_sign_in": {
+    "message": "साइन इन",
+    "description": "Header button shown when user is not authenticated"
+  },
+  "popup_status_lifetime": {
+    "message": "आजीवन",
+    "description": "Header button label for lifetime subscribers"
+  },
+  "popup_status_trial": {
+    "message": "परीक्षण",
+    "description": "Header button label for users in their free trial"
+  },
+  "popup_status_premium": {
+    "message": "प्रीमियम",
+    "description": "Header button label for paid subscribers"
+  },
+  "popup_status_active": {
+    "message": "सक्रिय",
+    "description": "Tooltip for the green status dot indicating an active subscription"
+  },
+  "popup_status_connected": {
+    "message": "जुड़ा हुआ",
+    "description": "Tooltip for the status dot indicating a connected but not active account"
+  },
+  "popup_account_heading": {
+    "message": "खाता",
+    "description": "Section heading in the account panel when connected"
+  },
+  "popup_disconnect": {
+    "message": "डिस्कनेक्ट",
+    "description": "Button to disconnect the user's account"
+  },
+  "popup_plan_lifetime": {
+    "message": "आजीवन एक्सेस",
+    "description": "Badge label for lifetime access plan"
+  },
+  "popup_plan_trial": {
+    "message": "परीक्षण सक्रिय",
+    "description": "Badge label shown during the free trial period"
+  },
+  "popup_plan_yearly": {
+    "message": "वार्षिक",
+    "description": "Badge label for annual subscription plan"
+  },
+  "popup_plan_monthly": {
+    "message": "मासिक",
+    "description": "Badge label for monthly subscription plan"
+  },
+  "popup_credits_remaining": {
+    "message": "$CREDITS$ डाउनलोड शेष",
+    "description": "Shows how many theme downloads remain in the current billing period",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "popup_trial_days_left": {
+    "message": "परीक्षण में $DAYS$ दिन शेष",
+    "description": "Shows how many days remain in the free trial",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "popup_start_trial": {
+    "message": "30-दिन का निःशुल्क परीक्षण शुरू करें",
+    "description": "CTA button for users without a subscription to start a free trial"
+  },
+  "popup_sub_ended": {
+    "message": "आपकी सदस्यता समाप्त हो गई है।",
+    "description": "Message shown when a user's subscription is canceled"
+  },
+  "popup_reactivate": {
+    "message": "एक्सेस पुनर्स्थापित करने के लिए पुनः सक्रिय करें।",
+    "description": "Link text to reactivate a canceled subscription"
+  },
+  "popup_payment_failed": {
+    "message": "भुगतान विफल हुआ।",
+    "description": "Message shown when the most recent payment has failed"
+  },
+  "popup_update_billing": {
+    "message": "एक्सेस पुनर्स्थापित करने के लिए अपनी बिलिंग जानकारी अपडेट करें।",
+    "description": "Link text to update payment method for past-due accounts"
+  },
+  "popup_connect_heading": {
+    "message": "खाता जोड़ें",
+    "description": "Section heading in the account panel when not connected"
+  },
+  "popup_connect_subtext": {
+    "message": "8 एनिमेटेड प्रीमियम थीम अनलॉक करने के लिए साइन इन करें।",
+    "description": "Subtitle in the connect account panel"
+  },
+  "popup_connecting": {
+    "message": "कनेक्ट हो रहा है...",
+    "description": "Loading state text shown while connecting"
+  },
+  "popup_connect_button": {
+    "message": "Google/GitHub से जोड़ें",
+    "description": "OAuth sign-in button label"
+  },
+  "popup_or_paste_token": {
+    "message": "या टोकन पेस्ट करें",
+    "description": "Divider text between OAuth and token input methods"
+  },
+  "popup_token_placeholder": {
+    "message": "टोकन पेस्ट करें...",
+    "description": "Placeholder text for the authentication token input field"
+  },
+  "popup_go": {
+    "message": "जाएं",
+    "description": "Submit button label for the token input form"
+  },
+  "popup_free_collection": {
+    "message": "निःशुल्क संग्रह",
+    "description": "Section heading for free themes"
+  },
+  "popup_premium_collection": {
+    "message": "प्रीमियम संग्रह",
+    "description": "Section heading for premium themes"
+  },
+  "popup_review_ask": {
+    "message": "ThemeGPT पसंद आया? एक त्वरित समीक्षा दूसरों को इसे खोजने में मदद करती है। ⭐",
+    "description": "Banner asking users to leave a review on the Chrome Web Store"
+  },
+  "popup_leave_review": {
+    "message": "समीक्षा छोड़ें",
+    "description": "Button to open the Chrome Web Store review page"
+  },
+  "popup_maybe_later": {
+    "message": "शायद बाद में",
+    "description": "Button to dismiss the review request banner"
+  },
+  "popup_manage_account": {
+    "message": "खाता प्रबंधित करें",
+    "description": "Footer link to the account management page"
+  },
+  "popup_session_expired": {
+    "message": "सत्र समाप्त हो गया। कृपया पुनः जोड़ें।",
+    "description": "Status message shown when the auth token has expired"
+  },
+  "popup_connection_error": {
+    "message": "कनेक्शन त्रुटि",
+    "description": "Status message shown when a network or server error occurs"
+  },
+  "popup_invalid_token": {
+    "message": "अमान्य टोकन। कृपया पुनः प्रयास करें।",
+    "description": "Status message shown when the provided auth token is invalid"
+  },
+  "popup_account_connected": {
+    "message": "खाता जुड़ गया ✅",
+    "description": "Status message shown after successfully connecting an active account"
+  },
+  "popup_account_connected_inactive": {
+    "message": "खाता जुड़ गया",
+    "description": "Status message shown after connecting an account without an active subscription"
+  },
+  "popup_connection_failed": {
+    "message": "कनेक्शन विफल हुआ। कृपया पुनः प्रयास करें।",
+    "description": "Status message shown when authentication fails"
+  },
+  "popup_no_downloads": {
+    "message": "इस अवधि में कोई डाउनलोड शेष नहीं। themegpt.ai पर अपना खाता प्रबंधित करें",
+    "description": "Error shown when the user has exhausted their theme downloads for the billing period"
+  },
+  "popup_connect_first": {
+    "message": "कृपया पहले अपना खाता जोड़ें।",
+    "description": "Error shown when an action requires authentication"
+  },
+  "popup_trial_teaser_1": {
+    "message": "यह एक प्रीमियम थीम है — अपना 30-दिन का निःशुल्क परीक्षण शुरू करें।",
+    "description": "First upsell message shown when clicking a locked premium theme"
+  },
+  "popup_trial_teaser_2": {
+    "message": "30-दिन के निःशुल्क परीक्षण के साथ सभी 8 प्रीमियम थीम अनलॉक करें।",
+    "description": "Second upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_trial_teaser_3": {
+    "message": "आप बार-बार प्रीमियम थीम पर वापस आ रहे हैं। 30 दिनों के लिए सब कुछ मुफ्त में अनलॉक करें।",
+    "description": "Third upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_connection_error_retry": {
+    "message": "कनेक्शन त्रुटि। कृपया पुनः प्रयास करें।",
+    "description": "Error shown when a network error occurs during theme download"
+  },
+  "popup_failed_to_unlock": {
+    "message": "थीम अनलॉक करने में विफल",
+    "description": "Error shown when the theme download API returns an error"
+  },
+  "popup_theme_apply_label": {
+    "message": "$THEME_NAME$ थीम लागू करें",
+    "description": "Accessible label for the theme card button when the theme is unlocked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "popup_theme_unlock_label": {
+    "message": "$THEME_NAME$ - प्रीमियम, अनलॉक करने के लिए क्लिक करें",
+    "description": "Accessible label for the theme card button when the theme is locked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "token_counter_session_tokens": {
+    "message": "सत्र टोकन",
+    "description": "Section heading for the token counter in the popup and canvas overlay"
+  },
+  "token_counter_input": {
+    "message": "इनपुट",
+    "description": "Label for user input token count"
+  },
+  "token_counter_output": {
+    "message": "आउटपुट",
+    "description": "Label for AI output token count"
+  },
+  "token_counter_total": {
+    "message": "कुल",
+    "description": "Label for total token count"
+  },
+  "token_counter_canvas": {
+    "message": "कैनवास",
+    "description": "Label for the canvas overlay position selector"
+  },
+  "token_counter_off": {
+    "message": "बंद",
+    "description": "Option to disable the canvas token counter"
+  },
+  "token_counter_side_top": {
+    "message": "साइड टॉप",
+    "description": "Option to show the canvas counter in the sidebar at the top"
+  },
+  "token_counter_compose_right": {
+    "message": "कंपोज़ राइट",
+    "description": "Option to show the canvas counter to the right of the composer"
+  },
+  "token_counter_estimated": {
+    "message": "अनुमानित · कोई डेटा आपके ब्राउज़र से नहीं जाता",
+    "description": "Privacy disclaimer shown below the token counter"
+  }
+}

@@ -12,9 +12,9 @@
 ## Checks
 | Check ID | Status | Severity | Details | Evidence |
 |---|---|---|---|---|
-| draft_short_description_length | pass | blocker | Short description length is 125 characters. | doc/chrome-store-listing.md |
-| draft_contains_required_video_url | pass | blocker | Draft listing includes required promo video URL https://youtu.be/TFgUKvVzA6U. | doc/chrome-store-listing.md |
-| draft_theme_counts_match_production | pass | blocker | Draft claims total/free/premium = 15/7/8; production is 15/7/8. | doc/chrome-store-listing.md |
+| draft_short_description_length | pass | blocker | Short description length is 125 characters. | doc/marketing/chrome-store-listing.md |
+| draft_contains_required_video_url | pass | blocker | Draft listing includes required promo video URL https://youtu.be/TFgUKvVzA6U. | doc/marketing/chrome-store-listing.md |
+| draft_theme_counts_match_production | pass | blocker | Draft claims total/free/premium = 15/7/8; production is 15/7/8. | doc/marketing/chrome-store-listing.md |
 | live_screenshot_media_present | pass | blocker | Live listing screenshot count: 5. | https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba |
 | live_screenshot_media_compliance | pass | blocker | All live screenshots meet dimension and size limits (>=1280x800, <=5MB). | https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba |
 | live_required_video_embed_present | pass | blocker | Found 1 unique embed URLs containing TFgUKvVzA6U. | https://chromewebstore.google.com/detail/themegpt/dlphknialdlpmcgoknkcmapmclgckhba |

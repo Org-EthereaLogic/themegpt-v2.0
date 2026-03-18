@@ -1,0 +1,258 @@
+{
+  "extName": {
+    "message": "ThemeGPT",
+    "description": "Extension display name"
+  },
+  "extDescription": {
+    "message": "개인 정보 보호를 최우선으로 하는 ChatGPT 테마 관리자. 외관을 맞춤 설정하고 토큰을 로컬에서 추적하세요 — 페이지 내 캔버스 카운터 포함.",
+    "description": "Extension description shown in the Chrome Web Store and browser extension manager"
+  },
+  "popup_sign_in": {
+    "message": "로그인",
+    "description": "Header button shown when user is not authenticated"
+  },
+  "popup_status_lifetime": {
+    "message": "평생",
+    "description": "Header button label for lifetime subscribers"
+  },
+  "popup_status_trial": {
+    "message": "체험판",
+    "description": "Header button label for users in their free trial"
+  },
+  "popup_status_premium": {
+    "message": "프리미엄",
+    "description": "Header button label for paid subscribers"
+  },
+  "popup_status_active": {
+    "message": "활성",
+    "description": "Tooltip for the green status dot indicating an active subscription"
+  },
+  "popup_status_connected": {
+    "message": "연결됨",
+    "description": "Tooltip for the status dot indicating a connected but not active account"
+  },
+  "popup_account_heading": {
+    "message": "계정",
+    "description": "Section heading in the account panel when connected"
+  },
+  "popup_disconnect": {
+    "message": "연결 해제",
+    "description": "Button to disconnect the user's account"
+  },
+  "popup_plan_lifetime": {
+    "message": "평생 이용권",
+    "description": "Badge label for lifetime access plan"
+  },
+  "popup_plan_trial": {
+    "message": "체험 중",
+    "description": "Badge label shown during the free trial period"
+  },
+  "popup_plan_yearly": {
+    "message": "연간",
+    "description": "Badge label for annual subscription plan"
+  },
+  "popup_plan_monthly": {
+    "message": "월간",
+    "description": "Badge label for monthly subscription plan"
+  },
+  "popup_credits_remaining": {
+    "message": "$CREDITS$회 다운로드 남음",
+    "description": "Shows how many theme downloads remain in the current billing period",
+    "placeholders": {
+      "credits": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "popup_trial_days_left": {
+    "message": "체험판 $DAYS$일 남음",
+    "description": "Shows how many days remain in the free trial",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "15"
+      }
+    }
+  },
+  "popup_start_trial": {
+    "message": "30일 무료 체험 시작",
+    "description": "CTA button for users without a subscription to start a free trial"
+  },
+  "popup_sub_ended": {
+    "message": "구독이 종료되었습니다.",
+    "description": "Message shown when a user's subscription is canceled"
+  },
+  "popup_reactivate": {
+    "message": "재활성화하여 이용권을 복원하세요.",
+    "description": "Link text to reactivate a canceled subscription"
+  },
+  "popup_payment_failed": {
+    "message": "결제가 실패했습니다.",
+    "description": "Message shown when the most recent payment has failed"
+  },
+  "popup_update_billing": {
+    "message": "이용권을 복원하려면 결제 정보를 업데이트하세요.",
+    "description": "Link text to update payment method for past-due accounts"
+  },
+  "popup_connect_heading": {
+    "message": "계정 연결",
+    "description": "Section heading in the account panel when not connected"
+  },
+  "popup_connect_subtext": {
+    "message": "로그인하여 8개의 애니메이션 프리미엄 테마를 잠금 해제하세요.",
+    "description": "Subtitle in the connect account panel"
+  },
+  "popup_connecting": {
+    "message": "연결 중...",
+    "description": "Loading state text shown while connecting"
+  },
+  "popup_connect_button": {
+    "message": "Google/GitHub로 연결",
+    "description": "OAuth sign-in button label"
+  },
+  "popup_or_paste_token": {
+    "message": "또는 토큰 붙여넣기",
+    "description": "Divider text between OAuth and token input methods"
+  },
+  "popup_token_placeholder": {
+    "message": "토큰 붙여넣기...",
+    "description": "Placeholder text for the authentication token input field"
+  },
+  "popup_go": {
+    "message": "이동",
+    "description": "Submit button label for the token input form"
+  },
+  "popup_free_collection": {
+    "message": "무료 컬렉션",
+    "description": "Section heading for free themes"
+  },
+  "popup_premium_collection": {
+    "message": "프리미엄 컬렉션",
+    "description": "Section heading for premium themes"
+  },
+  "popup_review_ask": {
+    "message": "ThemeGPT가 마음에 드시나요? 리뷰를 남겨 다른 분들이 찾을 수 있도록 도와주세요. ⭐",
+    "description": "Banner asking users to leave a review on the Chrome Web Store"
+  },
+  "popup_leave_review": {
+    "message": "리뷰 남기기",
+    "description": "Button to open the Chrome Web Store review page"
+  },
+  "popup_maybe_later": {
+    "message": "나중에",
+    "description": "Button to dismiss the review request banner"
+  },
+  "popup_manage_account": {
+    "message": "계정 관리",
+    "description": "Footer link to the account management page"
+  },
+  "popup_session_expired": {
+    "message": "세션이 만료되었습니다. 다시 연결해 주세요.",
+    "description": "Status message shown when the auth token has expired"
+  },
+  "popup_connection_error": {
+    "message": "연결 오류",
+    "description": "Status message shown when a network or server error occurs"
+  },
+  "popup_invalid_token": {
+    "message": "유효하지 않은 토큰입니다. 다시 시도해 주세요.",
+    "description": "Status message shown when the provided auth token is invalid"
+  },
+  "popup_account_connected": {
+    "message": "계정 연결됨 ✅",
+    "description": "Status message shown after successfully connecting an active account"
+  },
+  "popup_account_connected_inactive": {
+    "message": "계정 연결됨",
+    "description": "Status message shown after connecting an account without an active subscription"
+  },
+  "popup_connection_failed": {
+    "message": "연결에 실패했습니다. 다시 시도해 주세요.",
+    "description": "Status message shown when authentication fails"
+  },
+  "popup_no_downloads": {
+    "message": "이번 기간 다운로드가 남아 있지 않습니다. themegpt.ai에서 계정을 관리하세요",
+    "description": "Error shown when the user has exhausted their theme downloads for the billing period"
+  },
+  "popup_connect_first": {
+    "message": "먼저 계정을 연결해 주세요.",
+    "description": "Error shown when an action requires authentication"
+  },
+  "popup_trial_teaser_1": {
+    "message": "이것은 프리미엄 테마입니다 — 30일 무료 체험을 시작하세요.",
+    "description": "First upsell message shown when clicking a locked premium theme"
+  },
+  "popup_trial_teaser_2": {
+    "message": "30일 무료 체험으로 8개의 프리미엄 테마를 모두 잠금 해제하세요.",
+    "description": "Second upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_trial_teaser_3": {
+    "message": "프리미엄 테마를 계속 찾고 계시군요. 30일 동안 모두 무료로 이용하세요.",
+    "description": "Third upsell message shown on repeated clicks of locked premium themes"
+  },
+  "popup_connection_error_retry": {
+    "message": "연결 오류. 다시 시도해 주세요.",
+    "description": "Error shown when a network error occurs during theme download"
+  },
+  "popup_failed_to_unlock": {
+    "message": "테마 잠금 해제에 실패했습니다",
+    "description": "Error shown when the theme download API returns an error"
+  },
+  "popup_theme_apply_label": {
+    "message": "$THEME_NAME$ 테마 적용",
+    "description": "Accessible label for the theme card button when the theme is unlocked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "popup_theme_unlock_label": {
+    "message": "$THEME_NAME$ - 프리미엄, 클릭하여 잠금 해제",
+    "description": "Accessible label for the theme card button when the theme is locked",
+    "placeholders": {
+      "theme_name": {
+        "content": "$1",
+        "example": "Dracula"
+      }
+    }
+  },
+  "token_counter_session_tokens": {
+    "message": "세션 토큰",
+    "description": "Section heading for the token counter in the popup and canvas overlay"
+  },
+  "token_counter_input": {
+    "message": "입력",
+    "description": "Label for user input token count"
+  },
+  "token_counter_output": {
+    "message": "출력",
+    "description": "Label for AI output token count"
+  },
+  "token_counter_total": {
+    "message": "합계",
+    "description": "Label for total token count"
+  },
+  "token_counter_canvas": {
+    "message": "캔버스",
+    "description": "Label for the canvas overlay position selector"
+  },
+  "token_counter_off": {
+    "message": "끄기",
+    "description": "Option to disable the canvas token counter"
+  },
+  "token_counter_side_top": {
+    "message": "사이드 상단",
+    "description": "Option to show the canvas counter in the sidebar at the top"
+  },
+  "token_counter_compose_right": {
+    "message": "작성 영역 오른쪽",
+    "description": "Option to show the canvas counter to the right of the composer"
+  },
+  "token_counter_estimated": {
+    "message": "추정값 · 데이터가 브라우저를 떠나지 않습니다",
+    "description": "Privacy disclaimer shown below the token counter"
+  }
+}

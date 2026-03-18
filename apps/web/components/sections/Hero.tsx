@@ -54,7 +54,7 @@ export function Hero() {
           className="text-[clamp(2.5rem,5vw,4rem)] font-semibold leading-[1.15] tracking-tight mb-5"
           style={{
             fontFamily: "var(--font-fraunces), serif",
-            animation: "slideInLeft 0.6s ease-out 0.1s both",
+            animation: "slideInLeft 0.6s ease-out both",
           }}
         >
           ChatGPT Themes &
@@ -67,7 +67,7 @@ export function Hero() {
           className="text-lg mb-8 max-w-[480px] mx-auto lg:mx-0"
           style={{
             color: "#7A6555",
-            animation: "slideInLeft 0.6s ease-out 0.2s both",
+            animation: "slideInLeft 0.6s ease-out both",
           }}
         >
           15 handcrafted themes including dark mode and animated aurora effects.
@@ -130,6 +130,7 @@ export function Hero() {
           muted
           playsInline
           preload="none"
+          poster="/themes/aurora_borealis_1.webp"
           className="w-full h-auto object-cover bg-black"
         >
           <source src="/media/demo-30s.mp4" type="video/mp4" />

@@ -18,6 +18,7 @@ interface ChromeMessage {
 }
 
 const storage = new Storage({ area: "local" })
+const t = (key: string) => chrome.i18n.getMessage(key)
 type CanvasSelection = "off" | TokenCanvasPlacement
 
 function notifyActiveTabSettings(payload: {
@@ -164,35 +165,35 @@ export function TokenCounter() {
         <div className="pt-3 border-t border-brown/10 mt-2">
             <div className="mb-2">
                 <span className="text-xs font-semibold uppercase tracking-[0.15em] text-brown-soft">
-                    Session Tokens
+                    {t("token_counter_session_tokens")}
                 </span>
             </div>
 
             <div className="bg-cream-deep rounded-[16px] p-4 flex items-center justify-between text-brown shadow-card">
-                <StatBlock label="Input" value={stats?.user} />
+                <StatBlock label={t("token_counter_input")} value={stats?.user} />
                 <Divider />
-                <StatBlock label="Output" value={stats?.assistant} />
+                <StatBlock label={t("token_counter_output")} value={stats?.assistant} />
                 <Divider />
-                <StatBlock label="Total" value={stats?.total} highlight />
+                <StatBlock label={t("token_counter_total")} value={stats?.total} highlight />
             </div>
 
             <div className="mt-3 grid grid-cols-1 gap-2">
                 <label className="text-[10px] uppercase tracking-[0.12em] text-brown-soft">
-                    Canvas
+                    {t("token_counter_canvas")}
                     <select
                         value={canvasSelection}
                         onChange={updateCanvasSelection}
                         className="mt-1 block w-full rounded-button border border-brown/15 bg-white px-2 py-1 text-[11px] text-brown focus:outline-none focus:ring-2 focus:ring-teal/30"
                     >
-                        <option value="off">Off</option>
-                        <option value="sidebar-top">Side Top</option>
-                        <option value="composer-right">Compose Right</option>
+                        <option value="off">{t("token_counter_off")}</option>
+                        <option value="sidebar-top">{t("token_counter_side_top")}</option>
+                        <option value="composer-right">{t("token_counter_compose_right")}</option>
                     </select>
                 </label>
             </div>
 
             <p className="text-[10px] text-center mt-2 text-brown-soft">
-                Estimated · No data leaves your browser
+                {t("token_counter_estimated")}
             </p>
         </div>
     )

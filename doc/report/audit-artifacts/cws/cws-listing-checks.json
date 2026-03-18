@@ -53,21 +53,21 @@
       "check_id": "draft_short_description_length",
       "status": "pass",
       "severity": "blocker",
-      "evidence": "doc/chrome-store-listing.md",
+      "evidence": "doc/marketing/chrome-store-listing.md",
       "details": "Short description length is 125 characters."
     },
     {
       "check_id": "draft_contains_required_video_url",
       "status": "pass",
       "severity": "blocker",
-      "evidence": "doc/chrome-store-listing.md",
+      "evidence": "doc/marketing/chrome-store-listing.md",
       "details": "Draft listing includes required promo video URL https://youtu.be/TFgUKvVzA6U."
     },
     {
       "check_id": "draft_theme_counts_match_production",
       "status": "pass",
       "severity": "blocker",
-      "evidence": "doc/chrome-store-listing.md",
+      "evidence": "doc/marketing/chrome-store-listing.md",
       "details": "Draft claims total/free/premium = 15/7/8; production is 15/7/8."
     },
     {

@@ -31,6 +31,18 @@ vi.mock('@plasmohq/storage', () => ({
 
 import { TokenCounter } from './TokenCounter'
 
+const TOKEN_COUNTER_STRINGS: Record<string, string> = {
+  token_counter_session_tokens: 'Session Tokens',
+  token_counter_input: 'Input',
+  token_counter_output: 'Output',
+  token_counter_total: 'Total',
+  token_counter_canvas: 'Canvas',
+  token_counter_off: 'Off',
+  token_counter_side_top: 'Side Top',
+  token_counter_compose_right: 'Compose Right',
+  token_counter_estimated: 'Estimated · No data leaves your browser',
+}
+
 describe('TokenCounter', () => {
   let mockTabsQuery: ReturnType<typeof vi.fn>
   let mockTabsSendMessage: ReturnType<typeof vi.fn>
@@ -67,6 +79,9 @@ describe('TokenCounter', () => {
             removeListener: mockRemoveListener
           },
           sendMessage: vi.fn().mockResolvedValue(undefined)
+        },
+        i18n: {
+          getMessage: vi.fn((key: string) => TOKEN_COUNTER_STRINGS[key] ?? key)
         }
       }
     })

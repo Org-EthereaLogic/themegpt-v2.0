@@ -139,6 +139,9 @@ describe('token-counter DOM interactions', () => {
             addListener: mockAddListener,
             removeListener: vi.fn()
           }
+        },
+        i18n: {
+          getMessage: vi.fn((key: string) => key)
         }
       }
     })

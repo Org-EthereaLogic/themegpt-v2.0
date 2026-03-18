@@ -1,0 +1,28 @@
+{
+  "source": "google_ads",
+  "captured_at": "2026-03-04T15:10:00Z",
+  "dashboard_url": "https://ads.google.com/aw/campaigns?__e=1702899815",
+  "console_errors": [],
+  "note": "No JS errors. API failure is developer token tier restriction (not browser/auth). Page accessible manually.",
+  "campaign_data_feb21_mar04": {
+    "clicks": 1900,
+    "impressions": 21374,
+    "avg_cpc_usd": 0.58,
+    "total_cost_usd": 1102.77
+  },
+  "billing_summary": {
+    "balance_usd": 19.09,
+    "last_payment": { "date": "Mar 4", "amount_usd": 350.00, "method": "Visa ···5393", "type": "Manual" },
+    "next_auto_payment": { "date": "Apr 1 or when balance hits $500", "method": "Visa ···5393" },
+    "march_net_cost_usd": 369.09,
+    "march_payments_usd": 592.28,
+    "february_net_cost_usd": 829.39,
+    "february_payments_usd": 587.11
+  },
+  "ALERT": {
+    "severity": "HIGH",
+    "banner": "New form of payment required",
+    "detail": "Mastercard ···8331 (backup) flagged — dialog says 'Make sure your payment method is up to date and has sufficient funds'",
+    "action_required": "Verify or replace Mastercard ···8331 backup card in Google Ads billing settings"
+  }
+}

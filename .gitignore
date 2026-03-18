@@ -5,10 +5,12 @@ prompt/
 doc/ai_docs/
 doc/mock/
 doc/specs/root-*.css
+doc/marketing/clarity-insights.pdf
 screenshots/
 
-# VS Code AI rules
+# VS Code AI rules and local configuration
 .github/instructions/codacy.instructions.md
+.vscode/mcp.json
 
 # Dependencies
 node_modules

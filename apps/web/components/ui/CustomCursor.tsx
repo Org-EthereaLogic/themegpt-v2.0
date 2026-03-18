@@ -14,16 +14,24 @@ export function CustomCursor() {
     if (!mediaQuery.matches) return;
 
     let isHovering = false;
+    let posX = -100;
+    let posY = -100;
+
+    // Use transform only — avoids layout-triggering left/top changes on every mousemove
+    const setTransform = () => {
+      cursor.style.transform = `translate3d(${posX - 10}px, ${posY - 10}px, 0) scale(${isHovering ? 1.5 : 1})`;
+    };
 
     const updateHoverStyles = () => {
-      cursor.style.transform = `translate(-50%, -50%) ${isHovering ? "scale(1.5)" : "scale(1)"}`;
+      setTransform();
       cursor.style.borderColor = isHovering ? "#E8A87C" : "#5BB5A2";
       cursor.style.background = isHovering ? "rgba(232, 168, 124, 0.1)" : "transparent";
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      cursor.style.left = `${e.clientX}px`;
-      cursor.style.top = `${e.clientY}px`;
+      posX = e.clientX;
+      posY = e.clientY;
+      setTransform();
     };
 
     const handleMouseEnter = () => {
@@ -35,8 +43,6 @@ export function CustomCursor() {
       isHovering = false;
       updateHoverStyles();
     };
-
-    updateHoverStyles();
     document.addEventListener("mousemove", handleMouseMove);
 
     // Add hover listeners to interactive elements
@@ -60,11 +66,11 @@ export function CustomCursor() {
   return (
     <div
       ref={cursorRef}
-      className="custom-cursor fixed w-5 h-5 rounded-full border-2 pointer-events-none z-[9999] transition-transform duration-150 ease-out"
+      className="custom-cursor fixed w-5 h-5 rounded-full border-2 pointer-events-none z-[9999] transition-[transform,border-color,background] duration-150 ease-out"
       style={{
-        left: 0,
         top: 0,
-        transform: "translate(-50%, -50%) scale(1)",
+        left: 0,
+        transform: "translate3d(-100px, -100px, 0) scale(1)",
         borderColor: "#5BB5A2",
         background: "transparent",
       }}

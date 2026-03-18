@@ -1,0 +1,8 @@
+{
+  "source": "google_ads",
+  "date": "2026-03-08",
+  "note": "Dashboard requires Google sign-in; redirected to accounts.google.com. No console errors captured.",
+  "console_errors": [],
+  "dashboard_url": "https://ads.google.com/aw/campaigns?__e=1702899815",
+  "actual_url": "https://accounts.google.com/v3/signin/accountchooser (sign-in wall)"
+}

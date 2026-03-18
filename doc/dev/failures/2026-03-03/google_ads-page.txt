@@ -1,0 +1,28 @@
+Google Ads - Campaigns - ThemeGPT (170-289-9815)
+URL: https://ads.google.com/aw/campaigns?__e=1702899815
+Captured: 2026-03-03 (morning)
+Date range shown: Feb 21 – Mar 2, 2026 (Custom)
+
+=== CAMPAIGN SUMMARY (Feb 21 – Mar 2, 2026) ===
+Clicks:        1,659
+Impressions:   19,118
+Avg. CPC:      $0.61
+Cost:          $1,012.21
+
+=== CAMPAIGNS TABLE ===
+Campaign:         Website traffic-Search-1
+Budget:           $100.00/day
+Status:           Bid strategy learning
+Optimization:     96.1%
+Campaign type:    Search
+Impressions:      19,118
+CTR:              8.68%
+Cost:             $1,012...
+Bid strategy:     Maximize clicks
+
+=== API FAILURE CONTEXT ===
+The ADWS metrics script failed to collect Google Ads data via API.
+Error: USER_PERMISSION_DENIED (gRPC PERMISSION_DENIED)
+Root cause: Developer token is Test Account level (cannot query production accounts)
+Status: Applied for Basic access on Mar 1, 2026 — awaiting Google review
+Workaround: Data above captured manually via browser dashboard

@@ -2,13 +2,36 @@
 
 All notable changes to ThemeGPT will be documented in this file.
 
-## [Unreleased] - Web
-
-> **Web-only CRO change.** No extension code changed; no CWS submission required.
+## [Unreleased]
 
 ### Changed
 
 - **Homepage section order (CRO):** `PricingSection` now renders before `FeaturesSection`. Clarity analytics showed median scroll depth of 37–52%; pricing was previously at ~76% scroll depth, above where most users exit. New order: Hero → ThemesSection → PricingSection → FeaturesSection → Footer. Pricing is now at ~44% scroll depth, within the median scroll range. `#pricing` anchor, checkout props, and `pricing_view` GA4 event are unaffected. Deployed commit `402b19e`, Cloud Build `ad520a63` (SUCCESS), Feb 27, 2026.
+- **Checkout attribution + sign-in instrumentation:** Checkout-bound visits now log `signin_prompted` with attribution when auth interrupts the flow, and pending checkout state is reset on sign-in to avoid double-tracking in the login funnel.
+- **Hero media delivery:** Theme assets now ship with long-lived image caching, `/media` responses use refreshable caching, and the desktop demo video uses a poster frame with `preload="none"` to keep landing-page media lighter.
+
+### Fixed
+
+- **Web lint compatibility:** `apps/web` dependency metadata was aligned so workspace linting can run cleanly again after the package drift introduced around the March diagnostics sync.
+
+### Security
+
+- **Cloud Build secret handling:** Firebase public build variables now come from Cloud Build substitutions, while sensitive runtime values continue to come from Cloud Run secrets. The repo no longer relies on committed Firebase credentials in `cloudbuild.yaml`.
+
+---
+
+## [2.4.1] - 2026-03-05 (Extension)
+
+> **Localized package submission source release.** Track live store review status in `doc/dev/gate-tracking-log.md`.
+
+### Fixed
+
+- **Locale bundles in packaged artifacts:** Chrome and Edge production zips now re-copy `_locales/` after `plasmo package`, preventing localized store submissions from shipping without message bundles.
+
+### Changed
+
+- **Packaging pipeline:** `package` and `package:edge` now run `tools/include-locales-in-package.mjs` as a post-packaging step before the final archive is created.
+- **Source version bump:** Extension manifest/package version moved to `2.4.1` for the localized submission train.
 
 ---
 

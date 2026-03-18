@@ -1,0 +1,13 @@
+{
+  "date": "2026-03-13",
+  "failures": [
+    {
+      "source": "google_ads",
+      "error": "Google Ads API: Basic developer token access pending. Check status at ads.google.com/aw/developer-token.",
+      "traceback": null,
+      "dashboard_url": "https://ads.google.com/aw/campaigns?__e=1702899815",
+      "timestamp": "2026-03-13T18:09:56.438026+00:00",
+      "attempts": 1
+    }
+  ]
+}

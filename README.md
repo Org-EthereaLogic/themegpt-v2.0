@@ -15,11 +15,11 @@ A Chrome extension that lets you customize ChatGPT's appearance and track token 
 
 **[Install from the Chrome Web Store](https://chromewebstore.google.com/detail/dlphknialdlpmcgoknkcmapmclgckhba?utm_source=cws&utm_medium=share&utm_campaign=item-share)**
 
-> **Latest published extension: v2.3.0** — approved by the Chrome Web Store on February 22, 2026.
+> **Store publication and review status:** tracked in `doc/dev/gate-tracking-log.md`.
 >
-> **Current extension source version in this repo: v2.3.1** — submitted to CWS and Edge; review status is tracked in `doc/dev/gate-tracking-log.md`.
+> **Current extension source version in this repo: v2.4.1** — packaging now reinjects `_locales/` into Chrome and Edge zip artifacts for localized submissions.
 >
-> **Latest production web deployment:** commit `402b19e` auto-deployed via Cloud Build trigger `deploy-themegpt-on-push` (build `ad520a63-e595-4df0-af0a-b6341e22d222`, status `SUCCESS`) on February 27, 2026. CRO change: PricingSection moved before FeaturesSection to sit within the 52% median scroll depth.
+> **Current production web deployment:** Cloud Run revision `themegpt-web-00294-6ps`, created on March 9, 2026 at 18:42 UTC, serving 100% traffic from image tag `c8636840e7b2d1e85e68dfe8831fe2bf261d0485`.
 >
 > See [CHANGELOG.md](./CHANGELOG.md) for release notes and [doc/dev/gate-tracking-log.md](./doc/dev/gate-tracking-log.md) for live submission/review status.
 
@@ -144,14 +144,12 @@ pnpm test
 - Engineering execution checklist: [doc/dev/monetization-growth-execution-checklist.md](./doc/dev/monetization-growth-execution-checklist.md)
 - Governance and standards: [CONSTITUTION.md](./CONSTITUTION.md), [DIRECTIVES.md](./DIRECTIVES.md), [AGENTS.md](./AGENTS.md)
 
-Latest campaign snapshot (GA4 web property `516189580`, Feb 21 - Mar 2):
-- 17 total external users in Firestore as of Feb 26 (5 new Feb 25, 4 new Feb 26; up from 4 on Feb 24)
-- Google Ads (Feb 21 - Mar 2): 1,647 clicks, 18,998 impressions, $0.61 avg CPC, $1,006.92 total cost, 0 conversions
-- Google Ads budget: $100/day; location match type fixed to "Presence only" on Mar 1 (was serving ads to LATAM/Africa)
-- CWS organic (tracked automatically via ADWS): 16 installs/day, 18 listing views/day — running independently of paid campaign
-- ADWS daily metrics system: 5/6 sources live (GA4, Clarity, Stripe, CWS, Monetization API); Google Ads API still blocked (developer token Basic access applied Mar 1, awaiting review)
-- Conversion funnel: all funnel events at 0 (pricing_view, checkout_start, trial_start, purchase_success) — focusing on user base growth to 100 before monetization push
-- CWV regression under investigation: LCP 6.0s, INP 1.7s, CLS 12 (likely dynamic imports — see gate-tracking-log.md)
+Current operational snapshot (ADWS diagnostics through Mar 11, 2026):
+- Production web is serving revision `themegpt-web-00294-6ps` from commit/image tag `c8636840e7b2d1e85e68dfe8831fe2bf261d0485`.
+- Extension source is at `v2.4.1`, with localized package artifacts rebuilt to include `_locales/` before store submission.
+- ADWS monitoring remains 5/6 automated sources live; Google Ads still requires manual UI capture while Basic developer token approval is pending.
+- Latest Mar 11 report: 8 web sessions, 2 `pricing_view` events, 0 `checkout_start` / `trial_start` / `purchase_success` events, plus 22 CWS installs and 21 listing views.
+- Manual Google Ads fallback for Mar 11 recorded 90 clicks, 617 impressions, about $35.10 spend, and 0 conversions.
 
 ---
 

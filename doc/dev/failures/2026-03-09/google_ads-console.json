@@ -1,0 +1,6 @@
+{
+  "source": "google_ads",
+  "url": "https://ads.google.com/nav/selectaccount?authuser=0&dst=/aw/campaigns?__e%3D1702899815",
+  "note": "Browser logged in as test account asap.johnson00@gmail.com (not ThemeGPT production account). Page shows 'You do not have any Google Ads accounts.' Root cause is developer token pending Basic access, not browser auth.",
+  "console_errors": []
+}

@@ -1,9 +1,9 @@
 # Measurement Gate Tracking Log
 
-**Period:** Feb 20–27, 2026 (includes Feb 20 NO DATA incident + 7-day gate window Feb 21–27)
-**Updated:** Daily, by checking GA4
+**Period:** Feb 20–Mar 11, 2026 (includes the Feb 20 NO DATA incident and the ongoing post-launch diagnostics window)
+**Updated:** Daily via ADWS metrics artifacts, GA4 checks, and GCP deployment verification
 **Blocker:** No hard launch blocker. Gate 1 and Gate 3 are tracked as diagnostics while paid acquisition begins.
-**Latest deployment snapshot:** Feb 27, 2026 — commit `402b19e` deployed via trigger `deploy-themegpt-on-push` (build `ad520a63-e595-4df0-af0a-b6341e22d222`, status `SUCCESS`). CRO section reorder: PricingSection moved before FeaturesSection.
+**Latest deployment snapshot:** Mar 9, 2026 — Cloud Run revision `themegpt-web-00294-6ps` created at `2026-03-09T18:42:29Z`, serving 100% traffic from image tag `c8636840e7b2d1e85e68dfe8831fe2bf261d0485`.
 
 ---
 
@@ -52,6 +52,10 @@
 | 2026-02-27 | 40% | Y | FAIL | **Afternoon snapshot.** 10 total sessions (Unassigned 4, Direct 3, Organic Search 2, Cross-network 1). 4 unassigned sessions from Reddit organic posts (r/SideProject + r/ChatGPT) without UTM params. CRO deploy live (pricing at 44% depth). Pending full-day reprocessing — expect correction. |
 | 2026-03-01 | 22% | Y | TRACKING | **Morning snapshot.** 9 total sessions (Paid Search 5, Cross-network 3, Unassigned 2, Referral 1). 2 unassigned sessions. 100% desktop (targeting fix confirmed working). Countries: Ecuador 2, Brazil 1, Mexico 1, Uganda 1 — root cause identified as "Presence or interest" location match type (fixed Mar 1, see below). Pending full-day reprocessing. |
 | 2026-03-04 | 37.5% | Y | FAIL | **Morning snapshot.** 8 total sessions (Cross-network 3, Unassigned 3, Paid Search 2, Direct 1). 3 unassigned sessions. 100% desktop. Countries: US 4, Mexico 2, Bhutan 1, UK 1. High unassigned share likely from cross-network/direct sessions without UTM. Pending full-day reprocessing. |
+| 2026-03-06 | 0% | Y | PASS | **Morning snapshot.** 7 total sessions (Direct 2, Paid Search 2, Referral 2, Cross-network 1). No unassigned traffic recorded. Conversion funnel still idle. |
+| 2026-03-08 | 55.6% | Y | FAIL | **Morning snapshot.** 9 total sessions with 5 unassigned. 100% desktop. Countries: US 6, UK 2, Philippines 1. No monetization activity. |
+| 2026-03-09 | 60.0% | Y | FAIL | **Morning snapshot.** 15 total sessions with 9 unassigned and 7 `pricing_view` events. No checkout/trial/purchase events. Current main head `c863684` deployed to production the same day. |
+| 2026-03-11 | 25.0% | Y | FAIL | **Morning snapshot.** 8 total sessions with 2 unassigned. Google Ads API still blocked, so the report used manual UI fallback: 90 clicks, 617 impressions, about $35.10 spend, 0 conversions. |
 
 **Status values:** `PASS` (≤10%), `FAIL` (>10%), `TRACKING` (window in progress)
 
@@ -71,6 +75,10 @@
 | 2026-02-27 | N | N | N | N | **Afternoon snapshot.** 10 sessions. No funnel events (checkout_start/trial_start/purchase_success) visible yet. CRO section reorder live — pricing at 44% scroll depth. Reddit posts live: r/SideProject + r/ChatGPT. Pending full-day reprocessing. |
 | 2026-03-01 | N | N | N | N | **Morning snapshot.** 9 sessions, 0 funnel events. 100% desktop traffic. Zero checkout or trial activity. Geo-targeting location match fixed (see Mar 1 audit below). |
 | 2026-03-04 | N | N | N | N | **Morning snapshot.** 8 sessions, 0 funnel events. Firebase 28-day event counts: checkout_start ×5 total, pricing_view ×11, mobile_landing ×8. No new funnel events today. CWV optimization deployed (see Mar 4 fix below). |
+| 2026-03-06 | N | N | N | N | **Morning snapshot.** 7 sessions and 1 `pricing_view`. No checkout_start, trial_start, or purchase_success events. |
+| 2026-03-08 | N | N | N | N | **Morning snapshot.** 9 sessions and 1 `pricing_view`. No conversion events recorded. |
+| 2026-03-09 | N | N | N | N | **Morning snapshot.** 15 sessions and 7 `pricing_view` events. Pricing visibility improved, but no funnel progression reached checkout or purchase. |
+| 2026-03-11 | N | N | N | N | **Morning snapshot.** 8 sessions and 2 `pricing_view` events. Manual Google Ads fallback confirms traffic is still arriving, but monetization events remain at zero. |
 
 **Event column values:** `Y` (visible, count > 0), `N` (absent), `—` (no conversion activity that day, but instrumentation confirmed working), `TBD` (pending GA4 daily check)
 
@@ -79,16 +87,16 @@
 ## Diagnostic Summary
 
 ```
-Gate 1 result:  [ ] PASS  [ ] FAIL
-  First passing day: ___________
-  Last passing day:  ___________
+Gate 1 result:  [ ] PASS  [x] FAIL
+  First passing day: 2026-02-21
+  Last logged result: 2026-03-11 (25.0% unassigned; still above threshold)
 
-Gate 3 result:  [ ] PASS  [ ] FAIL
-  First passing day: ___________
-  Last passing day:  ___________
+Gate 3 result:  [ ] PASS  [x] FAIL
+  First day all 3 visible: never
+  Last logged result: 2026-03-11 (all 3 required events absent)
 
 Product Hunt launch unlocked:
-  [ ] YES — launch decision no longer gate-bound
+  [x] YES — launch decision is no longer gate-bound
   [ ] NO  — optional tracking-only status
 ```
 
@@ -99,6 +107,15 @@ Product Hunt launch unlocked:
 GA4 was not collecting web app data until the mid-day Feb 20 redeploy (Firebase env vars were missing from the Cloud Run build). True Day 1 of meaningful data collection is **Feb 21, 2026**. Continue logging Gate 1 and Gate 3 daily as quality diagnostics while optimization is driven by server-side monetization metrics.
 
 Gate 1 and Gate 3 remain independent diagnostic indicators. They inform quality, but no longer block acquisition starts.
+
+---
+
+## Current Source + Deployment Snapshot — Mar 11, 2026
+
+- **Extension source version:** `v2.4.1` in `apps/extension/package.json`
+- **Localized packaging fix:** `apps/extension/tools/include-locales-in-package.mjs` now reinjects `_locales/` into Chrome and Edge production zips after `plasmo package`
+- **Production web service:** `themegpt-web` is serving revision `themegpt-web-00294-6ps` (created `2026-03-09T18:42:29Z`) at 100% traffic from image tag `c8636840e7b2d1e85e68dfe8831fe2bf261d0485`
+- **Diagnostics status:** ADWS remains 5/6 automated sources live; Google Ads reporting still falls back to manual UI capture while Basic developer token approval is pending
 
 ---
 
@@ -766,9 +783,10 @@ Evidence: Mar 1 morning GA4 data showed 9 sessions, all desktop, but with countr
 
 **CWS collector unblocked**: The CWS GA4 property (521095252) is managed by
 Chrome Web Store — the developer does not have Admin role and cannot grant
-service account access. Fixed by adding user-account OAuth credentials
-(setup_cws_auth.py) with analytics.readonly scope for
-anthony.johnsonii@etherealogic.ai. CWS data now flowing.
+service account access. The collector was restored with user-account OAuth
+(`setup_cws_auth.py`) and, as of Mar 5, 2026, that credential now lives in the
+local system keychain instead of a plaintext file or `.env` entry. CWS data is
+flowing.
 
 CWS stats (1-day Mar 3): 16 installs, 18 listing views
 ADWS sources: 5/6 OK (google_ads still blocked pending Basic token approval)
@@ -777,7 +795,8 @@ Changes:
 - adws/setup_cws_auth.py — one-time OAuth setup script
 - adws/adw_modules/credentials.py — cws_ga4_client() function
 - adws/adw_modules/metrics_collectors.py — collect_cws uses cws_ga4_client
-- adws/.env — CWS_GOOGLE_CREDENTIALS=credentials/cws-user-oauth.json
+- doc/dev/auth-setup.md — operator runbook updated for keychain-backed CWS OAuth
+- Legacy `adws/credentials/cws-user-oauth.json` imports into the keychain automatically on the next successful run
 
 ---
 
@@ -786,7 +805,7 @@ Changes:
 **Budget change:** Daily budget reduced from $100/day to $50/day.
 **Reason:** Conserving spend while Google Ads API developer token Basic access approval is pending.
 
-**Developer token status:** Still **Pending review** as of Mar 3, 2026 (applied Mar 1). Check status at `ads.google.com/aw/apicenter`. No action required until Google responds.
+**Developer token status:** Still **Pending review** as of Mar 11, 2026 (applied Mar 1). Daily metrics therefore keep using a manual Google Ads UI fallback when ad-spend context is needed. Check status at `ads.google.com/aw/apicenter`.
 
 **Campaign:** Website traffic-Search-1, Account: ThemeGPT `170-289-9815`
 **Cumulative spend (Feb 21–Mar 2):** $1,012.21 | Clicks: 1,659 | Impr: 19,118 | CPC: $0.61

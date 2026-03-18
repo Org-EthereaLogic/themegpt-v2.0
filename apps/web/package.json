@@ -14,7 +14,7 @@
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",
     "@microsoft/clarity": "^1.0.2",
-    "@react-email/components": "^1.0.8",
+    "@react-email/components": "^1.0.9",
     "@themegpt/shared": "workspace:*",
     "firebase": "^12.10.0",
     "firebase-admin": "^13.7.0",

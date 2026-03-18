@@ -1,0 +1,11 @@
+Google Ads - Account Selection Page
+URL: https://ads.google.com/nav/selectaccount
+Logged in as: anthony.johnsonii@etherealogic.ai
+
+Select a Google Ads account:
+  - ThemeGPT (170-289-9815)
+  - Themegpt / Manager (799-632-8615)
+
+Note: API access blocked by developer token tier (Test Account level).
+Basic access application submitted Mar 1, 2026 - still pending review.
+Dashboard UI access works fine; only programmatic API is restricted.

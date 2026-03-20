@@ -1,0 +1,22 @@
+URL: https://ads.google.com/nav/selectaccount
+Title: Google Ads - Select a Google Ads account
+Logged-in user: anthony.johnsonii@etherealogic.ai
+
+Page content (account selector):
+- ThemeGPT: 170-289-9815
+- Themegpt (Manager): 799-632-8615
+- Google Ads account (Setup in progress): 310-040-5886
+
+Navigation note:
+Initial navigation to https://ads.google.com/aw/campaigns?__e=1702899815 redirected
+to account-onboarding wizard (535-326-0247). Subsequent page load settled on the
+account selector above, confirming the logged-in user has access to the correct
+ThemeGPT accounts (170-289-9815 client + 799-632-8615 manager) but the API
+developer token (Test Account tier) does not have permission to query them via the
+Google Ads API. Root cause: USER_PERMISSION_DENIED — developer token pending Basic
+access upgrade. Applied 2026-03-01, still pending as of 2026-03-20.
+
+Artifacts:
+- google_ads.webp: Screenshot of account selector page
+- google_ads-console.json: JS console errors (onboarding widget SEVERE log)
+- google_ads-page.txt: This file

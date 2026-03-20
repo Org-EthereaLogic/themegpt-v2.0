@@ -1,0 +1,10 @@
+[
+  {
+    "id": "6006c943-be21-4922-9f15-cd2218171f67",
+    "level": "error",
+    "timestamp": "2026-03-20T18:42:40.282Z",
+    "message": "[ACCOUNT_ONBOARDING] 2026-03-20 11:42:40.264 SEVERE 2 ActivityContext Neither name nor overrideName were set! Did you forget to add ActivityContextDirective to directives? Or to set the name in the constructor?",
+    "url": "https://ads.google.com/aw/signup/aboutyourbusiness",
+    "note": "Page redirected to account-onboarding wizard (535-326-0247) instead of ThemeGPT campaign view. Subsequent reload landed on account selector showing ThemeGPT 170-289-9815, Themegpt Manager 799-632-8615, and a 3rd account 310-040-5886 (Setup in progress). Root cause: developer token tier PERMISSION_DENIED on production accounts."
+  }
+]

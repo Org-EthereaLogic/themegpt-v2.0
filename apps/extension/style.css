@@ -1,5 +1,39 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&display=swap');
 
+@theme inline {
+  --color-cream: #FDF8F3;
+  --color-cream-warm: #FFF9F2;
+  --color-cream-deep: #F5EDE3;
+  --color-brown: #4A3728;
+  --color-brown-soft: #7A6555;
+  --color-teal: #5BB5A2;
+  --color-teal-soft: #7BCBB9;
+  --color-teal-bright: #3AA08C;
+  --color-coral: #E8A87C;
+  --color-coral-soft: #F4C4A0;
+  --color-coral-bright: #E08A54;
+  --color-yellow: #F4E4BA;
+  --color-yellow-bright: #FFDF82;
+
+  --font-sans: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+
+  --radius-card: 20px;
+  --radius-button: 14px;
+
+  --shadow-card: 0 8px 24px rgba(74, 55, 40, 0.06);
+  --shadow-card-hover: 0 12px 32px rgba(74, 55, 40, 0.10);
+  --shadow-button: 0 4px 16px rgba(91, 181, 162, 0.25);
+
+  --animate-badge-float: badgeFloat 3s ease-in-out infinite;
+  --animate-badge-glow: badgeGlow 3s ease-in-out infinite;
+  --animate-check-pop: checkPop 0.3s ease-out forwards;
+  --animate-slide-in: slideIn 0.2s ease-out;
+  --animate-mascot-wobble: mascotWobble 4s ease-in-out infinite;
+  --animate-blink: blink 4s ease-in-out infinite;
+  --animate-bounce-short: bounce 1s infinite 3;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

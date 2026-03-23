@@ -45,7 +45,9 @@
       ]
     },
     "patchedDependencies": {
-      "@parcel/reporter-dev-server@2.9.3": "patches/@parcel__reporter-dev-server@2.9.3.patch"
+      "@parcel/reporter-dev-server@2.9.3": "patches/@parcel__reporter-dev-server@2.9.3.patch",
+      "jiti@2.6.1": "patches/jiti@2.6.1.patch",
+      "@tailwindcss/oxide@4.2.2": "patches/@tailwindcss__oxide@4.2.2.patch"
     }
   },
   "workspaces": [

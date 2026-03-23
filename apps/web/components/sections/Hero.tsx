@@ -1,7 +1,28 @@
+"use client";
+
+import { useEffect, useRef } from "react";
 import { OrganicBlob } from "@/components/ui/OrganicBlob";
 import { HeroChromeButton } from "@/components/ui/HeroChromeButton";
 
 export function Hero() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Defer video loading until after page load so LCP resources aren't
+  // competing with the 8 MB video download on slow connections.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    const start = () => {
+      video.preload = "auto";
+      video.play().catch(() => {});
+    };
+    if (document.readyState === "complete") {
+      start();
+    } else {
+      window.addEventListener("load", start, { once: true });
+      return () => window.removeEventListener("load", start);
+    }
+  }, []);
   return (
     <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-2 items-center gap-8 lg:gap-16 px-6 py-32 lg:px-24 overflow-hidden">
       {/* Background Blobs */}
@@ -125,12 +146,12 @@ export function Hero() {
           </div>
         </div>
         <video
-          autoPlay
+          ref={videoRef}
           loop
           muted
           playsInline
           preload="none"
-          poster="/themes/aurora_borealis_1.webp"
+          poster="/media/demo-poster.jpg"
           className="w-full h-auto object-cover bg-black"
         >
           <source src="/media/demo-30s.mp4" type="video/mp4" />

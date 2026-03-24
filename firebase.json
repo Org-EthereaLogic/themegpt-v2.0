@@ -10,7 +10,7 @@
       {
         "source": "**",
         "run": {
-          "serviceId": "theme-gpt-web",
+          "serviceId": "themegpt-web",
           "region": "us-central1"
         }
       }

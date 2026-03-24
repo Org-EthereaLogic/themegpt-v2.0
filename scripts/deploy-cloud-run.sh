@@ -5,7 +5,8 @@ set -e
 export PATH=$PATH:/Users/etherealogic/google-cloud-sdk/bin
 PROJECT_ID="gen-lang-client-0312336987"
 REGION="us-central1"
-SERVICE_NAME="theme-gpt-web"
+SERVICE_NAME="themegpt-web"
+IMAGE_REPO="theme-gpt-web"
 ENV_FILE="apps/web/.env.local"
 
 # Colors
@@ -18,7 +19,7 @@ echo -e "${GREEN}Deploying ThemeGPT to Cloud Run...${NC}"
 # 1. Build Container
 echo -e "\n${GREEN}1. Building container image with Cloud Build...${NC}"
 
-IMAGE_NAME="us-central1-docker.pkg.dev/$PROJECT_ID/theme-gpt-repo/$SERVICE_NAME"
+IMAGE_NAME="us-central1-docker.pkg.dev/$PROJECT_ID/theme-gpt-repo/$IMAGE_REPO"
 echo -e "Image: $IMAGE_NAME"
 gcloud builds submit . \
   --project=$PROJECT_ID \
